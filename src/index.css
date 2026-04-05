@@ -1,0 +1,243 @@
+/**
+ * Styles globaux Rassoul Shop — Design Premium v2
+ * 
+ * Directives Tailwind + animations avancées :
+ * - Shimmer loading, glow pulse, gradient animé
+ * - Transitions de pages fluides
+ * - Effets visuels cohérents web & mobile
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   BASE - Reset et styles fondamentaux
+   ============================================ */
+
+@layer base {
+  /* Scrollbar personnalisée - fine et dorée au hover */
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1e1e1e;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(201, 169, 110, 0.4);
+  }
+
+  /* Scroll fluide global + antialiasing */
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Sélection de texte aux couleurs de la marque */
+  ::selection {
+    background: rgba(201, 169, 110, 0.25);
+    color: #f5f0eb;
+  }
+
+  /* Transitions fluides globales pour les liens et boutons */
+  a, button {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ============================================
+   COMPONENTS - Classes utilitaires réutilisables
+   ============================================ */
+
+@layer components {
+  /* Effet glassmorphism pour la navbar */
+  .glass {
+    background: rgba(10, 10, 10, 0.72);
+    backdrop-filter: blur(24px) saturate(1.2);
+    -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  }
+
+  /* Effet glassmorphism clair pour le mobile tab bar */
+  .glass-light {
+    background: rgba(14, 14, 14, 0.88);
+    backdrop-filter: blur(20px) saturate(1.1);
+    -webkit-backdrop-filter: blur(20px) saturate(1.1);
+  }
+
+  /* Bordure subtile dorée au hover (desktop) + toujours visible sur mobile */
+  .border-gold-hover {
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+  .border-gold-hover:hover {
+    border-color: rgba(201, 169, 110, 0.25);
+    box-shadow: 0 0 0 1px rgba(201, 169, 110, 0.06);
+  }
+
+  /* Overlay gradient sombre pour les images/vidéos */
+  .overlay-gradient {
+    background: linear-gradient(
+      to top,
+      rgba(5, 5, 5, 0.92) 0%,
+      rgba(5, 5, 5, 0.35) 45%,
+      transparent 100%
+    );
+  }
+
+  /* Ligne décorative dorée animée */
+  .gold-line {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(to right, #c9a96e, rgba(201, 169, 110, 0.2));
+  }
+
+  /* Texte avec gradient doré animé */
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #c9a96e 0%, #e8d5a8 40%, #c9a96e 80%, #dfc9a0 100%);
+    background-size: 200% 200%;
+    animation: goldShift 4s ease-in-out infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Shimmer loading — effet reflet qui glisse sur le skeleton */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+    background: #141414;
+  }
+  .shimmer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(201, 169, 110, 0.04) 40%,
+      rgba(201, 169, 110, 0.08) 50%,
+      rgba(201, 169, 110, 0.04) 60%,
+      transparent 100%
+    );
+    animation: shimmerSlide 1.8s ease-in-out infinite;
+  }
+
+  /* Glow doré subtil pour les CTAs et le panier flottant */
+  .glow-gold {
+    box-shadow:
+      0 0 15px rgba(201, 169, 110, 0.2),
+      0 0 40px rgba(201, 169, 110, 0.08);
+  }
+  .glow-gold-hover:hover {
+    box-shadow:
+      0 0 20px rgba(201, 169, 110, 0.35),
+      0 0 60px rgba(201, 169, 110, 0.12);
+  }
+
+  /* Card avec bordure gradient animée au hover */
+  .card-premium {
+    position: relative;
+    border-radius: 1rem;
+    overflow: hidden;
+    background: #141414;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    transition: border-color 0.5s ease, transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.5s ease;
+  }
+  .card-premium:hover {
+    border-color: rgba(201, 169, 110, 0.2);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(201, 169, 110, 0.08);
+  }
+  @media (min-width: 768px) {
+    .card-premium:hover {
+      transform: translateY(-4px);
+    }
+  }
+}
+
+/* ============================================
+   UTILITIES - Animations et effets spéciaux
+   ============================================ */
+
+@layer utilities {
+  /* Transition douce pour les images au hover (plus lente, plus fluide) */
+  .img-zoom {
+    transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .group:hover .img-zoom {
+    transform: scale(1.06);
+  }
+
+  /* Masquer la scrollbar mobile tout en gardant le scroll */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Bouton avec effet press (mobile-friendly) */
+  .btn-press:active {
+    transform: scale(0.96);
+  }
+}
+
+/* ============================================
+   KEYFRAMES - Animations custom
+   ============================================ */
+
+/* Bannière marquee défilante (Hero) */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 25s linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Shimmer (reflet glissant sur skeleton) */
+@keyframes shimmerSlide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Gradient doré qui bouge lentement */
+@keyframes goldShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Pulse glow pour le panier flottant */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 15px rgba(201, 169, 110, 0.25), 0 0 40px rgba(201, 169, 110, 0.08); }
+  50% { box-shadow: 0 0 25px rgba(201, 169, 110, 0.4), 0 0 60px rgba(201, 169, 110, 0.15); }
+}
+.glow-pulse {
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+/* Spin loader premium (doré) */
+@keyframes spinGold {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.spin-gold {
+  animation: spinGold 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
+}
+
+/* Fade-in par le bas pour les transitions de pages */
+@keyframes pageEnter {
+  0% { opacity: 0; transform: translateY(16px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.page-enter {
+  animation: pageEnter 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
