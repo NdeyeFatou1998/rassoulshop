@@ -1,0 +1,38 @@
+name: Frontend CI
+
+on:
+  pull_request:
+    paths:
+      - "**"
+  push:
+    branches:
+      - "main"
+
+jobs:
+  build:
+    name: Build (Vite)
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./
+
+    steps:
+      # Récupération du code
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Setup Node (version LTS) + cache npm
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      # Installation stricte via package-lock.json
+      - name: Install
+        run: npm ci
+
+      # Build de production (valide la compilation)
+      - name: Build
+        run: npm run build
