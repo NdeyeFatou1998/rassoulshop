@@ -27,7 +27,7 @@ export default function Experience() {
         <AnimatedSection direction="left">
           <div className="relative rounded-2xl overflow-hidden aspect-[4/5] md:aspect-auto md:h-full min-h-[400px]">
             <img
-              src="/assets/images/product-06.jpeg"
+              src="/assets/images/WhatsApp Image 2026-03-24 at 01.27.15.jpeg"
               alt="Expérience Rassoul Shop"
               className="w-full h-full object-cover"
             />

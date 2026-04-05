@@ -17,17 +17,17 @@ export default function Editorial() {
   /* Données des cartes éditoriales avec images locales */
   const cards = [
     {
-      image: "/assets/images/product-04.jpeg",
+      image: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.11.jpeg",
       label: "Éditorial",
       tag: "Signature",
     },
     {
-      image: "/assets/images/product-05.jpeg",
+      image: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.12.jpeg",
       label: "Direction",
       tag: "Luxe",
     },
     {
-      image: "/assets/images/product-10.jpeg",
+      image: "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg",
       label: "Capsule",
       tag: "Exclusive",
     },

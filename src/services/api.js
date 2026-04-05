@@ -82,13 +82,13 @@ export async function fetchCategories() {
  */
 function getFallbackProducts() {
   return [
-    { id: 1, title: "Set Prestige Minimal", description: "Ensemble élégant premium pour sorties et événements.", price: 25000, rating: 4.8, category: "sets", image: "/assets/images/product-01.jpeg", badge: "Nouveau" },
-    { id: 2, title: "Robe Signature Gold", description: "Silhouette raffinée et détails couture modernes.", price: 35000, rating: 4.9, category: "robes", image: "/assets/images/product-02.jpeg", badge: "Best-seller" },
-    { id: 3, title: "Veste Urban Luxe", description: "Design urbain avec finition haut de gamme.", price: 28000, rating: 4.7, category: "vestes", image: "/assets/images/product-03.jpeg", badge: null },
-    { id: 4, title: "Pack Everyday Premium", description: "Pièces polyvalentes pour un look chic quotidien.", price: 22000, rating: 4.6, category: "sets", image: "/assets/images/product-04.jpeg", badge: null },
-    { id: 5, title: "Collection Night Edition", description: "Sélection pensée pour les soirées élégantes.", price: 42000, rating: 4.9, category: "collections", image: "/assets/images/product-05.jpeg", badge: "Édition limitée" },
-    { id: 6, title: "Classique Intemporel", description: "Style sobre et premium qui traverse les saisons.", price: 18000, rating: 4.5, category: "classiques", image: "/assets/images/product-06.jpeg", badge: null },
-    { id: 7, title: "Look Weekend Elite", description: "Confort premium et coupe soignée pour le week-end.", price: 15000, rating: 4.4, category: "casual", image: "/assets/images/product-07.jpeg", badge: null },
-    { id: 8, title: "Capsule Rassoul Black", description: "Palette sombre et détails modernes de caractère.", price: 32000, rating: 4.8, category: "collections", image: "/assets/images/product-08.jpeg", badge: "Exclusif" },
+    { id: 1, title: "Set Prestige Minimal", description: "Ensemble élégant premium pour sorties et événements.", price: 25000, rating: 4.8, category: "sets", image: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.08.jpeg", badge: "Nouveau" },
+    { id: 2, title: "Robe Signature Gold", description: "Silhouette raffinée et détails couture modernes.", price: 35000, rating: 4.9, category: "robes", image: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.09.jpeg", badge: "Best-seller" },
+    { id: 3, title: "Veste Urban Luxe", description: "Design urbain avec finition haut de gamme.", price: 28000, rating: 4.7, category: "vestes", image: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.10.jpeg", badge: null },
+    { id: 4, title: "Pack Everyday Premium", description: "Pièces polyvalentes pour un look chic quotidien.", price: 22000, rating: 4.6, category: "sets", image: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.11.jpeg", badge: null },
+    { id: 5, title: "Collection Night Edition", description: "Sélection pensée pour les soirées élégantes.", price: 42000, rating: 4.9, category: "collections", image: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.12.jpeg", badge: "Édition limitée" },
+    { id: 6, title: "Classique Intemporel", description: "Style sobre et premium qui traverse les saisons.", price: 18000, rating: 4.5, category: "classiques", image: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.15.jpeg", badge: null },
+    { id: 7, title: "Look Weekend Elite", description: "Confort premium et coupe soignée pour le week-end.", price: 15000, rating: 4.4, category: "casual", image: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.57.jpeg", badge: null },
+    { id: 8, title: "Capsule Rassoul Black", description: "Palette sombre et détails modernes de caractère.", price: 32000, rating: 4.8, category: "collections", image: "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg", badge: "Exclusif" },
   ];
 }

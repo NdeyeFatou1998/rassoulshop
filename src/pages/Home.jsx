@@ -20,7 +20,7 @@ export default function Home() {
     <>
       {/* Section héro plein écran avec photo de fond */}
       <Hero
-        imageSrc="/assets/images/product-07.jpeg"
+        imageSrc="/assets/images/WhatsApp Image 2026-03-24 at 01.27.57.jpeg"
         title="Silhouette premium"
         subtitle="Design dense, visuel, immersif."
       />

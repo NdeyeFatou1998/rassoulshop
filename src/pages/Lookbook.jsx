@@ -23,23 +23,23 @@ export default function Lookbook() {
    * span: taille dans la grille CSS (tall = 2 rows, wide = 2 cols)
    */
   const looks = [
-    { type: "image", src: "/assets/images/product-01.jpeg", span: "tall" },
-    { type: "image", src: "/assets/images/product-02.jpeg", span: "normal" },
+    { type: "image", src: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.08.jpeg", span: "tall" },
+    { type: "image", src: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.09.jpeg", span: "normal" },
     { type: "video", src: "/assets/videos/WhatsApp Video 2026-03-24 at 01.28.04.mp4", span: "wide" },
-    { type: "image", src: "/assets/images/product-03.jpeg", span: "normal" },
-    { type: "image", src: "/assets/images/product-04.jpeg", span: "normal" },
-    { type: "image", src: "/assets/images/product-05.jpeg", span: "tall" },
+    { type: "image", src: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.10.jpeg", span: "normal" },
+    { type: "image", src: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.11.jpeg", span: "normal" },
+    { type: "image", src: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.12.jpeg", span: "tall" },
     { type: "video", src: "/assets/videos/WhatsApp Video 2026-03-24 at 01.27.56.mp4", span: "wide" },
-    { type: "image", src: "/assets/images/product-06.jpeg", span: "normal" },
-    { type: "image", src: "/assets/images/product-07.jpeg", span: "normal" },
-    { type: "image", src: "/assets/images/product-08.jpeg", span: "tall" },
-    { type: "image", src: "/assets/images/product-09.jpeg", span: "normal" },
-    { type: "image", src: "/assets/images/product-10.jpeg", span: "wide" },
-    { type: "image", src: "/assets/images/product-11.jpeg", span: "normal" },
+    { type: "image", src: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.15.jpeg", span: "normal" },
+    { type: "image", src: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.57.jpeg", span: "normal" },
+    { type: "image", src: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.58.jpeg", span: "tall" },
+    { type: "image", src: "/assets/images/WhatsApp Image 2026-03-24 at 01.28.14.jpeg", span: "normal" },
+    { type: "image", src: "/assets/images/WhatsApp 2Image 2026-03-24 at 01.27.58.jpeg", span: "wide" },
+    { type: "image", src: "/assets/images/WhatsApp I2mage 2026-03-24 at 01.28.14.jpeg", span: "normal" },
     { type: "video", src: "/assets/videos/WhatsApp Video 2026-03-24 at 01.27.43.mp4", span: "wide" },
-    { type: "image", src: "/assets/images/product-12.jpeg", span: "normal" },
-    { type: "image", src: "/assets/images/product-13.jpeg", span: "tall" },
-    { type: "image", src: "/assets/images/product-14.jpeg", span: "normal" },
+    { type: "image", src: "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg", span: "normal" },
+    { type: "image", src: "/assets/images/WhatsApp Image 22026-03-24 at 01.27.09.jpeg", span: "tall" },
+    { type: "image", src: "/assets/images/WhatsApp Image 22026-03-24 at 01.27.10.jpeg", span: "normal" },
   ];
 
   /* État de la lightbox */

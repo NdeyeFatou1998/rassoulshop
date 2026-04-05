@@ -37,7 +37,7 @@ export default function About() {
       <section className="relative h-[70vh] min-h-[500px] flex items-end overflow-hidden">
         {/* Image de fond premium */}
         <img
-          src="/assets/images/product-01.jpeg"
+          src="/assets/images/WhatsApp Image 2026-03-24 at 01.27.08.jpeg"
           alt="Maison Rassoul"
           className="absolute inset-0 w-full h-full object-cover"
         />
