@@ -13,7 +13,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function Hero({ imageSrc, title, subtitle }) {
@@ -117,17 +116,6 @@ export default function Hero({ imageSrc, title, subtitle }) {
           </Link>
         </motion.div>
       </motion.div>
-
-      {/* ---- Bannière marquee — fond crème lumineux + texte doré ---- */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 overflow-hidden border-t border-gold/20 bg-cream">
-        <div className="marquee-track flex whitespace-nowrap py-2.5">
-          {Array.from({ length: 10 }).map((_, i) => (
-            <span key={i} className="mx-6 md:mx-8 text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-gold-dark font-semibold">
-              Rassoul Shop &mdash; Premium Fashion &mdash; Collection 2026 &mdash; Style &mdash; Élégance
-            </span>
-          ))}
-        </div>
-      </div>
 
       {/* ---- Indicateur scroll capsule animé ---- */}
       <motion.div

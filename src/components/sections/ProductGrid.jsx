@@ -22,9 +22,18 @@ import { useProducts } from "../../hooks/useProducts";
 import { fetchCategories } from "../../services/api";
 import { useEffect } from "react";
 
-export default function ProductGrid({ limit = 8, showTitle = true, showFilter = false }) {
-  const [activeCategory, setActiveCategory] = useState(null);
+export default function ProductGrid({
+  limit = 8,
+  showTitle = true,
+  showFilter = false,
+  initialCategory = null,
+}) {
+  const [activeCategory, setActiveCategory] = useState(initialCategory);
   const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    setActiveCategory(initialCategory || null);
+  }, [initialCategory]);
 
   /* Récupère les produits via le hook personnalisé */
   const { products, loading } = useProducts({

@@ -11,8 +11,12 @@
 
 import { motion } from "framer-motion";
 import ProductGrid from "../components/sections/ProductGrid";
+import { useSearchParams } from "react-router-dom";
 
 export default function Shop() {
+  const [searchParams] = useSearchParams();
+  const category = searchParams.get("category");
+
   return (
     <>
       {/* ---- Header compact — juste le titre ---- */}
@@ -35,7 +39,12 @@ export default function Shop() {
       </section>
 
       {/* ---- Grille produits avec filtres catégorie ---- */}
-      <ProductGrid limit={12} showTitle={false} showFilter={true} />
+      <ProductGrid
+        limit={12}
+        showTitle={false}
+        showFilter={true}
+        initialCategory={category}
+      />
     </>
   );
 }

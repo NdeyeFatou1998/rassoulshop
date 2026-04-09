@@ -15,6 +15,7 @@ import Editorial from "../components/sections/Editorial";
 import ProductGrid from "../components/sections/ProductGrid";
 import Experience from "../components/sections/Experience";
 import PromoBanner from "../components/ui/PromoBanner";
+import CategoryCircles from "../components/ui/CategoryCircles";
 
 export default function Home() {
   return (
@@ -28,6 +29,9 @@ export default function Home() {
         title="Silhouette premium"
         subtitle="Design dense, visuel, immersif."
       />
+
+      {/* Catégories boutique — cercles horizontaux (défilement) */}
+      <CategoryCircles />
 
       {/* Section éditorial visuel — grille asymétrique */}
       <Editorial />
