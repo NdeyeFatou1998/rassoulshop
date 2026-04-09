@@ -25,21 +25,13 @@ Déclenchement :
 
 Objectif : garantir que le build Vite passe à chaque PR et sur `main`.
 
-### 2) CD — Déploiement Vercel
+## Déploiement (Vercel)
 
-Workflow : `.github/workflows/vercel.yml`
-
-Déclenchement :
-- `pull_request` : déploie en **Preview**
-- `push` sur `main` : déploie en **Production**
+Le déploiement se fait via **l’intégration Git Vercel** (pas via un workflow GitHub Actions Vercel).
 
 Principe :
-- Installation `vercel` CLI
-- `vercel pull` pour récupérer la configuration du projet
-- `vercel build`
-- `vercel deploy --prebuilt`
-  - en PR : preview
-  - sur `main` : `--prod`
+- Chaque `push` sur la branche `main` déclenche un build Vercel.
+- Vercel exécute `npm ci` puis `npm run build`.
 
 ## Secrets GitHub requis
 
@@ -69,3 +61,25 @@ Méthode simple :
   - `/assets/images/...`
   - `/assets/videos/...`
 - Le backend n’est pas déployé dans ce pipeline. Si tu veux un pipeline full-stack, il faudra ajouter un workflow backend séparé.
+
+## Pages clés
+
+### Home (`src/pages/Home.jsx`)
+
+Sections principales :
+- `PromoBanner`
+- `Hero`
+- `CategoryCircles` (défilement horizontal)
+- `ProductGrid` (sélection)
+- `Experience`
+
+Note : la section `Editorial` (cards Éditorial/Direction/Capsule) est supprimée de la Home.
+
+### Shop (`src/pages/Shop.jsx`)
+
+La boutique affiche les produits :
+- **par catégorie**, une section par catégorie
+- chaque section utilise `ShopCategoryCarousel` (carrousel horizontal de `ProductCard`)
+
+Paramètre URL :
+- `/shop?category=<cat>` : n’affiche qu’une seule catégorie.

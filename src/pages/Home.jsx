@@ -11,7 +11,6 @@
  */
 
 import Hero from "../components/sections/Hero";
-import Editorial from "../components/sections/Editorial";
 import ProductGrid from "../components/sections/ProductGrid";
 import Experience from "../components/sections/Experience";
 import PromoBanner from "../components/ui/PromoBanner";
@@ -32,9 +31,6 @@ export default function Home() {
 
       {/* Catégories boutique — cercles horizontaux (défilement) */}
       <CategoryCircles />
-
-      {/* Section éditorial visuel — grille asymétrique */}
-      <Editorial />
 
       {/* Grille de 8 produits sélectionnés */}
       <ProductGrid limit={8} showTitle={true} />

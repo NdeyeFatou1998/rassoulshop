@@ -46,7 +46,7 @@ function CategoryItem({ label, slug, Icon }) {
 
 export default function CategoryCircles() {
   return (
-    <section className="w-full px-3 md:px-5 lg:px-8 pt-10 md:pt-12">
+    <section className="w-full px-3 md:px-5 lg:px-8 pt-4 md:pt-6">
       <div className="overflow-hidden border-y border-white/[0.04] bg-[#070707]">
         <div className="marquee-track flex whitespace-nowrap py-5">
           {CATEGORIES.map((c) => (

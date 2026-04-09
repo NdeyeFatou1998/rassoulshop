@@ -10,12 +10,30 @@
  */
 
 import { motion } from "framer-motion";
-import ProductGrid from "../components/sections/ProductGrid";
 import { useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { fetchCategories } from "../services/api";
+import ShopCategoryCarousel from "../components/sections/ShopCategoryCarousel";
 
 export default function Shop() {
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
+
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      const data = await fetchCategories();
+      if (!cancelled) setCategories(Array.isArray(data) ? data : []);
+    }
+
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <>
@@ -38,13 +56,14 @@ export default function Shop() {
         </motion.div>
       </section>
 
-      {/* ---- Grille produits avec filtres catégorie ---- */}
-      <ProductGrid
-        limit={12}
-        showTitle={false}
-        showFilter={true}
-        initialCategory={category}
-      />
+      {/* ---- Produits par catégories (une ligne / catégorie) ---- */}
+      {category ? (
+        <ShopCategoryCarousel category={category} limit={12} />
+      ) : (
+        categories.map((cat) => (
+          <ShopCategoryCarousel key={cat} category={cat} limit={12} />
+        ))
+      )}
     </>
   );
 }
