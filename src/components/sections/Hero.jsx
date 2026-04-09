@@ -52,7 +52,7 @@ export default function Hero({ imageSrc, title, subtitle }) {
   return (
     <section
       ref={sectionRef}
-      className="relative h-[100svh] min-h-[600px] flex items-end overflow-hidden w-full"
+      className="relative h-[65svh] min-h-[440px] max-h-[720px] flex items-end overflow-hidden w-full"
     >
       {/* ---- Photo de fond avec effet parallax ---- */}
       {imageSrc ? (
@@ -75,7 +75,7 @@ export default function Hero({ imageSrc, title, subtitle }) {
         variants={container}
         initial="hidden"
         animate="show"
-        className="relative z-10 w-full px-5 md:px-12 lg:px-20 pb-20 md:pb-28"
+        className="relative z-10 w-full px-5 md:px-12 lg:px-20 pb-14 md:pb-16"
       >
         {/* Kicker animé */}
         <motion.div variants={fadeUpSlow} className="flex items-center gap-3 mb-4 md:mb-5">
@@ -134,7 +134,7 @@ export default function Hero({ imageSrc, title, subtitle }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2.2 }}
-        className="absolute bottom-12 md:bottom-14 left-1/2 -translate-x-1/2 z-30"
+        className="absolute bottom-10 md:bottom-11 left-1/2 -translate-x-1/2 z-30"
       >
         <div className="w-5 h-8 rounded-full border border-cream/15 flex items-start justify-center p-1.5">
           <motion.div
