@@ -56,35 +56,35 @@ function PromoItem({ product }) {
   return (
     <Link
       to={`/product/${product.id}`}
-      className="inline-flex items-center gap-3 mx-6 md:mx-8 whitespace-nowrap group"
+      className="inline-flex items-center gap-2 mx-4 md:mx-6 whitespace-nowrap group"
     >
       {/* Icône flamme */}
-      <Flame size={12} className="text-red-400 flex-shrink-0" />
+      <Flame size={10} className="text-red-500 flex-shrink-0" />
 
       {/* Nom du produit */}
-      <span className="text-[10px] md:text-[11px] uppercase tracking-[0.15em] font-semibold text-[#0a0a0a] group-hover:text-[#8b6914] transition-colors">
+      <span className="text-[9px] md:text-[10px] uppercase tracking-[0.12em] font-semibold text-[#0a0a0a] group-hover:text-[#6b5020] transition-colors">
         {product.title}
       </span>
 
       {/* Prix barré + prix promo */}
-      <span className="text-[10px] text-[#888] line-through">
-        {product.price?.toLocaleString("fr-FR")} FCFA
+      <span className="text-[9px] text-[#666] line-through">
+        {product.price?.toLocaleString("fr-FR")} F
       </span>
-      <span className="text-[11px] font-bold text-red-600">
-        {product.promoPrice?.toLocaleString("fr-FR")} FCFA
+      <span className="text-[10px] font-bold text-red-700">
+        {product.promoPrice?.toLocaleString("fr-FR")} F
       </span>
 
       {/* Minuteur compte à rebours */}
       {!countdown.isExpired && (
-        <span className="inline-flex items-center gap-1 text-[10px] font-mono bg-[#0a0a0a] text-[#D4AF37] px-2 py-0.5 rounded-full">
-          <Clock size={9} />
+        <span className="inline-flex items-center gap-0.5 text-[9px] font-mono bg-[#0a0a0a]/80 text-[#C5A55A] px-1.5 py-px rounded-full">
+          <Clock size={8} />
           {countdown.days > 0 && `${countdown.days}j `}
           {pad(countdown.hours)}:{pad(countdown.minutes)}:{pad(countdown.seconds)}
         </span>
       )}
 
       {/* Séparateur visuel */}
-      <span className="text-[#D4AF37]/40 mx-2">&mdash;</span>
+      <span className="text-[#A68B3C]/30 mx-1">·</span>
     </Link>
   );
 }
@@ -114,9 +114,9 @@ export default function PromoBanner() {
   if (promos.length === 0) return null;
 
   return (
-    <div className="relative z-40 bg-gradient-to-r from-[#D4AF37] via-[#E0C055] to-[#D4AF37] border-b border-[#B8960F]/30 overflow-hidden">
-      {/* Marquee défilant — double les items pour un scroll infini */}
-      <div className="marquee-track flex whitespace-nowrap py-2">
+    <div className="relative z-40 bg-gradient-to-r from-[#C5A55A] via-[#D4BA78] to-[#C5A55A] border-b border-[#A68B3C]/20 overflow-hidden">
+      {/* Marquee défilant — compact, discret */}
+      <div className="marquee-track flex whitespace-nowrap py-1">
         {/* Première copie */}
         {promos.map((p) => (
           <PromoItem key={`a-${p.id}`} product={p} />

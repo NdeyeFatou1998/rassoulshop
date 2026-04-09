@@ -130,7 +130,7 @@ export default function AdminUsers() {
         <p className="text-sm text-[#888]">{users.length} utilisateur(s)</p>
         <button
           onClick={handleNew}
-          className="flex items-center gap-2 px-4 py-2.5 bg-[#D4AF37] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#E0C055] transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 bg-[#C5A55A] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#D4B56E] transition-colors"
         >
           <Plus size={16} />
           Nouvel utilisateur
@@ -161,7 +161,7 @@ export default function AdminUsers() {
                 {/* Avatar initiales */}
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold ${
                   user.role === "admin"
-                    ? "bg-[#D4AF37]/20 text-[#D4AF37]"
+                    ? "bg-[#C5A55A]/20 text-[#C5A55A]"
                     : "bg-blue-500/20 text-blue-400"
                 }`}>
                   {user.firstName?.[0]}{user.lastName?.[0]}
@@ -181,7 +181,7 @@ export default function AdminUsers() {
               <div className="flex items-center gap-3">
                 <span className={`flex items-center gap-1 text-xs px-2.5 py-1 rounded-full ${
                   user.role === "admin"
-                    ? "bg-[#D4AF37]/20 text-[#D4AF37]"
+                    ? "bg-[#C5A55A]/20 text-[#C5A55A]"
                     : "bg-blue-500/20 text-blue-400"
                 }`}>
                   {user.role === "admin" ? <Shield size={10} /> : <UserCheck size={10} />}
@@ -190,7 +190,7 @@ export default function AdminUsers() {
 
                 <button
                   onClick={() => handleEdit(user)}
-                  className="p-2 rounded-lg hover:bg-[#222] text-[#888] hover:text-[#D4AF37] transition-colors"
+                  className="p-2 rounded-lg hover:bg-[#222] text-[#888] hover:text-[#C5A55A] transition-colors"
                   title="Modifier"
                 >
                   <Edit2 size={16} />
@@ -249,7 +249,7 @@ export default function AdminUsers() {
                 </div>
                 <button
                   onClick={() => { setShowModal(false); setGeneratedPwd(""); }}
-                  className="w-full py-2.5 bg-[#D4AF37] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#E0C055]"
+                  className="w-full py-2.5 bg-[#C5A55A] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#D4B56E]"
                 >
                   Fermer
                 </button>
@@ -270,7 +270,7 @@ export default function AdminUsers() {
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
                       required
-                      className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D4AF37] focus:outline-none"
+                      className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
                     />
                   </div>
                   <div>
@@ -280,7 +280,7 @@ export default function AdminUsers() {
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
                       required
-                      className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D4AF37] focus:outline-none"
+                      className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
                     />
                   </div>
                 </div>
@@ -292,7 +292,7 @@ export default function AdminUsers() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D4AF37] focus:outline-none"
+                    className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
                   />
                 </div>
 
@@ -301,7 +301,7 @@ export default function AdminUsers() {
                   <select
                     value={role}
                     onChange={(e) => setRole(e.target.value)}
-                    className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D4AF37] focus:outline-none"
+                    className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
                   >
                     <option value="admin">Admin</option>
                     <option value="assistant">Assistant</option>
@@ -325,7 +325,7 @@ export default function AdminUsers() {
                   <button
                     type="submit"
                     disabled={saving}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-[#D4AF37] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#E0C055] disabled:opacity-50"
+                    className="flex items-center gap-2 px-5 py-2.5 bg-[#C5A55A] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#D4B56E] disabled:opacity-50"
                   >
                     <Save size={16} />
                     {saving ? "Enregistrement..." : "Enregistrer"}

@@ -37,7 +37,7 @@ export default function AdminLayout() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#D4AF37] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#C5A55A] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -91,7 +91,7 @@ export default function AdminLayout() {
           <p className="text-sm text-[#f5f0e8] font-medium truncate">
             {user?.firstName} {user?.lastName}
           </p>
-          <p className="text-xs text-[#D4AF37] uppercase tracking-wider mt-0.5">
+          <p className="text-xs text-[#C5A55A] uppercase tracking-wider mt-0.5">
             {user?.role}
           </p>
         </div>
@@ -108,7 +108,7 @@ export default function AdminLayout() {
                 onClick={() => setSidebarOpen(false)}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200 ${
                   isActive
-                    ? "bg-[#D4AF37]/10 text-[#D4AF37] font-medium"
+                    ? "bg-[#C5A55A]/10 text-[#C5A55A] font-medium"
                     : "text-[#888] hover:text-[#f5f0e8] hover:bg-[#1a1a1a]"
                 }`}
               >

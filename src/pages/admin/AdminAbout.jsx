@@ -133,7 +133,7 @@ export default function AdminAbout() {
         <p className="text-sm text-[#888]">{sections.length} section(s)</p>
         <button
           onClick={handleNew}
-          className="flex items-center gap-2 px-4 py-2.5 bg-[#D4AF37] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#E0C055] transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 bg-[#C5A55A] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#D4B56E] transition-colors"
         >
           <Plus size={16} />
           Nouvelle section
@@ -169,7 +169,7 @@ export default function AdminAbout() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleEdit(section)}
-                    className="p-2 rounded-lg hover:bg-[#222] text-[#888] hover:text-[#D4AF37] transition-colors"
+                    className="p-2 rounded-lg hover:bg-[#222] text-[#888] hover:text-[#C5A55A] transition-colors"
                   >
                     <Edit2 size={16} />
                   </button>
@@ -210,7 +210,7 @@ export default function AdminAbout() {
                   ))}
 
                   {/* Bouton ajouter une image */}
-                  <label className="w-20 h-20 flex flex-col items-center justify-center bg-[#1a1a1a] border-2 border-dashed border-[#333] rounded-lg cursor-pointer hover:border-[#D4AF37] transition-colors">
+                  <label className="w-20 h-20 flex flex-col items-center justify-center bg-[#1a1a1a] border-2 border-dashed border-[#333] rounded-lg cursor-pointer hover:border-[#C5A55A] transition-colors">
                     <Upload size={16} className="text-[#555]" />
                     <span className="text-[9px] text-[#555] mt-1">Image</span>
                     <input
@@ -258,7 +258,7 @@ export default function AdminAbout() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   required
-                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D4AF37] focus:outline-none"
+                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
                 />
               </div>
 
@@ -268,7 +268,7 @@ export default function AdminAbout() {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   rows={5}
-                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D4AF37] focus:outline-none resize-none"
+                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none resize-none"
                 />
               </div>
 
@@ -279,7 +279,7 @@ export default function AdminAbout() {
                   value={sortOrder}
                   onChange={(e) => setSortOrder(parseInt(e.target.value, 10) || 0)}
                   min="0"
-                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D4AF37] focus:outline-none"
+                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
                 />
               </div>
 
@@ -294,7 +294,7 @@ export default function AdminAbout() {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-[#D4AF37] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#E0C055] disabled:opacity-50"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-[#C5A55A] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#D4B56E] disabled:opacity-50"
                 >
                   <Save size={16} />
                   {saving ? "Enregistrement..." : "Enregistrer"}

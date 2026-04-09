@@ -172,12 +172,12 @@ export default function AdminProducts() {
             placeholder="Rechercher un produit..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-[#141414] border border-[#222] rounded-lg text-[#f5f0e8] placeholder-[#555] text-sm focus:border-[#D4AF37] focus:outline-none"
+            className="w-full pl-10 pr-4 py-2.5 bg-[#141414] border border-[#222] rounded-lg text-[#f5f0e8] placeholder-[#555] text-sm focus:border-[#C5A55A] focus:outline-none"
           />
         </div>
         <button
           onClick={handleNew}
-          className="flex items-center gap-2 px-4 py-2.5 bg-[#D4AF37] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#E0C055] transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 bg-[#C5A55A] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#D4B56E] transition-colors"
         >
           <Plus size={16} />
           Nouveau produit
@@ -228,7 +228,7 @@ export default function AdminProducts() {
                   <div>
                     <p className="text-sm text-[#f5f0e8] font-medium line-clamp-1">{product.title}</p>
                     {product.badge && (
-                      <span className="text-[10px] text-[#D4AF37] uppercase">{product.badge}</span>
+                      <span className="text-[10px] text-[#C5A55A] uppercase">{product.badge}</span>
                     )}
                   </div>
                 </div>
@@ -277,7 +277,7 @@ export default function AdminProducts() {
                 <div className="col-span-2 flex items-center justify-end gap-2">
                   <button
                     onClick={() => handleEdit(product)}
-                    className="p-2 rounded-lg hover:bg-[#222] text-[#888] hover:text-[#D4AF37] transition-colors"
+                    className="p-2 rounded-lg hover:bg-[#222] text-[#888] hover:text-[#C5A55A] transition-colors"
                     title="Modifier"
                   >
                     <Edit2 size={16} />
@@ -326,7 +326,7 @@ export default function AdminProducts() {
                   value={form.title}
                   onChange={(e) => setForm({ ...form, title: e.target.value })}
                   required
-                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D4AF37] focus:outline-none"
+                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
                 />
               </div>
 
@@ -337,7 +337,7 @@ export default function AdminProducts() {
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
                   rows={3}
-                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D4AF37] focus:outline-none resize-none"
+                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none resize-none"
                 />
               </div>
 
@@ -349,7 +349,7 @@ export default function AdminProducts() {
                   value={form.image}
                   onChange={(e) => setForm({ ...form, image: e.target.value })}
                   placeholder="/assets/images/..."
-                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D4AF37] focus:outline-none"
+                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
                 />
               </div>
 
@@ -363,7 +363,7 @@ export default function AdminProducts() {
                     onChange={(e) => setForm({ ...form, price: e.target.value })}
                     required
                     min="0"
-                    className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D4AF37] focus:outline-none"
+                    className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -373,7 +373,7 @@ export default function AdminProducts() {
                     value={form.stock}
                     onChange={(e) => setForm({ ...form, stock: e.target.value })}
                     min="0"
-                    className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D4AF37] focus:outline-none"
+                    className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -385,7 +385,7 @@ export default function AdminProducts() {
                     min="0"
                     max="5"
                     step="0.1"
-                    className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D4AF37] focus:outline-none"
+                    className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
                   />
                 </div>
               </div>
@@ -399,7 +399,7 @@ export default function AdminProducts() {
                     value={form.category}
                     onChange={(e) => setForm({ ...form, category: e.target.value })}
                     placeholder="sets, robes, vestes..."
-                    className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D4AF37] focus:outline-none"
+                    className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -409,7 +409,7 @@ export default function AdminProducts() {
                     value={form.badge}
                     onChange={(e) => setForm({ ...form, badge: e.target.value })}
                     placeholder="Nouveau, Best-seller..."
-                    className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D4AF37] focus:outline-none"
+                    className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
                   />
                 </div>
               </div>
@@ -421,7 +421,7 @@ export default function AdminProducts() {
                     type="checkbox"
                     checked={form.promoActive}
                     onChange={(e) => setForm({ ...form, promoActive: e.target.checked })}
-                    className="w-4 h-4 accent-[#D4AF37]"
+                    className="w-4 h-4 accent-[#C5A55A]"
                   />
                   <label className="text-sm text-[#f5f0e8]">Activer la promotion</label>
                 </div>
@@ -434,7 +434,7 @@ export default function AdminProducts() {
                         value={form.promoPrice}
                         onChange={(e) => setForm({ ...form, promoPrice: e.target.value })}
                         min="0"
-                        className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D4AF37] focus:outline-none"
+                        className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
                       />
                     </div>
                     <div>
@@ -443,7 +443,7 @@ export default function AdminProducts() {
                         type="datetime-local"
                         value={form.promoEndsAt}
                         onChange={(e) => setForm({ ...form, promoEndsAt: e.target.value })}
-                        className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D4AF37] focus:outline-none"
+                        className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
                       />
                     </div>
                   </div>
@@ -480,12 +480,12 @@ export default function AdminProducts() {
                       value={newVariantName}
                       onChange={(e) => setNewVariantName(e.target.value)}
                       placeholder="Nom de la variante"
-                      className="flex-1 px-3 py-2 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D4AF37] focus:outline-none"
+                      className="flex-1 px-3 py-2 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
                     />
                     <button
                       type="button"
                       onClick={handleAddVariant}
-                      className="px-3 py-2 bg-[#222] text-[#D4AF37] rounded-lg text-sm hover:bg-[#333] transition-colors"
+                      className="px-3 py-2 bg-[#222] text-[#C5A55A] rounded-lg text-sm hover:bg-[#333] transition-colors"
                     >
                       <Plus size={16} />
                     </button>
@@ -505,7 +505,7 @@ export default function AdminProducts() {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-[#D4AF37] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#E0C055] disabled:opacity-50 transition-colors"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-[#C5A55A] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#D4B56E] disabled:opacity-50 transition-colors"
                 >
                   <Save size={16} />
                   {saving ? "Enregistrement..." : "Enregistrer"}

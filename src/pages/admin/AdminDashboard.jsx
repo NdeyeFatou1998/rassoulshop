@@ -78,8 +78,8 @@ export default function AdminDashboard() {
       label: "Produits",
       value: stats?.totalProducts || 0,
       icon: Package,
-      color: "text-[#D4AF37]",
-      bg: "bg-[#D4AF37]/10",
+      color: "text-[#C5A55A]",
+      bg: "bg-[#C5A55A]/10",
     },
     {
       label: "Utilisateurs",
@@ -151,7 +151,7 @@ export default function AdminDashboard() {
           <h2 className="text-sm font-medium text-[#f5f0e8]">Dernières commandes</h2>
           <Link
             to="/admin/orders"
-            className="text-xs text-[#D4AF37] hover:text-[#E0C055] transition-colors"
+            className="text-xs text-[#C5A55A] hover:text-[#D4B56E] transition-colors"
           >
             Voir tout →
           </Link>
@@ -179,7 +179,7 @@ export default function AdminDashboard() {
                     <span className={`text-xs px-2 py-1 rounded-full ${st.cls}`}>
                       {st.label}
                     </span>
-                    <p className="text-sm font-medium text-[#D4AF37] mt-1">
+                    <p className="text-sm font-medium text-[#C5A55A] mt-1">
                       {formatPrice(order.total)}
                     </p>
                   </div>
@@ -194,30 +194,30 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <Link
           to="/admin/products"
-          className="bg-[#141414] border border-[#222] rounded-xl p-4 text-center hover:border-[#D4AF37]/30 transition-colors"
+          className="bg-[#141414] border border-[#222] rounded-xl p-4 text-center hover:border-[#C5A55A]/30 transition-colors"
         >
-          <Package size={24} className="mx-auto text-[#D4AF37] mb-2" />
+          <Package size={24} className="mx-auto text-[#C5A55A] mb-2" />
           <p className="text-sm text-[#f5f0e8]">Gérer Produits</p>
         </Link>
         <Link
           to="/admin/orders"
-          className="bg-[#141414] border border-[#222] rounded-xl p-4 text-center hover:border-[#D4AF37]/30 transition-colors"
+          className="bg-[#141414] border border-[#222] rounded-xl p-4 text-center hover:border-[#C5A55A]/30 transition-colors"
         >
-          <ShoppingCart size={24} className="mx-auto text-[#D4AF37] mb-2" />
+          <ShoppingCart size={24} className="mx-auto text-[#C5A55A] mb-2" />
           <p className="text-sm text-[#f5f0e8]">Commandes</p>
         </Link>
         <Link
           to="/admin/lookbook"
-          className="bg-[#141414] border border-[#222] rounded-xl p-4 text-center hover:border-[#D4AF37]/30 transition-colors"
+          className="bg-[#141414] border border-[#222] rounded-xl p-4 text-center hover:border-[#C5A55A]/30 transition-colors"
         >
-          <Package size={24} className="mx-auto text-[#D4AF37] mb-2" />
+          <Package size={24} className="mx-auto text-[#C5A55A] mb-2" />
           <p className="text-sm text-[#f5f0e8]">Lookbook</p>
         </Link>
         <Link
           to="/admin/users"
-          className="bg-[#141414] border border-[#222] rounded-xl p-4 text-center hover:border-[#D4AF37]/30 transition-colors"
+          className="bg-[#141414] border border-[#222] rounded-xl p-4 text-center hover:border-[#C5A55A]/30 transition-colors"
         >
-          <Users size={24} className="mx-auto text-[#D4AF37] mb-2" />
+          <Users size={24} className="mx-auto text-[#C5A55A] mb-2" />
           <p className="text-sm text-[#f5f0e8]">Utilisateurs</p>
         </Link>
       </div>

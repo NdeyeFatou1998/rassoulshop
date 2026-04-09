@@ -27,9 +27,9 @@ export default {
           600: "#2a2a2a",
         },
         gold: {
-          DEFAULT: "#D4AF37",
-          light: "#E8CC6A",
-          dark: "#B8960F",
+          DEFAULT: "#C5A55A",
+          light: "#D4BA78",
+          dark: "#A68B3C",
         },
         cream: {
           DEFAULT: "#f5f0eb",

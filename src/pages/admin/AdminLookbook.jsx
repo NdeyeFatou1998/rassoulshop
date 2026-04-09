@@ -125,7 +125,7 @@ export default function AdminLookbook() {
         <p className="text-sm text-[#888]">{items.length} média(s)</p>
         <button
           onClick={handleNew}
-          className="flex items-center gap-2 px-4 py-2.5 bg-[#D4AF37] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#E0C055] transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 bg-[#C5A55A] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#D4B56E] transition-colors"
         >
           <Plus size={16} />
           Ajouter un média
@@ -179,7 +179,7 @@ export default function AdminLookbook() {
               <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                 <button
                   onClick={() => handleEdit(item)}
-                  className="p-2 bg-[#D4AF37] rounded-full text-[#0a0a0a] hover:bg-[#E0C055]"
+                  className="p-2 bg-[#C5A55A] rounded-full text-[#0a0a0a] hover:bg-[#D4B56E]"
                 >
                   <Edit2 size={14} />
                 </button>
@@ -228,7 +228,7 @@ export default function AdminLookbook() {
               {!editingItem && (
                 <div>
                   <label className="block text-xs text-[#888] uppercase tracking-wider mb-2">Fichier *</label>
-                  <label className="flex flex-col items-center gap-2 p-6 bg-[#1a1a1a] border-2 border-dashed border-[#333] rounded-lg cursor-pointer hover:border-[#D4AF37] transition-colors">
+                  <label className="flex flex-col items-center gap-2 p-6 bg-[#1a1a1a] border-2 border-dashed border-[#333] rounded-lg cursor-pointer hover:border-[#C5A55A] transition-colors">
                     <Upload size={24} className="text-[#555]" />
                     <span className="text-sm text-[#888]">
                       {file ? file.name : "Cliquer pour sélectionner"}
@@ -255,7 +255,7 @@ export default function AdminLookbook() {
                 <select
                   value={type}
                   onChange={(e) => setType(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D4AF37] focus:outline-none"
+                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
                 >
                   <option value="image">Image</option>
                   <option value="video">Vidéo</option>
@@ -270,7 +270,7 @@ export default function AdminLookbook() {
                   value={caption}
                   onChange={(e) => setCaption(e.target.value)}
                   placeholder="Description du média..."
-                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D4AF37] focus:outline-none"
+                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
                 />
               </div>
 
@@ -282,7 +282,7 @@ export default function AdminLookbook() {
                   value={sortOrder}
                   onChange={(e) => setSortOrder(parseInt(e.target.value, 10) || 0)}
                   min="0"
-                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D4AF37] focus:outline-none"
+                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
                 />
               </div>
 
@@ -298,7 +298,7 @@ export default function AdminLookbook() {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-[#D4AF37] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#E0C055] disabled:opacity-50"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-[#C5A55A] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#D4B56E] disabled:opacity-50"
                 >
                   <Save size={16} />
                   {saving ? "Enregistrement..." : "Enregistrer"}

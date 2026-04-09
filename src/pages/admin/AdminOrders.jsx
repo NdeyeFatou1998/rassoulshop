@@ -105,7 +105,7 @@ export default function AdminOrders() {
             placeholder="Rechercher par nom, tél, n°..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-[#141414] border border-[#222] rounded-lg text-[#f5f0e8] placeholder-[#555] text-sm focus:border-[#D4AF37] focus:outline-none"
+            className="w-full pl-10 pr-4 py-2.5 bg-[#141414] border border-[#222] rounded-lg text-[#f5f0e8] placeholder-[#555] text-sm focus:border-[#C5A55A] focus:outline-none"
           />
         </div>
 
@@ -115,7 +115,7 @@ export default function AdminOrders() {
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-3 py-2.5 bg-[#141414] border border-[#222] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D4AF37] focus:outline-none"
+            className="px-3 py-2.5 bg-[#141414] border border-[#222] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
           >
             <option value="">Tous les statuts</option>
             {Object.entries(STATUS_CONFIG).map(([key, val]) => (
@@ -165,7 +165,7 @@ export default function AdminOrders() {
 
                 {/* Prix + actions */}
                 <div className="flex items-center gap-3">
-                  <p className="text-sm font-semibold text-[#D4AF37]">{fmtPrice(order.total)}</p>
+                  <p className="text-sm font-semibold text-[#C5A55A]">{fmtPrice(order.total)}</p>
 
                   {/* Sélecteur de statut rapide */}
                   <select
@@ -182,7 +182,7 @@ export default function AdminOrders() {
 
                   <button
                     onClick={() => setSelectedOrder(order)}
-                    className="p-2 rounded-lg hover:bg-[#222] text-[#888] hover:text-[#D4AF37] transition-colors"
+                    className="p-2 rounded-lg hover:bg-[#222] text-[#888] hover:text-[#C5A55A] transition-colors"
                     title="Détails"
                   >
                     <Eye size={16} />
@@ -236,7 +236,7 @@ export default function AdminOrders() {
                         <p className="text-sm text-[#f5f0e8]">{item.title || `Produit #${item.productId}`}</p>
                         <p className="text-xs text-[#555]">Qté : {item.quantity}</p>
                       </div>
-                      <p className="text-sm text-[#D4AF37]">
+                      <p className="text-sm text-[#C5A55A]">
                         {fmtPrice((item.price || 0) * (item.quantity || 1))}
                       </p>
                     </div>
@@ -249,7 +249,7 @@ export default function AdminOrders() {
                 <div>
                   <p className="text-xs text-[#888]">Date : {fmtDate(selectedOrder.createdAt)}</p>
                 </div>
-                <p className="text-lg font-bold text-[#D4AF37]">{fmtPrice(selectedOrder.total)}</p>
+                <p className="text-lg font-bold text-[#C5A55A]">{fmtPrice(selectedOrder.total)}</p>
               </div>
             </div>
           </div>
