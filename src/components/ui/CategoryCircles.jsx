@@ -28,10 +28,16 @@ function CategoryItem({ label, slug, Icon }) {
       to={`/shop?category=${encodeURIComponent(slug)}`}
       className="group inline-flex flex-col items-center justify-center mx-4 md:mx-6"
     >
-      <div className="w-[68px] h-[68px] md:w-[78px] md:h-[78px] rounded-full bg-noir-900/80 border border-gold/15 group-hover:border-gold/35 transition-colors flex items-center justify-center">
-        <Icon size={20} className="text-gold/80 group-hover:text-gold transition-colors" />
+      <div className="relative w-[68px] h-[68px] md:w-[78px] md:h-[78px] rounded-full overflow-hidden bg-gradient-to-br from-gold via-gold-light to-gold border border-gold/40 flex items-center justify-center transition-all duration-300 group-hover:scale-[1.05] group-hover:shadow-[0_18px_45px_rgba(0,0,0,0.45)]">
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[radial-gradient(circle_at_30%_25%,rgba(255,255,255,0.55),transparent_55%)]" />
+        <div className="absolute inset-0 opacity-60 mix-blend-overlay bg-[linear-gradient(120deg,transparent_0%,rgba(255,255,255,0.22)_38%,transparent_58%,transparent_100%)]" />
+
+        <Icon
+          size={20}
+          className="relative z-10 text-noir-950/90 group-hover:text-noir-950 transition-colors"
+        />
       </div>
-      <span className="mt-2 text-[10px] md:text-[11px] uppercase tracking-[0.18em] text-cream/55 group-hover:text-cream/80 transition-colors">
+      <span className="mt-2 text-[10px] md:text-[11px] uppercase tracking-[0.18em] text-gold/80 group-hover:text-gold transition-colors">
         {label}
       </span>
     </Link>
