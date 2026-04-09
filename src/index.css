@@ -28,7 +28,7 @@
     border-radius: 10px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(201, 169, 110, 0.4);
+    background: rgba(212, 175, 55, 0.5);
   }
 
   /* Scroll fluide global + antialiasing */
@@ -40,7 +40,7 @@
 
   /* Sélection de texte aux couleurs de la marque */
   ::selection {
-    background: rgba(201, 169, 110, 0.25);
+    background: rgba(212, 175, 55, 0.3);
     color: #f5f0eb;
   }
 
@@ -75,8 +75,8 @@
     transition: border-color 0.4s ease, box-shadow 0.4s ease;
   }
   .border-gold-hover:hover {
-    border-color: rgba(201, 169, 110, 0.25);
-    box-shadow: 0 0 0 1px rgba(201, 169, 110, 0.06);
+    border-color: rgba(212, 175, 55, 0.3);
+    box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.08);
   }
 
   /* Overlay gradient sombre pour les images/vidéos */
@@ -93,12 +93,12 @@
   .gold-line {
     width: 40px;
     height: 1px;
-    background: linear-gradient(to right, #c9a96e, rgba(201, 169, 110, 0.2));
+    background: linear-gradient(to right, #D4AF37, rgba(212, 175, 55, 0.2));
   }
 
   /* Texte avec gradient doré animé */
   .text-gradient-gold {
-    background: linear-gradient(135deg, #c9a96e 0%, #e8d5a8 40%, #c9a96e 80%, #dfc9a0 100%);
+    background: linear-gradient(135deg, #D4AF37 0%, #F0D860 35%, #D4AF37 65%, #E8CC6A 100%);
     background-size: 200% 200%;
     animation: goldShift 4s ease-in-out infinite;
     -webkit-background-clip: text;
@@ -119,9 +119,9 @@
     background: linear-gradient(
       90deg,
       transparent 0%,
-      rgba(201, 169, 110, 0.04) 40%,
-      rgba(201, 169, 110, 0.08) 50%,
-      rgba(201, 169, 110, 0.04) 60%,
+      rgba(212, 175, 55, 0.05) 40%,
+      rgba(212, 175, 55, 0.10) 50%,
+      rgba(212, 175, 55, 0.05) 60%,
       transparent 100%
     );
     animation: shimmerSlide 1.8s ease-in-out infinite;
@@ -130,13 +130,13 @@
   /* Glow doré subtil pour les CTAs et le panier flottant */
   .glow-gold {
     box-shadow:
-      0 0 15px rgba(201, 169, 110, 0.2),
-      0 0 40px rgba(201, 169, 110, 0.08);
+      0 0 15px rgba(212, 175, 55, 0.25),
+      0 0 40px rgba(212, 175, 55, 0.10);
   }
   .glow-gold-hover:hover {
     box-shadow:
-      0 0 20px rgba(201, 169, 110, 0.35),
-      0 0 60px rgba(201, 169, 110, 0.12);
+      0 0 20px rgba(212, 175, 55, 0.4),
+      0 0 60px rgba(212, 175, 55, 0.15);
   }
 
   /* Card avec bordure gradient animée au hover */
@@ -149,8 +149,8 @@
     transition: border-color 0.5s ease, transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.5s ease;
   }
   .card-premium:hover {
-    border-color: rgba(201, 169, 110, 0.2);
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(201, 169, 110, 0.08);
+    border-color: rgba(212, 175, 55, 0.25);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(212, 175, 55, 0.10);
   }
   @media (min-width: 768px) {
     .card-premium:hover {
@@ -217,8 +217,8 @@
 
 /* Pulse glow pour le panier flottant */
 @keyframes glowPulse {
-  0%, 100% { box-shadow: 0 0 15px rgba(201, 169, 110, 0.25), 0 0 40px rgba(201, 169, 110, 0.08); }
-  50% { box-shadow: 0 0 25px rgba(201, 169, 110, 0.4), 0 0 60px rgba(201, 169, 110, 0.15); }
+  0%, 100% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.3), 0 0 40px rgba(212, 175, 55, 0.10); }
+  50% { box-shadow: 0 0 25px rgba(212, 175, 55, 0.5), 0 0 60px rgba(212, 175, 55, 0.2); }
 }
 .glow-pulse {
   animation: glowPulse 3s ease-in-out infinite;

@@ -7,8 +7,11 @@
  * - /lookbook      → Galerie visuelle (Lookbook)
  * - /product/:id   → Fiche détail produit (ProductDetail)
  * - /cart          → Panier d'achat (Cart)
+ * - /admin/login   → Connexion admin
+ * - /admin/*       → Backoffice admin (dashboard, produits, lookbook, about, commandes, users, settings)
  * 
  * Layout global :
+ * - AuthProvider enveloppe tout (état global auth admin)
  * - CartProvider enveloppe tout (état global panier)
  * - Navbar fixe en haut (desktop) avec glassmorphism
  * - FloatingCart : bouton panier flottant avec compteur
@@ -21,6 +24,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CartProvider } from "./context/CartContext";
+import { AuthProvider } from "./context/AuthContext";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import MobileTabBar from "./components/layout/MobileTabBar";
@@ -30,6 +34,17 @@ import Shop from "./pages/Shop";
 import Lookbook from "./pages/Lookbook";
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
+
+/* ---- Pages Admin ---- */
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminProducts from "./pages/admin/AdminProducts";
+import AdminLookbook from "./pages/admin/AdminLookbook";
+import AdminAbout from "./pages/admin/AdminAbout";
+import AdminOrders from "./pages/admin/AdminOrders";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminSettings from "./pages/admin/AdminSettings";
 
 /**
  * ScrollToTop - Remet le scroll en haut à chaque navigation
@@ -78,30 +93,59 @@ function AnimatedRoutes() {
   );
 }
 
+/**
+ * PublicLayout — Layout du site public (Navbar, Footer, FloatingCart, MobileTabBar)
+ * Séparé de l'admin qui a son propre layout
+ */
+function PublicLayout() {
+  return (
+    <>
+      {/* Navigation principale desktop (glassmorphism) */}
+      <Navbar />
+
+      {/* Contenu principal avec transitions animées entre les pages */}
+      <main className="min-h-screen pb-20 md:pb-0">
+        <AnimatedRoutes />
+      </main>
+
+      {/* Pied de page premium */}
+      <Footer />
+
+      {/* Panier flottant avec compteur (visible quand articles > 0) */}
+      <FloatingCart />
+
+      {/* Navigation mobile fixe en bas (visible < 768px) */}
+      <MobileTabBar />
+    </>
+  );
+}
+
 export default function App() {
   return (
-    <CartProvider>
-      <BrowserRouter>
-        {/* Reset du scroll à chaque changement de route */}
-        <ScrollToTop />
+    <AuthProvider>
+      <CartProvider>
+        <BrowserRouter>
+          {/* Reset du scroll à chaque changement de route */}
+          <ScrollToTop />
 
-        {/* Navigation principale desktop (glassmorphism) */}
-        <Navbar />
+          <Routes>
+            {/* ---- Routes Admin (layout séparé, pas de Navbar/Footer) ---- */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route path="dashboard" element={<AdminDashboard />} />
+              <Route path="products" element={<AdminProducts />} />
+              <Route path="lookbook" element={<AdminLookbook />} />
+              <Route path="about" element={<AdminAbout />} />
+              <Route path="orders" element={<AdminOrders />} />
+              <Route path="users" element={<AdminUsers />} />
+              <Route path="settings" element={<AdminSettings />} />
+            </Route>
 
-        {/* Contenu principal avec transitions animées entre les pages */}
-        <main className="min-h-screen pb-20 md:pb-0">
-          <AnimatedRoutes />
-        </main>
-
-        {/* Pied de page premium */}
-        <Footer />
-
-        {/* Panier flottant avec compteur (visible quand articles > 0) */}
-        <FloatingCart />
-
-        {/* Navigation mobile fixe en bas (visible < 768px) */}
-        <MobileTabBar />
-      </BrowserRouter>
-    </CartProvider>
+            {/* ---- Routes publiques (avec Navbar, Footer, etc.) ---- */}
+            <Route path="/*" element={<PublicLayout />} />
+          </Routes>
+        </BrowserRouter>
+      </CartProvider>
+    </AuthProvider>
   );
 }

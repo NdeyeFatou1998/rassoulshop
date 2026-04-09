@@ -14,10 +14,14 @@ import Hero from "../components/sections/Hero";
 import Editorial from "../components/sections/Editorial";
 import ProductGrid from "../components/sections/ProductGrid";
 import Experience from "../components/sections/Experience";
+import PromoBanner from "../components/ui/PromoBanner";
 
 export default function Home() {
   return (
     <>
+      {/* Bannière promotions défilante avec minuteur (masquée si aucune promo) */}
+      <PromoBanner />
+
       {/* Section héro plein écran avec photo de fond */}
       <Hero
         imageSrc="/assets/images/WhatsApp Image 2026-03-24 at 01.27.57.jpeg"

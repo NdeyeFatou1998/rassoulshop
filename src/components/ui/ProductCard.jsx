@@ -9,11 +9,13 @@
  * - Card premium avec lift au hover (desktop)
  * - Badge animé, étoile toujours visible, prix FCFA
  * - Micro-interactions : press effect sur le bouton panier
+ * - Bouton "Épuisé" rouge quand stock = 0
+ * - Prix promo avec prix barré si promo active
  */
 
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Star, ShoppingBag, Check } from "lucide-react";
+import { Star, ShoppingBag, Check, XCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 
@@ -21,6 +23,12 @@ export default function ProductCard({ product, index = 0 }) {
   const { addToCart, flyTargetRef } = useCart();
   const imgRef = useRef(null);
   const [justAdded, setJustAdded] = useState(false);
+
+  /* Déterminer si le produit est en rupture de stock */
+  const isSoldOut = product.stock !== undefined && product.stock <= 0;
+
+  /* Déterminer si une promo est active */
+  const hasPromo = product.promoActive && product.promoPrice;
 
   /**
    * Ajouter au panier avec animation fly-to-cart améliorée
@@ -130,28 +138,52 @@ export default function ProductCard({ product, index = 0 }) {
           <h3 className="text-[13px] md:text-sm font-medium text-cream/90 leading-snug line-clamp-1 group-hover:text-cream transition-colors duration-300">
             {product.title}
           </h3>
-          {/* Prix en FCFA */}
-          <p className="text-[13px] md:text-sm font-bold text-cream">
-            {product.price.toLocaleString("fr-FR")} <span className="text-[9px] font-normal text-muted">FCFA</span>
-          </p>
+          {/* Prix en FCFA — avec support promo (prix barré + prix réduit) */}
+          <div className="flex items-center gap-2">
+            {hasPromo ? (
+              <>
+                <p className="text-[11px] md:text-xs text-muted line-through">
+                  {product.price.toLocaleString("fr-FR")}
+                </p>
+                <p className="text-[13px] md:text-sm font-bold text-red-400">
+                  {product.promoPrice.toLocaleString("fr-FR")} <span className="text-[9px] font-normal">FCFA</span>
+                </p>
+              </>
+            ) : (
+              <p className="text-[13px] md:text-sm font-bold text-cream">
+                {product.price.toLocaleString("fr-FR")} <span className="text-[9px] font-normal text-muted">FCFA</span>
+              </p>
+            )}
+          </div>
         </div>
       </Link>
 
-      {/* ---- Bouton panier rapide ----
+      {/* ---- Bouton panier rapide / Épuisé ----
+           Si stock = 0 : badge "Épuisé" rouge, désactivé
+           Sinon : bouton panier normal
            MOBILE : toujours visible (opacity-100)
            DESKTOP : apparaît au hover avec transition slide-up
       */}
-      <button
-        onClick={handleQuickAdd}
-        className={`absolute bottom-[72px] md:bottom-[76px] right-2.5 w-9 h-9 rounded-full flex items-center justify-center shadow-lg btn-press transition-all duration-300 opacity-100 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 ${
-          justAdded
-            ? "bg-green-500 text-white scale-110"
-            : "bg-gold text-noir-900 glow-gold-hover"
-        }`}
-        aria-label="Ajouter au panier"
-      >
-        {justAdded ? <Check size={14} strokeWidth={3} /> : <ShoppingBag size={14} strokeWidth={2.5} />}
-      </button>
+      {isSoldOut ? (
+        <div
+          className="absolute bottom-[72px] md:bottom-[76px] right-2.5 px-2.5 h-9 rounded-full flex items-center justify-center gap-1 shadow-lg bg-red-500/90 text-white text-[10px] font-bold uppercase tracking-wider opacity-100"
+        >
+          <XCircle size={12} />
+          Épuisé
+        </div>
+      ) : (
+        <button
+          onClick={handleQuickAdd}
+          className={`absolute bottom-[72px] md:bottom-[76px] right-2.5 w-9 h-9 rounded-full flex items-center justify-center shadow-lg btn-press transition-all duration-300 opacity-100 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 ${
+            justAdded
+              ? "bg-green-500 text-white scale-110"
+              : "bg-gold text-noir-900 glow-gold-hover"
+          }`}
+          aria-label="Ajouter au panier"
+        >
+          {justAdded ? <Check size={14} strokeWidth={3} /> : <ShoppingBag size={14} strokeWidth={2.5} />}
+        </button>
+      )}
     </motion.article>
   );
 }

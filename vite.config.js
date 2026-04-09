@@ -13,9 +13,13 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
-    /* Proxy des appels /api vers le backend Express */
+    /* Proxy des appels /api et /uploads vers le backend Express */
     proxy: {
       "/api": {
+        target: "http://localhost:3001",
+        changeOrigin: true,
+      },
+      "/uploads": {
         target: "http://localhost:3001",
         changeOrigin: true,
       },

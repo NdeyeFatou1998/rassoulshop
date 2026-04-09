@@ -3,18 +3,37 @@
  * 
  * Design minimaliste et premium :
  * - Grande image de marque avec overlay texte
- * - Valeurs de la maison en icônes (pas de paragraphes)
+ * - Valeurs de la maison en icônes (statique)
+ * - Sections dynamiques depuis l'API /api/about (titre + description + images)
  * - Section statistiques/chiffres clés
  * - Vidéo immersive de la marque
  * 
  * Principe : montrer plutôt qu'expliquer, zéro blabla.
+ * Le contenu des sections À Propos est géré dynamiquement par l'admin.
  */
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Gem, Truck, Shield, Heart } from "lucide-react";
 import AnimatedSection from "../components/ui/AnimatedSection";
+import { fetchAbout } from "../services/adminApi";
 
 export default function About() {
+  /* Sections dynamiques chargées depuis l'API */
+  const [sections, setSections] = useState([]);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const data = await fetchAbout();
+        setSections(data || []);
+      } catch {
+        /* Silencieux si API indisponible */
+      }
+    }
+    load();
+  }, []);
+
   /* Valeurs de la maison en format icône + label */
   const values = [
     { icon: Gem, label: "Premium", desc: "Qualité supérieure" },
@@ -30,6 +49,13 @@ export default function About() {
     { value: "48h", label: "Livraison" },
     { value: "2026", label: "Depuis" },
   ];
+
+  /** Construire l'URL complète pour les images uploadées */
+  function getImgUrl(src) {
+    if (!src) return "";
+    /* Les URLs /uploads sont proxifiées par Vite vers le backend */
+    return src;
+  }
 
   return (
     <>
@@ -86,6 +112,53 @@ export default function About() {
           })}
         </div>
       </section>
+
+      {/* ---- Sections dynamiques À Propos (gérées par l'admin) ---- */}
+      {sections.length > 0 && (
+        <section className="w-full px-4 md:px-8 lg:px-12 pb-16 md:pb-24 space-y-12">
+          {sections.map((section, i) => (
+            <AnimatedSection key={section.id} delay={i * 0.1}>
+              <div className="rounded-2xl bg-noir-800 border border-white/[0.06] overflow-hidden">
+                {/* Titre + description */}
+                <div className="p-6 md:p-10">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-6 h-px bg-gold" />
+                    <span className="text-[10px] uppercase tracking-[0.25em] text-gold font-semibold">
+                      À propos
+                    </span>
+                  </div>
+                  <h2 className="font-serif text-2xl md:text-3xl text-cream mb-4">
+                    {section.title}
+                  </h2>
+                  {section.description && (
+                    <p className="text-sm md:text-base text-muted leading-relaxed max-w-3xl whitespace-pre-line">
+                      {section.description}
+                    </p>
+                  )}
+                </div>
+
+                {/* Images de la section (grille responsive) */}
+                {section.images?.length > 0 && (
+                  <div className={`grid gap-1 ${
+                    section.images.length === 1 ? "grid-cols-1"
+                    : section.images.length === 2 ? "grid-cols-2"
+                    : "grid-cols-2 md:grid-cols-3"
+                  }`}>
+                    {section.images.map((img) => (
+                      <img
+                        key={img.id}
+                        src={getImgUrl(img.src)}
+                        alt={section.title}
+                        className="w-full h-48 md:h-64 object-cover"
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </AnimatedSection>
+          ))}
+        </section>
+      )}
 
       {/* ---- Statistiques clés ---- */}
       <section className="w-full px-4 md:px-8 lg:px-12 pb-16 md:pb-24">
