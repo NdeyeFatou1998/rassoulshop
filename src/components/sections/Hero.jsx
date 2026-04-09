@@ -52,7 +52,7 @@ export default function Hero({ imageSrc, title, subtitle }) {
   return (
     <section
       ref={sectionRef}
-      className="relative h-[65svh] min-h-[440px] max-h-[720px] flex items-end overflow-hidden w-full"
+      className="relative h-[60svh] min-h-[420px] max-h-[680px] flex items-end overflow-hidden w-full"
     >
       {/* ---- Photo de fond avec effet parallax ---- */}
       {imageSrc ? (
