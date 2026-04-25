@@ -13,7 +13,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ShoppingCart } from "lucide-react";
+import { Menu, X, ShoppingCart, ShoppingBag } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 
 export default function Navbar() {
@@ -120,7 +120,7 @@ export default function Navbar() {
         </div>
       </motion.header>
 
-      {/* ---- Menu mobile — fond blanc propre ---- */}
+      {/* ---- Menu mobile — fond noir doré ---- */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div

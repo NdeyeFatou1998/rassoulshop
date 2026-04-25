@@ -38,9 +38,8 @@ export async function fetchProducts({ category, limit, sort } = {}) {
     const data = await response.json();
     return data.products;
   } catch (error) {
-    console.warn("API indisponible, utilisation des données de secours:", error.message);
-    /* Données de secours si le backend est hors ligne */
-    return getFallbackProducts();
+    console.warn("API indisponible:", error.message);
+    return [];
   }
 }
 
@@ -76,19 +75,3 @@ export async function fetchCategories() {
   }
 }
 
-/**
- * Données de secours si le backend est hors ligne
- * Permet au frontend de fonctionner en mode autonome
- */
-function getFallbackProducts() {
-  return [
-    { id: 1, title: "Peluche Personnalisee Geante", description: "Peluche geante brodee au prenom de votre choix.", price: 15000, rating: 4.9, category: "peluches", image: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.08.jpeg", badge: "Best-seller" },
-    { id: 2, title: "Bracelet Couple Grave", description: "Paire de bracelets argentes graves au prenom.", price: 8000, rating: 4.6, category: "bijoux", image: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.09.jpeg", badge: null },
-    { id: 3, title: "Set Cadeau Beige Premium", description: "Coffret cuir beige complet.", price: 30000, rating: 4.8, category: "sets-cadeau", image: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.10.jpeg", badge: "Best-seller" },
-    { id: 4, title: "Set Cadeau Vert Elegant", description: "Coffret cuir vert complet.", price: 32000, rating: 4.7, category: "sets-cadeau", image: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.11.jpeg", badge: null },
-    { id: 5, title: "Set Cadeau Gris Anthracite", description: "Coffret cuir gris fonce.", price: 28000, rating: 4.7, category: "sets-cadeau", image: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.12.jpeg", badge: null },
-    { id: 6, title: "Peluche Boss Lady Bouquet", description: "Coffret peluche avec bouquet de roses.", price: 25000, rating: 4.8, category: "peluches", image: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.15.jpeg", badge: "Exclusif" },
-    { id: 7, title: "Montre Automatique Classique", description: "Montres automatiques bracelet cuir premium.", price: 35000, rating: 4.9, category: "montres", image: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.58.jpeg", badge: "Nouveau" },
-    { id: 8, title: "Set Montre Bijoux Or", description: "Montre doree avec collier Van Cleef style.", price: 38000, rating: 4.8, category: "montres", image: "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg", badge: null },
-  ];
-}
