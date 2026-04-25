@@ -220,6 +220,24 @@ export async function deleteLookbookItem(id) {
   });
 }
 
+/** GET /api/lookbook/banner — Bannière hero */
+export async function fetchLookbookBanner() {
+  return apiRequest(`${API_BASE}/lookbook/banner`);
+}
+
+/** PUT /api/lookbook/banner — Modifier la bannière (FormData avec fichier) */
+export async function updateLookbookBanner(formData) {
+  const token = getToken();
+  const response = await fetch(`${API_BASE}/lookbook/banner`, {
+    method: "PUT",
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    body: formData,
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || "Erreur upload bannière");
+  return data;
+}
+
 /* ================================================================== */
 /*  ABOUT                                                              */
 /* ================================================================== */

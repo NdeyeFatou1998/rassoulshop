@@ -16,29 +16,21 @@ import { X, Volume2, VolumeX, ChevronLeft, ChevronRight, Play, ArrowDown } from 
 import AnimatedSection from "../components/ui/AnimatedSection";
 
 export default function Lookbook() {
-  /**
-   * Données du lookbook — TOUTES les images + TOUTES les vidéos
-   * span: taille dans la grille CSS (tall = 2 rows, wide = 2 cols)
-   */
-  const looks = [
-    { type: "image", src: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.08.jpeg", span: "tall" },
-    { type: "image", src: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.09.jpeg", span: "normal" },
-    { type: "video", src: "/assets/videos/WhatsApp Video 2026-03-24 at 01.28.04.mp4", span: "wide" },
-    { type: "image", src: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.10.jpeg", span: "normal" },
-    { type: "image", src: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.11.jpeg", span: "normal" },
-    { type: "image", src: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.12.jpeg", span: "tall" },
-    { type: "video", src: "/assets/videos/WhatsApp Video 2026-03-24 at 01.27.56.mp4", span: "wide" },
-    { type: "image", src: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.15.jpeg", span: "normal" },
-    { type: "image", src: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.57.jpeg", span: "normal" },
-    { type: "image", src: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.58.jpeg", span: "tall" },
-    { type: "image", src: "/assets/images/WhatsApp Image 2026-03-24 at 01.28.14.jpeg", span: "normal" },
-    { type: "image", src: "/assets/images/WhatsApp 2Image 2026-03-24 at 01.27.58.jpeg", span: "wide" },
-    { type: "image", src: "/assets/images/WhatsApp I2mage 2026-03-24 at 01.28.14.jpeg", span: "normal" },
-    { type: "video", src: "/assets/videos/WhatsApp Video 2026-03-24 at 01.27.43.mp4", span: "wide" },
-    { type: "image", src: "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg", span: "normal" },
-    { type: "image", src: "/assets/images/WhatsApp Image 22026-03-24 at 01.27.09.jpeg", span: "tall" },
-    { type: "image", src: "/assets/images/WhatsApp Image 22026-03-24 at 01.27.10.jpeg", span: "normal" },
-  ];
+  /* Données chargées depuis l'API */
+  const [looks, setLooks]   = useState([]);
+  const [banner, setBanner] = useState(null);
+
+  useEffect(() => {
+    fetch("/api/lookbook")
+      .then((r) => r.json())
+      .then((d) => setLooks(d.items || []))
+      .catch(() => setLooks([]));
+
+    fetch("/api/lookbook/banner")
+      .then((r) => r.json())
+      .then((d) => setBanner(d.banner || null))
+      .catch(() => setBanner(null));
+  }, []);
 
   /* État de la lightbox */
   const [lightboxIndex, setLightboxIndex] = useState(null);
@@ -112,8 +104,9 @@ export default function Lookbook() {
     show: { opacity: 1, y: 0, transition: { duration: 0.85, ease: [0.22, 1, 0.36, 1] } },
   };
 
-  /* Vidéo de fond du hero — première vidéo du lookbook */
-  const heroBgVideo = "/assets/videos/WhatsApp Video 2026-03-24 at 01.28.04.mp4";
+  /* Bannière hero : src depuis DB, ou vide si rien */
+  const heroBannerSrc  = banner?.src  || null;
+  const heroBannerType = banner?.type || "video";
 
   return (
     <>
@@ -141,15 +134,24 @@ export default function Lookbook() {
             className="absolute overflow-hidden flex items-center justify-center"
             style={{ inset: "3px", borderRadius: 24 }}
           >
-            {/* Vidéo de fond */}
-            <video
-              src={heroBgVideo}
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="absolute inset-0 w-full h-full object-cover scale-[1.04]"
-            />
+            {/* Fond : vidéo ou image selon la bannière configurée */}
+            {heroBannerSrc && heroBannerType === "video" && (
+              <video
+                src={heroBannerSrc}
+                autoPlay muted loop playsInline
+                className="absolute inset-0 w-full h-full object-cover scale-[1.04]"
+              />
+            )}
+            {heroBannerSrc && heroBannerType === "image" && (
+              <img
+                src={heroBannerSrc}
+                alt="Lookbook"
+                className="absolute inset-0 w-full h-full object-cover scale-[1.04]"
+              />
+            )}
+            {!heroBannerSrc && (
+              <div className="absolute inset-0 bg-gradient-to-br from-noir-950 via-[#1a150a] to-noir-950" />
+            )}
 
             {/* Overlays sombres pour lisibilité */}
             <div className="absolute inset-0 bg-gradient-to-b from-noir-950/55 via-noir-950/30 to-noir-950/80 pointer-events-none" />
