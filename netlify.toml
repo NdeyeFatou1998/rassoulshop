@@ -1,0 +1,22 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Proxy API vers le backend Railway (doit être AVANT le catch-all /*→index.html)
+[[redirects]]
+  from = "/api/*"
+  to = "https://rassoulshopbackend-production.up.railway.app/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/uploads/*"
+  to = "https://rassoulshopbackend-production.up.railway.app/uploads/:splat"
+  status = 200
+  force = true
+
+# Catch-all SPA React Router
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
