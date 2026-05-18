@@ -246,11 +246,17 @@ export default function AdminProducts() {
   /* ================================================================
      JSX — Layout 2 colonnes
      ================================================================ */
-  return (
-    <div className="flex gap-5 h-[calc(100vh-8rem)] min-h-0">
+  /* Sur mobile : liste visible si rien sélectionné, formulaire visible si sélectionné */
+  const showList = !selected;
+  const showForm = !!selected;
 
-      {/* ---- COLONNE GAUCHE : liste produits ---- */}
-      <div className="w-72 flex-shrink-0 bg-[#111] rounded-xl border border-[#222] flex flex-col overflow-hidden">
+  return (
+    <div className="md:flex md:gap-5 md:h-[calc(100vh-8rem)] md:min-h-0">
+
+      {/* ---- COLONNE GAUCHE : liste produits (cachée sur mobile quand formulaire ouvert) ---- */}
+      <div className={`${
+        showList ? 'flex' : 'hidden md:flex'
+      } flex-col w-full md:w-72 md:flex-shrink-0 bg-[#111] rounded-xl border border-[#222] overflow-hidden min-h-[60vh] md:min-h-0 md:h-auto`}>
         <div className="p-3 border-b border-[#222] space-y-2">
           <button
             onClick={selectNew}
@@ -293,8 +299,10 @@ export default function AdminProducts() {
         </div>
       </div>
 
-      {/* ---- COLONNE DROITE : formulaire inline + variantes ---- */}
-      <div className="flex-1 min-w-0 overflow-y-auto">
+      {/* ---- COLONNE DROITE : formulaire (cachée sur mobile si rien sélectionné) ---- */}
+      <div className={`${
+        showForm ? 'block' : 'hidden md:block'
+      } flex-1 min-w-0 overflow-y-auto`}>
         {!selected ? (
           <div className="flex flex-col items-center justify-center h-full text-[#444]">
             <Tag size={36} className="mb-3 text-[#333]" />
@@ -302,6 +310,15 @@ export default function AdminProducts() {
           </div>
         ) : (
           <form onSubmit={handleSave} className="space-y-5 pb-10">
+            {/* Bouton retour mobile */}
+            <button
+              type="button"
+              onClick={() => setSelected(null)}
+              className="md:hidden flex items-center gap-1.5 text-xs text-[#888] hover:text-[#f5f0e8] mb-3 transition-colors"
+            >
+              ← Retour à la liste
+            </button>
+
             {/* Header */}
             <div className="flex items-center justify-between sticky top-0 bg-[#0a0a0a] py-2 z-10">
               <h2 className="text-base font-semibold text-[#f5f0e8]">
