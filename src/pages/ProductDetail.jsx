@@ -215,17 +215,32 @@ export default function ProductDetail() {
             </motion.div>
 
             {/* Prix en FCFA — gradient doré animé */}
-            <motion.div variants={fadeUp} className="flex items-baseline gap-3 mb-5 md:mb-6">
-              <p className="text-2xl md:text-3xl font-bold text-gradient-gold">
-                {(product.price + Object.values(selectedVariants).reduce((acc, v) => acc + (v?.price_modifier || 0), 0)).toLocaleString("fr-FR")}
-                <span className="text-sm font-normal text-muted ml-1">FCFA</span>
-              </p>
-              {Object.values(selectedVariants).some(v => v?.price_modifier > 0) && (
-                <span className="text-xs text-white/30 line-through">
-                  {product.price.toLocaleString("fr-FR")}
-                </span>
-              )}
-            </motion.div>
+            {(() => {
+              const hasPromo = product.promo_active && product.promo_price;
+              const basePrice = hasPromo ? product.promo_price : product.price;
+              const variantsExtra = Object.values(selectedVariants).reduce((acc, v) => acc + (v?.price_modifier || 0), 0);
+              const finalPrice = basePrice + variantsExtra;
+              return (
+                <motion.div variants={fadeUp} className="flex items-baseline gap-3 mb-5 md:mb-6">
+                  <p className="text-2xl md:text-3xl font-bold text-gradient-gold">
+                    {finalPrice.toLocaleString("fr-FR")}
+                    <span className="text-sm font-normal text-muted ml-1">FCFA</span>
+                  </p>
+                  {/* Prix barré : prix original si promo active, ou prix sans variantes si modificateur */}
+                  {(hasPromo || variantsExtra > 0) && (
+                    <span className="text-xs text-white/30 line-through">
+                      {product.price.toLocaleString("fr-FR")}
+                    </span>
+                  )}
+                  {/* Badge % réduction */}
+                  {hasPromo && (
+                    <span className="text-[10px] font-bold bg-red-500/20 text-red-400 px-2 py-0.5 rounded-full">
+                      -{Math.round((1 - product.promo_price / product.price) * 100)}%
+                    </span>
+                  )}
+                </motion.div>
+              );
+            })()}
 
             {/* Description */}
             <motion.p variants={fadeUp} className="text-[13px] text-cream/50 leading-relaxed mb-6 md:mb-8 max-w-lg">

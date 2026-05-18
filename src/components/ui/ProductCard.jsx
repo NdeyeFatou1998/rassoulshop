@@ -20,8 +20,8 @@ export default function ProductCard({ product, index = 0 }) {
   const { addToCart } = useCart();
   const [justAdded, setJustAdded] = useState(false);
 
-  /* Promo active */
-  const hasPromo = product.promoActive && product.promoPrice;
+  /* Promo active — l'API retourne les champs en snake_case depuis PostgreSQL */
+  const hasPromo = product.promo_active && product.promo_price;
 
   /** Ajout rapide au panier */
   function handleQuickAdd(e) {
@@ -131,7 +131,7 @@ export default function ProductCard({ product, index = 0 }) {
                 {product.price.toLocaleString("fr-FR")}
               </span>
               <span className="text-[13px] font-bold text-gold">
-                {product.promoPrice.toLocaleString("fr-FR")}
+                {product.promo_price.toLocaleString("fr-FR")}
                 <span className="text-[8px] font-normal ml-0.5">FCFA</span>
               </span>
             </>
