@@ -32,6 +32,7 @@ export default function GiftBoxDetail() {
   const [boxType, setBoxType]           = useState("simple");
   const [vipProductId, setVipProductId] = useState(null);
   const [replacements, setReplacements] = useState({});
+  const [qty, setQty]                   = useState(1);
 
   useEffect(() => {
     async function load() {
@@ -92,7 +93,7 @@ export default function GiftBoxDetail() {
         }
       }
     }
-    addToCart({ id: `giftbox-${box.id}-${Date.now()}`, title: `🎁 ${box.name}`, price: finalPrice, image: box.image, description: desc, isGiftBox: true }, 1);
+    addToCart({ id: `giftbox-${box.id}-${Date.now()}`, title: `🎁 ${box.name}`, price: finalPrice, image: box.image, description: desc, isGiftBox: true }, qty);
     setJustAdded(true);
     setTimeout(() => setJustAdded(false), 1600);
   }
@@ -117,7 +118,7 @@ export default function GiftBoxDetail() {
 
   return (
     <div className="min-h-screen bg-[#080807]">
-      <div className="max-w-4xl mx-auto px-5 lg:px-10 pt-20 md:pt-24 pb-28">
+      <div className="max-w-5xl mx-auto px-5 lg:px-10 pt-20 md:pt-24 pb-28">
 
         {/* ── Retour ── */}
         <Link to="/gift-boxes"
@@ -125,246 +126,259 @@ export default function GiftBoxDetail() {
           <ArrowLeft size={13} /> Tous les coffrets
         </Link>
 
-        {/* ── Titre coffret ── */}
-        <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }}>
-          <div className="flex flex-col sm:flex-row gap-6 items-start mb-10">
-            {/* Image */}
-            <div className="w-32 h-32 sm:w-40 sm:h-40 flex-shrink-0 rounded-2xl overflow-hidden border border-white/[0.08] bg-[#141412]">
+        {/* ══════════════════════════════════════
+            LAYOUT PRINCIPAL : image gauche / infos droite
+        ══════════════════════════════════════ */}
+        <div className="flex flex-col lg:flex-row gap-10 lg:gap-14">
+
+          {/* ── Colonne gauche : image ── */}
+          <motion.div
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.45 }}
+            className="w-full lg:w-[400px] flex-shrink-0"
+          >
+            <div className="rounded-2xl overflow-hidden aspect-square bg-[#141412] border border-white/[0.07] sticky top-24">
               {box.image
                 ? <img src={box.image} alt={box.name} className="w-full h-full object-cover" />
-                : <div className="w-full h-full flex items-center justify-center"><Gift size={36} className="text-gold/20" /></div>
+                : <div className="w-full h-full flex items-center justify-center"><Gift size={56} className="text-gold/15" /></div>
               }
             </div>
-            {/* Infos */}
-            <div className="flex-1">
-              <p className="text-[9px] uppercase tracking-[0.28em] text-gold/60 mb-2">Coffret cadeau</p>
+          </motion.div>
+
+          {/* ── Colonne droite : toutes les infos ── */}
+          <motion.div
+            initial={{ opacity: 0, x: 16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.45, delay: 0.06 }}
+            className="flex-1 min-w-0 space-y-8"
+          >
+            {/* En-tête */}
+            <div>
+              <p className="text-[9px] uppercase tracking-[0.3em] text-gold/60 font-semibold mb-2">Coffret cadeau</p>
               <h1 className="font-serif text-2xl md:text-3xl text-white leading-tight mb-2">{box.name}</h1>
-              {box.description && <p className="text-sm text-white/40 leading-relaxed">{box.description}</p>}
-              <p className="mt-3 text-xl font-semibold text-gold">{fmt(box.price)} <span className="text-xs font-normal text-white/25">FCFA de base</span></p>
+              {box.description && (
+                <p className="text-sm text-white/40 leading-relaxed">{box.description}</p>
+              )}
+              <p className="mt-4 text-2xl font-semibold text-gold">
+                {fmt(finalPrice * qty)}
+                <span className="text-xs font-normal text-white/25 ml-1.5">FCFA</span>
+              </p>
             </div>
-          </div>
-        </motion.div>
 
-        {/* ── Section 1 : Composition ── */}
-        {box.items?.length > 0 && (
-          <section className="mb-10">
-            <h2 className="text-[10px] uppercase tracking-[0.22em] text-white/35 font-semibold mb-4">
-              Ce coffret contient
-            </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-              {box.items.map((item, i) => {
-                const isOpen     = openItem === item.item_id;
-                /* article actuellement sélectionné pour ce slot */
-                const chosenId   = replacements[item.item_id];
-                const chosenRp   = item.replacements?.find(r => r.product_id === chosenId);
-                /* ce qu'on affiche dans la card : remplacement choisi ou article original */
-                const displayImg = chosenRp?.image || item.image;
-                const displayName = chosenRp?.title || item.title;
+            {/* ── Composition ── */}
+            {box.items?.length > 0 && (
+              <div>
+                <h2 className="text-[9px] uppercase tracking-[0.22em] text-white/30 font-semibold mb-3">
+                  Ce coffret contient
+                </h2>
+                {/* Grille plus petite : 3 cols mobile → 4 desktop */}
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
+                  {box.items.map((item, i) => {
+                    const isOpen      = openItem === item.item_id;
+                    const chosenId    = replacements[item.item_id];
+                    const chosenRp    = item.replacements?.find(r => r.product_id === chosenId);
+                    const displayImg  = chosenRp?.image  || item.image;
+                    const displayName = chosenRp?.title  || item.title;
 
-                return (
-                  <motion.div key={item.item_id}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: i * 0.05 }}>
-
-                    {/* Card produit */}
-                    <div
-                      onClick={() => item.is_replaceable && setOpenItem(isOpen ? null : item.item_id)}
-                      className={`relative flex flex-col rounded-xl overflow-hidden border transition-all duration-300 ${
-                        item.is_replaceable
-                          ? "cursor-pointer hover:border-gold/30 hover:shadow-[0_0_16px_rgba(197,165,90,0.07)]"
-                          : "cursor-default"
-                      } ${
-                        isOpen ? "border-gold/40 shadow-[0_0_20px_rgba(197,165,90,0.10)]" : "border-white/[0.07]"
-                      } bg-[#0f0f0e]`}
-                    >
-                      {/* Image */}
-                      <div className="relative aspect-square overflow-hidden bg-[#141412]">
-                        {displayImg
-                          ? <img src={displayImg} alt={displayName} className="w-full h-full object-cover" />
-                          : <div className="w-full h-full flex items-center justify-center"><Package size={24} className="text-white/10" /></div>
-                        }
-                        {/* Badge Remplaçable */}
-                        {item.is_replaceable && (
-                          <span className="absolute top-1.5 left-1.5 flex items-center gap-1 text-[7px] uppercase tracking-wide font-bold bg-gold text-[#0a0a09] px-1.5 py-[2px] rounded-full">
-                            <RefreshCw size={7} /> Remplaçable
-                          </span>
-                        )}
-                        {/* Badge "modifié" si remplacement choisi */}
-                        {chosenRp && (
-                          <span className="absolute bottom-1.5 right-1.5 w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">
-                            <Check size={10} className="text-white" />
-                          </span>
-                        )}
-                      </div>
-                      {/* Infos */}
-                      <div className="px-2.5 pt-2 pb-2.5">
-                        <p className="text-[11px] font-medium text-white/80 leading-snug line-clamp-2">{displayName}</p>
-                        {item.quantity > 1 && (
-                          <p className="text-[9px] text-gold/60 mt-0.5">×{item.quantity}</p>
-                        )}
-                        {item.is_replaceable && (
-                          <p className={`text-[9px] mt-1 flex items-center gap-0.5 transition-colors ${isOpen ? "text-gold" : "text-white/30"}`}>
-                            {isOpen ? "Fermer" : "Changer"} <ArrowRight size={8} className={`transition-transform ${isOpen ? "rotate-90" : ""}`} />
-                          </p>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Panel options de remplacement */}
-                    <AnimatePresence>
-                      {isOpen && item.is_replaceable && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.25 }}
-                          className="overflow-hidden"
+                    return (
+                      <motion.div key={item.item_id}
+                        initial={{ opacity: 0, scale: 0.94 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.3, delay: i * 0.04 }}
+                      >
+                        {/* Card compacte */}
+                        <div
+                          onClick={() => item.is_replaceable && setOpenItem(isOpen ? null : item.item_id)}
+                          className={`relative flex flex-col rounded-lg overflow-hidden border transition-all duration-250 ${
+                            item.is_replaceable
+                              ? "cursor-pointer hover:border-gold/35"
+                              : "cursor-default"
+                          } ${isOpen ? "border-gold/45 shadow-[0_0_14px_rgba(197,165,90,0.10)]" : "border-white/[0.07]"} bg-[#0f0f0e]`}
                         >
-                          <div className="mt-2 rounded-xl border border-gold/15 bg-[#111110] p-3 space-y-2">
-                            <p className="text-[9px] uppercase tracking-wider text-gold/50 font-semibold mb-2">
-                              Choisir un remplacement
-                            </p>
+                          {/* Image */}
+                          <div className="relative aspect-square overflow-hidden bg-[#141412]">
+                            {displayImg
+                              ? <img src={displayImg} alt={displayName} className="w-full h-full object-cover" />
+                              : <div className="w-full h-full flex items-center justify-center"><Package size={16} className="text-white/10" /></div>
+                            }
+                            {/* Badge Remplaçable + quantité sur la même ligne */}
+                            <div className="absolute top-1 left-1 flex items-center gap-1 flex-wrap">
+                              {item.is_replaceable && (
+                                <span className="flex items-center gap-0.5 text-[6px] uppercase tracking-wide font-bold bg-gold text-[#0a0a09] px-1.5 py-[2px] rounded-full leading-none">
+                                  <RefreshCw size={6} /> Remp.
+                                </span>
+                              )}
+                              {item.quantity > 1 && (
+                                <span className="text-[7px] font-bold bg-white/15 text-white px-1.5 py-[2px] rounded-full leading-none">
+                                  ×{item.quantity}
+                                </span>
+                              )}
+                            </div>
+                            {/* Checkmark vert si remplacé */}
+                            {chosenRp && (
+                              <span className="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-green-500 flex items-center justify-center">
+                                <Check size={8} className="text-white" />
+                              </span>
+                            )}
+                          </div>
+                          {/* Nom uniquement */}
+                          <div className="px-1.5 py-1.5">
+                            <p className="text-[9px] text-white/65 leading-snug line-clamp-2">{displayName}</p>
+                          </div>
+                        </div>
 
-                            {/* Garder l'original */}
-                            <button
-                              onClick={() => { setReplacements(prev => { const r = { ...prev }; delete r[item.item_id]; return r; }); setOpenItem(null); }}
-                              className={`w-full flex items-center gap-2 p-2 rounded-lg border text-left transition-colors ${
-                                !chosenId ? "border-gold/30 bg-gold/10" : "border-white/[0.06] hover:border-gold/20"
-                              }`}
+                        {/* Panel remplacement (s'ouvre sous la card) */}
+                        <AnimatePresence>
+                          {isOpen && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.22 }}
+                              className="overflow-hidden col-span-full"
                             >
-                              {item.image
-                                ? <img src={item.image} alt={item.title} className="w-8 h-8 rounded-lg object-cover flex-shrink-0" />
-                                : <div className="w-8 h-8 rounded-lg bg-[#1a1a18] flex items-center justify-center"><Package size={12} className="text-white/20" /></div>
-                              }
-                              <div className="flex-1 min-w-0">
-                                <p className="text-[11px] font-medium text-white/80 truncate">{item.title}</p>
-                                <p className="text-[9px] text-white/30">{fmt(item.price)} FCFA · Original</p>
-                              </div>
-                              {!chosenId && <Check size={12} className="text-gold flex-shrink-0" />}
-                            </button>
-
-                            {/* Options de remplacement */}
-                            {item.replacements?.map(rp => {
-                              const sel = chosenId === rp.product_id;
-                              return (
-                                <button key={rp.product_id}
-                                  onClick={() => { setReplacements(prev => ({ ...prev, [item.item_id]: rp.product_id })); setOpenItem(null); }}
-                                  className={`w-full flex items-center gap-2 p-2 rounded-lg border text-left transition-colors ${
-                                    sel ? "border-gold/30 bg-gold/10" : "border-white/[0.06] hover:border-gold/20"
+                              <div className="mt-1.5 rounded-xl border border-gold/15 bg-[#111110] p-2.5 space-y-1.5">
+                                <p className="text-[8px] uppercase tracking-wider text-gold/50 font-semibold mb-1.5">
+                                  Remplacer par :
+                                </p>
+                                {/* Original */}
+                                <button
+                                  onClick={() => { setReplacements(prev => { const r = {...prev}; delete r[item.item_id]; return r; }); setOpenItem(null); }}
+                                  className={`w-full flex items-center gap-2 p-1.5 rounded-lg border text-left transition-colors ${
+                                    !chosenId ? "border-gold/30 bg-gold/10" : "border-white/[0.06] hover:border-gold/20"
                                   }`}
                                 >
-                                  {rp.image
-                                    ? <img src={rp.image} alt={rp.title} className="w-8 h-8 rounded-lg object-cover flex-shrink-0" />
-                                    : <div className="w-8 h-8 rounded-lg bg-[#1a1a18] flex items-center justify-center"><Package size={12} className="text-white/20" /></div>
+                                  {item.image
+                                    ? <img src={item.image} alt={item.title} className="w-7 h-7 rounded object-cover flex-shrink-0" />
+                                    : <div className="w-7 h-7 rounded bg-[#1a1a18] flex-shrink-0" />
                                   }
                                   <div className="flex-1 min-w-0">
-                                    <p className="text-[11px] font-medium text-white/80 truncate">{rp.title}</p>
-                                    <p className="text-[9px] text-white/30">{fmt(rp.price)} FCFA</p>
+                                    <p className="text-[10px] text-white/75 truncate">{item.title}</p>
+                                    <p className="text-[8px] text-white/25">Original · {fmt(item.price)} FCFA</p>
                                   </div>
-                                  {sel && <Check size={12} className="text-gold flex-shrink-0" />}
+                                  {!chosenId && <Check size={10} className="text-gold flex-shrink-0" />}
                                 </button>
-                              );
-                            })}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </section>
-        )}
-
-        {/* ── Section 2 : Emballage ── */}
-        <section className="mb-10">
-          <h2 className="text-[10px] uppercase tracking-[0.22em] text-white/35 font-semibold mb-4">
-            Choisir l'emballage
-          </h2>
-          <div className="grid grid-cols-2 gap-3">
-            {/* Simple */}
-            <button onClick={() => setBoxType("simple")}
-              className={`relative p-4 rounded-xl border text-left transition-all ${
-                boxType === "simple" ? "border-gold/35 bg-gold/[0.07]" : "border-white/[0.07] hover:border-gold/20"
-              }`}>
-              {boxType === "simple" && <Check size={12} className="absolute top-3 right-3 text-gold" />}
-              <Package size={20} className={`mb-2 ${boxType === "simple" ? "text-gold" : "text-white/25"}`} />
-              <p className={`text-sm font-semibold ${boxType === "simple" ? "text-gold" : "text-white/70"}`}>Boîte simple</p>
-              <p className="text-[10px] text-white/30 mt-0.5">Emballage standard</p>
-              <p className="text-[11px] text-gold font-semibold mt-2">Gratuit</p>
-            </button>
-
-            {/* VIP */}
-            <button onClick={() => setBoxType("vip")}
-              className={`relative p-4 rounded-xl border text-left transition-all ${
-                boxType === "vip" ? "border-gold/35 bg-gold/[0.07]" : "border-white/[0.07] hover:border-gold/20"
-              }`}>
-              {boxType === "vip" && <Check size={12} className="absolute top-3 right-3 text-gold" />}
-              <Crown size={20} className={`mb-2 ${boxType === "vip" ? "text-gold" : "text-white/25"}`} />
-              <p className={`text-sm font-semibold ${boxType === "vip" ? "text-gold" : "text-white/70"}`}>Boîte VIP</p>
-              <p className="text-[10px] text-white/30 mt-0.5">Emballage premium</p>
-              <p className="text-[11px] text-white/25 mt-2">+25% sur la boîte choisie</p>
-            </button>
-          </div>
-
-          {/* Sélection boîte VIP */}
-          <AnimatePresence>
-            {boxType === "vip" && boxProducts.length > 0 && (
-              <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25 }} className="overflow-hidden">
-                <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  {boxProducts.map(bp => {
-                    const sel = vipProductId === bp.id;
-                    return (
-                      <button key={bp.id} onClick={() => setVipProductId(bp.id)}
-                        className={`relative flex flex-col rounded-xl overflow-hidden border transition-all ${
-                          sel ? "border-gold/40 bg-gold/[0.07]" : "border-white/[0.07] hover:border-gold/20"
-                        } bg-[#0f0f0e]`}>
-                        {sel && <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-gold flex items-center justify-center z-10"><Check size={10} className="text-[#0a0a09]" /></div>}
-                        <div className="aspect-square overflow-hidden bg-[#141412]">
-                          {bp.image
-                            ? <img src={bp.image} alt={bp.title} className="w-full h-full object-cover" />
-                            : <div className="w-full h-full flex items-center justify-center"><Crown size={20} className="text-gold/20" /></div>
-                          }
-                        </div>
-                        <div className="p-2">
-                          <p className="text-[10px] font-medium text-white/70 line-clamp-1">{bp.title}</p>
-                          <p className="text-[10px] text-gold mt-0.5">{fmt(Math.round(bp.price * 1.25))} FCFA</p>
-                        </div>
-                      </button>
+                                {/* Alternatives */}
+                                {item.replacements?.map(rp => {
+                                  const sel = chosenId === rp.product_id;
+                                  return (
+                                    <button key={rp.product_id}
+                                      onClick={() => { setReplacements(prev => ({...prev, [item.item_id]: rp.product_id})); setOpenItem(null); }}
+                                      className={`w-full flex items-center gap-2 p-1.5 rounded-lg border text-left transition-colors ${
+                                        sel ? "border-gold/30 bg-gold/10" : "border-white/[0.06] hover:border-gold/20"
+                                      }`}
+                                    >
+                                      {rp.image
+                                        ? <img src={rp.image} alt={rp.title} className="w-7 h-7 rounded object-cover flex-shrink-0" />
+                                        : <div className="w-7 h-7 rounded bg-[#1a1a18] flex-shrink-0" />
+                                      }
+                                      <div className="flex-1 min-w-0">
+                                        <p className="text-[10px] text-white/75 truncate">{rp.title}</p>
+                                        <p className="text-[8px] text-white/25">{fmt(rp.price)} FCFA</p>
+                                      </div>
+                                      {sel && <Check size={10} className="text-gold flex-shrink-0" />}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </motion.div>
                     );
                   })}
                 </div>
-              </motion.div>
+              </div>
             )}
-          </AnimatePresence>
-        </section>
 
-        {/* ── Section 3 : Récap + Panier ── */}
-        <div className="sticky bottom-4 md:static rounded-2xl border border-white/[0.08] bg-[#0f0f0e]/90 backdrop-blur-md p-4 flex items-center justify-between gap-4">
-          <div>
-            <p className="text-[9px] uppercase tracking-[0.2em] text-white/25 mb-1">Total</p>
-            <p className="text-2xl font-serif text-gold leading-none">
-              {fmt(finalPrice)}
-              <span className="text-xs font-sans text-white/25 ml-1">FCFA</span>
-            </p>
-            {finalPrice !== box.price && (
-              <p className="text-[9px] text-white/20 line-through mt-0.5">{fmt(box.price)} FCFA</p>
-            )}
-          </div>
-          <button
-            onClick={handleAdd}
-            disabled={boxType === "vip" && !vipProductId && boxProducts.length > 0}
-            className={`flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold uppercase tracking-wider
-                        transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0 ${
-              justAdded ? "bg-green-500 text-white" : "bg-gold text-[#0a0a09] hover:bg-[#d4b472]"
-            }`}
-          >
-            {justAdded
-              ? <><Check size={15} /> Ajouté au panier</>
-              : <><ShoppingCart size={15} /> Ajouter au panier</>
-            }
-          </button>
+            {/* ── Emballage ── */}
+            <div>
+              <h2 className="text-[9px] uppercase tracking-[0.22em] text-white/30 font-semibold mb-3">Emballage</h2>
+              <div className="grid grid-cols-2 gap-2.5">
+                <button onClick={() => setBoxType("simple")}
+                  className={`relative p-3.5 rounded-xl border text-left transition-all ${
+                    boxType === "simple" ? "border-gold/35 bg-gold/[0.07]" : "border-white/[0.07] hover:border-gold/20"
+                  }`}>
+                  {boxType === "simple" && <Check size={11} className="absolute top-2.5 right-2.5 text-gold" />}
+                  <Package size={18} className={`mb-1.5 ${boxType === "simple" ? "text-gold" : "text-white/20"}`} />
+                  <p className={`text-xs font-semibold ${boxType === "simple" ? "text-gold" : "text-white/65"}`}>Boîte simple</p>
+                  <p className="text-[10px] text-gold font-semibold mt-1">Gratuit</p>
+                </button>
+                <button onClick={() => setBoxType("vip")}
+                  className={`relative p-3.5 rounded-xl border text-left transition-all ${
+                    boxType === "vip" ? "border-gold/35 bg-gold/[0.07]" : "border-white/[0.07] hover:border-gold/20"
+                  }`}>
+                  {boxType === "vip" && <Check size={11} className="absolute top-2.5 right-2.5 text-gold" />}
+                  <Crown size={18} className={`mb-1.5 ${boxType === "vip" ? "text-gold" : "text-white/20"}`} />
+                  <p className={`text-xs font-semibold ${boxType === "vip" ? "text-gold" : "text-white/65"}`}>Boîte VIP</p>
+                  <p className="text-[10px] text-white/25 mt-1">+25% sur la boîte</p>
+                </button>
+              </div>
+              {/* Sélection produit VIP */}
+              <AnimatePresence>
+                {boxType === "vip" && boxProducts.length > 0 && (
+                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.22 }} className="overflow-hidden">
+                    <div className="mt-2 grid grid-cols-3 sm:grid-cols-4 gap-2">
+                      {boxProducts.map(bp => {
+                        const sel = vipProductId === bp.id;
+                        return (
+                          <button key={bp.id} onClick={() => setVipProductId(bp.id)}
+                            className={`relative flex flex-col rounded-lg overflow-hidden border transition-all bg-[#0f0f0e] ${
+                              sel ? "border-gold/40" : "border-white/[0.07] hover:border-gold/20"
+                            }`}>
+                            {sel && <div className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-gold flex items-center justify-center z-10"><Check size={8} className="text-[#0a0a09]" /></div>}
+                            <div className="aspect-square overflow-hidden bg-[#141412]">
+                              {bp.image ? <img src={bp.image} alt={bp.title} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><Crown size={16} className="text-gold/20" /></div>}
+                            </div>
+                            <div className="p-1.5">
+                              <p className="text-[9px] text-white/65 line-clamp-1">{bp.title}</p>
+                              <p className="text-[9px] text-gold mt-0.5">{fmt(Math.round(bp.price * 1.25))} FCFA</p>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* ── Quantité + Panier ── */}
+            <div className="flex items-end gap-4 pt-2 border-t border-white/[0.05]">
+              {/* Quantité */}
+              <div>
+                <p className="text-[9px] uppercase tracking-[0.18em] text-white/25 mb-2">Quantité</p>
+                <div className="flex items-center gap-0 border border-white/[0.1] rounded-xl overflow-hidden">
+                  <button onClick={() => setQty(q => Math.max(1, q - 1))}
+                    className="w-9 h-9 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/[0.05] transition-colors text-lg font-light">
+                    −
+                  </button>
+                  <span className="w-8 text-center text-sm font-semibold text-white/80">{qty}</span>
+                  <button onClick={() => setQty(q => q + 1)}
+                    className="w-9 h-9 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/[0.05] transition-colors text-lg font-light">
+                    +
+                  </button>
+                </div>
+              </div>
+
+              {/* Bouton Ajouter */}
+              <button
+                onClick={handleAdd}
+                disabled={boxType === "vip" && !vipProductId && boxProducts.length > 0}
+                className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold uppercase tracking-wider
+                            transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed ${
+                  justAdded ? "bg-green-500 text-white" : "bg-gold text-[#0a0a09] hover:bg-[#d4b472]"
+                }`}
+              >
+                {justAdded
+                  ? <><Check size={15} /> Ajouté</>
+                  : <><ShoppingCart size={15} /> Ajouter au panier — {fmt(finalPrice * qty)} FCFA</>
+                }
+              </button>
+            </div>
+
+          </motion.div>
         </div>
 
       </div>
