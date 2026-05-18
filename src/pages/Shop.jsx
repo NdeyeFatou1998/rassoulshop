@@ -20,20 +20,17 @@ export default function Shop() {
   return (
     <>
       {/* ---- Header ---- */}
-      <section className="bg-[#080807] pt-24 md:pt-28 pb-10 border-b border-white/[0.05]">
+      <section className="bg-[#080807] pt-20 md:pt-24 pb-5 border-b border-white/[0.05]">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="max-w-7xl mx-auto px-5 lg:px-10 text-center"
         >
-          <span className="text-[10px] uppercase tracking-[0.3em] text-gold font-semibold">
-            Notre collection
-          </span>
-          <h1 className="font-serif text-3xl md:text-4xl text-white mt-2">
+          <h1 className="font-serif text-3xl md:text-4xl text-white">
             Boutique
           </h1>
-          <div className="w-10 h-px bg-gold/50 mx-auto mt-4" />
+          <div className="w-10 h-px bg-gold/50 mx-auto mt-3" />
         </motion.div>
       </section>
 
