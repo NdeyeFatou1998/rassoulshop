@@ -38,6 +38,7 @@ export default function AdminProducts() {
   const emptyForm = {
     title:"", description:"", price:"", promoPrice:"", promoActive:false,
     promoEndsAt:"", category_id:"", category:"", stock:"0", badge:"", rating:"0", image:"", active:true,
+    is_vip: false,
   };
   const [form, setForm] = useState(emptyForm);
 
@@ -108,6 +109,7 @@ export default function AdminProducts() {
         rating: String(full.rating || 0),
         image: full.image || "",
         active: full.active !== false,
+        is_vip: !!full.is_vip,
       });
       loadByType(full.id);
     } catch {
@@ -126,6 +128,7 @@ export default function AdminProducts() {
         rating: String(p.rating || 0),
         image: p.image || "",
         active: p.active !== false,
+        is_vip: !!p.is_vip,
       });
       loadByType(p.id);
     }
@@ -157,6 +160,7 @@ export default function AdminProducts() {
         stock: parseInt(form.stock) || 0,
         badge: form.badge || null, rating: parseFloat(form.rating) || 0,
         image: form.image || null,
+        is_vip: form.category === "boites" ? form.is_vip : false,
       };
       const isNew = selected === "new";
       const url = isNew ? "/api/products" : `/api/products/${selected.id}`;
@@ -424,6 +428,18 @@ export default function AdminProducts() {
                   <option value="">— Choisir —</option>
                   {categories.filter(c=>c.active).map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                 </select>
+                {/* Checkbox VIP — visible uniquement si catégorie = boites */}
+                {form.category === "boites" && (
+                  <label className="flex items-center gap-2 mt-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={form.is_vip}
+                      onChange={e => setForm(f => ({...f, is_vip: e.target.checked}))}
+                      className="w-4 h-4 accent-[#C5A55A]"
+                    />
+                    <span className="text-xs text-[#C5A55A] font-semibold uppercase tracking-wider">Boîte VIP</span>
+                  </label>
+                )}
               </div>
               <div>
                 <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">Badge</label>
