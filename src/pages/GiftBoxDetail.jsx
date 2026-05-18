@@ -27,10 +27,11 @@ export default function GiftBoxDetail() {
     async function load() {
       setLoading(true);
       try {
-        /* Box détail */
+        /* Box détail — l'API retourne la box directement (pas { giftBox }) */
         const res = await fetch(`/api/gift-boxes/${id}`);
         const data = await res.json();
-        setBox(data.giftBox || null);
+        /* data est soit la box elle-même, soit un objet d'erreur avec success:false */
+        setBox(data.success === false ? null : data);
 
         /* Produits VIP (catégorie Boîtes) */
         const resCats = await fetch("/api/categories?active=true");
