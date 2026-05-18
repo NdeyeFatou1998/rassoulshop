@@ -31,6 +31,8 @@ export default function AdminProducts() {
   const [selected, setSelected]   = useState(null); /* product objet ou "new" */
   const [saving, setSaving]       = useState(false);
   const [error, setError]         = useState("");
+  const [saved, setSaved]         = useState(false);   /* feedback succès */
+  const [successMsg, setSuccessMsg] = useState("");    /* toast succès */
 
   /* ---- Formulaire produit ---- */
   const emptyForm = {
@@ -166,8 +168,20 @@ export default function AdminProducts() {
       const data = await res.json();
       if (!data.success) { setError(data.message || "Erreur"); return; }
       await loadProducts();
-      /* Si nouveau, aller sur le produit créé */
-      if (isNew && data.product) { selectProduct(data.product); }
+      /* Feedback succès */
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2500);
+      if (isNew) {
+        /* Sur mobile : retour à la liste après création */
+        const isMobile = window.innerWidth < 768;
+        if (isMobile) {
+          setSuccessMsg(`"${data.product?.title || 'Produit'}" créé avec succès !`);
+          setTimeout(() => setSuccessMsg(""), 3000);
+          setSelected(null);
+        } else if (data.product) {
+          selectProduct(data.product);
+        }
+      }
     } catch (err) { setError(err.message);
     } finally { setSaving(false); }
   }
@@ -257,6 +271,12 @@ export default function AdminProducts() {
       <div className={`${
         showList ? 'flex' : 'hidden md:flex'
       } flex-col w-full md:w-72 md:flex-shrink-0 bg-[#111] rounded-xl border border-[#222] overflow-hidden min-h-[60vh] md:min-h-0 md:h-auto`}>
+        {/* Toast succès création (mobile) */}
+        {successMsg && (
+          <div className="mx-3 mt-3 px-3 py-2 bg-emerald-500/15 border border-emerald-500/30 rounded-lg text-emerald-400 text-xs">
+            ✓ {successMsg}
+          </div>
+        )}
         <div className="p-3 border-b border-[#222] space-y-2">
           <button
             onClick={selectNew}
@@ -309,7 +329,7 @@ export default function AdminProducts() {
             <p className="text-sm">Sélectionnez un produit ou créez-en un nouveau</p>
           </div>
         ) : (
-          <form onSubmit={handleSave} className="space-y-5 pb-10">
+          <form onSubmit={handleSave} className="space-y-5 pb-10 pt-1">
             {/* Bouton retour mobile */}
             <button
               type="button"
@@ -332,9 +352,11 @@ export default function AdminProducts() {
                   </button>
                 )}
                 <button type="submit" disabled={saving}
-                  className="flex items-center gap-2 px-4 py-2 bg-[#C5A55A] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#d4b472] disabled:opacity-50 transition-colors">
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors disabled:opacity-50 ${
+                    saved ? 'bg-emerald-500 text-white' : 'bg-[#C5A55A] text-[#0a0a0a] hover:bg-[#d4b472]'
+                  }`}>
                   <Save size={14} />
-                  {saving ? "Enregistrement…" : "Enregistrer"}
+                  {saving ? "Enregistrement…" : saved ? "✓ Sauvegardé" : "Enregistrer"}
                 </button>
               </div>
             </div>
