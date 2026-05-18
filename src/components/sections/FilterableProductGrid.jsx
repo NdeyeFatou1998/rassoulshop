@@ -13,7 +13,7 @@
  * - defaultCategory (string) : catégorie active au chargement (défaut: null)
  */
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Search, X, SlidersHorizontal } from "lucide-react";
@@ -228,44 +228,60 @@ function PromoCard({ card }) {
   );
 }
 
-/* ---- Plages de prix ---- */
-const PRICE_RANGES = [
-  { label: "Tous les prix", value: null },
-  { label: "< 15 000",      value: [0, 14999] },
-  { label: "15 k – 30 k",   value: [15000, 29999] },
-  { label: "30 k – 60 k",   value: [30000, 59999] },
-  { label: "> 60 000",      value: [60000, Infinity] },
-];
+/* Pas du slider prix en FCFA */
+const PRICE_STEP = 500;
 
 /* ---- Composant principal ---- */
 export default function FilterableProductGrid({ limit = 80, defaultCategory = null, showFilters = false }) {
-  const [active, setActive]         = useState(defaultCategory);
-  const [search, setSearch]         = useState("");
-  const [priceRange, setPriceRange] = useState(null); /* null = tous */
+  const [active, setActive]       = useState(defaultCategory);
+  const [search, setSearch]       = useState("");
+  const [minVal, setMinVal]       = useState(0);
+  const [maxVal, setMaxVal]       = useState(200000);
+  const [applied, setApplied]     = useState(null); /* { min, max } ou null */
   const { products, loading } = useProducts({ limit });
 
-  /* Filtrage côté client : catégorie + recherche + prix */
+  /* Étendue réelle des prix depuis les produits chargés */
+  const priceExtent = useMemo(() => {
+    if (!products.length) return [0, 200000];
+    const prices = products.map(p => (p.promo_active && p.promo_price) ? p.promo_price : p.price);
+    const hi = Math.ceil(Math.max(...prices) / PRICE_STEP) * PRICE_STEP;
+    return [0, hi];
+  }, [products]);
+
+  /* Initialiser le slider dès que les produits sont chargés */
+  useEffect(() => {
+    if (products.length) {
+      setMinVal(priceExtent[0]);
+      setMaxVal(priceExtent[1]);
+    }
+  }, [priceExtent[1]]);
+
+  /* Pourcentage pour le positionnement du fill et des thumbs */
+  function pct(val) {
+    const [lo, hi] = priceExtent;
+    if (hi === lo) return 0;
+    return ((val - lo) / (hi - lo)) * 100;
+  }
+
+  /* Filtrage côté client : catégorie + recherche + prix appliqué */
   const filtered = useMemo(() => {
     let result = products;
-    /* Filtre catégorie */
     if (active) result = result.filter(p => p.category_slug === active || p.category === active);
-    /* Filtre recherche */
     if (search.trim()) {
       const q = search.toLowerCase();
       result = result.filter(p => p.title.toLowerCase().includes(q) || (p.description || "").toLowerCase().includes(q));
     }
-    /* Filtre prix (prend le prix promo si active, sinon prix normal) */
-    if (priceRange) {
+    if (applied) {
       result = result.filter(p => {
         const price = (p.promo_active && p.promo_price) ? p.promo_price : p.price;
-        return price >= priceRange[0] && price <= priceRange[1];
+        return price >= applied.min && price <= applied.max;
       });
     }
     return result;
-  }, [products, active, search, priceRange]);
+  }, [products, active, search, applied]);
 
   /* Actif si au moins un filtre secondaire est appliqué */
-  const hasActiveFilters = search.trim() !== "" || priceRange !== null;
+  const hasActiveFilters = search.trim() !== "" || applied !== null;
 
   return (
     <section className="bg-[#080807] py-10 md:py-14">
@@ -297,26 +313,59 @@ export default function FilterableProductGrid({ limit = 80, defaultCategory = nu
               )}
             </div>
 
-            {/* Filtres prix en chips */}
-            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
-              <SlidersHorizontal size={13} className="text-white/25 flex-shrink-0" />
-              {PRICE_RANGES.map((range) => {
-                const isActive = priceRange === range.value ||
-                  (priceRange && range.value && priceRange[0] === range.value[0] && priceRange[1] === range.value[1]);
-                return (
-                  <button
-                    key={range.label}
-                    onClick={() => setPriceRange(range.value)}
-                    className={`flex-shrink-0 px-3 py-1.5 text-[10px] uppercase tracking-wider font-semibold rounded-full border transition-all duration-300 ${
-                      isActive
-                        ? "bg-gold/15 border-gold/40 text-gold"
-                        : "border-white/[0.08] text-white/35 hover:border-white/20 hover:text-white/60"
-                    }`}
-                  >
-                    {range.label}
-                  </button>
-                );
-              })}
+            {/* Double slider prix */}
+            <div className="bg-[#111110] border border-white/[0.07] rounded-xl px-4 pt-4 pb-5">
+              <div className="flex items-center gap-2 mb-4">
+                <SlidersHorizontal size={13} className="text-gold/60" />
+                <span className="text-[10px] uppercase tracking-wider text-white/40 font-semibold">Prix</span>
+              </div>
+
+              {/* Valeurs min / max */}
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-xs font-semibold text-white/70">
+                  {minVal.toLocaleString("fr-FR")} <span className="text-[9px] text-white/30">FCFA</span>
+                </span>
+                <span className="text-xs font-semibold text-white/70">
+                  {maxVal.toLocaleString("fr-FR")} <span className="text-[9px] text-white/30">FCFA</span>
+                </span>
+              </div>
+
+              {/* Track + double range input */}
+              <div className="relative h-5 flex items-center mb-5">
+                {/* Track fond */}
+                <div className="absolute w-full h-[4px] bg-white/[0.08] rounded-full" />
+                {/* Fill doré entre les deux poignées */}
+                <div
+                  className="absolute h-[4px] bg-gold/50 rounded-full"
+                  style={{ left: `${pct(minVal)}%`, right: `${100 - pct(maxVal)}%` }}
+                />
+                {/* Input min */}
+                <input
+                  type="range"
+                  className="range-price"
+                  min={priceExtent[0]} max={priceExtent[1]} step={PRICE_STEP}
+                  value={minVal}
+                  onChange={e => setMinVal(Math.min(Number(e.target.value), maxVal - PRICE_STEP))}
+                />
+                {/* Input max */}
+                <input
+                  type="range"
+                  className="range-price"
+                  min={priceExtent[0]} max={priceExtent[1]} step={PRICE_STEP}
+                  value={maxVal}
+                  onChange={e => setMaxVal(Math.max(Number(e.target.value), minVal + PRICE_STEP))}
+                />
+              </div>
+
+              {/* Bouton Filtrer */}
+              <button
+                onClick={() => setApplied({ min: minVal, max: maxVal })}
+                className="w-full py-2 text-[11px] uppercase tracking-[0.18em] font-semibold
+                           bg-gold/10 border border-gold/30 text-gold rounded-lg
+                           hover:bg-gold/20 transition-all duration-300"
+              >
+                Filtrer
+              </button>
             </div>
 
             {/* Compteur résultats + reset */}
@@ -327,7 +376,7 @@ export default function FilterableProductGrid({ limit = 80, defaultCategory = nu
                 </p>
                 {hasActiveFilters && (
                   <button
-                    onClick={() => { setSearch(""); setPriceRange(null); }}
+                    onClick={() => { setSearch(""); setApplied(null); setMinVal(priceExtent[0]); setMaxVal(priceExtent[1]); }}
                     className="text-[10px] text-gold/60 hover:text-gold transition-colors"
                   >
                     Réinitialiser les filtres

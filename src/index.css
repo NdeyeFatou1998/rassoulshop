@@ -302,3 +302,42 @@
 .spin-border-hero {
   animation: spinBorder 6s linear infinite;
 }
+
+/* ---- Double range slider prix ---- */
+.range-price {
+  -webkit-appearance: none;
+  appearance: none;
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  background: transparent;
+  pointer-events: none;
+  outline: none;
+}
+.range-price::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #C5A55A;
+  border: 2px solid #080807;
+  cursor: pointer;
+  pointer-events: all;
+  box-shadow: 0 0 8px rgba(197, 165, 90, 0.45);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.range-price::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 14px rgba(197, 165, 90, 0.7);
+  transform: scale(1.1);
+}
+.range-price::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #C5A55A;
+  border: 2px solid #080807;
+  cursor: pointer;
+  pointer-events: all;
+  box-shadow: 0 0 8px rgba(197, 165, 90, 0.45);
+}
