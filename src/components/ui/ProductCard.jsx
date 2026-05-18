@@ -32,57 +32,48 @@ export default function ProductCard({ product, index = 0 }) {
     addToCart(product, 1);
   }
 
-  /* Rayon du squircle produit */
-  const SQ_R_OUT = 20;
-  const SQ_R_IN  = 17;
-
   return (
     <motion.article
       initial={{ opacity: 0, y: 18 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-20px" }}
       transition={{ duration: 0.5, delay: index * 0.04, ease: [0.22, 1, 0.36, 1] }}
-      className="group flex flex-col"
+      className="group flex flex-col rounded-2xl overflow-hidden
+                 bg-[#0f0f0e] border border-white/[0.07]
+                 hover:border-gold/25 hover:shadow-[0_0_24px_rgba(197,165,90,0.08)]
+                 transition-all duration-400"
     >
-      {/* ---- Squircle image ---- */}
-      <div className="relative w-full aspect-square">
-        {/* Contour doré au hover (conic-gradient statique, pas tournant) */}
-        <div
-          className="absolute inset-0 transition-opacity duration-400 opacity-0 group-hover:opacity-100"
-          style={{
-            borderRadius: SQ_R_OUT,
-            background: "linear-gradient(135deg, rgba(197,165,90,0.6) 0%, transparent 40%, transparent 60%, rgba(197,165,90,0.4) 100%)",
-            boxShadow: "0 0 22px rgba(197,165,90,0.18)",
-          }}
+      {/* ---- Image (haut de la card) ---- */}
+      <Link to={`/product/${product.id}`} className="relative w-full aspect-square block overflow-hidden">
+        <img
+          src={product.image}
+          alt={product.title}
+          loading="lazy"
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
         />
 
-        {/* Image intérieure */}
-        <Link
-          to={`/product/${product.id}`}
-          className="absolute overflow-hidden block"
-          style={{ inset: "2px", borderRadius: SQ_R_IN, background: "#111110" }}
-        >
-          <img
-            src={product.image}
-            alt={product.title}
-            loading="lazy"
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
-          />
-          {/* Gradient overlay bas au hover */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+        {/* Gradient bas au hover */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent
+                        opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
 
-          {/* Badge */}
-          {product.badge && (
-            <span className="absolute top-2.5 left-2.5 px-2 py-[3px] text-[7px] uppercase tracking-[0.16em] font-bold bg-gold text-noir-950 rounded-full">
-              {product.badge}
-            </span>
-          )}
-        </Link>
+        {/* Badge produit */}
+        {product.badge && (
+          <span className="absolute top-2.5 left-2.5 px-2 py-[3px] text-[7px] uppercase tracking-[0.16em] font-bold bg-gold text-noir-950 rounded-full">
+            {product.badge}
+          </span>
+        )}
 
-        {/* Bouton quick-add — bas droite du squircle */}
+        {/* Badge promo % */}
+        {hasPromo && (
+          <span className="absolute top-2.5 right-2.5 text-[7px] font-bold bg-red-500/80 text-white px-1.5 py-0.5 rounded-full">
+            -{Math.round((1 - product.promo_price / product.price) * 100)}%
+          </span>
+        )}
+
+        {/* Bouton quick-add */}
         <button
           onClick={handleQuickAdd}
-          className={`absolute bottom-3 right-3 z-10 w-8 h-8 rounded-full flex items-center justify-center
+          className={`absolute bottom-2.5 right-2.5 z-10 w-8 h-8 rounded-full flex items-center justify-center
             transition-all duration-300 active:scale-95
             opacity-100 md:opacity-0 md:group-hover:opacity-100 ${
               justAdded
@@ -96,24 +87,15 @@ export default function ProductCard({ product, index = 0 }) {
             : <ShoppingCart size={12} strokeWidth={1.8} />
           }
         </button>
-      </div>
+      </Link>
 
-      {/* ---- Card infos — fond sombre, bordure fine, hover doré ---- */}
-      <div className="mt-2.5 rounded-xl bg-[#0f0f0e] border border-white/[0.06] px-3 pt-3 pb-3 flex flex-col gap-0
-                      group-hover:border-gold/20 group-hover:bg-[#141412]
-                      transition-all duration-400">
+      {/* ---- Infos (bas de la card, dans le même conteneur) ---- */}
+      <div className="px-3.5 pt-3 pb-3.5 flex flex-col border-t border-white/[0.05]">
 
-        {/* Ligne 1 : catégorie + badge promo */}
-        <div className="flex items-center justify-between mb-1.5">
-          <p className="text-[8px] uppercase tracking-[0.22em] text-gold/70 font-semibold">
-            {product.category_name || product.category || ""}
-          </p>
-          {hasPromo && (
-            <span className="text-[7px] font-bold bg-red-500/15 text-red-400 px-1.5 py-0.5 rounded-full">
-              -{Math.round((1 - product.promo_price / product.price) * 100)}%
-            </span>
-          )}
-        </div>
+        {/* Catégorie */}
+        <p className="text-[8px] uppercase tracking-[0.22em] text-gold/70 font-semibold mb-1.5">
+          {product.category_name || product.category || ""}
+        </p>
 
         {/* Titre */}
         <h3 className="text-[12px] font-medium text-white/90 leading-snug line-clamp-2
@@ -121,7 +103,7 @@ export default function ProductCard({ product, index = 0 }) {
           {product.title}
         </h3>
 
-        {/* Swatches de variantes (couleurs avec image, max 4) */}
+        {/* Swatches variantes */}
         {product.variant_types && product.variant_types.length > 0 && (() => {
           const imgType = product.variant_types.find(t => t.options?.some(o => o.image));
           if (!imgType) return null;
@@ -138,8 +120,8 @@ export default function ProductCard({ product, index = 0 }) {
           );
         })()}
 
-        {/* Séparateur + Prix */}
-        <div className="mt-2.5 pt-2.5 border-t border-white/[0.05] flex items-baseline gap-1.5">
+        {/* Prix */}
+        <div className="flex items-baseline gap-1.5 mt-2.5 pt-2.5 border-t border-white/[0.05]">
           {hasPromo ? (
             <>
               <span className="text-[10px] text-white/25 line-through">
