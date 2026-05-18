@@ -38,7 +38,7 @@ export default function Shop() {
       </section>
 
       {/* ---- Grille filtrée — catégorie initiale depuis URL ---- */}
-      <FilterableProductGrid limit={100} defaultCategory={initialCategory} />
+      <FilterableProductGrid limit={100} defaultCategory={initialCategory} showFilters />
     </>
   );
 }
