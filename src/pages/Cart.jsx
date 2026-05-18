@@ -11,13 +11,14 @@
  * - Panier vide avec illustration animée
  */
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Minus, Plus, Trash2, ShoppingCart, ArrowLeft, Truck, Shield, CreditCard } from "lucide-react";
 import { useCart } from "../context/CartContext";
 
 export default function Cart() {
   const { cart, cartTotal, cartCount, updateQuantity, removeFromCart, clearCart } = useCart();
+  const navigate = useNavigate();
 
   return (
     <section className="w-full px-4 md:px-8 lg:px-12 pt-24 md:pt-32 pb-32">
@@ -194,12 +195,13 @@ export default function Cart() {
                 </span>
               </div>
 
-              {/* Bouton acheter avec glow */}
+              {/* Bouton commander */}
               <motion.button
                 whileTap={{ scale: 0.97 }}
+                onClick={() => navigate("/checkout")}
                 className="w-full py-3.5 rounded-full bg-gold text-noir-900 text-[11px] uppercase tracking-[0.2em] font-bold glow-gold glow-gold-hover transition-all duration-400 btn-press"
               >
-                Acheter maintenant
+                Commander maintenant
               </motion.button>
 
               {/* Vider le panier */}

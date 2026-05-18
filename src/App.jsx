@@ -34,6 +34,7 @@ import Shop from "./pages/Shop";
 import Lookbook from "./pages/Lookbook";
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
 import GiftBoxShop from "./pages/GiftBoxShop";
 import GiftBoxDetail from "./pages/GiftBoxDetail";
 
@@ -93,6 +94,7 @@ function AnimatedRoutes() {
           <Route path="/lookbook" element={<Lookbook />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="/gift-boxes" element={<GiftBoxShop />} />
           <Route path="/gift-boxes/:id" element={<GiftBoxDetail />} />
         </Routes>
