@@ -72,14 +72,7 @@ export default function GiftBoxDetail() {
       const vip = boxProducts.find(p => p.id === vipProductId);
       if (vip) total += Math.round(parseFloat(vip.price) * 1.25);
     }
-    if (box.items) {
-      for (const item of box.items) {
-        if (item.is_replaceable && replacements[item.item_id]) {
-          const rp = item.replacements?.find(r => r.product_id === replacements[item.item_id]);
-          if (rp) total += (parseFloat(rp.price) - parseFloat(item.price)) * item.quantity;
-        }
-      }
-    }
+    /* Les remplacements sont des échanges sans surcoût : pas de delta prix */
     return total;
   }
 
