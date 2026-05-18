@@ -332,7 +332,8 @@ export default function GiftBoxDetail() {
             <div>
               <h2 className="text-[9px] uppercase tracking-[0.22em] text-white/30 font-semibold mb-3">Emballage</h2>
               <div className="grid grid-cols-2 gap-2.5">
-                <button onClick={() => setBoxType("simple")}
+                {/* Boîte simple */}
+                <button onClick={() => { setBoxType("simple"); setVipProductId(null); }}
                   className={`relative p-3.5 rounded-xl border text-left transition-all ${
                     boxType === "simple" ? "border-gold/35 bg-gold/[0.07]" : "border-white/[0.07] hover:border-gold/20"
                   }`}>
@@ -341,39 +342,70 @@ export default function GiftBoxDetail() {
                   <p className={`text-xs font-semibold ${boxType === "simple" ? "text-gold" : "text-white/65"}`}>Boîte simple</p>
                   <p className="text-[10px] text-gold font-semibold mt-1">Gratuit</p>
                 </button>
+                {/* Boîte VIP */}
                 <button onClick={() => setBoxType("vip")}
                   className={`relative p-3.5 rounded-xl border text-left transition-all ${
                     boxType === "vip" ? "border-gold/35 bg-gold/[0.07]" : "border-white/[0.07] hover:border-gold/20"
                   }`}>
-                  {boxType === "vip" && <Check size={11} className="absolute top-2.5 right-2.5 text-gold" />}
+                  {boxType === "vip" && vipProductId && <Check size={11} className="absolute top-2.5 right-2.5 text-gold" />}
                   <Crown size={18} className={`mb-1.5 ${boxType === "vip" ? "text-gold" : "text-white/20"}`} />
                   <p className={`text-xs font-semibold ${boxType === "vip" ? "text-gold" : "text-white/65"}`}>Boîte VIP</p>
-                  <p className="text-[10px] text-white/25 mt-1">+25% sur la boîte</p>
+                  <p className="text-[10px] text-white/25 mt-1">+25% du prix total</p>
                 </button>
               </div>
-              {/* Sélection produit VIP */}
+
+              {/* Panel de sélection VIP — style identique au panel remplacement */}
               <AnimatePresence>
-                {boxType === "vip" && boxProducts.length > 0 && (
-                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.22 }} className="overflow-hidden">
-                    <div className="mt-2 grid grid-cols-3 sm:grid-cols-4 gap-2">
-                      {boxProducts.map(bp => {
-                        const sel = vipProductId === bp.id;
-                        return (
-                          <button key={bp.id} onClick={() => setVipProductId(bp.id)}
-                            className={`relative flex flex-col rounded-lg overflow-hidden border transition-all bg-[#0f0f0e] ${
-                              sel ? "border-gold/40" : "border-white/[0.07] hover:border-gold/20"
-                            }`}>
-                            {sel && <div className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-gold flex items-center justify-center z-10"><Check size={8} className="text-[#0a0a09]" /></div>}
-                            <div className="aspect-square overflow-hidden bg-[#141412]">
-                              {bp.image ? <img src={bp.image} alt={bp.title} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><Crown size={16} className="text-gold/20" /></div>}
-                            </div>
-                            <div className="p-1.5">
-                              <p className="text-[9px] text-white/65 line-clamp-1">{bp.title}</p>
-                              <p className="text-[9px] text-gold mt-0.5">{fmt(Math.round(bp.price * 1.25))} FCFA</p>
-                            </div>
-                          </button>
-                        );
-                      })}
+                {boxType === "vip" && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.2 }}
+                    className="mt-2 relative"
+                  >
+                    {/* Trait + notch pointant vers le bouton VIP (côté droit) */}
+                    <div className="absolute -top-2 h-2 w-px bg-gold/40" style={{ left: "75%" }} />
+                    <div className="absolute -top-1.5 w-3 h-3 rotate-45 bg-[#111110] border-t border-l border-gold/25" style={{ left: "calc(75% - 6px)" }} />
+
+                    <div className="rounded-xl border border-gold/20 bg-[#111110] p-3">
+                      <p className="text-[8px] uppercase tracking-wider text-gold/50 font-semibold mb-3">
+                        Choisir votre boîte VIP
+                        <span className="ml-2 text-white/25 normal-case font-normal tracking-normal">· prix coffret +25%</span>
+                      </p>
+
+                      {boxProducts.length === 0 ? (
+                        <p className="text-[9px] text-white/25 italic">Aucune boîte VIP disponible pour l'instant.</p>
+                      ) : (
+                        <div className="flex gap-2 overflow-x-auto pb-1">
+                          {boxProducts.map(bp => {
+                            const sel = vipProductId === bp.id;
+                            return (
+                              <button key={bp.id}
+                                onClick={() => setVipProductId(sel ? null : bp.id)}
+                                className={`flex-shrink-0 flex flex-col rounded-lg overflow-hidden border transition-all w-[72px] ${
+                                  sel ? "border-gold/45 bg-gold/[0.08]" : "border-white/[0.08] hover:border-gold/25"
+                                }`}
+                              >
+                                <div className="relative aspect-square bg-[#1a1a18]">
+                                  {bp.image
+                                    ? <img src={bp.image} alt={bp.title} className="w-full h-full object-cover" />
+                                    : <div className="w-full h-full flex items-center justify-center"><Crown size={14} className="text-gold/20" /></div>
+                                  }
+                                  {sel && (
+                                    <div className="absolute inset-0 flex items-end justify-end p-1">
+                                      <Check size={9} className="text-gold" />
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="p-1 text-center">
+                                  <p className="text-[7px] text-white/55 line-clamp-2 leading-tight">{bp.title}</p>
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
                   </motion.div>
                 )}
