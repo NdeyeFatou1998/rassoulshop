@@ -313,54 +313,42 @@ export default function FilterableProductGrid({ limit = 80, defaultCategory = nu
               )}
             </div>
 
-            {/* Double slider prix */}
-            <div className="bg-[#111110] border border-white/[0.07] rounded-xl px-4 pt-4 pb-5">
-              <div className="flex items-center gap-2 mb-4">
-                <SlidersHorizontal size={13} className="text-gold/60" />
-                <span className="text-[10px] uppercase tracking-wider text-white/40 font-semibold">Prix</span>
-              </div>
+            {/* Double slider prix — compact inline */}
+            <div className="flex items-center gap-3 bg-[#111110] border border-white/[0.07] rounded-xl px-4 py-3">
+              {/* Icône + label */}
+              <SlidersHorizontal size={13} className="text-gold/50 flex-shrink-0" />
 
-              {/* Valeurs min / max */}
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-xs font-semibold text-white/70">
-                  {minVal.toLocaleString("fr-FR")} <span className="text-[9px] text-white/30">FCFA</span>
-                </span>
-                <span className="text-xs font-semibold text-white/70">
-                  {maxVal.toLocaleString("fr-FR")} <span className="text-[9px] text-white/30">FCFA</span>
-                </span>
-              </div>
-
-              {/* Track + double range input */}
-              <div className="relative h-5 flex items-center mb-5">
-                {/* Track fond */}
-                <div className="absolute w-full h-[4px] bg-white/[0.08] rounded-full" />
-                {/* Fill doré entre les deux poignées */}
-                <div
-                  className="absolute h-[4px] bg-gold/50 rounded-full"
-                  style={{ left: `${pct(minVal)}%`, right: `${100 - pct(maxVal)}%` }}
-                />
-                {/* Input min */}
-                <input
-                  type="range"
-                  className="range-price"
-                  min={priceExtent[0]} max={priceExtent[1]} step={PRICE_STEP}
-                  value={minVal}
-                  onChange={e => setMinVal(Math.min(Number(e.target.value), maxVal - PRICE_STEP))}
-                />
-                {/* Input max */}
-                <input
-                  type="range"
-                  className="range-price"
-                  min={priceExtent[0]} max={priceExtent[1]} step={PRICE_STEP}
-                  value={maxVal}
-                  onChange={e => setMaxVal(Math.max(Number(e.target.value), minVal + PRICE_STEP))}
-                />
+              {/* Slider + valeurs */}
+              <div className="flex-1 min-w-0">
+                {/* Valeurs */}
+                <div className="flex justify-between mb-1.5">
+                  <span className="text-[10px] text-white/50">{minVal.toLocaleString("fr-FR")} FCFA</span>
+                  <span className="text-[10px] text-white/50">{maxVal.toLocaleString("fr-FR")} FCFA</span>
+                </div>
+                {/* Track + inputs */}
+                <div className="relative h-5 flex items-center">
+                  <div className="absolute w-full h-[3px] bg-white/[0.08] rounded-full" />
+                  <div
+                    className="absolute h-[3px] bg-gold/50 rounded-full"
+                    style={{ left: `${pct(minVal)}%`, right: `${100 - pct(maxVal)}%` }}
+                  />
+                  <input type="range" className="range-price"
+                    min={priceExtent[0]} max={priceExtent[1]} step={PRICE_STEP}
+                    value={minVal}
+                    onChange={e => setMinVal(Math.min(Number(e.target.value), maxVal - PRICE_STEP))}
+                  />
+                  <input type="range" className="range-price"
+                    min={priceExtent[0]} max={priceExtent[1]} step={PRICE_STEP}
+                    value={maxVal}
+                    onChange={e => setMaxVal(Math.max(Number(e.target.value), minVal + PRICE_STEP))}
+                  />
+                </div>
               </div>
 
               {/* Bouton Filtrer */}
               <button
                 onClick={() => setApplied({ min: minVal, max: maxVal })}
-                className="w-full py-2 text-[11px] uppercase tracking-[0.18em] font-semibold
+                className="flex-shrink-0 px-4 py-2 text-[10px] uppercase tracking-[0.15em] font-semibold
                            bg-gold/10 border border-gold/30 text-gold rounded-lg
                            hover:bg-gold/20 transition-all duration-300"
               >

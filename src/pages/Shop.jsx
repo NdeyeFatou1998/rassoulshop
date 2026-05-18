@@ -20,7 +20,7 @@ export default function Shop() {
   return (
     <>
       {/* ---- Header ---- */}
-      <section className="bg-[#080807] pt-20 md:pt-24 pb-5 border-b border-white/[0.05]">
+      <section className="bg-[#080807] pt-20 md:pt-24 pb-5">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
