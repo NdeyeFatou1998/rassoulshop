@@ -155,7 +155,6 @@ export default function GiftBoxDetail() {
           >
             {/* En-tête */}
             <div>
-              <p className="text-[9px] uppercase tracking-[0.3em] text-gold/60 font-semibold mb-2">Coffret cadeau</p>
               <h1 className="font-serif text-2xl md:text-3xl text-white leading-tight mb-2">{box.name}</h1>
               {box.description && (
                 <p className="text-sm text-white/40 leading-relaxed">{box.description}</p>
@@ -172,7 +171,7 @@ export default function GiftBoxDetail() {
                 <h2 className="text-[9px] uppercase tracking-[0.22em] text-white/30 font-semibold mb-3">
                   Ce coffret contient
                 </h2>
-                {/* Grille plus petite : 3 cols mobile → 4 desktop */}
+                {/* Grille : 3 cols mobile → 5 desktop */}
                 <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
                   {box.items.map((item, i) => {
                     const isOpen      = openItem === item.item_id;
@@ -191,30 +190,26 @@ export default function GiftBoxDetail() {
                         <div
                           onClick={() => item.is_replaceable && setOpenItem(isOpen ? null : item.item_id)}
                           className={`relative flex flex-col rounded-lg overflow-hidden border transition-all duration-250 ${
-                            item.is_replaceable
-                              ? "cursor-pointer hover:border-gold/35"
-                              : "cursor-default"
-                          } ${isOpen ? "border-gold/45 shadow-[0_0_14px_rgba(197,165,90,0.10)]" : "border-white/[0.07]"} bg-[#0f0f0e]`}
+                            item.is_replaceable ? "cursor-pointer hover:border-gold/35" : "cursor-default"
+                          } ${isOpen ? "border-gold/50 shadow-[0_0_12px_rgba(197,165,90,0.12)]" : "border-white/[0.07]"} bg-[#0f0f0e]`}
                         >
-                          {/* Image */}
                           <div className="relative aspect-square overflow-hidden bg-[#141412]">
                             {displayImg
                               ? <img src={displayImg} alt={displayName} className="w-full h-full object-cover" />
                               : <div className="w-full h-full flex items-center justify-center"><Package size={16} className="text-white/10" /></div>
                             }
-                            {/* Badge Remplaçable + quantité sur la même ligne */}
-                            <div className="absolute top-1 left-1 flex items-center gap-1 flex-wrap">
-                              {item.is_replaceable && (
-                                <span className="flex items-center gap-0.5 text-[6px] uppercase tracking-wide font-bold bg-gold text-[#0a0a09] px-1.5 py-[2px] rounded-full leading-none">
-                                  <RefreshCw size={6} /> Remp.
-                                </span>
-                              )}
-                              {item.quantity > 1 && (
-                                <span className="text-[7px] font-bold bg-white/15 text-white px-1.5 py-[2px] rounded-full leading-none">
-                                  ×{item.quantity}
-                                </span>
-                              )}
-                            </div>
+                            {/* Badge Remp. en haut à gauche */}
+                            {item.is_replaceable && (
+                              <span className="absolute top-1 left-1 flex items-center gap-0.5 text-[6px] uppercase font-bold bg-gold text-[#0a0a09] px-1.5 py-[2px] rounded-full leading-none">
+                                <RefreshCw size={6} /> Remp.
+                              </span>
+                            )}
+                            {/* ×N en haut à droite — gold */}
+                            {item.quantity > 1 && (
+                              <span className="absolute top-1 right-1 text-[7px] font-bold text-gold bg-gold/20 px-1.5 py-[2px] rounded-full leading-none">
+                                ×{item.quantity}
+                              </span>
+                            )}
                             {/* Checkmark vert si remplacé */}
                             {chosenRp && (
                               <span className="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-green-500 flex items-center justify-center">
@@ -222,73 +217,109 @@ export default function GiftBoxDetail() {
                               </span>
                             )}
                           </div>
-                          {/* Nom uniquement */}
                           <div className="px-1.5 py-1.5">
                             <p className="text-[9px] text-white/65 leading-snug line-clamp-2">{displayName}</p>
                           </div>
                         </div>
-
-                        {/* Panel remplacement (s'ouvre sous la card) */}
-                        <AnimatePresence>
-                          {isOpen && (
-                            <motion.div
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: "auto" }}
-                              exit={{ opacity: 0, height: 0 }}
-                              transition={{ duration: 0.22 }}
-                              className="overflow-hidden col-span-full"
-                            >
-                              <div className="mt-1.5 rounded-xl border border-gold/15 bg-[#111110] p-2.5 space-y-1.5">
-                                <p className="text-[8px] uppercase tracking-wider text-gold/50 font-semibold mb-1.5">
-                                  Remplacer par :
-                                </p>
-                                {/* Original */}
-                                <button
-                                  onClick={() => { setReplacements(prev => { const r = {...prev}; delete r[item.item_id]; return r; }); setOpenItem(null); }}
-                                  className={`w-full flex items-center gap-2 p-1.5 rounded-lg border text-left transition-colors ${
-                                    !chosenId ? "border-gold/30 bg-gold/10" : "border-white/[0.06] hover:border-gold/20"
-                                  }`}
-                                >
-                                  {item.image
-                                    ? <img src={item.image} alt={item.title} className="w-7 h-7 rounded object-cover flex-shrink-0" />
-                                    : <div className="w-7 h-7 rounded bg-[#1a1a18] flex-shrink-0" />
-                                  }
-                                  <div className="flex-1 min-w-0">
-                                    <p className="text-[10px] text-white/75 truncate">{item.title}</p>
-                                    <p className="text-[8px] text-white/25">Original · {fmt(item.price)} FCFA</p>
-                                  </div>
-                                  {!chosenId && <Check size={10} className="text-gold flex-shrink-0" />}
-                                </button>
-                                {/* Alternatives */}
-                                {item.replacements?.map(rp => {
-                                  const sel = chosenId === rp.product_id;
-                                  return (
-                                    <button key={rp.product_id}
-                                      onClick={() => { setReplacements(prev => ({...prev, [item.item_id]: rp.product_id})); setOpenItem(null); }}
-                                      className={`w-full flex items-center gap-2 p-1.5 rounded-lg border text-left transition-colors ${
-                                        sel ? "border-gold/30 bg-gold/10" : "border-white/[0.06] hover:border-gold/20"
-                                      }`}
-                                    >
-                                      {rp.image
-                                        ? <img src={rp.image} alt={rp.title} className="w-7 h-7 rounded object-cover flex-shrink-0" />
-                                        : <div className="w-7 h-7 rounded bg-[#1a1a18] flex-shrink-0" />
-                                      }
-                                      <div className="flex-1 min-w-0">
-                                        <p className="text-[10px] text-white/75 truncate">{rp.title}</p>
-                                        <p className="text-[8px] text-white/25">{fmt(rp.price)} FCFA</p>
-                                      </div>
-                                      {sel && <Check size={10} className="text-gold flex-shrink-0" />}
-                                    </button>
-                                  );
-                                })}
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
                       </motion.div>
                     );
                   })}
                 </div>
+
+                {/* ── Panel pleine largeur avec connecteur ── */}
+                <AnimatePresence>
+                  {openItem !== null && (() => {
+                    const item = box.items.find(it => it.item_id === openItem);
+                    if (!item) return null;
+                    const itemIndex  = box.items.findIndex(it => it.item_id === openItem);
+                    const chosenId   = replacements[openItem];
+                    /* position du connecteur : approx. centre de la card dans la grille (5 cols) */
+                    const colCount   = 5;
+                    const colIndex   = itemIndex % colCount;
+                    const pct        = ((colIndex + 0.5) / colCount * 100).toFixed(1);
+
+                    return (
+                      <motion.div
+                        key={openItem}
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.2 }}
+                        className="mt-0 relative"
+                      >
+                        {/* Trait vertical reliant la card au panel */}
+                        <div className="absolute -top-2 h-2 w-px bg-gold/40" style={{ left: `${pct}%` }} />
+                        {/* Flèche (notch) au bord supérieur du panel */}
+                        <div
+                          className="absolute -top-1.5 w-3 h-3 rotate-45 bg-[#111110] border-t border-l border-gold/25"
+                          style={{ left: `calc(${pct}% - 6px)` }}
+                        />
+
+                        <div className="rounded-xl border border-gold/20 bg-[#111110] p-3">
+                          <p className="text-[8px] uppercase tracking-wider text-gold/50 font-semibold mb-3">
+                            Remplacer · <span className="text-white/50">{item.title}</span>
+                          </p>
+                          {/* Choix horizontaux */}
+                          <div className="flex gap-2 overflow-x-auto pb-1">
+
+                            {/* Option : garder l'original */}
+                            <button
+                              onClick={() => { setReplacements(prev => { const r = {...prev}; delete r[item.item_id]; return r; }); setOpenItem(null); }}
+                              className={`flex-shrink-0 flex flex-col rounded-lg overflow-hidden border transition-all w-[72px] ${
+                                !chosenId ? "border-gold/45 bg-gold/[0.08]" : "border-white/[0.08] hover:border-gold/25"
+                              }`}
+                            >
+                              <div className="relative aspect-square bg-[#1a1a18]">
+                                {item.image
+                                  ? <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                                  : <div className="w-full h-full flex items-center justify-center"><Package size={12} className="text-white/10" /></div>
+                                }
+                                {!chosenId && (
+                                  <div className="absolute inset-0 flex items-end justify-end p-1">
+                                    <Check size={9} className="text-gold" />
+                                  </div>
+                                )}
+                              </div>
+                              <div className="p-1 text-center">
+                                <p className="text-[7px] text-white/55 line-clamp-2 leading-tight">{item.title}</p>
+                                <p className="text-[6px] text-white/25 mt-0.5">{fmt(item.price)} F</p>
+                              </div>
+                            </button>
+
+                            {/* Alternatives */}
+                            {item.replacements?.map(rp => {
+                              const sel = chosenId === rp.product_id;
+                              return (
+                                <button key={rp.product_id}
+                                  onClick={() => { setReplacements(prev => ({...prev, [item.item_id]: rp.product_id})); setOpenItem(null); }}
+                                  className={`flex-shrink-0 flex flex-col rounded-lg overflow-hidden border transition-all w-[72px] ${
+                                    sel ? "border-gold/45 bg-gold/[0.08]" : "border-white/[0.08] hover:border-gold/25"
+                                  }`}
+                                >
+                                  <div className="relative aspect-square bg-[#1a1a18]">
+                                    {rp.image
+                                      ? <img src={rp.image} alt={rp.title} className="w-full h-full object-cover" />
+                                      : <div className="w-full h-full flex items-center justify-center"><Package size={12} className="text-white/10" /></div>
+                                    }
+                                    {sel && (
+                                      <div className="absolute inset-0 flex items-end justify-end p-1">
+                                        <Check size={9} className="text-gold" />
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div className="p-1 text-center">
+                                    <p className="text-[7px] text-white/55 line-clamp-2 leading-tight">{rp.title}</p>
+                                    <p className="text-[6px] text-gold mt-0.5">{fmt(rp.price)} F</p>
+                                  </div>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </motion.div>
+                    );
+                  })()}
+                </AnimatePresence>
               </div>
             )}
 
