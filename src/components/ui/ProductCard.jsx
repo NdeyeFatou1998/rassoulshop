@@ -120,6 +120,13 @@ export default function ProductCard({ product, index = 0 }) {
           );
         })()}
 
+        {/* Tag VIP — visible uniquement pour les boîtes marquées VIP */}
+        {product.is_vip && (
+          <span className="self-start mt-2 inline-flex items-center gap-1 text-[7px] uppercase tracking-[0.18em] font-bold bg-gold/15 text-gold border border-gold/30 px-2 py-[3px] rounded-full">
+            ★ VIP
+          </span>
+        )}
+
         {/* Prix */}
         <div className="flex items-baseline gap-1.5 mt-2.5 pt-2.5 border-t border-white/[0.05]">
           {hasPromo ? (

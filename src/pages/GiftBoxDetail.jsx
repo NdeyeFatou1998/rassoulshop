@@ -51,8 +51,9 @@ export default function GiftBoxDetail() {
         if (boitesCat) {
           const resProd  = await fetch("/api/products");
           const dataProd = await resProd.json();
+          /* Seuls les produits is_vip = true de la catégorie boites */
           setBoxProducts(
-            (dataProd.products || []).filter(p => p.category_id === boitesCat.id && p.active)
+            (dataProd.products || []).filter(p => p.category_id === boitesCat.id && p.active && p.is_vip)
           );
         }
       } catch (err) {
@@ -68,9 +69,9 @@ export default function GiftBoxDetail() {
     if (!box) return 0;
     /* Les prix viennent du JSON PostgreSQL parfois sous forme de string — parseFloat obligatoire */
     let total = parseFloat(box.price) || 0;
+    /* Boîte VIP sélectionnée : le prix total du coffret augmente de 25% */
     if (boxType === "vip" && vipProductId) {
-      const vip = boxProducts.find(p => p.id === vipProductId);
-      if (vip) total += Math.round(parseFloat(vip.price) * 1.25);
+      total = Math.round(total * 1.25);
     }
     /* Les remplacements sont des échanges sans surcoût : pas de delta prix */
     return total;
