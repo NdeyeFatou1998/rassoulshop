@@ -10,7 +10,7 @@
  *  4. Récap prix + bouton Ajouter au panier
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Gift, Package, Crown, ShoppingCart, ArrowLeft, Check, ArrowRight, RefreshCw } from "lucide-react";
@@ -26,7 +26,10 @@ export default function GiftBoxDetail() {
   const [justAdded, setJustAdded]   = useState(false);
 
   /* item_id de la card ouverte pour afficher ses options */
-  const [openItem, setOpenItem] = useState(null);
+  const [openItem, setOpenItem]         = useState(null);
+  const [connectorLeft, setConnectorLeft] = useState("50%");
+  const cardRefs = useRef({});
+  const gridRef  = useRef(null);
 
   /* Choix du client */
   const [boxType, setBoxType]           = useState("simple");
@@ -63,16 +66,17 @@ export default function GiftBoxDetail() {
 
   function calcPrice() {
     if (!box) return 0;
-    let total = box.price;
+    /* Les prix viennent du JSON PostgreSQL parfois sous forme de string — parseFloat obligatoire */
+    let total = parseFloat(box.price) || 0;
     if (boxType === "vip" && vipProductId) {
       const vip = boxProducts.find(p => p.id === vipProductId);
-      if (vip) total += Math.round(vip.price * 1.25);
+      if (vip) total += Math.round(parseFloat(vip.price) * 1.25);
     }
     if (box.items) {
       for (const item of box.items) {
         if (item.is_replaceable && replacements[item.item_id]) {
           const rp = item.replacements?.find(r => r.product_id === replacements[item.item_id]);
-          if (rp) total += (rp.price - item.price) * item.quantity;
+          if (rp) total += (parseFloat(rp.price) - parseFloat(item.price)) * item.quantity;
         }
       }
     }
@@ -172,7 +176,7 @@ export default function GiftBoxDetail() {
                   Ce coffret contient
                 </h2>
                 {/* Grille : 3 cols mobile → 5 desktop */}
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
+                <div ref={gridRef} className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
                   {box.items.map((item, i) => {
                     const isOpen      = openItem === item.item_id;
                     const chosenId    = replacements[item.item_id];
@@ -188,7 +192,19 @@ export default function GiftBoxDetail() {
                       >
                         {/* Card compacte */}
                         <div
-                          onClick={() => item.is_replaceable && setOpenItem(isOpen ? null : item.item_id)}
+                          ref={(el) => { cardRefs.current[item.item_id] = el; }}
+                          onClick={() => {
+                            if (!item.is_replaceable) return;
+                            const nextOpen = isOpen ? null : item.item_id;
+                            setOpenItem(nextOpen);
+                            /* Calcul position exacte du centre de la card dans la grille */
+                            if (nextOpen && cardRefs.current[item.item_id] && gridRef.current) {
+                              const cardRect = cardRefs.current[item.item_id].getBoundingClientRect();
+                              const gridRect = gridRef.current.getBoundingClientRect();
+                              const center   = cardRect.left + cardRect.width / 2 - gridRect.left;
+                              setConnectorLeft(`${center}px`);
+                            }
+                          }}
                           className={`relative flex flex-col rounded-lg overflow-hidden border transition-all duration-250 ${
                             item.is_replaceable ? "cursor-pointer hover:border-gold/35" : "cursor-default"
                           } ${isOpen ? "border-gold/50 shadow-[0_0_12px_rgba(197,165,90,0.12)]" : "border-white/[0.07]"} bg-[#0f0f0e]`}
@@ -231,12 +247,7 @@ export default function GiftBoxDetail() {
                   {openItem !== null && (() => {
                     const item = box.items.find(it => it.item_id === openItem);
                     if (!item) return null;
-                    const itemIndex  = box.items.findIndex(it => it.item_id === openItem);
                     const chosenId   = replacements[openItem];
-                    /* position du connecteur : approx. centre de la card dans la grille (5 cols) */
-                    const colCount   = 5;
-                    const colIndex   = itemIndex % colCount;
-                    const pct        = ((colIndex + 0.5) / colCount * 100).toFixed(1);
 
                     return (
                       <motion.div
@@ -247,12 +258,12 @@ export default function GiftBoxDetail() {
                         transition={{ duration: 0.2 }}
                         className="mt-0 relative"
                       >
-                        {/* Trait vertical reliant la card au panel */}
-                        <div className="absolute -top-2 h-2 w-px bg-gold/40" style={{ left: `${pct}%` }} />
-                        {/* Flèche (notch) au bord supérieur du panel */}
+                        {/* Trait vertical reliant la card au panel — position exacte via DOM ref */}
+                        <div className="absolute -top-2 h-2 w-px bg-gold/40" style={{ left: connectorLeft }} />
+                        {/* Flèche (notch) pointant vers la card */}
                         <div
                           className="absolute -top-1.5 w-3 h-3 rotate-45 bg-[#111110] border-t border-l border-gold/25"
-                          style={{ left: `calc(${pct}% - 6px)` }}
+                          style={{ left: `calc(${connectorLeft} - 6px)` }}
                         />
 
                         <div className="rounded-xl border border-gold/20 bg-[#111110] p-3">
