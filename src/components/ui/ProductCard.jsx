@@ -98,12 +98,26 @@ export default function ProductCard({ product, index = 0 }) {
         </button>
       </div>
 
-      {/* ---- Infos sous le squircle ---- */}
-      <div className="pt-3 px-0.5">
-        <p className="text-[8px] uppercase tracking-[0.22em] text-gold font-semibold mb-1">
-          {product.category_name || product.category || ""}
-        </p>
-        <h3 className="text-[12px] font-medium text-white leading-snug line-clamp-1 group-hover:text-gold/90 transition-colors duration-300">
+      {/* ---- Card infos — fond sombre, bordure fine, hover doré ---- */}
+      <div className="mt-2.5 rounded-xl bg-[#0f0f0e] border border-white/[0.06] px-3 pt-3 pb-3 flex flex-col gap-0
+                      group-hover:border-gold/20 group-hover:bg-[#141412]
+                      transition-all duration-400">
+
+        {/* Ligne 1 : catégorie + badge promo */}
+        <div className="flex items-center justify-between mb-1.5">
+          <p className="text-[8px] uppercase tracking-[0.22em] text-gold/70 font-semibold">
+            {product.category_name || product.category || ""}
+          </p>
+          {hasPromo && (
+            <span className="text-[7px] font-bold bg-red-500/15 text-red-400 px-1.5 py-0.5 rounded-full">
+              -{Math.round((1 - product.promo_price / product.price) * 100)}%
+            </span>
+          )}
+        </div>
+
+        {/* Titre */}
+        <h3 className="text-[12px] font-medium text-white/90 leading-snug line-clamp-2
+                       group-hover:text-white transition-colors duration-300">
           {product.title}
         </h3>
 
@@ -124,24 +138,26 @@ export default function ProductCard({ product, index = 0 }) {
           );
         })()}
 
-        <div className="flex items-baseline gap-1.5 mt-1.5">
+        {/* Séparateur + Prix */}
+        <div className="mt-2.5 pt-2.5 border-t border-white/[0.05] flex items-baseline gap-1.5">
           {hasPromo ? (
             <>
               <span className="text-[10px] text-white/25 line-through">
                 {product.price.toLocaleString("fr-FR")}
               </span>
-              <span className="text-[13px] font-bold text-gold">
+              <span className="text-[13px] font-bold text-gold leading-none">
                 {product.promo_price.toLocaleString("fr-FR")}
                 <span className="text-[8px] font-normal ml-0.5">FCFA</span>
               </span>
             </>
           ) : (
-            <span className="text-[13px] font-semibold text-white/90">
+            <span className="text-[13px] font-semibold text-white/90 leading-none">
               {product.price.toLocaleString("fr-FR")}
               <span className="text-[8px] font-normal text-white/30 ml-0.5">FCFA</span>
             </span>
           )}
         </div>
+
       </div>
     </motion.article>
   );
