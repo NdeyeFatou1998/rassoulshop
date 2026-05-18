@@ -127,21 +127,22 @@ export default function GiftBoxDetail() {
         </Link>
 
         {/* ══════════════════════════════════════
-            LAYOUT PRINCIPAL : image gauche / infos droite
+            LAYOUT PRINCIPAL : toujours côte à côte
+            image gauche | infos droite
         ══════════════════════════════════════ */}
-        <div className="flex flex-col lg:flex-row gap-10 lg:gap-14">
+        <div className="flex flex-row gap-5 md:gap-10 items-start">
 
-          {/* ── Colonne gauche : image ── */}
+          {/* ── Colonne gauche : image (taille fixe responsive) ── */}
           <motion.div
             initial={{ opacity: 0, x: -16 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.45 }}
-            className="w-full lg:w-[400px] flex-shrink-0"
+            className="w-32 sm:w-56 md:w-80 flex-shrink-0"
           >
-            <div className="rounded-2xl overflow-hidden aspect-square bg-[#141412] border border-white/[0.07] sticky top-24">
+            <div className="rounded-xl md:rounded-2xl overflow-hidden aspect-square bg-[#141412] border border-white/[0.07] sticky top-24">
               {box.image
                 ? <img src={box.image} alt={box.name} className="w-full h-full object-cover" />
-                : <div className="w-full h-full flex items-center justify-center"><Gift size={56} className="text-gold/15" /></div>
+                : <div className="w-full h-full flex items-center justify-center"><Gift size={36} className="text-gold/15" /></div>
               }
             </div>
           </motion.div>
@@ -151,7 +152,7 @@ export default function GiftBoxDetail() {
             initial={{ opacity: 0, x: 16 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.45, delay: 0.06 }}
-            className="flex-1 min-w-0 space-y-8"
+            className="flex-1 min-w-0 space-y-6"
           >
             {/* En-tête */}
             <div>
