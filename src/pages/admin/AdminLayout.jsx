@@ -158,14 +158,14 @@ export default function AdminLayout() {
           </button>
 
           {/* Titre de la page */}
-          <h1 className="text-lg font-medium text-[#f5f0e8]">{pageTitle}</h1>
+          <h1 className="text-base font-medium text-[#f5f0e8] truncate px-2">{pageTitle}</h1>
 
           {/* Espace pour actions futures */}
           <div className="w-8" />
         </header>
 
         {/* Contenu des pages admin (via Outlet de React Router) */}
-        <main className="flex-1 p-4 lg:p-8 overflow-y-auto">
+        <main className="flex-1 p-3 md:p-4 lg:p-8 overflow-y-auto overflow-x-hidden">
           <Outlet />
         </main>
       </div>

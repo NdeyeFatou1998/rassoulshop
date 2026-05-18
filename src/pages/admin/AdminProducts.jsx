@@ -299,26 +299,55 @@ export default function AdminProducts() {
         </div>
 
         <div className="flex-1 overflow-y-auto divide-y divide-[#1a1a1a]">
-          {loading ? Array.from({length:6}).map((_,i) => <div key={i} className="h-12 mx-2 my-1 bg-[#141414] rounded-lg animate-pulse" />) :
+          {loading ? Array.from({length:6}).map((_,i) => <div key={i} className="h-14 mx-2 my-1 bg-[#141414] rounded-lg animate-pulse" />) :
           filtered.map(p => (
-            <button
+            <div
               key={p.id}
-              onClick={() => selectProduct(p)}
-              className={`w-full flex items-center gap-2.5 px-3 py-2.5 text-left transition-colors ${selected !== "new" && selected?.id === p.id ? "bg-[#C5A55A]/10" : "hover:bg-[#1a1a1a]"}`}
+              className={`flex items-center gap-2 px-2.5 py-2 transition-colors ${
+                selected !== "new" && selected?.id === p.id ? "bg-[#C5A55A]/10" : "hover:bg-[#1a1a1a]"
+              }`}
             >
+              {/* Image */}
               {p.image
-                ? <img src={p.image} alt="" className="w-8 h-8 rounded-lg object-cover flex-shrink-0" />
-                : <div className="w-8 h-8 rounded-lg bg-[#222] flex items-center justify-center flex-shrink-0"><Tag size={12} className="text-[#555]" /></div>
+                ? <img src={p.image} alt="" className="w-8 h-8 rounded-md object-cover flex-shrink-0" />
+                : <div className="w-8 h-8 rounded-md bg-[#222] flex items-center justify-center flex-shrink-0"><Tag size={11} className="text-[#555]" /></div>
               }
-              <div className="min-w-0 flex-1">
-                <p className="text-xs font-medium text-[#f5f0e8] truncate">{p.title}</p>
-                <p className={`text-[10px] ${p.stock === 0 ? "text-red-400" : p.stock <= 2 ? "text-orange-400" : "text-[#555]"}`}>
-                  {fmtP(p.price)} · stock {p.stock}
-                  {p.stock === 0 && <AlertTriangle size={10} className="inline ml-1" />}
+
+              {/* Infos — clic pour modifier */}
+              <button
+                type="button"
+                onClick={() => selectProduct(p)}
+                className="min-w-0 flex-1 text-left"
+              >
+                <p className="text-xs font-medium text-[#f5f0e8] truncate leading-tight">{p.title}</p>
+                <p className={`text-[10px] leading-tight mt-0.5 ${
+                  p.stock === 0 ? "text-red-400" : p.stock <= 2 ? "text-orange-400" : "text-[#555]"
+                }`}>
+                  {fmtP(p.price)}
+                  {p.stock === 0 && <AlertTriangle size={9} className="inline ml-1" />}
                 </p>
+              </button>
+
+              {/* Boutons action */}
+              <div className="flex items-center gap-0.5 flex-shrink-0">
+                <button
+                  type="button"
+                  title="Modifier"
+                  onClick={() => selectProduct(p)}
+                  className="p-1.5 rounded-md text-[#555] hover:text-[#C5A55A] hover:bg-[#C5A55A]/10 transition-colors"
+                >
+                  <Pencil size={12} />
+                </button>
+                <button
+                  type="button"
+                  title="Supprimer"
+                  onClick={() => handleDelete(p)}
+                  className="p-1.5 rounded-md text-[#555] hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                >
+                  <Trash2 size={12} />
+                </button>
               </div>
-              {selected !== "new" && selected?.id === p.id && <ChevronRight size={12} className="text-[#C5A55A] flex-shrink-0" />}
-            </button>
+            </div>
           ))}
         </div>
       </div>
@@ -344,23 +373,24 @@ export default function AdminProducts() {
             </button>
 
             {/* Header */}
-            <div className="flex items-center justify-between sticky top-0 bg-[#0a0a0a] py-2 z-10">
-              <h2 className="text-base font-semibold text-[#f5f0e8]">
+            <div className="flex items-center gap-2 justify-between sticky top-0 bg-[#0a0a0a] py-2 z-10 min-w-0">
+              <h2 className="text-sm font-semibold text-[#f5f0e8] truncate min-w-0 flex-1">
                 {selected === "new" ? "Nouveau produit" : selected.title}
               </h2>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 flex-shrink-0">
                 {selected !== "new" && (
                   <button type="button" onClick={() => handleDelete(selected)}
                     className="p-2 text-[#555] hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors">
-                    <Trash2 size={15} />
+                    <Trash2 size={14} />
                   </button>
                 )}
                 <button type="submit" disabled={saving}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors disabled:opacity-50 ${
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-colors disabled:opacity-50 ${
                     saved ? 'bg-emerald-500 text-white' : 'bg-[#C5A55A] text-[#0a0a0a] hover:bg-[#d4b472]'
                   }`}>
-                  <Save size={14} />
-                  {saving ? "Enregistrement…" : saved ? "✓ Sauvegardé" : "Enregistrer"}
+                  <Save size={13} />
+                  <span className="hidden sm:inline">{saving ? "Enregistrement…" : saved ? "✓ Sauvegardé" : "Enregistrer"}</span>
+                  <span className="sm:hidden">{saving ? "…" : saved ? "✓" : "OK"}</span>
                 </button>
               </div>
             </div>
