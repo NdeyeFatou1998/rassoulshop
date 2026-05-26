@@ -12,6 +12,15 @@ export function normalizeOrder(raw) {
   }
   if (!Array.isArray(items)) items = [];
 
+  items = items.map((item) => ({
+    ...item,
+    id: item.id ?? item.productId ?? null,
+    title: item.title || item.name || `Produit #${item.id || item.productId || "?"}`,
+    image: item.image || item.productImage || item.img || null,
+    price: Number(item.price) || 0,
+    quantity: Number(item.quantity) || 1,
+  }));
+
   const firstName = (raw.customer_first_name || raw.customerFirstName || "").trim();
   const lastName = (raw.customer_last_name || raw.customerLastName || "").trim();
   const fullName =

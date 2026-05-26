@@ -1,22 +1,17 @@
 /**
  * Page Admin Commandes — /admin/orders
- *
- * Gestion des commandes avec :
- * - Liste filtrable par statut
- * - Détail de chaque commande (articles, client, total)
- * - Mise à jour du statut (pending → confirmed → shipped → delivered / cancelled)
- * - Suppression avec confirmation
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import {
-  Search, Eye, Trash2, X, ChevronDown, Clock,
-  CheckCircle, Truck, Package, XCircle, Filter
+  Search, Eye, Trash2, X, Clock, CheckCircle, Truck,
+  Package, XCircle, Filter, Download, ImageIcon,
 } from "lucide-react";
+import html2canvas from "html2canvas";
 import { fetchOrders, updateOrderStatus, deleteOrder } from "../../services/adminApi";
 import { normalizeOrder } from "../../utils/normalizeOrder";
+import OrderInvoicePreview from "../../components/admin/OrderInvoicePreview";
 
-/** Labels et couleurs pour chaque statut de commande */
 const STATUS_CONFIG = {
   pending:   { label: "En attente",  icon: Clock,       cls: "bg-amber-500/20 text-amber-400",   border: "border-amber-500/30" },
   confirmed: { label: "Confirmée",   icon: CheckCircle, cls: "bg-blue-500/20 text-blue-400",     border: "border-blue-500/30" },
@@ -25,14 +20,22 @@ const STATUS_CONFIG = {
   cancelled: { label: "Annulée",     icon: XCircle,     cls: "bg-red-500/20 text-red-400",       border: "border-red-500/30" },
 };
 
+function itemImageSrc(image) {
+  if (!image) return null;
+  if (image.startsWith("http") || image.startsWith("/")) return image;
+  return `/${image.replace(/^\//, "")}`;
+}
+
 export default function AdminOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [search, setSearch] = useState("");
+  const [invoiceImageUrl, setInvoiceImageUrl] = useState("");
+  const [invoiceLoading, setInvoiceLoading] = useState(false);
+  const invoiceRef = useRef(null);
 
-  /** Charger les commandes */
   async function loadOrders() {
     setLoading(true);
     try {
@@ -49,12 +52,38 @@ export default function AdminOrders() {
 
   useEffect(() => { loadOrders(); }, [filterStatus]);
 
-  /** Modifier le statut d'une commande */
+  const generateInvoiceImage = useCallback(async () => {
+    if (!invoiceRef.current || !selectedOrder) return;
+    setInvoiceLoading(true);
+    try {
+      const canvas = await html2canvas(invoiceRef.current, {
+        scale: 2,
+        backgroundColor: "#ffffff",
+        useCORS: true,
+        logging: false,
+      });
+      setInvoiceImageUrl(canvas.toDataURL("image/png"));
+    } catch (err) {
+      console.error("Erreur génération facture:", err);
+      setInvoiceImageUrl("");
+    } finally {
+      setInvoiceLoading(false);
+    }
+  }, [selectedOrder]);
+
+  useEffect(() => {
+    if (!selectedOrder) {
+      setInvoiceImageUrl("");
+      return;
+    }
+    const t = setTimeout(() => generateInvoiceImage(), 150);
+    return () => clearTimeout(t);
+  }, [selectedOrder, generateInvoiceImage]);
+
   async function handleStatusChange(orderId, newStatus) {
     try {
       await updateOrderStatus(orderId, newStatus);
       await loadOrders();
-      /* Mettre à jour la commande sélectionnée si elle est ouverte */
       if (selectedOrder?.id === orderId) {
         setSelectedOrder((prev) => ({ ...prev, status: newStatus }));
       }
@@ -63,7 +92,6 @@ export default function AdminOrders() {
     }
   }
 
-  /** Supprimer une commande */
   async function handleDelete(orderId) {
     if (!confirm("Supprimer cette commande ?")) return;
     try {
@@ -75,19 +103,24 @@ export default function AdminOrders() {
     }
   }
 
-  /** Formater un montant en FCFA */
+  function downloadInvoice() {
+    if (!invoiceImageUrl) return;
+    const a = document.createElement("a");
+    a.href = invoiceImageUrl;
+    a.download = `${selectedOrder.reference}-facture.png`;
+    a.click();
+  }
+
   function fmtPrice(n) {
     return (n || 0).toLocaleString("fr-FR") + " FCFA";
   }
 
-  /** Formater une date */
   function fmtDate(d) {
     return new Date(d).toLocaleDateString("fr-FR", {
       day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit",
     });
   }
 
-  /** Filtrer par recherche */
   const q = search.trim().toLowerCase();
   const filtered = orders.filter((o) => {
     if (!q) return true;
@@ -103,9 +136,7 @@ export default function AdminOrders() {
 
   return (
     <div className="space-y-6">
-      {/* ---- Header avec filtre et recherche ---- */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        {/* Recherche */}
         <div className="relative flex-1 max-w-md">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#555]" />
           <input
@@ -116,8 +147,6 @@ export default function AdminOrders() {
             className="w-full pl-10 pr-4 py-2.5 bg-[#141414] border border-[#222] rounded-lg text-[#f5f0e8] placeholder-[#555] text-sm focus:border-[#C5A55A] focus:outline-none"
           />
         </div>
-
-        {/* Filtre par statut */}
         <div className="flex items-center gap-2">
           <Filter size={14} className="text-[#555]" />
           <select
@@ -133,7 +162,6 @@ export default function AdminOrders() {
         </div>
       </div>
 
-      {/* ---- Liste des commandes ---- */}
       {loading ? (
         <div className="space-y-3">
           {Array.from({ length: 5 }).map((_, i) => (
@@ -155,7 +183,6 @@ export default function AdminOrders() {
                 key={order.id}
                 className="px-6 py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 hover:bg-[#1a1a1a] transition-colors"
               >
-                {/* Info commande */}
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="text-xs font-mono text-[#C5A55A] bg-[#C5A55A]/10 px-2 py-0.5 rounded">
@@ -167,19 +194,14 @@ export default function AdminOrders() {
                     </span>
                   </div>
                   <p className="text-sm font-medium text-[#f5f0e8] mt-1.5">
-                    {order.customerFirstName}{" "}
-                    <span className="text-[#f5f0e8]">{order.customerLastName}</span>
+                    {order.customerFirstName} {order.customerLastName}
                   </p>
                   <p className="text-xs text-[#555] mt-0.5 truncate">
                     {order.customerPhone} · {order.items.length} article(s) · {fmtDate(order.createdAt)}
                   </p>
                 </div>
-
-                {/* Prix + actions */}
                 <div className="flex items-center gap-3">
                   <p className="text-sm font-semibold text-[#C5A55A]">{fmtPrice(order.total)}</p>
-
-                  {/* Sélecteur de statut rapide */}
                   <select
                     value={order.status}
                     onChange={(e) => handleStatusChange(order.id, e.target.value)}
@@ -191,7 +213,6 @@ export default function AdminOrders() {
                       </option>
                     ))}
                   </select>
-
                   <button
                     onClick={() => setSelectedOrder(order)}
                     className="p-2 rounded-lg hover:bg-[#222] text-[#888] hover:text-[#C5A55A] transition-colors"
@@ -213,63 +234,134 @@ export default function AdminOrders() {
         </div>
       )}
 
-      {/* ---- Modal détail commande ---- */}
+      {/* Modal détail */}
       {selectedOrder && (
-        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center px-4">
-          <div className="bg-[#141414] border border-[#222] rounded-2xl w-full max-w-lg">
-            {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-[#222]">
-              <h2 className="text-lg font-medium text-[#f5f0e8]">
-                {selectedOrder.reference}
-              </h2>
-              <button onClick={() => setSelectedOrder(null)} className="text-[#555] hover:text-[#f5f0e8]">
+        <div className="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-[#141414] border border-[#222] rounded-2xl w-full max-w-2xl max-h-[92vh] flex flex-col my-auto">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[#222] shrink-0">
+              <div>
+                <h2 className="text-lg font-medium text-[#f5f0e8]">{selectedOrder.reference}</h2>
+                <p className="text-xs text-[#555] mt-0.5">{fmtDate(selectedOrder.createdAt)}</p>
+              </div>
+              <button onClick={() => setSelectedOrder(null)} className="text-[#555] hover:text-[#f5f0e8] p-1">
                 <X size={20} />
               </button>
             </div>
 
-            <div className="px-6 py-5 space-y-4">
+            <div className="px-6 py-5 space-y-5 overflow-y-auto flex-1">
               {/* Client */}
-              <div className="space-y-2">
-                <h3 className="text-xs text-[#888] uppercase tracking-wider">Client</h3>
-                <p className="text-sm text-[#f5f0e8]">
-                  <span className="text-[#888]">Prénom :</span> {selectedOrder.customerFirstName || "—"}
-                </p>
-                <p className="text-sm text-[#f5f0e8]">
-                  <span className="text-[#888]">Nom :</span> {selectedOrder.customerLastName || "—"}
-                </p>
-                <p className="text-sm text-[#888]">{selectedOrder.customerPhone}</p>
-                {selectedOrder.customerEmail && (
-                  <p className="text-sm text-[#888]">{selectedOrder.customerEmail}</p>
-                )}
-                {selectedOrder.deliveryAddress && (
-                  <p className="text-sm text-[#888]">{selectedOrder.deliveryAddress}</p>
-                )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                <div className="bg-[#1a1a1a] rounded-lg p-3 border border-[#222]">
+                  <p className="text-[10px] text-[#888] uppercase tracking-wider mb-1">Client</p>
+                  <p className="text-[#f5f0e8] font-medium">
+                    {selectedOrder.customerFirstName} {selectedOrder.customerLastName}
+                  </p>
+                  <p className="text-[#888] text-xs mt-1">{selectedOrder.customerPhone}</p>
+                  {selectedOrder.customerEmail && (
+                    <p className="text-[#888] text-xs">{selectedOrder.customerEmail}</p>
+                  )}
+                </div>
+                <div className="bg-[#1a1a1a] rounded-lg p-3 border border-[#222]">
+                  <p className="text-[10px] text-[#888] uppercase tracking-wider mb-1">Adresse</p>
+                  <p className="text-[#ccc] text-xs leading-relaxed">
+                    {selectedOrder.deliveryAddress || "—"}
+                  </p>
+                </div>
               </div>
 
-              {/* Articles */}
-              <div className="space-y-2">
-                <h3 className="text-xs text-[#888] uppercase tracking-wider">Articles</h3>
+              {/* Articles avec images */}
+              <div>
+                <h3 className="text-xs text-[#888] uppercase tracking-wider mb-2">Articles commandés</h3>
                 <div className="space-y-2">
-                  {selectedOrder.items.map((item, i) => (
-                    <div key={i} className="flex items-center justify-between bg-[#1a1a1a] px-3 py-2 rounded-lg">
-                      <div>
-                        <p className="text-sm text-[#f5f0e8]">{item.title || `Produit #${item.productId}`}</p>
-                        <p className="text-xs text-[#555]">Qté : {item.quantity}</p>
+                  {selectedOrder.items.map((item, i) => {
+                    const src = itemImageSrc(item.image);
+                    return (
+                      <div
+                        key={i}
+                        className="flex items-center gap-3 bg-[#1a1a1a] px-3 py-2.5 rounded-lg border border-[#222]"
+                      >
+                        <div className="w-14 h-14 rounded-lg overflow-hidden bg-[#222] border border-[#333] shrink-0">
+                          {src ? (
+                            <img
+                              src={src}
+                              alt={item.title}
+                              className="w-full h-full object-cover"
+                              crossOrigin="anonymous"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-[#444]">
+                              <ImageIcon size={18} />
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-[#f5f0e8] font-medium truncate">{item.title}</p>
+                          <p className="text-xs text-[#555]">Qté : {item.quantity}</p>
+                        </div>
+                        <p className="text-sm text-[#C5A55A] font-semibold shrink-0">
+                          {fmtPrice((item.price || 0) * (item.quantity || 1))}
+                        </p>
                       </div>
-                      <p className="text-sm text-[#C5A55A]">
-                        {fmtPrice((item.price || 0) * (item.quantity || 1))}
-                      </p>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Total + date */}
-              <div className="flex items-center justify-between pt-3 border-t border-[#222]">
-                <div>
-                  <p className="text-xs text-[#888]">Date : {fmtDate(selectedOrder.createdAt)}</p>
+              {/* Facture — source cachée pour capture */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-xs text-[#888] uppercase tracking-wider">Facture</h3>
+                  {invoiceImageUrl && (
+                    <button
+                      type="button"
+                      onClick={downloadInvoice}
+                      className="flex items-center gap-1.5 text-xs text-[#C5A55A] hover:text-[#D4B56E] transition-colors"
+                    >
+                      <Download size={14} />
+                      Télécharger PNG
+                    </button>
+                  )}
                 </div>
-                <p className="text-lg font-bold text-[#C5A55A]">{fmtPrice(selectedOrder.total)}</p>
+
+                {/* Source hors écran pour capture PNG */}
+                <div
+                  ref={invoiceRef}
+                  className="fixed left-[-10000px] top-0 w-[480px] pointer-events-none opacity-0"
+                  aria-hidden
+                >
+                  <OrderInvoicePreview
+                    order={selectedOrder}
+                    fmtPrice={fmtPrice}
+                    fmtDate={fmtDate}
+                  />
+                </div>
+
+                {invoiceLoading ? (
+                  <div className="h-48 bg-[#1a1a1a] rounded-xl border border-[#222] animate-pulse flex items-center justify-center text-[#555] text-sm">
+                    Génération de la facture…
+                  </div>
+                ) : invoiceImageUrl ? (
+                  <div className="rounded-xl overflow-hidden border border-[#222] bg-white">
+                    <img
+                      src={invoiceImageUrl}
+                      alt={`Facture ${selectedOrder.reference}`}
+                      className="w-full h-auto block"
+                    />
+                  </div>
+                ) : (
+                  <div className="rounded-xl border border-[#222] overflow-hidden">
+                    <OrderInvoicePreview
+                      order={selectedOrder}
+                      fmtPrice={fmtPrice}
+                      fmtDate={fmtDate}
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className="flex items-center justify-between pt-2 border-t border-[#222]">
+                <p className="text-xs text-[#888]">Total commande</p>
+                <p className="text-xl font-bold text-[#C5A55A]">{fmtPrice(selectedOrder.total)}</p>
               </div>
             </div>
           </div>
