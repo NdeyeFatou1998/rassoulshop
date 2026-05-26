@@ -16,6 +16,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Gift, Package, Crown, ShoppingCart, ArrowLeft, Check, ArrowRight, RefreshCw } from "lucide-react";
 import { useCart } from "../context/CartContext";
 
+const DEFAULT_IMG = "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg";
+
 export default function GiftBoxDetail() {
   const { id } = useParams();
   const { addToCart } = useCart();
@@ -91,7 +93,17 @@ export default function GiftBoxDetail() {
         }
       }
     }
-    addToCart({ id: `giftbox-${box.id}-${Date.now()}`, title: `🎁 ${box.name}`, price: finalPrice, image: box.image, description: desc, isGiftBox: true }, qty);
+    addToCart(
+      {
+        id: `giftbox-${box.id}-${Date.now()}`,
+        title: `🎁 ${box.name}`,
+        price: finalPrice,
+        image: box.image || DEFAULT_IMG,
+        description: desc,
+        isGiftBox: true,
+      },
+      qty
+    );
     setJustAdded(true);
     setTimeout(() => setJustAdded(false), 1600);
   }
@@ -137,10 +149,11 @@ export default function GiftBoxDetail() {
             className="w-full lg:w-[400px] flex-shrink-0"
           >
             <div className="rounded-2xl overflow-hidden aspect-square bg-[#141412] border border-white/[0.07] sticky top-24">
-              {box.image
-                ? <img src={box.image} alt={box.name} className="w-full h-full object-cover" />
-                : <div className="w-full h-full flex items-center justify-center"><Gift size={56} className="text-gold/15" /></div>
-              }
+              <img
+                src={box.image || DEFAULT_IMG}
+                alt={box.name}
+                className="w-full h-full object-cover"
+              />
             </div>
           </motion.div>
 
@@ -175,7 +188,7 @@ export default function GiftBoxDetail() {
                     const isOpen      = openItem === item.item_id;
                     const chosenId    = replacements[item.item_id];
                     const chosenRp    = item.replacements?.find(r => r.product_id === chosenId);
-                    const displayImg  = chosenRp?.image  || item.image;
+                    const displayImg  = chosenRp?.image  || item.image || DEFAULT_IMG;
                     const displayName = chosenRp?.title  || item.title;
 
                     return (
@@ -204,10 +217,11 @@ export default function GiftBoxDetail() {
                           } ${isOpen ? "border-gold/50 shadow-[0_0_12px_rgba(197,165,90,0.12)]" : "border-white/[0.07]"} bg-[#0f0f0e]`}
                         >
                           <div className="relative aspect-square overflow-hidden bg-[#141412]">
-                            {displayImg
-                              ? <img src={displayImg} alt={displayName} className="w-full h-full object-cover" />
-                              : <div className="w-full h-full flex items-center justify-center"><Package size={16} className="text-white/10" /></div>
-                            }
+                            <img
+                              src={displayImg}
+                              alt={displayName}
+                              className="w-full h-full object-cover"
+                            />
                             {/* Badge Remp. en haut à gauche */}
                             {item.is_replaceable && (
                               <span className="absolute top-1 left-1 flex items-center gap-0.5 text-[6px] uppercase font-bold bg-gold text-[#0a0a09] px-1.5 py-[2px] rounded-full leading-none">

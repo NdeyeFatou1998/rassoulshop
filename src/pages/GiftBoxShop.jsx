@@ -8,6 +8,8 @@ import { motion } from "framer-motion";
 import { Gift } from "lucide-react";
 import { Link } from "react-router-dom";
 
+const DEFAULT_IMG = "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg";
+
 export default function GiftBoxShop() {
   const [giftBoxes, setGiftBoxes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -69,18 +71,12 @@ export default function GiftBoxShop() {
                 >
                   {/* Image */}
                   <div className="relative w-full aspect-square overflow-hidden">
-                    {box.image ? (
-                      <img
-                        src={box.image}
-                        alt={box.name}
-                        loading="lazy"
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-[#141412] flex items-center justify-center">
-                        <Gift size={36} className="text-gold/20" />
-                      </div>
-                    )}
+                    <img
+                      src={box.image || DEFAULT_IMG}
+                      alt={box.name}
+                      loading="lazy"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
+                    />
                     {/* Overlay hover */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent
                                     opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
