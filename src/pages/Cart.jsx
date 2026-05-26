@@ -94,7 +94,10 @@ export default function Cart() {
                     className="flex-shrink-0 w-[72px] h-[90px] md:w-24 md:h-[120px] rounded-xl overflow-hidden bg-noir-700"
                   >
                     <img
-                      src={item.product.image}
+                      src={
+                        item.product.image ||
+                        "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg"
+                      }
                       alt={item.product.title}
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                     />
