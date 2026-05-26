@@ -447,8 +447,18 @@ export default function GiftBoxDetail() {
               </AnimatePresence>
             </div>
 
-            {/* ── Quantité + Panier ── */}
-            <div className="flex items-end gap-4 pt-2 border-t border-white/[0.05]">
+            {/* ── Récap prix + Quantité + Panier ── */}
+            <div className="pt-2 border-t border-white/[0.05]">
+              {/* Prix total */}
+              <div className="flex items-baseline justify-between mb-3">
+                <p className="text-[9px] uppercase tracking-[0.18em] text-white/25">Total</p>
+                <p className="text-xl font-semibold text-gold">
+                  {fmt(finalPrice * qty)}
+                  <span className="text-[10px] font-normal text-white/25 ml-1.5">FCFA</span>
+                </p>
+              </div>
+
+              <div className="flex items-end gap-4">
               {/* Quantité */}
               <div>
                 <p className="text-[9px] uppercase tracking-[0.18em] text-white/25 mb-2">Quantité</p>
@@ -476,9 +486,10 @@ export default function GiftBoxDetail() {
               >
                 {justAdded
                   ? <><Check size={15} /> Ajouté</>
-                  : <><ShoppingCart size={15} /> Ajouter au panier — {fmt(finalPrice * qty)} FCFA</>
+                  : <><ShoppingCart size={15} /> Ajouter au panier</>
                 }
               </button>
+              </div>
             </div>
 
           </motion.div>
