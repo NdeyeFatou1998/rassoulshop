@@ -16,7 +16,22 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Gift, Package, Crown, ShoppingCart, ArrowLeft, Check, ArrowRight, RefreshCw } from "lucide-react";
 import { useCart } from "../context/CartContext";
 
-const DEFAULT_IMG = "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg";
+const DEFAULT_IMG = `data:image/svg+xml;utf8,${encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#faf7f2"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="800" fill="url(#g)"/>
+  <rect x="70" y="70" width="660" height="660" rx="48" fill="#ffffff" stroke="#e8dfd0" stroke-width="10"/>
+  <path d="M270 380h260v260H270z" fill="#ffffff" stroke="#e8dfd0" stroke-width="8" rx="20"/>
+  <path d="M400 245c-42-62-145-42-145 36 0 54 52 89 145 129 93-40 145-75 145-129 0-78-103-98-145-36z" fill="#C5A55A" opacity="0.35"/>
+  <text x="400" y="560" font-family="Georgia, serif" font-size="34" font-weight="700" fill="#1a1612" text-anchor="middle">Coffret</text>
+  <text x="400" y="604" font-family="Arial, sans-serif" font-size="18" fill="#8a6a42" text-anchor="middle" letter-spacing="2">RASSOUL SHOP</text>
+</svg>
+`)}`;
 
 export default function GiftBoxDetail() {
   const { id } = useParams();
@@ -153,6 +168,9 @@ export default function GiftBoxDetail() {
                 src={box.image || DEFAULT_IMG}
                 alt={box.name}
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.src = DEFAULT_IMG;
+                }}
               />
             </div>
           </motion.div>
@@ -221,6 +239,9 @@ export default function GiftBoxDetail() {
                               src={displayImg}
                               alt={displayName}
                               className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.currentTarget.src = DEFAULT_IMG;
+                              }}
                             />
                             {/* Badge Remp. en haut à gauche */}
                             {item.is_replaceable && (
