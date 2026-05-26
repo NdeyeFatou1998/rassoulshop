@@ -14,6 +14,7 @@ import {
   CheckCircle, Truck, Package, XCircle, Filter
 } from "lucide-react";
 import { fetchOrders, updateOrderStatus, deleteOrder } from "../../services/adminApi";
+import { normalizeOrder } from "../../utils/normalizeOrder";
 
 /** Labels et couleurs pour chaque statut de commande */
 const STATUS_CONFIG = {
@@ -38,7 +39,7 @@ export default function AdminOrders() {
       const params = {};
       if (filterStatus) params.status = filterStatus;
       const data = await fetchOrders(params);
-      setOrders(data.orders || []);
+      setOrders((data.orders || []).map(normalizeOrder));
     } catch (err) {
       console.error("Erreur chargement commandes:", err);
     } finally {
@@ -87,11 +88,18 @@ export default function AdminOrders() {
   }
 
   /** Filtrer par recherche */
-  const filtered = orders.filter((o) =>
-    o.customerName.toLowerCase().includes(search.toLowerCase()) ||
-    o.customerPhone.includes(search) ||
-    String(o.id).includes(search)
-  );
+  const q = search.trim().toLowerCase();
+  const filtered = orders.filter((o) => {
+    if (!q) return true;
+    return (
+      o.reference?.toLowerCase().includes(q) ||
+      o.customerFirstName?.toLowerCase().includes(q) ||
+      o.customerLastName?.toLowerCase().includes(q) ||
+      o.customerName?.toLowerCase().includes(q) ||
+      o.customerPhone?.includes(search.trim()) ||
+      String(o.id).includes(search.trim())
+    );
+  });
 
   return (
     <div className="space-y-6">
@@ -102,7 +110,7 @@ export default function AdminOrders() {
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#555]" />
           <input
             type="text"
-            placeholder="Rechercher par nom, tél, n°..."
+            placeholder="Référence, prénom, nom, tél..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-10 pr-4 py-2.5 bg-[#141414] border border-[#222] rounded-lg text-[#f5f0e8] placeholder-[#555] text-sm focus:border-[#C5A55A] focus:outline-none"
@@ -148,17 +156,21 @@ export default function AdminOrders() {
                 className="px-6 py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 hover:bg-[#1a1a1a] transition-colors"
               >
                 {/* Info commande */}
-                <div className="flex-1">
-                  <div className="flex items-center gap-3">
-                    <p className="text-sm font-medium text-[#f5f0e8]">
-                      #{order.id} — {order.customerName}
-                    </p>
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs font-mono text-[#C5A55A] bg-[#C5A55A]/10 px-2 py-0.5 rounded">
+                      {order.reference}
+                    </span>
                     <span className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${st.cls}`}>
                       <StIcon size={10} />
                       {st.label}
                     </span>
                   </div>
-                  <p className="text-xs text-[#555] mt-1">
+                  <p className="text-sm font-medium text-[#f5f0e8] mt-1.5">
+                    {order.customerFirstName}{" "}
+                    <span className="text-[#f5f0e8]">{order.customerLastName}</span>
+                  </p>
+                  <p className="text-xs text-[#555] mt-0.5 truncate">
                     {order.customerPhone} · {order.items.length} article(s) · {fmtDate(order.createdAt)}
                   </p>
                 </div>
@@ -208,7 +220,7 @@ export default function AdminOrders() {
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-[#222]">
               <h2 className="text-lg font-medium text-[#f5f0e8]">
-                Commande #{selectedOrder.id}
+                {selectedOrder.reference}
               </h2>
               <button onClick={() => setSelectedOrder(null)} className="text-[#555] hover:text-[#f5f0e8]">
                 <X size={20} />
@@ -219,10 +231,18 @@ export default function AdminOrders() {
               {/* Client */}
               <div className="space-y-2">
                 <h3 className="text-xs text-[#888] uppercase tracking-wider">Client</h3>
-                <p className="text-sm text-[#f5f0e8]">{selectedOrder.customerName}</p>
+                <p className="text-sm text-[#f5f0e8]">
+                  <span className="text-[#888]">Prénom :</span> {selectedOrder.customerFirstName || "—"}
+                </p>
+                <p className="text-sm text-[#f5f0e8]">
+                  <span className="text-[#888]">Nom :</span> {selectedOrder.customerLastName || "—"}
+                </p>
                 <p className="text-sm text-[#888]">{selectedOrder.customerPhone}</p>
                 {selectedOrder.customerEmail && (
                   <p className="text-sm text-[#888]">{selectedOrder.customerEmail}</p>
+                )}
+                {selectedOrder.deliveryAddress && (
+                  <p className="text-sm text-[#888]">{selectedOrder.deliveryAddress}</p>
                 )}
               </div>
 

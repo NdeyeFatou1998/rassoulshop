@@ -200,10 +200,26 @@ export default function AdminProducts() {
 
   /* ---- Upload image produit ---- */
   async function uploadProductImage(file) {
-    const fd = new FormData(); fd.append("image", file);
-    const res = await fetch("/api/upload", { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: fd });
-    const data = await res.json();
-    if (data.success) setForm(f => ({ ...f, image: data.imageUrl }));
+    setUploadingImg(true);
+    setError("");
+    try {
+      const fd = new FormData();
+      fd.append("image", file);
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || "Upload Cloudinary échoué");
+      }
+      setForm((f) => ({ ...f, image: data.imageUrl }));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setUploadingImg(false);
+    }
   }
 
   /* ---- Catégorie dropdown ---- */

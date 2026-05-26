@@ -46,7 +46,7 @@ export default function ProductCard({ product, index = 0 }) {
       {/* ---- Image (haut de la card) ---- */}
       <Link to={`/product/${product.id}`} className="relative w-full aspect-square block overflow-hidden">
         <img
-          src={product.image}
+          src={product.image || "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg"}
           alt={product.title}
           loading="lazy"
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"

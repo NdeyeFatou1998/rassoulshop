@@ -14,6 +14,7 @@ import {
   AlertTriangle, XCircle, Clock, TrendingUp
 } from "lucide-react";
 import { fetchDashboardStats, fetchOrders } from "../../services/adminApi";
+import { normalizeOrder } from "../../utils/normalizeOrder";
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
@@ -29,7 +30,7 @@ export default function AdminDashboard() {
           fetchOrders({ limit: 5 }),
         ]);
         setStats(statsData);
-        setRecentOrders(ordersData.orders || []);
+        setRecentOrders((ordersData.orders || []).map(normalizeOrder));
       } catch (err) {
         console.error("Erreur chargement dashboard:", err);
       } finally {
@@ -169,7 +170,8 @@ export default function AdminDashboard() {
                 <div key={order.id} className="px-6 py-3 flex items-center justify-between">
                   <div>
                     <p className="text-sm text-[#f5f0e8]">
-                      #{order.id} — {order.customerName}
+                      <span className="text-[#C5A55A] font-mono text-xs mr-2">{order.reference}</span>
+                      {order.customerFirstName} {order.customerLastName}
                     </p>
                     <p className="text-xs text-[#555] mt-0.5">
                       {order.items.length} article(s) · {new Date(order.createdAt).toLocaleDateString("fr-FR")}
