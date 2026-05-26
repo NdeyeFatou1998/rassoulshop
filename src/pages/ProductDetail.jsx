@@ -92,7 +92,14 @@ export default function ProductDetail() {
       setTimeout(() => flyEl.remove(), 700);
     }
 
-    addToCart(product, quantity);
+    const hasPromo = product.promo_active && product.promo_price;
+    const basePrice = hasPromo ? product.promo_price : product.price;
+    const variantsExtra = Object.values(selectedVariants).reduce(
+      (acc, v) => acc + (v?.price_modifier || 0),
+      0
+    );
+    const unitPrice = (Number(basePrice) || 0) + variantsExtra;
+    addToCart({ ...product, _cartUnitPrice: unitPrice }, quantity);
     setAdded(true);
     setTimeout(() => setAdded(false), 1800);
   }

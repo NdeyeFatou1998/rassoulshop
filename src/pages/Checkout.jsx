@@ -14,6 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Truck, Phone, MapPin, User, Mail, CheckCircle, ShoppingBag } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import { getProductUnitPrice } from "../utils/pricing";
 
 export default function Checkout() {
   const { cart, cartTotal, clearCart } = useCart();
@@ -43,13 +44,19 @@ export default function Checkout() {
     if (cart.length === 0) { setError("Votre panier est vide."); return; }
 
     /* Construction des items à envoyer */
-    const items = cart.map(({ product, quantity }) => ({
-      id: product.id,
-      title: product.title,
-      price: product.price,
-      quantity,
-      image: product.image || null,
-    }));
+    const items = cart.map(({ product, quantity }) => {
+      const unitPrice = getProductUnitPrice(product);
+      return {
+        id: product.id,
+        title: product.title,
+        price: unitPrice,
+        unit_price: unitPrice,
+        promo_active: product.promo_active,
+        promo_price: product.promo_price,
+        quantity,
+        image: product.image || null,
+      };
+    });
 
     setSubmitting(true);
     try {
@@ -281,7 +288,7 @@ export default function Checkout() {
                       <p className="text-[10px] text-white/35">×{quantity}</p>
                     </div>
                     <span className="text-xs font-semibold text-cream flex-shrink-0">
-                      {(product.price * quantity).toLocaleString("fr-FR")}
+                      {(getProductUnitPrice(product) * quantity).toLocaleString("fr-FR")}
                     </span>
                   </div>
                 ))}

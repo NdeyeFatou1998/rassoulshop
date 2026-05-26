@@ -15,6 +15,7 @@
  */
 
 import { createContext, useContext, useState, useEffect, useRef } from "react";
+import { getProductUnitPrice } from "../utils/pricing";
 
 const CartContext = createContext();
 
@@ -49,7 +50,10 @@ export function CartProvider({ children }) {
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   /** Montant total en FCFA */
-  const cartTotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  const cartTotal = cart.reduce(
+    (sum, item) => sum + getProductUnitPrice(item.product) * item.quantity,
+    0
+  );
 
   /**
    * Ajouter un produit au panier

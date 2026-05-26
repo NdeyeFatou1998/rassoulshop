@@ -15,6 +15,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Minus, Plus, Trash2, ShoppingCart, ArrowLeft, Truck, Shield, CreditCard } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import { getProductUnitPrice, getLineTotal } from "../utils/pricing";
 
 export default function Cart() {
   const { cart, cartTotal, cartCount, updateQuantity, removeFromCart, clearCart } = useCart();
@@ -115,7 +116,7 @@ export default function Cart() {
                       </Link>
                       {/* Prix unitaire */}
                       <p className="text-[11px] text-muted mt-0.5">
-                        {item.product.price.toLocaleString("fr-FR")} FCFA
+                        {getProductUnitPrice(item.product).toLocaleString("fr-FR")} FCFA
                       </p>
                     </div>
 
@@ -147,7 +148,7 @@ export default function Cart() {
 
                       {/* Sous-total ligne */}
                       <span className="text-[12px] md:text-sm font-bold text-cream">
-                        {(item.product.price * item.quantity).toLocaleString("fr-FR")} <span className="text-[8px] md:text-[9px] text-muted font-normal">FCFA</span>
+                        {getLineTotal(item.product, item.quantity).toLocaleString("fr-FR")} <span className="text-[8px] md:text-[9px] text-muted font-normal">FCFA</span>
                       </span>
                     </div>
                   </div>
