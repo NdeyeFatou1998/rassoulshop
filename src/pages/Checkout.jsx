@@ -286,10 +286,14 @@ export default function Checkout() {
                 {cart.map(({ product, quantity }) => (
                   <div key={product.id} className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg overflow-hidden bg-noir-700 flex-shrink-0">
-                      {product.image
-                        ? <img src={product.image} alt={product.title} className="w-full h-full object-cover" />
-                        : <div className="w-full h-full bg-white/5" />
-                      }
+                      <img
+                        src={
+                          product.image ||
+                          "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg"
+                        }
+                        alt={product.title}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-xs text-cream truncate">{product.title}</p>
