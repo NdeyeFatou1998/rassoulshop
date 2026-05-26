@@ -78,7 +78,9 @@ export default function ProductDetail() {
         transition: all 0.65s cubic-bezier(0.32, 0, 0.07, 1);
       `;
       const flyImg = document.createElement("img");
-      flyImg.src = product.image;
+      flyImg.src =
+        product.image ||
+        "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg";
       flyImg.style.cssText = "width:100%;height:100%;object-fit:cover;";
       flyEl.appendChild(flyImg);
       document.body.appendChild(flyEl);
@@ -174,7 +176,10 @@ export default function ProductDetail() {
               className="rounded-2xl overflow-hidden aspect-[3/4] bg-noir-800 border border-white/[0.05]"
             >
               <img
-                src={product.image}
+                src={
+                  product.image ||
+                  "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg"
+                }
                 alt={product.title}
                 className="w-full h-full object-cover"
               />
