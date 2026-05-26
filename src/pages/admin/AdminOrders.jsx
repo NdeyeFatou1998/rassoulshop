@@ -5,7 +5,7 @@
 import { useState, useEffect, useRef } from "react";
 import {
   Search, Eye, Trash2, X, Clock, CheckCircle, Truck,
-  Package, XCircle, Filter, Download, ImageIcon,
+  Package, XCircle, Filter, Download, ImageIcon, Maximize2, FileText,
 } from "lucide-react";
 import html2canvas from "html2canvas";
 import { fetchOrders, updateOrderStatus, deleteOrder } from "../../services/adminApi";
@@ -33,7 +33,12 @@ export default function AdminOrders() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [search, setSearch] = useState("");
   const [invoiceLoading, setInvoiceLoading] = useState(false);
+  const [invoiceFullscreen, setInvoiceFullscreen] = useState(false);
   const invoiceRef = useRef(null);
+
+  useEffect(() => {
+    setInvoiceFullscreen(false);
+  }, [selectedOrder?.id]);
 
   /** Attendre le chargement des images avant capture PNG */
   async function waitForInvoiceImages(el) {
@@ -249,7 +254,13 @@ export default function AdminOrders() {
                 <h2 className="text-lg font-medium text-[#f5f0e8]">{selectedOrder.reference}</h2>
                 <p className="text-xs text-[#555] mt-0.5">{fmtDate(selectedOrder.createdAt)}</p>
               </div>
-              <button onClick={() => setSelectedOrder(null)} className="text-[#555] hover:text-[#f5f0e8] p-1">
+              <button
+                onClick={() => {
+                  setInvoiceFullscreen(false);
+                  setSelectedOrder(null);
+                }}
+                className="text-[#555] hover:text-[#f5f0e8] p-1"
+              >
                 <X size={20} />
               </button>
             </div>
@@ -313,43 +324,102 @@ export default function AdminOrders() {
                 </div>
               </div>
 
-              {/* Facture visible (export PNG au clic) */}
+              {/* Miniature facture — clic pour plein écran */}
               <div>
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-xs text-[#888] uppercase tracking-wider">Facture</h3>
-                  <button
-                    type="button"
-                    onClick={downloadInvoice}
-                    disabled={invoiceLoading}
-                    className="flex items-center gap-1.5 text-xs text-[#C5A55A] hover:text-[#D4B56E] transition-colors disabled:opacity-50"
-                  >
-                    <Download size={14} />
-                    {invoiceLoading ? "Export…" : "Télécharger PNG"}
-                  </button>
-                </div>
-                <div
-                  ref={invoiceRef}
-                  className="rounded-xl overflow-hidden border border-[#222] bg-white relative"
+                <h3 className="text-xs text-[#888] uppercase tracking-wider mb-2">Facture</h3>
+                <button
+                  type="button"
+                  onClick={() => setInvoiceFullscreen(true)}
+                  className="w-full max-w-[220px] text-left rounded-xl border border-[#333] bg-[#1a1a1a] overflow-hidden hover:border-[#C5A55A]/50 hover:bg-[#1f1f1f] transition-all group"
                 >
-                  {invoiceLoading && (
-                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center z-10">
-                      <span className="text-xs text-white bg-black/60 px-3 py-1 rounded-full">
-                        Export en cours…
-                      </span>
+                  <div className="h-[88px] overflow-hidden relative bg-white">
+                    <div
+                      className="absolute top-0 left-0 origin-top-left pointer-events-none"
+                      style={{ transform: "scale(0.26)", width: 400 }}
+                    >
+                      <OrderInvoicePreview
+                        order={selectedOrder}
+                        fmtPrice={fmtPrice}
+                        fmtDate={fmtDate}
+                      />
                     </div>
-                  )}
-                  <OrderInvoicePreview
-                    order={selectedOrder}
-                    fmtPrice={fmtPrice}
-                    fmtDate={fmtDate}
-                  />
-                </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                    <div className="absolute bottom-2 right-2 w-7 h-7 rounded-full bg-black/55 flex items-center justify-center text-[#C5A55A]">
+                      <Maximize2 size={13} />
+                    </div>
+                  </div>
+                  <div className="px-3 py-2.5 flex items-center justify-between gap-2 border-t border-[#222]">
+                    <div className="min-w-0">
+                      <p className="text-[10px] text-[#888] flex items-center gap-1">
+                        <FileText size={11} />
+                        Aperçu
+                      </p>
+                      <p className="text-xs font-mono text-[#C5A55A] truncate">{selectedOrder.reference}</p>
+                    </div>
+                    <p className="text-[10px] text-[#888] group-hover:text-[#C5A55A] shrink-0">
+                      Ouvrir →
+                    </p>
+                  </div>
+                </button>
               </div>
 
               <div className="flex items-center justify-between pt-2 border-t border-[#222]">
                 <p className="text-xs text-[#888]">Total commande</p>
                 <p className="text-xl font-bold text-[#C5A55A]">{fmtPrice(selectedOrder.total)}</p>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Plein écran facture */}
+      {selectedOrder && invoiceFullscreen && (
+        <div
+          className="fixed inset-0 z-[70] bg-black/92 flex flex-col"
+          onClick={() => setInvoiceFullscreen(false)}
+        >
+          <div
+            className="flex items-center justify-between px-4 py-3 border-b border-white/10 shrink-0"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setInvoiceFullscreen(false)}
+              className="p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+              aria-label="Fermer"
+            >
+              <X size={22} />
+            </button>
+            <p className="text-sm font-mono text-[#C5A55A]">{selectedOrder.reference}</p>
+            <button
+              type="button"
+              onClick={downloadInvoice}
+              disabled={invoiceLoading}
+              className="p-2 rounded-lg text-[#C5A55A] hover:bg-[#C5A55A]/15 transition-colors disabled:opacity-50"
+              aria-label="Télécharger la facture"
+              title="Télécharger PNG"
+            >
+              <Download size={22} />
+            </button>
+          </div>
+
+          <div
+            className="flex-1 overflow-y-auto p-4 md:p-8 flex justify-center items-start"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div ref={invoiceRef} className="w-full max-w-md shadow-2xl rounded-xl overflow-hidden relative">
+              {invoiceLoading && (
+                <div className="absolute inset-0 bg-black/30 flex items-center justify-center z-10 rounded-xl">
+                  <span className="text-sm text-white bg-black/70 px-4 py-2 rounded-full">
+                    Export en cours…
+                  </span>
+                </div>
+              )}
+              <OrderInvoicePreview
+                order={selectedOrder}
+                fmtPrice={fmtPrice}
+                fmtDate={fmtDate}
+              />
             </div>
           </div>
         </div>
