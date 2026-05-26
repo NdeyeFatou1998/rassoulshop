@@ -9,7 +9,7 @@
  * - Écran de succès après envoi
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Truck, Phone, MapPin, User, Mail, CheckCircle, ShoppingBag } from "lucide-react";
@@ -28,6 +28,13 @@ export default function Checkout() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [orderReference, setOrderReference] = useState(null);
+
+  /* Remonter en haut quand l'écran succès s'affiche (même URL /checkout) */
+  useEffect(() => {
+    if (success) {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }
+  }, [success]);
 
   /* Helpers */
   function field(key) {
@@ -85,6 +92,7 @@ export default function Checkout() {
           null
       );
       clearCart();
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       setSuccess(true);
     } catch {
       setError("Erreur réseau. Veuillez réessayer.");
@@ -96,7 +104,7 @@ export default function Checkout() {
   /* ---- Écran succès ---- */
   if (success) {
     return (
-      <section className="min-h-screen w-full flex flex-col items-center justify-center px-4 pt-24 pb-20">
+      <section className="w-full flex flex-col items-center px-4 pt-24 md:pt-28 pb-16 md:pb-20">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
