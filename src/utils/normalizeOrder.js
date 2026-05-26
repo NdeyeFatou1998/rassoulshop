@@ -29,7 +29,11 @@ export function normalizeOrder(raw) {
   return {
     ...raw,
     id: raw.id,
-    reference: raw.reference || `CMD-${String(raw.id).padStart(5, "0")}`,
+    order_reference: raw.order_reference || raw.reference || null,
+    reference:
+      raw.order_reference ||
+      raw.reference ||
+      `CMD-${String(raw.id).padStart(5, "0")}`,
     customerFirstName: firstName,
     customerLastName: lastName,
     customerName: fullName,

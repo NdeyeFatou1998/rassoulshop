@@ -26,7 +26,7 @@ export default function Checkout() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  const [orderId, setOrderId] = useState(null);
+  const [orderReference, setOrderReference] = useState(null);
 
   /* Helpers */
   function field(key) {
@@ -71,7 +71,12 @@ export default function Checkout() {
       if (!data.success) { setError(data.message || "Erreur lors de la commande."); return; }
 
       /* Succès */
-      setOrderId(data.order?.id);
+      setOrderReference(
+        data.order_reference ||
+          data.order?.reference ||
+          data.order?.order_reference ||
+          null
+      );
       clearCart();
       setSuccess(true);
     } catch {
@@ -103,11 +108,14 @@ export default function Checkout() {
           <div>
             <p className="text-[10px] uppercase tracking-[0.25em] text-gold font-semibold mb-2">Commande reçue</p>
             <h1 className="font-serif text-2xl md:text-3xl text-cream mb-3">Merci pour votre commande !</h1>
-            {orderId && (
-              <p className="text-sm text-white/40 mb-2">Numéro de commande : <span className="text-gold font-semibold">#{orderId}</span></p>
+            {orderReference && (
+              <p className="text-sm text-white/40 mb-2">
+                Référence commande :{" "}
+                <span className="text-gold font-semibold font-mono tracking-wider">{orderReference}</span>
+              </p>
             )}
             <p className="text-sm text-white/40 leading-relaxed">
-              Vous serez contacté(e) pour confirmer la livraison.<br />
+              Un email de confirmation avec votre facture vous a été envoyé si vous avez renseigné votre adresse email.<br />
               <span className="text-gold/70">Paiement à la livraison.</span>
             </p>
           </div>
