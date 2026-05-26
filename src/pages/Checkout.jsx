@@ -115,7 +115,7 @@ export default function Checkout() {
               </p>
             )}
             <p className="text-sm text-white/40 leading-relaxed">
-              Un email de confirmation avec votre facture (image) vous a été envoyé si vous avez renseigné votre adresse email.<br />
+              Un email de confirmation avec votre facture PDF vous a été envoyé si vous avez renseigné votre adresse email.<br />
               <span className="text-gold/70">Paiement à la livraison.</span>
             </p>
           </div>
