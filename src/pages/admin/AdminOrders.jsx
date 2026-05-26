@@ -2,7 +2,7 @@
  * Page Admin Commandes — /admin/orders
  */
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Search, Eye, Trash2, X, Clock, CheckCircle, Truck,
   Package, XCircle, Filter, Download, ImageIcon,
@@ -32,9 +32,25 @@ export default function AdminOrders() {
   const [filterStatus, setFilterStatus] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [search, setSearch] = useState("");
-  const [invoiceImageUrl, setInvoiceImageUrl] = useState("");
   const [invoiceLoading, setInvoiceLoading] = useState(false);
   const invoiceRef = useRef(null);
+
+  /** Attendre le chargement des images avant capture PNG */
+  async function waitForInvoiceImages(el) {
+    const imgs = el.querySelectorAll("img");
+    await Promise.all(
+      [...imgs].map(
+        (img) =>
+          new Promise((resolve) => {
+            if (img.complete) resolve();
+            else {
+              img.onload = resolve;
+              img.onerror = resolve;
+            }
+          })
+      )
+    );
+  }
 
   async function loadOrders() {
     setLoading(true);
@@ -51,34 +67,6 @@ export default function AdminOrders() {
   }
 
   useEffect(() => { loadOrders(); }, [filterStatus]);
-
-  const generateInvoiceImage = useCallback(async () => {
-    if (!invoiceRef.current || !selectedOrder) return;
-    setInvoiceLoading(true);
-    try {
-      const canvas = await html2canvas(invoiceRef.current, {
-        scale: 2,
-        backgroundColor: "#ffffff",
-        useCORS: true,
-        logging: false,
-      });
-      setInvoiceImageUrl(canvas.toDataURL("image/png"));
-    } catch (err) {
-      console.error("Erreur génération facture:", err);
-      setInvoiceImageUrl("");
-    } finally {
-      setInvoiceLoading(false);
-    }
-  }, [selectedOrder]);
-
-  useEffect(() => {
-    if (!selectedOrder) {
-      setInvoiceImageUrl("");
-      return;
-    }
-    const t = setTimeout(() => generateInvoiceImage(), 150);
-    return () => clearTimeout(t);
-  }, [selectedOrder, generateInvoiceImage]);
 
   async function handleStatusChange(orderId, newStatus) {
     try {
@@ -103,12 +91,30 @@ export default function AdminOrders() {
     }
   }
 
-  function downloadInvoice() {
-    if (!invoiceImageUrl) return;
-    const a = document.createElement("a");
-    a.href = invoiceImageUrl;
-    a.download = `${selectedOrder.reference}-facture.png`;
-    a.click();
+  async function downloadInvoice() {
+    if (!invoiceRef.current || !selectedOrder) return;
+    setInvoiceLoading(true);
+    try {
+      await waitForInvoiceImages(invoiceRef.current);
+      await new Promise((r) => setTimeout(r, 200));
+      const canvas = await html2canvas(invoiceRef.current, {
+        scale: 2,
+        backgroundColor: "#ffffff",
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
+      });
+      const url = canvas.toDataURL("image/png");
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${selectedOrder.reference}-facture.png`;
+      a.click();
+    } catch (err) {
+      console.error("Erreur export facture:", err);
+      alert("Impossible d'exporter la facture. Réessayez.");
+    } finally {
+      setInvoiceLoading(false);
+    }
   }
 
   function fmtPrice(n) {
@@ -307,56 +313,37 @@ export default function AdminOrders() {
                 </div>
               </div>
 
-              {/* Facture — source cachée pour capture */}
+              {/* Facture visible (export PNG au clic) */}
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-xs text-[#888] uppercase tracking-wider">Facture</h3>
-                  {invoiceImageUrl && (
-                    <button
-                      type="button"
-                      onClick={downloadInvoice}
-                      className="flex items-center gap-1.5 text-xs text-[#C5A55A] hover:text-[#D4B56E] transition-colors"
-                    >
-                      <Download size={14} />
-                      Télécharger PNG
-                    </button>
-                  )}
+                  <button
+                    type="button"
+                    onClick={downloadInvoice}
+                    disabled={invoiceLoading}
+                    className="flex items-center gap-1.5 text-xs text-[#C5A55A] hover:text-[#D4B56E] transition-colors disabled:opacity-50"
+                  >
+                    <Download size={14} />
+                    {invoiceLoading ? "Export…" : "Télécharger PNG"}
+                  </button>
                 </div>
-
-                {/* Source hors écran pour capture PNG */}
                 <div
                   ref={invoiceRef}
-                  className="fixed left-[-10000px] top-0 w-[480px] pointer-events-none opacity-0"
-                  aria-hidden
+                  className="rounded-xl overflow-hidden border border-[#222] bg-white relative"
                 >
+                  {invoiceLoading && (
+                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center z-10">
+                      <span className="text-xs text-white bg-black/60 px-3 py-1 rounded-full">
+                        Export en cours…
+                      </span>
+                    </div>
+                  )}
                   <OrderInvoicePreview
                     order={selectedOrder}
                     fmtPrice={fmtPrice}
                     fmtDate={fmtDate}
                   />
                 </div>
-
-                {invoiceLoading ? (
-                  <div className="h-48 bg-[#1a1a1a] rounded-xl border border-[#222] animate-pulse flex items-center justify-center text-[#555] text-sm">
-                    Génération de la facture…
-                  </div>
-                ) : invoiceImageUrl ? (
-                  <div className="rounded-xl overflow-hidden border border-[#222] bg-white">
-                    <img
-                      src={invoiceImageUrl}
-                      alt={`Facture ${selectedOrder.reference}`}
-                      className="w-full h-auto block"
-                    />
-                  </div>
-                ) : (
-                  <div className="rounded-xl border border-[#222] overflow-hidden">
-                    <OrderInvoicePreview
-                      order={selectedOrder}
-                      fmtPrice={fmtPrice}
-                      fmtDate={fmtDate}
-                    />
-                  </div>
-                )}
               </div>
 
               <div className="flex items-center justify-between pt-2 border-t border-[#222]">

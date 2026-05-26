@@ -1,5 +1,5 @@
 /**
- * Aperçu facture commande — rendu document premium (capturable en PNG)
+ * Aperçu facture — styles inline pour affichage fiable + export PNG
  */
 export default function OrderInvoicePreview({ order, fmtPrice, fmtDate }) {
   const st = {
@@ -11,49 +11,75 @@ export default function OrderInvoicePreview({ order, fmtPrice, fmtDate }) {
   };
 
   return (
-    <div className="bg-white text-[#1a1612] rounded-xl overflow-hidden shadow-lg border border-[#e8dfd0] text-left">
-      {/* En-tête */}
-      <div className="bg-[#1a1612] text-[#f5f0e8] px-5 py-4 flex justify-between items-start gap-4">
+    <div
+      style={{
+        backgroundColor: "#ffffff",
+        color: "#1a1612",
+        borderRadius: 12,
+        overflow: "hidden",
+        border: "1px solid #e8dfd0",
+        textAlign: "left",
+        fontFamily: "Georgia, 'Times New Roman', serif",
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: "#1a1612",
+          color: "#f5f0e8",
+          padding: "16px 20px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          gap: 16,
+        }}
+      >
         <div>
-          <p className="text-[10px] uppercase tracking-[0.28em] text-[#C5A55A] font-semibold">
+          <p style={{ fontSize: 10, letterSpacing: "0.28em", color: "#C5A55A", margin: 0, textTransform: "uppercase" }}>
             Rassoul shop
           </p>
-          <h4 className="font-serif text-xl mt-1">Facture</h4>
+          <h4 style={{ fontSize: 22, margin: "4px 0 0", fontWeight: 700 }}>Facture</h4>
         </div>
-        <div className="text-right text-xs text-white/70">
-          <p className="font-mono text-[#C5A55A] font-semibold">{order.reference}</p>
-          <p className="mt-1">{fmtDate(order.createdAt)}</p>
-          <p className="mt-0.5">{st[order.status] || order.status}</p>
+        <div style={{ textAlign: "right", fontSize: 12, color: "rgba(255,255,255,0.75)" }}>
+          <p style={{ margin: 0, fontFamily: "monospace", color: "#C5A55A", fontWeight: 700 }}>
+            {order.reference}
+          </p>
+          <p style={{ margin: "4px 0 0" }}>{fmtDate(order.createdAt)}</p>
+          <p style={{ margin: "2px 0 0" }}>{st[order.status] || order.status}</p>
         </div>
       </div>
 
-      {/* Client */}
-      <div className="px-5 py-4 border-b border-[#eee6d8] grid grid-cols-2 gap-4 text-xs">
+      <div
+        style={{
+          padding: "16px 20px",
+          borderBottom: "1px solid #eee6d8",
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 16,
+          fontSize: 12,
+        }}
+      >
         <div>
-          <p className="text-[#888] uppercase tracking-wider text-[9px] mb-1">Client</p>
-          <p className="font-medium">
+          <p style={{ color: "#888", fontSize: 9, textTransform: "uppercase", margin: "0 0 4px" }}>Client</p>
+          <p style={{ margin: 0, fontWeight: 600 }}>
             {order.customerFirstName} {order.customerLastName}
           </p>
-          <p className="text-[#666] mt-0.5">{order.customerPhone}</p>
-          {order.customerEmail && (
-            <p className="text-[#666]">{order.customerEmail}</p>
-          )}
+          <p style={{ margin: "4px 0 0", color: "#666" }}>{order.customerPhone}</p>
+          {order.customerEmail && <p style={{ margin: "2px 0 0", color: "#666" }}>{order.customerEmail}</p>}
         </div>
         <div>
-          <p className="text-[#888] uppercase tracking-wider text-[9px] mb-1">Livraison</p>
-          <p className="text-[#444] leading-relaxed">{order.deliveryAddress || "—"}</p>
+          <p style={{ color: "#888", fontSize: 9, textTransform: "uppercase", margin: "0 0 4px" }}>Livraison</p>
+          <p style={{ margin: 0, color: "#444", lineHeight: 1.5 }}>{order.deliveryAddress || "—"}</p>
         </div>
       </div>
 
-      {/* Lignes */}
-      <div className="px-5 py-3">
-        <table className="w-full text-xs">
+      <div style={{ padding: "12px 20px" }}>
+        <table style={{ width: "100%", fontSize: 12, borderCollapse: "collapse" }}>
           <thead>
-            <tr className="border-b border-[#eee6d8] text-[#888] text-[9px] uppercase tracking-wider">
-              <th className="text-left py-2 font-medium w-10" />
-              <th className="text-left py-2 font-medium">Article</th>
-              <th className="text-center py-2 font-medium w-12">Qté</th>
-              <th className="text-right py-2 font-medium w-24">Montant</th>
+            <tr style={{ borderBottom: "1px solid #eee6d8", color: "#888", fontSize: 9, textTransform: "uppercase" }}>
+              <th style={{ textAlign: "left", padding: "8px 4px 8px 0", width: 40 }} />
+              <th style={{ textAlign: "left", padding: "8px 4px" }}>Article</th>
+              <th style={{ textAlign: "center", padding: "8px 4px", width: 40 }}>Qté</th>
+              <th style={{ textAlign: "right", padding: "8px 0 8px 4px", width: 90 }}>Montant</th>
             </tr>
           </thead>
           <tbody>
@@ -61,25 +87,41 @@ export default function OrderInvoicePreview({ order, fmtPrice, fmtDate }) {
               const lineTotal = (item.price || 0) * (item.quantity || 1);
               const img = item.image;
               return (
-                <tr key={i} className="border-b border-[#f5f0ea]">
-                  <td className="py-2 pr-2">
-                    <div className="w-9 h-9 rounded-md overflow-hidden bg-[#f5f0ea] border border-[#eee6d8]">
+                <tr key={i} style={{ borderBottom: "1px solid #f5f0ea" }}>
+                  <td style={{ padding: "8px 8px 8px 0", verticalAlign: "middle" }}>
+                    <div
+                      style={{
+                        width: 36,
+                        height: 36,
+                        borderRadius: 6,
+                        overflow: "hidden",
+                        backgroundColor: "#f5f0ea",
+                        border: "1px solid #eee6d8",
+                      }}
+                    >
                       {img ? (
-                        <img src={img} alt="" className="w-full h-full object-cover" />
+                        <img
+                          src={img}
+                          alt=""
+                          crossOrigin="anonymous"
+                          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                        />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-[#ccc] text-[8px]">
+                        <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "#ccc", fontSize: 8 }}>
                           —
                         </div>
                       )}
                     </div>
                   </td>
-                  <td className="py-2 pr-2">
-                    <p className="font-medium text-[#1a1612]">
-                      {item.title || `Produit #${item.id || item.productId}`}
-                    </p>
+                  <td style={{ padding: "8px 4px", verticalAlign: "middle", fontWeight: 600 }}>
+                    {item.title || `Produit #${item.id || item.productId}`}
                   </td>
-                  <td className="py-2 text-center text-[#666]">{item.quantity || 1}</td>
-                  <td className="py-2 text-right font-medium">{fmtPrice(lineTotal)}</td>
+                  <td style={{ padding: "8px 4px", textAlign: "center", color: "#666", verticalAlign: "middle" }}>
+                    {item.quantity || 1}
+                  </td>
+                  <td style={{ padding: "8px 0 8px 4px", textAlign: "right", fontWeight: 600, verticalAlign: "middle" }}>
+                    {fmtPrice(lineTotal)}
+                  </td>
                 </tr>
               );
             })}
@@ -87,18 +129,28 @@ export default function OrderInvoicePreview({ order, fmtPrice, fmtDate }) {
         </table>
       </div>
 
-      {/* Total */}
-      <div className="px-5 py-4 bg-[#faf7f2] border-t border-[#eee6d8] flex justify-between items-center">
-        <p className="text-[10px] text-[#888] uppercase tracking-wider">
+      <div
+        style={{
+          padding: "16px 20px",
+          backgroundColor: "#faf7f2",
+          borderTop: "1px solid #eee6d8",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <p style={{ margin: 0, fontSize: 10, color: "#888", textTransform: "uppercase" }}>
           Paiement à la livraison
         </p>
-        <div className="text-right">
-          <p className="text-[9px] text-[#888] uppercase">Total TTC</p>
-          <p className="text-lg font-bold text-[#8a6a42]">{fmtPrice(order.total)}</p>
+        <div style={{ textAlign: "right" }}>
+          <p style={{ margin: 0, fontSize: 9, color: "#888", textTransform: "uppercase" }}>Total TTC</p>
+          <p style={{ margin: "2px 0 0", fontSize: 20, fontWeight: 700, color: "#8a6a42" }}>
+            {fmtPrice(order.total)}
+          </p>
         </div>
       </div>
 
-      <p className="text-center text-[9px] text-[#aaa] py-2 border-t border-[#eee6d8]">
+      <p style={{ textAlign: "center", fontSize: 9, color: "#aaa", padding: "8px 0", margin: 0, borderTop: "1px solid #eee6d8" }}>
         Merci pour votre confiance — rassoulshopsn.com
       </p>
     </div>
