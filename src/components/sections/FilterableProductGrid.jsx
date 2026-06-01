@@ -19,13 +19,15 @@ import { Link } from "react-router-dom";
 import { Search, X, SlidersHorizontal } from "lucide-react";
 import ProductCard from "../ui/ProductCard";
 import { useProducts } from "../../hooks/useProducts";
+import { fetchCategoriesFull } from "../../services/api";
+import { getCategoryImageUrl } from "../../utils/categoryImage";
 
 /* Squircle radius en px */
 const R_OUT = 20; /* border-radius du contour tournant */
 const R_IN  = 17; /* border-radius de l'image intérieure */
 
-/* Catégories avec image représentative */
-const CATEGORIES = [
+/* Catégories fallback si l'API est indisponible */
+const FALLBACK_CATEGORIES = [
   {
     label: "Tous",
     slug:  null,
@@ -238,7 +240,26 @@ export default function FilterableProductGrid({ limit = 80, defaultCategory = nu
   const [minVal, setMinVal]       = useState(0);
   const [maxVal, setMaxVal]       = useState(200000);
   const [applied, setApplied]     = useState(null); /* { min, max } ou null */
+  const [categories, setCategories] = useState(FALLBACK_CATEGORIES);
   const { products, loading } = useProducts({ limit });
+
+  useEffect(() => {
+    fetchCategoriesFull({ activeOnly: true }).then((rows) => {
+      if (!rows.length) return;
+      setCategories([
+        {
+          label: "Tous",
+          slug: null,
+          image: getCategoryImageUrl(rows[0]?.image_url),
+        },
+        ...rows.map((cat) => ({
+          label: cat.name,
+          slug: cat.slug,
+          image: getCategoryImageUrl(cat.image_url),
+        })),
+      ]);
+    });
+  }, []);
 
   /* Étendue réelle des prix depuis les produits chargés */
   const priceExtent = useMemo(() => {
@@ -377,7 +398,7 @@ export default function FilterableProductGrid({ limit = 80, defaultCategory = nu
 
         {/* ---- Bande de squircles ---- */}
         <div className="flex gap-5 md:gap-7 overflow-x-auto no-scrollbar pb-8 mb-6 md:mb-10 md:justify-center">
-          {CATEGORIES.map((cat) => (
+          {categories.map((cat) => (
             <CategorySquircle
               key={cat.slug ?? "all"}
               label={cat.label}

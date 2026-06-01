@@ -61,7 +61,7 @@ export async function fetchProductById(id) {
 
 /**
  * Récupère la liste des catégories disponibles
- * @returns {Promise<Array<string>>} Liste des catégories
+ * @returns {Promise<Array<string>>} Liste des catégories (slugs)
  */
 export async function fetchCategories() {
   try {
@@ -72,6 +72,25 @@ export async function fetchCategories() {
   } catch (error) {
     console.warn("Erreur catégories:", error.message);
     return ["peluches", "montres", "bijoux", "sets-cadeau", "sacs", "accessoires"];
+  }
+}
+
+/**
+ * Récupère les catégories complètes (nom, slug, image_url, etc.)
+ * @param {Object} [options]
+ * @param {boolean} [options.activeOnly=true] - Uniquement les catégories actives
+ * @returns {Promise<Array>}
+ */
+export async function fetchCategoriesFull({ activeOnly = true } = {}) {
+  try {
+    const query = activeOnly ? "?active=true" : "";
+    const response = await fetch(`${API_BASE}/categories${query}`);
+    if (!response.ok) throw new Error("Catégories indisponibles");
+    const data = await response.json();
+    return Array.isArray(data.categoriesFull) ? data.categoriesFull : [];
+  } catch (error) {
+    console.warn("Erreur catégories complètes:", error.message);
+    return [];
   }
 }
 

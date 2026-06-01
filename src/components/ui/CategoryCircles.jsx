@@ -1,55 +1,84 @@
 /**
- * CategoryCircles — Bandeau de catégories (Home + Shop)
- *
- * Design premium sur fond blanc :
- * - Fond blanc avec bordure grise discrète
- * - Grands cercles crème avec icônes, bordure gold au hover
- * - Labels lisibles en gris sombre
- * - Scroll horizontal fluide mobile, row centrée desktop
+ * CategoryCircles — Catégories admin avec images (page d'accueil)
  */
 
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Heart, Watch, Gem, Gift, ShoppingBag, Pen } from "lucide-react";
-
-/* Catégories réelles du shop cadeau */
-const CATEGORIES = [
-  { label: "Peluches",    slug: "peluches",     Icon: Heart },
-  { label: "Montres",     slug: "montres",       Icon: Watch },
-  { label: "Bijoux",      slug: "bijoux",        Icon: Gem },
-  { label: "Sets Cadeau", slug: "sets-cadeau",   Icon: Gift },
-  { label: "Sacs",        slug: "sacs",          Icon: ShoppingBag },
-  { label: "Accessoires", slug: "accessoires",   Icon: Pen },
-];
-
-function CategoryItem({ label, slug, Icon }) {
-  return (
-    <Link
-      to={`/shop?category=${encodeURIComponent(slug)}`}
-      className="group flex-shrink-0 flex flex-col items-center gap-3"
-    >
-      {/* Cercle dark avec bordure gold au hover */}
-      <div className="w-[72px] h-[72px] md:w-20 md:h-20 rounded-full bg-[#111110] border border-white/[0.08] flex items-center justify-center transition-all duration-400 group-hover:border-gold/50 group-hover:bg-gold/[0.07] group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(197,165,90,0.15)]">
-        <Icon
-          size={22}
-          strokeWidth={1.5}
-          className="text-white/50 transition-colors duration-400 group-hover:text-gold"
-        />
-      </div>
-      {/* Label blanc → gold au hover */}
-      <span className="text-[10px] uppercase tracking-[0.15em] font-medium text-white/40 group-hover:text-gold transition-colors duration-300 whitespace-nowrap">
-        {label}
-      </span>
-    </Link>
-  );
-}
+import { motion } from "framer-motion";
+import { getCategoryImageUrl } from "../../utils/categoryImage";
 
 export default function CategoryCircles() {
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/categories?active=true")
+      .then((r) => r.json())
+      .then((d) => setCategories(Array.isArray(d.categoriesFull) ? d.categoriesFull : []))
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="bg-[#080807] border-y border-white/[0.05]">
+        <div className="max-w-7xl mx-auto px-5 lg:px-10 py-10 md:py-12">
+          <div className="h-4 w-32 shimmer rounded-full mx-auto mb-8" />
+          <div className="flex gap-4 overflow-hidden justify-center">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="flex flex-col items-center gap-3 flex-shrink-0">
+                <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl shimmer" />
+                <div className="h-2 w-16 shimmer rounded-full" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (categories.length === 0) return null;
+
   return (
     <section className="bg-[#080807] border-y border-white/[0.05]">
-      <div className="max-w-7xl mx-auto px-5 lg:px-10 py-8 md:py-10">
-        <div className="flex items-center gap-8 md:gap-10 overflow-x-auto no-scrollbar md:justify-center">
-          {CATEGORIES.map((c) => (
-            <CategoryItem key={c.slug} {...c} />
+      <div className="max-w-7xl mx-auto px-5 lg:px-10 py-10 md:py-12">
+        <div className="text-center mb-8 md:mb-10">
+          <p className="text-[10px] uppercase tracking-[0.28em] text-gold/70 font-semibold mb-2">
+            Explorer
+          </p>
+          <h2 className="font-serif text-2xl md:text-3xl text-cream">Nos catégories</h2>
+        </div>
+
+        <div className="flex items-start gap-5 md:gap-8 overflow-x-auto no-scrollbar md:justify-center pb-1">
+          {categories.map((cat, i) => (
+            <motion.div
+              key={cat.id}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.05 }}
+            >
+              <Link
+                to={`/shop?category=${encodeURIComponent(cat.slug)}`}
+                className="group flex-shrink-0 flex flex-col items-center gap-3 w-[88px] md:w-[104px]"
+              >
+                <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-2xl overflow-hidden border border-white/[0.08] bg-[#111110] transition-all duration-400 group-hover:border-gold/40 group-hover:shadow-[0_0_20px_rgba(197,165,90,0.15)] group-hover:scale-[1.03]">
+                  <img
+                    src={getCategoryImageUrl(cat.image_url)}
+                    alt={cat.name}
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+                    onError={(e) => {
+                      e.currentTarget.src = getCategoryImageUrl(null);
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
+                <span className="text-[10px] uppercase tracking-[0.14em] font-medium text-white/45 group-hover:text-gold transition-colors duration-300 text-center leading-snug line-clamp-2">
+                  {cat.name}
+                </span>
+              </Link>
+            </motion.div>
           ))}
         </div>
       </div>

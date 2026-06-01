@@ -25,6 +25,7 @@ export default function AdminCategories() {
     display_order: 0,
     active: true
   });
+  const [uploadingImg, setUploadingImg] = useState(false);
 
   // Charger la liste des catégories
   useEffect(() => {
@@ -99,12 +100,41 @@ export default function AdminCategories() {
     });
   }
 
+  async function uploadCategoryImage(file) {
+    if (!file) return;
+    setUploadingImg(true);
+    try {
+      const token = localStorage.getItem("rassoul_admin_token");
+      const fd = new FormData();
+      fd.append("image", file);
+      const res = await fetch("/api/upload?folder=categories", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || "Upload échoué");
+      }
+      setFormData((prev) => ({ ...prev, image_url: data.imageUrl }));
+    } catch (error) {
+      console.error("Erreur upload image catégorie:", error);
+      alert(error.message || "Erreur lors de l'upload de l'image");
+    } finally {
+      setUploadingImg(false);
+    }
+  }
+
   // Soumettre le formulaire
   async function handleSubmit(e) {
     e.preventDefault();
 
     try {
       const token = localStorage.getItem("rassoul_admin_token");
+      const payload = {
+        ...formData,
+        image_url: formData.image_url?.trim() || null,
+      };
 
       if (editingCategory) {
         // Modifier
@@ -114,7 +144,7 @@ export default function AdminCategories() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`
           },
-          body: JSON.stringify(formData)
+          body: JSON.stringify(payload)
         });
       } else {
         // Créer
@@ -124,7 +154,7 @@ export default function AdminCategories() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`
           },
-          body: JSON.stringify(formData)
+          body: JSON.stringify(payload)
         });
         const data = await response.json();
         if (!data.success) {
@@ -214,6 +244,21 @@ export default function AdminCategories() {
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
+                  {/* Miniature catégorie */}
+                  <div className="w-14 h-14 rounded-xl overflow-hidden bg-[#1a1a1a] border border-[#333] flex-shrink-0">
+                    {category.image_url ? (
+                      <img
+                        src={category.image_url}
+                        alt={category.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-[10px] text-[#555]">
+                        Sans image
+                      </div>
+                    )}
+                  </div>
+
                   {/* Indicateur ordre */}
                   <span className="text-xs text-[#555] font-mono w-6 text-center">
                     {category.display_order}
@@ -319,6 +364,55 @@ export default function AdminCategories() {
                   placeholder="Description courte de la catégorie"
                   className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#C5A55A] focus:outline-none transition-colors resize-none"
                 />
+              </div>
+
+              <div>
+                <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
+                  Image de la catégorie
+                </label>
+                <div className="flex items-start gap-4">
+                  <div className="w-24 h-24 rounded-xl overflow-hidden bg-[#1a1a1a] border border-[#333] flex-shrink-0">
+                    {formData.image_url ? (
+                      <img
+                        src={formData.image_url}
+                        alt="Aperçu"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-[10px] text-[#555] text-center px-2">
+                        Aucune image
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      disabled={uploadingImg}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) uploadCategoryImage(file);
+                        e.target.value = "";
+                      }}
+                      className="block w-full text-xs text-[#888] file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-[#C5A55A]/20 file:text-[#C5A55A] hover:file:bg-[#C5A55A]/30"
+                    />
+                    {uploadingImg && (
+                      <p className="text-xs text-[#C5A55A]">Upload en cours…</p>
+                    )}
+                    {formData.image_url && (
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, image_url: "" })}
+                        className="text-xs text-red-400 hover:text-red-300"
+                      >
+                        Supprimer l'image
+                      </button>
+                    )}
+                    <p className="text-[10px] text-[#666]">
+                      JPG, PNG ou WebP — affichée sur la page d'accueil.
+                    </p>
+                  </div>
+                </div>
               </div>
 
               <div className="flex gap-4">
