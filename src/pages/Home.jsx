@@ -10,7 +10,6 @@
 import Hero from "../components/sections/Hero";
 import Experience from "../components/sections/Experience";
 import FilterableProductGrid from "../components/sections/FilterableProductGrid";
-import CategoryCircles from "../components/ui/CategoryCircles";
 import MarqueeStrip from "../components/ui/MarqueeStrip";
 import BrandStatement from "../components/ui/BrandStatement";
 
@@ -27,10 +26,7 @@ export default function Home() {
       {/* ---- Bande défilante marketing ---- */}
       <MarqueeStrip />
 
-      {/* ---- Catégories créées par l'admin (avec images) ---- */}
-      <CategoryCircles />
-
-      {/* ---- Grille produits filtrables (avec cards promo inline) ---- */}
+      {/* ---- Grille produits filtrables (avec filtres catégories) ---- */}
       <FilterableProductGrid limit={60} />
 
       {/* ---- Citation de marque premium ---- */}
