@@ -22,24 +22,9 @@ export default function Experience() {
 
   return (
     <section className="bg-noir-950 py-16 md:py-24">
-      <div className="max-w-7xl mx-auto px-5 md:px-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 items-center">
-        {/* ---- Image ---- */}
-        <AnimatedSection direction="left">
-          <div className="relative rounded-2xl overflow-hidden aspect-[4/5] md:aspect-[3/4]">
-            <img
-              src="/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg"
-              alt="Rassoul Shop — L'art d'offrir"
-              className="w-full h-full object-cover"
-            />
-            {/* Overlay dégradé subtil */}
-            <div className="absolute inset-0 bg-gradient-to-t from-noir-950/30 via-transparent to-transparent" />
-          </div>
-        </AnimatedSection>
-
-        {/* ---- Contenu texte ---- */}
-        <AnimatedSection direction="right">
-          <div className="py-4 md:py-0">
+      <div className="max-w-3xl mx-auto px-5 md:px-10">
+        <AnimatedSection direction="up">
+          <div className="py-4 md:py-0 text-center md:text-left">
             {/* Kicker */}
             <span className="text-[10px] uppercase tracking-[0.3em] text-gold/60 font-medium">
               Pourquoi nous choisir
