@@ -1,33 +1,27 @@
 /**
  * Page AdminCategories - Gestion des Catégories
- * 
- * Permet aux admins de :
- * - Lister les catégories (avec statut actif/inactif)
- * - Créer une catégorie (nom, slug auto, description, ordre d'affichage)
- * - Modifier une catégorie
- * - Supprimer une catégorie
- * - Activer/désactiver une catégorie
+ *
+ * Création simplifiée : nom + image (+ statut, ordre optionnel)
  */
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+
+const EMPTY_FORM = {
+  name: "",
+  image_url: "",
+  display_order: "",
+  active: true,
+};
 
 export default function AdminCategories() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    slug: "",
-    description: "",
-    image_url: "",
-    display_order: 0,
-    active: true
-  });
+  const [formData, setFormData] = useState(EMPTY_FORM);
   const [uploadingImg, setUploadingImg] = useState(false);
 
-  // Charger la liste des catégories
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -44,60 +38,29 @@ export default function AdminCategories() {
     }
   }
 
-  // Ouvrir le modal pour créer ou modifier
   function openModal(category = null) {
     if (category) {
       setEditingCategory(category);
       setFormData({
         name: category.name,
-        slug: category.slug,
-        description: category.description || "",
         image_url: category.image_url || "",
-        display_order: category.display_order || 0,
-        active: category.active
+        display_order:
+          category.display_order != null && category.display_order !== 0
+            ? String(category.display_order)
+            : "",
+        active: category.active,
       });
     } else {
       setEditingCategory(null);
-      setFormData({
-        name: "",
-        slug: "",
-        description: "",
-        image_url: "",
-        display_order: 0,
-        active: true
-      });
+      setFormData(EMPTY_FORM);
     }
     setShowModal(true);
   }
 
-  // Fermer le modal
   function closeModal() {
     setShowModal(false);
     setEditingCategory(null);
-    setFormData({
-      name: "",
-      slug: "",
-      description: "",
-      image_url: "",
-      display_order: 0,
-      active: true
-    });
-  }
-
-  // Générer le slug automatiquement à partir du nom
-  function handleNameChange(value) {
-    const slug = value
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)+/g, "");
-    
-    setFormData({
-      ...formData,
-      name: value,
-      slug: editingCategory ? formData.slug : slug
-    });
+    setFormData(EMPTY_FORM);
   }
 
   async function uploadCategoryImage(file) {
@@ -125,36 +88,44 @@ export default function AdminCategories() {
     }
   }
 
-  // Soumettre le formulaire
+  function buildPayload() {
+    const payload = {
+      name: formData.name.trim(),
+      image_url: formData.image_url?.trim() || null,
+      active: formData.active,
+    };
+
+    if (formData.display_order !== "") {
+      payload.display_order = parseInt(formData.display_order, 10) || 0;
+    }
+
+    return payload;
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
 
     try {
       const token = localStorage.getItem("rassoul_admin_token");
-      const payload = {
-        ...formData,
-        image_url: formData.image_url?.trim() || null,
-      };
+      const payload = buildPayload();
 
       if (editingCategory) {
-        // Modifier
         await fetch(`/api/categories/${editingCategory.id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(payload),
         });
       } else {
-        // Créer
         const response = await fetch("/api/categories", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(payload),
         });
         const data = await response.json();
         if (!data.success) {
@@ -171,13 +142,12 @@ export default function AdminCategories() {
     }
   }
 
-  // Toggle actif/inactif
   async function toggleCategory(id) {
     try {
       const token = localStorage.getItem("rassoul_admin_token");
       await fetch(`/api/categories/${id}/toggle`, {
         method: "PATCH",
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
       fetchCategories();
     } catch (error) {
@@ -185,7 +155,6 @@ export default function AdminCategories() {
     }
   }
 
-  // Supprimer une catégorie
   async function deleteCategory(id) {
     if (!confirm("Êtes-vous sûr de vouloir supprimer cette catégorie ?")) return;
 
@@ -193,7 +162,7 @@ export default function AdminCategories() {
       const token = localStorage.getItem("rassoul_admin_token");
       await fetch(`/api/categories/${id}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
       fetchCategories();
     } catch (error) {
@@ -204,7 +173,6 @@ export default function AdminCategories() {
 
   return (
     <div className="p-6 md:p-8">
-      {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="font-serif text-2xl md:text-3xl text-[#f5f0e8] mb-2">
@@ -222,7 +190,6 @@ export default function AdminCategories() {
         </button>
       </div>
 
-      {/* Liste des catégories */}
       {loading ? (
         <div className="text-center py-12 text-[#888]">Chargement...</div>
       ) : categories.length === 0 ? (
@@ -244,7 +211,6 @@ export default function AdminCategories() {
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  {/* Miniature catégorie */}
                   <div className="w-14 h-14 rounded-xl overflow-hidden bg-[#1a1a1a] border border-[#333] flex-shrink-0">
                     {category.image_url ? (
                       <img
@@ -259,11 +225,6 @@ export default function AdminCategories() {
                     )}
                   </div>
 
-                  {/* Indicateur ordre */}
-                  <span className="text-xs text-[#555] font-mono w-6 text-center">
-                    {category.display_order}
-                  </span>
-                  
                   <div>
                     <div className="flex items-center gap-2">
                       <h3 className="font-semibold text-[#f5f0e8] text-lg">
@@ -274,10 +235,6 @@ export default function AdminCategories() {
                           Inactif
                         </span>
                       )}
-                    </div>
-                    <div className="mt-1 space-y-0.5 text-sm text-[#888]">
-                      <p>Slug: <span className="font-mono text-[#C5A55A]/70">{category.slug}</span></p>
-                      {category.description && <p>{category.description}</p>}
                     </div>
                   </div>
                 </div>
@@ -312,7 +269,6 @@ export default function AdminCategories() {
         </div>
       )}
 
-      {/* Modal Créer/Modifier */}
       {showModal && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
           <motion.div
@@ -327,48 +283,21 @@ export default function AdminCategories() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
-                  Nom
+                  Nom *
                 </label>
                 <input
                   type="text"
                   value={formData.name}
-                  onChange={(e) => handleNameChange(e.target.value)}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
-                  placeholder="Ex : Robes"
+                  placeholder="Ex : Peluches"
                   className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#C5A55A] focus:outline-none transition-colors"
                 />
               </div>
 
               <div>
                 <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
-                  Slug
-                </label>
-                <input
-                  type="text"
-                  value={formData.slug}
-                  onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                  required
-                  placeholder="auto-généré depuis le nom"
-                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] font-mono placeholder-[#555] focus:border-[#C5A55A] focus:outline-none transition-colors"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
-                  Description
-                </label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  rows={2}
-                  placeholder="Description courte de la catégorie"
-                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#C5A55A] focus:outline-none transition-colors resize-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
-                  Image de la catégorie
+                  Image
                 </label>
                 <div className="flex items-start gap-4">
                   <div className="w-24 h-24 rounded-xl overflow-hidden bg-[#1a1a1a] border border-[#333] flex-shrink-0">
@@ -408,40 +337,36 @@ export default function AdminCategories() {
                         Supprimer l'image
                       </button>
                     )}
-                    <p className="text-[10px] text-[#666]">
-                      JPG, PNG ou WebP — affichée sur la page d'accueil.
-                    </p>
                   </div>
                 </div>
               </div>
 
-              <div className="flex gap-4">
-                <div className="flex-1">
-                  <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
-                    Ordre d'affichage
-                  </label>
-                  <input
-                    type="number"
-                    value={formData.display_order}
-                    onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) || 0 })}
-                    min={0}
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] focus:border-[#C5A55A] focus:outline-none transition-colors"
-                  />
-                </div>
+              <div>
+                <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
+                  Ordre d'affichage <span className="text-[#555] normal-case tracking-normal">(optionnel)</span>
+                </label>
+                <input
+                  type="number"
+                  value={formData.display_order}
+                  onChange={(e) => setFormData({ ...formData, display_order: e.target.value })}
+                  min={0}
+                  placeholder="Laisser vide pour tri automatique"
+                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#C5A55A] focus:outline-none transition-colors"
+                />
+              </div>
 
-                <div className="flex-1">
-                  <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
-                    Statut
-                  </label>
-                  <select
-                    value={formData.active ? "true" : "false"}
-                    onChange={(e) => setFormData({ ...formData, active: e.target.value === "true" })}
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] focus:border-[#C5A55A] focus:outline-none transition-colors"
-                  >
-                    <option value="true">Actif</option>
-                    <option value="false">Inactif</option>
-                  </select>
-                </div>
+              <div>
+                <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
+                  Statut
+                </label>
+                <select
+                  value={formData.active ? "true" : "false"}
+                  onChange={(e) => setFormData({ ...formData, active: e.target.value === "true" })}
+                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] focus:border-[#C5A55A] focus:outline-none transition-colors"
+                >
+                  <option value="true">Actif</option>
+                  <option value="false">Inactif</option>
+                </select>
               </div>
 
               <div className="flex gap-3 pt-4">
