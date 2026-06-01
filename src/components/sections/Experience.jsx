@@ -56,7 +56,6 @@ export default function Experience() {
             </div>
           </div>
         </AnimatedSection>
-        </div>
       </div>
     </section>
   );
