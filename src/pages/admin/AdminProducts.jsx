@@ -14,9 +14,10 @@
 
 import { useState, useEffect, useCallback } from "react";
 import {
-  Plus, Trash2, Search, X, Tag, AlertTriangle, Save,
-  ChevronRight, Image as ImageIcon, Check, Pencil
+  Plus, Trash2, Search, X, Tag, Save,
+  ChevronRight, Image as ImageIcon, Check, Pencil, Flag
 } from "lucide-react";
+import { getStockAlert } from "../../utils/stockAlert";
 
 export default function AdminProducts() {
   const token = localStorage.getItem("rassoul_admin_token");
@@ -316,18 +317,30 @@ export default function AdminProducts() {
 
         <div className="flex-1 overflow-y-auto divide-y divide-[#1a1a1a]">
           {loading ? Array.from({length:6}).map((_,i) => <div key={i} className="h-14 mx-2 my-1 bg-[#141414] rounded-lg animate-pulse" />) :
-          filtered.map(p => (
+          filtered.map(p => {
+            const stockAlert = getStockAlert(p.stock);
+            return (
             <div
               key={p.id}
               className={`flex items-center gap-2 px-2.5 py-2 transition-colors ${
                 selected !== "new" && selected?.id === p.id ? "bg-[#C5A55A]/10" : "hover:bg-[#1a1a1a]"
-              }`}
+              } ${stockAlert ? "border-l-2 border-l-red-500 bg-red-500/[0.04]" : ""}`}
             >
-              {/* Image */}
-              {p.image
-                ? <img src={p.image} alt="" className="w-8 h-8 rounded-md object-cover flex-shrink-0" />
-                : <div className="w-8 h-8 rounded-md bg-[#222] flex items-center justify-center flex-shrink-0"><Tag size={11} className="text-[#555]" /></div>
-              }
+              {/* Image + indicateur stock */}
+              <div className="relative flex-shrink-0">
+                {p.image
+                  ? <img src={p.image} alt="" className="w-8 h-8 rounded-md object-cover" />
+                  : <div className="w-8 h-8 rounded-md bg-[#222] flex items-center justify-center"><Tag size={11} className="text-[#555]" /></div>
+                }
+                {stockAlert && (
+                  <span
+                    className="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-red-600 rounded-full border border-[#111] shadow-sm"
+                    title={stockAlert.label}
+                  >
+                    <Flag size={9} className="text-white fill-white" />
+                  </span>
+                )}
+              </div>
 
               {/* Infos — clic pour modifier */}
               <button
@@ -335,12 +348,22 @@ export default function AdminProducts() {
                 onClick={() => selectProduct(p)}
                 className="min-w-0 flex-1 text-left"
               >
-                <p className="text-xs font-medium text-[#f5f0e8] truncate leading-tight">{p.title}</p>
+                <div className="flex items-center gap-1 min-w-0">
+                  <p className="text-xs font-medium text-[#f5f0e8] truncate leading-tight">{p.title}</p>
+                  {stockAlert && (
+                    <span
+                      className="flex-shrink-0 flex items-center gap-0.5 px-1 py-0.5 rounded bg-red-500/20 text-red-400 text-[8px] font-bold uppercase tracking-wide"
+                      title={stockAlert.label}
+                    >
+                      <Flag size={8} className="fill-red-400" />
+                      {stockAlert.level === "out" ? "Rupture" : "Faible"}
+                    </span>
+                  )}
+                </div>
                 <p className={`text-[10px] leading-tight mt-0.5 ${
-                  p.stock === 0 ? "text-red-400" : p.stock <= 2 ? "text-orange-400" : "text-[#555]"
+                  stockAlert ? "text-red-400 font-medium" : "text-[#555]"
                 }`}>
-                  {fmtP(p.price)}
-                  {p.stock === 0 && <AlertTriangle size={9} className="inline ml-1" />}
+                  {fmtP(p.price)} · Stock : {Number(p.stock) || 0}
                 </p>
               </button>
 
@@ -364,7 +387,8 @@ export default function AdminProducts() {
                 </button>
               </div>
             </div>
-          ))}
+          );
+          })}
         </div>
       </div>
 
@@ -390,9 +414,17 @@ export default function AdminProducts() {
 
             {/* Header */}
             <div className="flex items-center gap-2 justify-between sticky top-0 bg-[#0a0a0a] py-2 z-10 min-w-0">
-              <h2 className="text-sm font-semibold text-[#f5f0e8] truncate min-w-0 flex-1">
-                {selected === "new" ? "Nouveau produit" : selected.title}
-              </h2>
+              <div className="min-w-0 flex-1">
+                <h2 className="text-sm font-semibold text-[#f5f0e8] truncate">
+                  {selected === "new" ? "Nouveau produit" : selected.title}
+                </h2>
+                {selected !== "new" && getStockAlert(selected.stock ?? form.stock) && (
+                  <p className="flex items-center gap-1 text-[10px] text-red-400 font-semibold mt-0.5">
+                    <Flag size={10} className="fill-red-400" />
+                    {getStockAlert(selected.stock ?? form.stock).label}
+                  </p>
+                )}
+              </div>
               <div className="flex items-center gap-1.5 flex-shrink-0">
                 {selected !== "new" && (
                   <button type="button" onClick={() => handleDelete(selected)}
