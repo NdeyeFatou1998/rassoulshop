@@ -8,6 +8,7 @@ export default function OrderInvoicePreview({ order, fmtPrice, fmtDate }) {
     shipped: "Expédiée",
     delivered: "Livrée",
     cancelled: "Annulée",
+    refunded: "Remboursée",
   };
 
   return (

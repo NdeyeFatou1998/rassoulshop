@@ -346,6 +346,7 @@ export async function fetchDashboardStats() {
     shippedOrders: Number(s.shipped) || 0,
     deliveredOrders: Number(s.delivered) || 0,
     cancelledOrders: Number(s.cancelled) || 0,
+    refundedOrders: Number(s.refunded) || 0,
     totalRevenue: Number(s.total_revenue) || 0,
     revenueThisMonth: 0,
     totalProducts: 0,

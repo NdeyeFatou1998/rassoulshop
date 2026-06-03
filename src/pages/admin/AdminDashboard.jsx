@@ -11,7 +11,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   ShoppingCart, DollarSign, Package, Users,
-  AlertTriangle, XCircle, Clock, TrendingUp
+  AlertTriangle, XCircle, Clock, TrendingUp, RotateCcw
 } from "lucide-react";
 import { fetchDashboardStats, fetchOrders } from "../../services/adminApi";
 import { normalizeOrder } from "../../utils/normalizeOrder";
@@ -105,6 +105,13 @@ export default function AdminDashboard() {
       bg: "bg-amber-500/10",
     },
     {
+      label: "Remboursées",
+      value: stats?.refundedOrders || 0,
+      icon: RotateCcw,
+      color: "text-rose-400",
+      bg: "bg-rose-500/10",
+    },
+    {
       label: "Stock bas",
       value: stats?.lowStock || 0,
       icon: AlertTriangle,
@@ -127,6 +134,7 @@ export default function AdminDashboard() {
     shipped: { label: "Expédiée", cls: "bg-purple-500/20 text-purple-400" },
     delivered: { label: "Livrée", cls: "bg-emerald-500/20 text-emerald-400" },
     cancelled: { label: "Annulée", cls: "bg-red-500/20 text-red-400" },
+    refunded: { label: "Remboursée", cls: "bg-rose-500/20 text-rose-400" },
   };
 
   return (

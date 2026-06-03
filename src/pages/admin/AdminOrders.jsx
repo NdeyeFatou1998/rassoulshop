@@ -5,7 +5,7 @@
 import { useState, useEffect, useRef } from "react";
 import {
   Search, Eye, Trash2, X, Clock, CheckCircle, Truck,
-  Package, XCircle, Filter, Download, ImageIcon, Maximize2, FileText,
+  Package, XCircle, Filter, Download, ImageIcon, Maximize2, FileText, RotateCcw,
 } from "lucide-react";
 import html2canvas from "html2canvas";
 import { fetchOrders, updateOrderStatus, deleteOrder } from "../../services/adminApi";
@@ -18,6 +18,7 @@ const STATUS_CONFIG = {
   shipped:   { label: "Expédiée",    icon: Truck,       cls: "bg-purple-500/20 text-purple-400", border: "border-purple-500/30" },
   delivered: { label: "Livrée",      icon: Package,     cls: "bg-emerald-500/20 text-emerald-400", border: "border-emerald-500/30" },
   cancelled: { label: "Annulée",     icon: XCircle,     cls: "bg-red-500/20 text-red-400",       border: "border-red-500/30" },
+  refunded:  { label: "Remboursée",  icon: RotateCcw,   cls: "bg-rose-500/20 text-rose-400",     border: "border-rose-500/30" },
 };
 
 function itemImageSrc(image) {
