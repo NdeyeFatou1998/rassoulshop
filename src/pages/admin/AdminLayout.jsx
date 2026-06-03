@@ -13,7 +13,7 @@ import { Outlet, Link, useLocation, useNavigate, Navigate } from "react-router-d
 import { useAuth } from "../../context/AuthContext";
 import {
   LayoutDashboard, Package, Image, FileText, ShoppingCart,
-  Users, Tags, Gift, LogOut, Menu, X, ChevronRight, Settings, Layers
+  Users, Tags, Gift, LogOut, Menu, X, ChevronRight, Settings, Layers, ScrollText
 } from "lucide-react";
 
 /** Liens de navigation du sidebar admin */
@@ -24,6 +24,7 @@ const NAV_ITEMS = [
   { label: "À Propos", path: "/admin/about", icon: FileText },
   { label: "Commandes", path: "/admin/orders", icon: ShoppingCart },
   { label: "Utilisateurs", path: "/admin/users", icon: Users },
+  { label: "Suivi", path: "/admin/suivi", icon: ScrollText, adminOnly: true },
   { label: "Catégories", path: "/admin/categories", icon: Tags },
   { label: "Box Cadeau", path: "/admin/gift-boxes", icon: Gift },
   { label: "Variantes", path: "/admin/variants", icon: Layers },
@@ -31,7 +32,7 @@ const NAV_ITEMS = [
 ];
 
 /** Pages réservées aux administrateurs (pas aux assistants) */
-const ADMIN_ONLY_PATHS = ["/admin/users"];
+const ADMIN_ONLY_PATHS = ["/admin/users", "/admin/suivi"];
 
 export default function AdminLayout() {
   const { user, isAuthenticated, loading, logoutUser } = useAuth();
@@ -62,7 +63,7 @@ export default function AdminLayout() {
   /** Titre de la page actuelle */
   const navItems =
     user?.role === "assistant"
-      ? NAV_ITEMS.filter((item) => !ADMIN_ONLY_PATHS.includes(item.path))
+      ? NAV_ITEMS.filter((item) => !item.adminOnly && !ADMIN_ONLY_PATHS.includes(item.path))
       : NAV_ITEMS;
 
   const currentPage = navItems.find((item) => location.pathname.startsWith(item.path));

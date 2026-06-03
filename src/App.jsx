@@ -47,6 +47,7 @@ import AdminLookbook from "./pages/admin/AdminLookbook";
 import AdminAbout from "./pages/admin/AdminAbout";
 import AdminOrders from "./pages/admin/AdminOrders";
 import AdminUsers from "./pages/admin/AdminUsers";
+import AdminSuivi from "./pages/admin/AdminSuivi";
 import AdminCategories from "./pages/admin/AdminCategories";
 import AdminGiftBoxes from "./pages/admin/AdminGiftBoxes";
 import AdminVariants from "./pages/admin/AdminVariants";
@@ -147,6 +148,7 @@ export default function App() {
               <Route path="about" element={<AdminAbout />} />
               <Route path="orders" element={<AdminOrders />} />
               <Route path="users" element={<AdminUsers />} />
+              <Route path="suivi" element={<AdminSuivi />} />
               <Route path="assistants" element={<Navigate to="/admin/users" replace />} />
               <Route path="categories" element={<AdminCategories />} />
               <Route path="gift-boxes" element={<AdminGiftBoxes />} />

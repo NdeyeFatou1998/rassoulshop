@@ -330,6 +330,14 @@ export async function deleteOrder(id) {
   });
 }
 
+/** GET /api/audit-logs — Journal de suivi (admins) */
+export async function fetchAuditLogs(params = {}) {
+  const qs = new URLSearchParams(params).toString();
+  return apiRequest(`${API_BASE}/audit-logs${qs ? `?${qs}` : ""}`, {
+    headers: authHeaders(),
+  });
+}
+
 /** GET /api/orders/stats/summary — Statistiques dashboard (camelCase) */
 export async function fetchDashboardStats() {
   const data = await apiRequest(`${API_BASE}/orders/stats/summary`, {
