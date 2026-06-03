@@ -74,11 +74,24 @@ export default function AdminOrders() {
 
   useEffect(() => { loadOrders(); }, [filterStatus]);
 
-  async function handleStatusChange(orderId, newStatus) {
+  async function handleStatusChange(order, newStatus) {
+    if (newStatus === order.status) return;
+
+    const oldLabel = STATUS_CONFIG[order.status]?.label || order.status;
+    const newLabel = STATUS_CONFIG[newStatus]?.label || newStatus;
+    const ref = order.reference || order.order_reference || `#${order.id}`;
+
+    const confirmed = confirm(
+      `Changer le statut de la commande ${ref} ?\n\n` +
+      `« ${oldLabel} » → « ${newLabel} »\n\n` +
+      `Un email sera envoyé au client (si email renseigné) et à tous les administrateurs.`
+    );
+    if (!confirmed) return;
+
     try {
-      await updateOrderStatus(orderId, newStatus);
+      await updateOrderStatus(order.id, newStatus);
       await loadOrders();
-      if (selectedOrder?.id === orderId) {
+      if (selectedOrder?.id === order.id) {
         setSelectedOrder((prev) => ({ ...prev, status: newStatus }));
       }
     } catch (err) {
@@ -216,7 +229,7 @@ export default function AdminOrders() {
                   <p className="text-sm font-semibold text-[#C5A55A]">{fmtPrice(order.total)}</p>
                   <select
                     value={order.status}
-                    onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                    onChange={(e) => handleStatusChange(order, e.target.value)}
                     className={`text-xs px-2 py-1 rounded-lg bg-transparent border ${st.border} ${st.cls.split(" ")[1]} focus:outline-none`}
                   >
                     {Object.entries(STATUS_CONFIG).map(([key, val]) => (
