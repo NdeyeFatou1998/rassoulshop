@@ -4,11 +4,9 @@
  * Composition :
  * - Hero plein écran (image + titre + CTAs)
  * - FilterableProductGrid — tous les produits + filtre par catégorie
- * - Experience — section "Pourquoi nous choisir"
  */
 
 import Hero from "../components/sections/Hero";
-import Experience from "../components/sections/Experience";
 import FilterableProductGrid from "../components/sections/FilterableProductGrid";
 import MarqueeStrip from "../components/ui/MarqueeStrip";
 import BrandStatement from "../components/ui/BrandStatement";
@@ -27,13 +25,10 @@ export default function Home() {
       <MarqueeStrip />
 
       {/* ---- Grille produits filtrables (avec filtres catégories) ---- */}
-      <FilterableProductGrid limit={60} />
+      <FilterableProductGrid limit={60} showPromoCards={false} />
 
       {/* ---- Citation de marque premium ---- */}
       <BrandStatement />
-
-      {/* ---- Section pourquoi nous choisir ---- */}
-      <Experience />
     </>
   );
 }

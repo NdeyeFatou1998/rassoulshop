@@ -144,8 +144,8 @@ const PROMO_CARDS = [
     desc: "Sets complets emballés avec soin, prêts à offrir. À partir de 25 000 FCFA.",
     cta: "Voir les coffrets",
     href: "/shop?category=sets-cadeau",
-    image: "/assets/images/WhatsApp Image 2026-03-24 at 01.27.10.jpeg",
-    accent: "left",
+    image: null,
+    accent: "center",
   },
   {
     id: "perso",
@@ -234,7 +234,12 @@ function PromoCard({ card }) {
 const PRICE_STEP = 500;
 
 /* ---- Composant principal ---- */
-export default function FilterableProductGrid({ limit = 80, defaultCategory = null, showFilters = false }) {
+export default function FilterableProductGrid({
+  limit = 80,
+  defaultCategory = null,
+  showFilters = false,
+  showPromoCards = true,
+}) {
   const [active, setActive]       = useState(defaultCategory);
   const [search, setSearch]       = useState("");
   const [minVal, setMinVal]       = useState(0);
@@ -460,7 +465,9 @@ export default function FilterableProductGrid({ limit = 80, defaultCategory = nu
                   </motion.div>
 
                   {/* PromoCard insérée après le chunk (si pas le dernier et si promo disponible) */}
-                  {chunkIdx < Math.ceil(filtered.length / 8) - 1 && PROMO_CARDS[chunkIdx] && (
+                  {showPromoCards &&
+                    chunkIdx < Math.ceil(filtered.length / 8) - 1 &&
+                    PROMO_CARDS[chunkIdx] && (
                     <PromoCard card={PROMO_CARDS[chunkIdx]} />
                   )}
                 </div>
