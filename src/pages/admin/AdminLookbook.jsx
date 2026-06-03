@@ -10,7 +10,7 @@
  * ② Médias du Lookbook (CRUD complet)
  *    - Grille de tous les items
  *    - Ajout : upload fichier + choix du span
- *    - Édition : modifier span et légende
+ *    - Édition : modifier span
  *    - Suppression avec confirmation
  */
 
@@ -50,7 +50,6 @@ export default function AdminLookbook() {
   const [editingItem, setEditingItem] = useState(null);
   const [file, setFile]               = useState(null);
   const [span, setSpan]               = useState("normal");
-  const [caption, setCaption]         = useState("");
   const [saving, setSaving]           = useState(false);
   const [modalError, setModalError]   = useState("");
 
@@ -107,7 +106,6 @@ export default function AdminLookbook() {
     setEditingItem(null);
     setFile(null);
     setSpan("normal");
-    setCaption("");
     setModalError("");
     setShowModal(true);
   }
@@ -116,7 +114,6 @@ export default function AdminLookbook() {
     setEditingItem(item);
     setFile(null);
     setSpan(item.span || "normal");
-    setCaption(item.caption || "");
     setModalError("");
     setShowModal(true);
   }
@@ -127,15 +124,13 @@ export default function AdminLookbook() {
     setSaving(true);
     try {
       if (editingItem) {
-        /* Modifier span, caption */
-        await updateLookbookItem(editingItem.id, { span, caption });
+        await updateLookbookItem(editingItem.id, { span });
       } else {
         /* Créer : fichier obligatoire */
         if (!file) { setModalError("Veuillez sélectionner un fichier"); setSaving(false); return; }
         const fd = new FormData();
         fd.append("file", file);
         fd.append("span", span);
-        fd.append("caption", caption);
         fd.append("display_order", String(items.length));
         await createLookbookItem(fd);
       }
@@ -292,7 +287,7 @@ export default function AdminLookbook() {
                   ) : (
                     <img
                       src={item.src}
-                      alt={item.caption || `Look ${item.id}`}
+                      alt={`Look ${item.id}`}
                       className="w-full aspect-square object-cover"
                     />
                   )}
@@ -327,11 +322,6 @@ export default function AdminLookbook() {
                   </div>
 
                   {/* Caption */}
-                  {item.caption && (
-                    <div className="px-2 py-1.5 bg-[#111]">
-                      <p className="text-[10px] text-[#777] line-clamp-1">{item.caption}</p>
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
@@ -401,20 +391,6 @@ export default function AdminLookbook() {
                     <option key={o.value} value={o.value}>{o.label}</option>
                   ))}
                 </select>
-              </div>
-
-              {/* Légende */}
-              <div>
-                <label className="block text-[10px] text-[#888] uppercase tracking-wider mb-2">
-                  Légende (optionnel)
-                </label>
-                <input
-                  type="text"
-                  value={caption}
-                  onChange={(e) => setCaption(e.target.value)}
-                  placeholder="Description du média..."
-                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
-                />
               </div>
 
               {/* Actions */}
