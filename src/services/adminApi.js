@@ -330,9 +330,27 @@ export async function deleteOrder(id) {
   });
 }
 
-/** GET /api/orders/stats/summary — Statistiques */
+/** GET /api/orders/stats/summary — Statistiques dashboard (camelCase) */
 export async function fetchDashboardStats() {
-  return apiRequest(`${API_BASE}/orders/stats/summary`, {
+  const data = await apiRequest(`${API_BASE}/orders/stats/summary`, {
     headers: authHeaders(),
   });
+
+  if (data.totalOrders != null) return data;
+
+  const s = data.stats || {};
+  return {
+    totalOrders: Number(s.total_orders) || 0,
+    pendingOrders: Number(s.pending) || 0,
+    confirmedOrders: Number(s.confirmed) || 0,
+    shippedOrders: Number(s.shipped) || 0,
+    deliveredOrders: Number(s.delivered) || 0,
+    cancelledOrders: Number(s.cancelled) || 0,
+    totalRevenue: Number(s.total_revenue) || 0,
+    revenueThisMonth: 0,
+    totalProducts: 0,
+    lowStock: 0,
+    outOfStock: 0,
+    totalUsers: 0,
+  };
 }

@@ -30,7 +30,8 @@ export default function AdminDashboard() {
           fetchOrders({ limit: 5 }),
         ]);
         setStats(statsData);
-        setRecentOrders((ordersData.orders || []).map(normalizeOrder));
+        const orders = ordersData.orders || ordersData || [];
+        setRecentOrders(Array.isArray(orders) ? orders.map(normalizeOrder) : []);
       } catch (err) {
         console.error("Erreur chargement dashboard:", err);
       } finally {
@@ -71,6 +72,9 @@ export default function AdminDashboard() {
     {
       label: "Revenus",
       value: formatPrice(stats?.totalRevenue),
+      sub: stats?.revenueThisMonth != null
+        ? `Ce mois : ${formatPrice(stats.revenueThisMonth)}`
+        : null,
       icon: TrendingUp,
       color: "text-emerald-400",
       bg: "bg-emerald-500/10",
@@ -83,8 +87,12 @@ export default function AdminDashboard() {
       bg: "bg-[#C5A55A]/10",
     },
     {
-      label: "Utilisateurs",
+      label: "Équipe",
       value: stats?.totalUsers || 0,
+      sub:
+        stats?.totalAdmins != null
+          ? `${stats.totalAdmins} admin · ${stats.totalAssistants || 0} assistant(s)`
+          : null,
       icon: Users,
       color: "text-purple-400",
       bg: "bg-purple-500/10",
@@ -140,6 +148,9 @@ export default function AdminDashboard() {
                 <p className="text-xl font-semibold text-[#f5f0e8] mt-1">
                   {card.value}
                 </p>
+                {card.sub && (
+                  <p className="text-[10px] text-[#666] mt-1 leading-snug">{card.sub}</p>
+                )}
               </div>
             </div>
           );

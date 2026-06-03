@@ -1,3 +1,30 @@
+/** Parse montant (aligné backend orderPricing) */
+function parseAmount(value) {
+  if (value == null || value === "") return 0;
+  if (typeof value === "number" && !Number.isNaN(value)) return Math.round(value);
+  const cleaned = String(value).replace(/\s/g, "").replace(/[^\d.-]/g, "");
+  const n = Number(cleaned);
+  return Number.isNaN(n) ? 0 : Math.round(n);
+}
+
+/** Prix unitaire d'une ligne commande */
+export function getOrderItemUnitPrice(item) {
+  if (!item) return 0;
+  if (item.unit_price != null) return parseAmount(item.unit_price);
+  if (item.unitPrice != null) return parseAmount(item.unitPrice);
+  const hasPromo = item.promo_active && item.promo_price != null;
+  if (hasPromo) return parseAmount(item.promo_price);
+  return parseAmount(item.price);
+}
+
+/** Total commande recalculé depuis les articles */
+export function computeOrderTotal(items) {
+  return (items || []).reduce((sum, item) => {
+    const qty = Math.max(1, Number(item.quantity) || 1);
+    return sum + getOrderItemUnitPrice(item) * qty;
+  }, 0);
+}
+
 /**
  * Prix unitaire effectif (promo + variante panier)
  */
