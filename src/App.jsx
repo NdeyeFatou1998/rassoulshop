@@ -20,7 +20,7 @@
  * - Scroll to top automatique à chaque changement de page
  */
 
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CartProvider } from "./context/CartContext";
@@ -47,7 +47,6 @@ import AdminLookbook from "./pages/admin/AdminLookbook";
 import AdminAbout from "./pages/admin/AdminAbout";
 import AdminOrders from "./pages/admin/AdminOrders";
 import AdminUsers from "./pages/admin/AdminUsers";
-import AdminAssistants from "./pages/admin/AdminAssistants";
 import AdminCategories from "./pages/admin/AdminCategories";
 import AdminGiftBoxes from "./pages/admin/AdminGiftBoxes";
 import AdminVariants from "./pages/admin/AdminVariants";
@@ -148,7 +147,7 @@ export default function App() {
               <Route path="about" element={<AdminAbout />} />
               <Route path="orders" element={<AdminOrders />} />
               <Route path="users" element={<AdminUsers />} />
-              <Route path="assistants" element={<AdminAssistants />} />
+              <Route path="assistants" element={<Navigate to="/admin/users" replace />} />
               <Route path="categories" element={<AdminCategories />} />
               <Route path="gift-boxes" element={<AdminGiftBoxes />} />
               <Route path="variants" element={<AdminVariants />} />

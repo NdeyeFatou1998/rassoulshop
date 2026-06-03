@@ -13,7 +13,7 @@ import { Outlet, Link, useLocation, useNavigate, Navigate } from "react-router-d
 import { useAuth } from "../../context/AuthContext";
 import {
   LayoutDashboard, Package, Image, FileText, ShoppingCart,
-  Users, UserPlus, Tags, Gift, LogOut, Menu, X, ChevronRight, Settings, Layers
+  Users, Tags, Gift, LogOut, Menu, X, ChevronRight, Settings, Layers
 } from "lucide-react";
 
 /** Liens de navigation du sidebar admin */
@@ -24,12 +24,14 @@ const NAV_ITEMS = [
   { label: "À Propos", path: "/admin/about", icon: FileText },
   { label: "Commandes", path: "/admin/orders", icon: ShoppingCart },
   { label: "Utilisateurs", path: "/admin/users", icon: Users },
-  { label: "Assistants", path: "/admin/assistants", icon: UserPlus },
   { label: "Catégories", path: "/admin/categories", icon: Tags },
   { label: "Box Cadeau", path: "/admin/gift-boxes", icon: Gift },
   { label: "Variantes", path: "/admin/variants", icon: Layers },
   { label: "Paramètres", path: "/admin/settings", icon: Settings },
 ];
+
+/** Pages réservées aux administrateurs (pas aux assistants) */
+const ADMIN_ONLY_PATHS = ["/admin/users"];
 
 export default function AdminLayout() {
   const { user, isAuthenticated, loading, logoutUser } = useAuth();
@@ -58,7 +60,12 @@ export default function AdminLayout() {
   }
 
   /** Titre de la page actuelle */
-  const currentPage = NAV_ITEMS.find((item) => location.pathname.startsWith(item.path));
+  const navItems =
+    user?.role === "assistant"
+      ? NAV_ITEMS.filter((item) => !ADMIN_ONLY_PATHS.includes(item.path))
+      : NAV_ITEMS;
+
+  const currentPage = navItems.find((item) => location.pathname.startsWith(item.path));
   const pageTitle = currentPage?.label || "Admin";
 
   return (
@@ -102,7 +109,7 @@ export default function AdminLayout() {
 
         {/* Navigation */}
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-          {NAV_ITEMS.map((item) => {
+          {navItems.map((item) => {
             const isActive = location.pathname.startsWith(item.path);
             const Icon = item.icon;
             return (
