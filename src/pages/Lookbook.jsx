@@ -101,8 +101,11 @@ function LookbookSlide({ look, isActive, index, total, muted, onToggleMute }) {
           {muted ? <VolumeX size={17} /> : <Volume2 size={17} />}
         </button>
 
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 px-3 py-1 rounded-full bg-noir-900/60 backdrop-blur-sm pointer-events-none">
-          <span className="text-[10px] uppercase tracking-[0.15em] text-cream/60">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 pointer-events-none">
+          <span className="px-4 py-1.5 rounded-full bg-noir-900/60 backdrop-blur-sm text-[10px] uppercase tracking-[0.15em] text-cream/70 font-medium">
+            {index + 1} / {total}
+          </span>
+          <span className="text-[9px] uppercase tracking-[0.12em] text-cream/45">
             {playing ? "Tapez pour pause" : "Tapez pour lire"}
           </span>
         </div>
@@ -294,8 +297,6 @@ export default function Lookbook() {
             <div
               ref={trackRef}
               onScroll={handleTrackScroll}
-              onTouchStart={onTouchStart}
-              onTouchEnd={onTouchEnd}
               className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-smooth touch-pan-x"
             >
               {looks.map((look, i) => (
