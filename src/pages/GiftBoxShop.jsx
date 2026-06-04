@@ -118,10 +118,8 @@ export default function GiftBoxShop() {
                     </h3>
                   </div>
                   {/* Prix — fond blanc, gold luisant */}
-                  <div className="w-full rounded-lg px-3 py-2 flex items-center justify-center"
-                    style={{ background: "rgba(255,255,255,0.92)", border: "1px solid rgba(255,255,255,0.70)", boxShadow: "0 2px 8px rgba(0,0,0,0.25)" }}
-                  >
-                    <span className="text-[15px] font-bold" style={{ color: "#B38728" }}>
+                  <div className="flex items-center justify-center">
+                    <span className="text-[15px] font-bold" style={{ color: "#C8A84B" }}>
                       {(box.price || 0).toLocaleString("fr-FR")} FCFA
                     </span>
                   </div>
