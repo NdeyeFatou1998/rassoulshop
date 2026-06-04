@@ -78,7 +78,7 @@ export default function GiftBoxShop() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.45, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
                 className="group flex flex-col rounded-xl overflow-hidden"
-                style={{ background: "#111010" }}
+                style={{ background: "#111010", border: "0.5px solid rgba(255,255,255,0.18)" }}
               >
                 {/* Image carrée */}
                 <Link to={`/gift-boxes/${box.id}`}

@@ -31,7 +31,7 @@ export default function ProductCard({ product, index = 0 }) {
       viewport={{ once: true, margin: "-20px" }}
       transition={{ duration: 0.45, delay: index * 0.04, ease: [0.22, 1, 0.36, 1] }}
       className="group flex flex-col rounded-xl overflow-hidden"
-      style={{ background: "#111010" }}
+      style={{ background: "#111010", border: "0.5px solid rgba(255,255,255,0.18)" }}
     >
       {/* ---- Image carrée ---- */}
       <Link
