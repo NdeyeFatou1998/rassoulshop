@@ -89,12 +89,23 @@
   }
 
   .text-gradient-gold {
-    background: linear-gradient(135deg, #C5A55A 0%, #E8C96A 35%, #C5A55A 65%, #D4BA78 100%);
-    background-size: 200% 200%;
+    background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 40%, #B38728 65%, #FBF5B7 100%);
+    background-size: 250% 250%;
     animation: goldShift 4s ease-in-out infinite;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+
+  /* Gold texte premium avec reflet luisant */
+  .text-gold-shine {
+    background: linear-gradient(90deg, #BF953F 0%, #FCF6BA 35%, #C8A84B 50%, #FCF6BA 65%, #BF953F 100%);
+    background-size: 300% 100%;
+    animation: goldShine 3s ease-in-out infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
   }
 
   /* Shimmer — fond brun chaud visible */
@@ -232,6 +243,12 @@
 @keyframes goldShift {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
+}
+
+/* Reflet luisant qui glisse de gauche à droite */
+@keyframes goldShine {
+  0%   { background-position: 200% 0%; }
+  100% { background-position: -200% 0%; }
 }
 
 @keyframes glowPulse {

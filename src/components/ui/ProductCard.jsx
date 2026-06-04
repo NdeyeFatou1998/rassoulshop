@@ -1,6 +1,5 @@
 /**
- * ProductCard — Carte produit premium
- * Fond brun chaud visible, titre gold gras, prix blanc bold
+ * ProductCard — Fond brun chaud, titre gold animé luisant, VIP en haut image
  */
 
 import { useState } from "react";
@@ -9,9 +8,15 @@ import { ShoppingCart, Check } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 
+const CARD_BG = "linear-gradient(160deg, #38311f 0%, #2a2416 100%)";
+const CARD_BORDER = "1px solid rgba(197,165,90,0.30)";
+const CARD_BORDER_HOVER = "1px solid rgba(212,186,120,0.65)";
+const GOLD = "#C8A84B";
+
 export default function ProductCard({ product, index = 0 }) {
   const { addToCart } = useCart();
   const [justAdded, setJustAdded] = useState(false);
+  const [hovered, setHovered] = useState(false);
 
   const hasPromo = product.promo_active && product.promo_price;
 
@@ -31,18 +36,15 @@ export default function ProductCard({ product, index = 0 }) {
       transition={{ duration: 0.5, delay: index * 0.04, ease: [0.22, 1, 0.36, 1] }}
       className="group flex flex-col rounded-2xl overflow-hidden transition-all duration-400"
       style={{
-        background: "linear-gradient(160deg, #38311f 0%, #2a2416 100%)",
-        border: "1px solid rgba(197,165,90,0.30)",
-        boxShadow: "0 2px 16px rgba(0,0,0,0.5)",
+        background: CARD_BG,
+        border: hovered ? CARD_BORDER_HOVER : CARD_BORDER,
+        boxShadow: hovered
+          ? "0 8px 40px rgba(197,165,90,0.22), 0 2px 8px rgba(0,0,0,0.5)"
+          : "0 2px 16px rgba(0,0,0,0.45)",
+        transform: hovered ? "translateY(-3px)" : "translateY(0)",
       }}
-      onMouseEnter={e => {
-        e.currentTarget.style.border = "1px solid rgba(197,165,90,0.60)";
-        e.currentTarget.style.boxShadow = "0 8px 36px rgba(197,165,90,0.18)";
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.border = "1px solid rgba(197,165,90,0.30)";
-        e.currentTarget.style.boxShadow = "0 2px 16px rgba(0,0,0,0.5)";
-      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
       {/* ---- Image ---- */}
       <Link to={`/product/${product.id}`} className="relative w-full aspect-square block overflow-hidden">
@@ -53,30 +55,60 @@ export default function ProductCard({ product, index = 0 }) {
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
         />
 
-        <div className="absolute inset-0 bg-gradient-to-t from-[#2a2416]/60 via-transparent to-transparent
-                        opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+        {/* Gradient bas */}
+        <div
+          className="absolute inset-0 transition-opacity duration-400"
+          style={{
+            background: "linear-gradient(to top, rgba(30,22,10,0.65) 0%, transparent 55%)",
+            opacity: hovered ? 1 : 0.3,
+          }}
+        />
 
-        {product.badge && (
-          <span className="absolute top-2.5 left-2.5 px-2 py-[3px] text-[8px] uppercase tracking-[0.14em] font-bold bg-[#C5A55A] text-[#0c0a07] rounded-full">
-            {product.badge}
-          </span>
-        )}
+        {/* Badges en haut gauche : badge produit + VIP empilés */}
+        <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5">
+          {product.badge && (
+            <span
+              className="px-2 py-[3px] text-[8px] uppercase tracking-[0.14em] font-bold rounded-full"
+              style={{ background: GOLD, color: "#0c0a07" }}
+            >
+              {product.badge}
+            </span>
+          )}
+          {product.is_vip && (
+            <span
+              className="inline-flex items-center gap-0.5 text-[7px] uppercase tracking-[0.15em] font-bold px-2 py-[3px] rounded-full"
+              style={{
+                background: "rgba(197,165,90,0.22)",
+                color: GOLD,
+                border: "1px solid rgba(197,165,90,0.50)",
+                backdropFilter: "blur(4px)",
+              }}
+            >
+              ★ VIP
+            </span>
+          )}
+        </div>
 
+        {/* Badge promo % — haut droite */}
         {hasPromo && (
-          <span className="absolute top-2.5 right-2.5 text-[8px] font-bold bg-red-500 text-white px-2 py-0.5 rounded-full">
+          <span
+            className="absolute top-2.5 right-2.5 text-[8px] font-bold px-2 py-0.5 rounded-full"
+            style={{ background: "#e53e3e", color: "#fff" }}
+          >
             -{Math.round((1 - product.promo_price / product.price) * 100)}%
           </span>
         )}
 
+        {/* Bouton quick-add */}
         <button
           onClick={handleQuickAdd}
           className={`absolute bottom-2.5 right-2.5 z-10 w-9 h-9 rounded-full flex items-center justify-center
             transition-all duration-300 active:scale-95
-            opacity-100 md:opacity-0 md:group-hover:opacity-100 ${
-              justAdded
-                ? "bg-green-500 text-white scale-110"
-                : "bg-[#0c0a07]/80 backdrop-blur-sm text-white hover:bg-[#C5A55A] hover:text-[#0c0a07]"
-            }`}
+            opacity-100 md:opacity-0 md:group-hover:opacity-100`}
+          style={justAdded
+            ? { background: "#22c55e", color: "#fff" }
+            : { background: "rgba(12,10,7,0.82)", backdropFilter: "blur(6px)", color: "rgba(255,255,255,0.9)" }
+          }
           aria-label="Ajouter au panier"
         >
           {justAdded
@@ -87,16 +119,20 @@ export default function ProductCard({ product, index = 0 }) {
       </Link>
 
       {/* ---- Infos ---- */}
-      <div className="px-3.5 pt-3 pb-4 flex flex-col" style={{ borderTop: "1px solid rgba(197,165,90,0.20)" }}>
-
+      <div
+        className="px-3.5 pt-3 pb-4 flex flex-col"
+        style={{ borderTop: "1px solid rgba(197,165,90,0.18)" }}
+      >
         {/* Catégorie */}
-        <p className="text-[8px] uppercase tracking-[0.22em] font-bold mb-1.5" style={{ color: "#C5A55A" }}>
+        <p
+          className="text-[8px] uppercase tracking-[0.22em] font-bold mb-1.5"
+          style={{ color: "rgba(197,165,90,0.80)" }}
+        >
           {product.category_name || product.category || ""}
         </p>
 
-        {/* Titre — gold gras, VISIBLE */}
-        <h3 className="text-[14px] font-bold leading-snug line-clamp-2 transition-colors duration-300"
-            style={{ color: "#D4BA78" }}>
+        {/* Titre — gold luisant animé */}
+        <h3 className="text-gold-shine text-[14px] leading-snug line-clamp-2">
           {product.title}
         </h3>
 
@@ -110,40 +146,36 @@ export default function ProductCard({ product, index = 0 }) {
             <div className="flex items-center gap-1 mt-2">
               {swatches.map(opt => (
                 <img key={opt.id} src={opt.image} alt={opt.name} title={opt.name}
-                  className="w-4 h-4 rounded-full object-cover border border-[#C5A55A]/30" />
+                  className="w-4 h-4 rounded-full object-cover"
+                  style={{ border: "1px solid rgba(197,165,90,0.30)" }} />
               ))}
-              {extra > 0 && <span className="text-[9px] ml-0.5" style={{ color: "rgba(255,255,255,0.6)" }}>+{extra}</span>}
+              {extra > 0 && <span className="text-[9px] ml-0.5" style={{ color: "rgba(255,255,255,0.50)" }}>+{extra}</span>}
             </div>
           );
         })()}
 
-        {product.is_vip && (
-          <span className="self-start mt-2 inline-flex items-center gap-1 text-[7px] uppercase tracking-[0.18em] font-bold px-2 py-[3px] rounded-full"
-                style={{ background: "rgba(197,165,90,0.15)", color: "#C5A55A", border: "1px solid rgba(197,165,90,0.40)" }}>
-            ★ VIP
-          </span>
-        )}
-
         {/* Prix */}
-        <div className="flex items-baseline gap-2 mt-3 pt-2.5" style={{ borderTop: "1px solid rgba(197,165,90,0.15)" }}>
+        <div
+          className="flex items-baseline gap-2 mt-3 pt-2.5"
+          style={{ borderTop: "1px solid rgba(197,165,90,0.15)" }}
+        >
           {hasPromo ? (
             <>
-              <span className="text-[11px] line-through" style={{ color: "rgba(255,255,255,0.45)" }}>
+              <span className="text-[11px] line-through" style={{ color: "rgba(255,255,255,0.38)" }}>
                 {product.price.toLocaleString("fr-FR")}
               </span>
-              <span className="text-[16px] font-bold" style={{ color: "#C5A55A" }}>
+              <span className="text-[16px] font-bold" style={{ color: GOLD }}>
                 {product.promo_price.toLocaleString("fr-FR")}
-                <span className="text-[9px] font-normal ml-0.5" style={{ color: "rgba(197,165,90,0.70)" }}>FCFA</span>
+                <span className="text-[9px] font-normal ml-0.5" style={{ color: "rgba(197,165,90,0.65)" }}>FCFA</span>
               </span>
             </>
           ) : (
             <span className="text-[16px] font-bold" style={{ color: "#f0ead8" }}>
               {product.price.toLocaleString("fr-FR")}
-              <span className="text-[9px] font-normal ml-0.5" style={{ color: "rgba(240,234,216,0.60)" }}>FCFA</span>
+              <span className="text-[9px] font-normal ml-0.5" style={{ color: "rgba(240,234,216,0.55)" }}>FCFA</span>
             </span>
           )}
         </div>
-
       </div>
     </motion.article>
   );

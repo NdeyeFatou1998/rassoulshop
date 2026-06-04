@@ -1,18 +1,22 @@
 /**
- * Navbar — Logo image RSN2, liens visibles, glassmorphism au scroll
+ * Navbar — Logo RSN2 visible, loupe de recherche, sans logo dans le menu mobile
  */
 
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ShoppingCart, ShoppingBag } from "lucide-react";
+import { Menu, X, ShoppingCart, ShoppingBag, Search } from "lucide-react";
 import { useCart } from "../../context/CartContext";
+import SearchOverlay from "../ui/SearchOverlay";
+
+const GOLD = "#C8A84B";
 
 export default function Navbar() {
   const location = useLocation();
   const { cartCount } = useCart();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -24,10 +28,6 @@ export default function Navbar() {
     setMobileOpen(false);
   }, [location.pathname]);
 
-  const headerBg = scrolled
-    ? "bg-[#0c0a07]/95 backdrop-blur-xl border-b border-gold/[0.12] shadow-[0_1px_30px_rgba(0,0,0,0.6)]"
-    : "bg-gradient-to-b from-black/50 to-transparent";
-
   const navLinks = [
     { label: "Accueil", path: "/" },
     { label: "Boutique", path: "/shop" },
@@ -37,24 +37,36 @@ export default function Navbar() {
 
   return (
     <>
+      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
+
       <motion.header
         initial={{ y: -8, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${headerBg}`}
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
+        style={scrolled ? {
+          background: "rgba(14,11,6,0.96)",
+          backdropFilter: "blur(24px)",
+          WebkitBackdropFilter: "blur(24px)",
+          borderBottom: "1px solid rgba(197,165,90,0.22)",
+          boxShadow: "0 2px 30px rgba(0,0,0,0.7)",
+        } : {
+          background: "linear-gradient(to bottom, rgba(8,5,2,0.70) 0%, transparent 100%)",
+        }}
       >
-        <div className="max-w-7xl mx-auto px-4 lg:px-10 flex items-center justify-between h-16 md:h-[72px]">
+        <div className="max-w-7xl mx-auto px-4 lg:px-10 flex items-center justify-between h-16 md:h-[76px]">
 
           {/* Hamburger mobile */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 -ml-2 text-white/80 hover:text-white transition-colors"
+            className="md:hidden p-2 -ml-2 transition-colors"
+            style={{ color: "rgba(240,234,216,0.90)" }}
             aria-label="Menu"
           >
-            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
 
-          {/* Logo image — centré mobile, gauche desktop */}
+          {/* Logo — centré mobile, gauche desktop */}
           <Link
             to="/"
             className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex items-center"
@@ -62,8 +74,12 @@ export default function Navbar() {
             <img
               src="/assets/images/RSN2.png"
               alt="Rassoul Shop Sn"
-              className="h-10 md:h-11 w-auto object-contain drop-shadow-[0_2px_8px_rgba(197,165,90,0.5)]"
-              style={{ filter: "drop-shadow(0 0 6px rgba(197,165,90,0.4))" }}
+              className="object-contain"
+              style={{
+                height: "clamp(44px, 6vw, 56px)",
+                width: "auto",
+                filter: "drop-shadow(0 2px 12px rgba(197,165,90,0.55)) brightness(1.05)",
+              }}
             />
           </Link>
 
@@ -75,15 +91,15 @@ export default function Navbar() {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`relative text-[11px] uppercase tracking-[0.18em] font-semibold py-2 transition-colors duration-300 ${
-                    isActive ? "text-gold" : "text-white/80 hover:text-white"
-                  }`}
+                  className="relative text-[11px] uppercase tracking-[0.18em] font-semibold py-2 transition-colors duration-300"
+                  style={{ color: isActive ? GOLD : "rgba(240,234,216,0.85)" }}
                 >
                   {link.label}
                   {isActive && (
                     <motion.div
                       layoutId="nav-underline"
-                      className="absolute -bottom-0.5 left-0 right-0 h-[1.5px] bg-gold"
+                      className="absolute -bottom-0.5 left-0 right-0 h-[1.5px]"
+                      style={{ background: `linear-gradient(90deg, transparent, ${GOLD}, transparent)` }}
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -92,22 +108,43 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* Panier */}
-          <Link
-            to="/cart"
-            className="relative p-2 -mr-2 text-white/80 hover:text-white transition-colors"
-          >
-            <ShoppingCart size={19} strokeWidth={1.5} />
-            {cartCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center text-[9px] font-bold bg-gold text-[#0c0a07] rounded-full px-1">
-                {cartCount}
-              </span>
-            )}
-          </Link>
+          {/* Actions droite : loupe + panier */}
+          <div className="flex items-center gap-1">
+            {/* Loupe */}
+            <button
+              onClick={() => setSearchOpen(true)}
+              className="p-2 rounded-lg transition-all duration-300"
+              style={{ color: "rgba(240,234,216,0.85)" }}
+              onMouseEnter={e => { e.currentTarget.style.color = GOLD; e.currentTarget.style.background = "rgba(197,165,90,0.10)"; }}
+              onMouseLeave={e => { e.currentTarget.style.color = "rgba(240,234,216,0.85)"; e.currentTarget.style.background = "transparent"; }}
+              aria-label="Rechercher"
+            >
+              <Search size={19} strokeWidth={1.8} />
+            </button>
+
+            {/* Panier */}
+            <Link
+              to="/cart"
+              className="relative p-2 -mr-2 transition-colors duration-300"
+              style={{ color: "rgba(240,234,216,0.85)" }}
+              onMouseEnter={e => e.currentTarget.style.color = GOLD}
+              onMouseLeave={e => e.currentTarget.style.color = "rgba(240,234,216,0.85)"}
+            >
+              <ShoppingCart size={19} strokeWidth={1.5} />
+              {cartCount > 0 && (
+                <span
+                  className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center text-[9px] font-bold rounded-full px-1"
+                  style={{ background: GOLD, color: "#0c0a07" }}
+                >
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+          </div>
         </div>
       </motion.header>
 
-      {/* Menu mobile */}
+      {/* Menu mobile — SANS logo, avec texte de marque */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -115,23 +152,35 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-40 bg-[#0c0a07] flex flex-col"
+            className="fixed inset-0 z-40 flex flex-col"
+            style={{ background: "linear-gradient(180deg, #1a1408 0%, #0e0b06 100%)" }}
           >
-            <div className="flex items-center justify-between px-5 h-16 border-b border-gold/[0.12]">
-              <img
-                src="/assets/images/RSN2.png"
-                alt="Rassoul Shop Sn"
-                className="h-10 w-auto object-contain"
-                style={{ filter: "drop-shadow(0 0 6px rgba(197,165,90,0.4))" }}
-              />
+            {/* Header menu mobile : texte marque + croix */}
+            <div
+              className="flex items-center justify-between px-5 h-16"
+              style={{ borderBottom: "1px solid rgba(197,165,90,0.15)" }}
+            >
+              <span
+                className="font-serif font-bold text-xl tracking-[0.08em]"
+                style={{
+                  background: "linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                RASSOUL<span style={{ marginLeft: 4 }}>SHOP</span>
+              </span>
               <button
                 onClick={() => setMobileOpen(false)}
-                className="p-2 text-white/60 hover:text-white transition-colors"
+                className="p-2 transition-colors"
+                style={{ color: "rgba(240,234,216,0.60)" }}
               >
                 <X size={20} />
               </button>
             </div>
 
+            {/* Liens */}
             <div className="flex flex-col px-6 pt-8">
               {navLinks.map((link, i) => (
                 <motion.div
@@ -139,29 +188,44 @@ export default function Navbar() {
                   initial={{ opacity: 0, x: -16 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.04 + i * 0.06 }}
-                  className="border-b border-white/[0.07]"
+                  style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
                 >
                   <Link
                     to={link.path}
-                    className={`block py-5 font-serif text-2xl tracking-wide transition-colors ${
-                      location.pathname === link.path ? "text-gold" : "text-white/90 active:text-gold"
-                    }`}
+                    className="block py-5 font-serif text-2xl tracking-wide transition-colors"
+                    style={{ color: location.pathname === link.path ? GOLD : "rgba(240,234,216,0.90)" }}
                   >
                     {link.label}
                   </Link>
                 </motion.div>
               ))}
+
+              {/* Recherche dans le menu mobile */}
+              <motion.button
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.04 + navLinks.length * 0.06 }}
+                onClick={() => { setMobileOpen(false); setSearchOpen(true); }}
+                className="flex items-center gap-3 py-5 font-serif text-2xl tracking-wide transition-colors text-left"
+                style={{ color: "rgba(240,234,216,0.90)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+              >
+                <Search size={20} strokeWidth={1.5} />
+                Rechercher
+              </motion.button>
             </div>
 
+            {/* Panier en bas */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
+              transition={{ delay: 0.35 }}
               className="mt-auto px-6 pb-10"
             >
               <Link
                 to="/cart"
-                className="flex items-center gap-3 text-sm text-white/60 hover:text-gold transition-colors"
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center gap-3 text-sm transition-colors"
+                style={{ color: "rgba(240,234,216,0.60)" }}
               >
                 <ShoppingBag size={18} strokeWidth={1.5} />
                 <span>Panier {cartCount > 0 && `(${cartCount})`}</span>
