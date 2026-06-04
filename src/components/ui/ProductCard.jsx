@@ -8,7 +8,7 @@ import { ShoppingCart, Check } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 
-const CARD_BG = "linear-gradient(160deg, #38311f 0%, #2a2416 100%)";
+const CARD_BG = "#111010";
 const CARD_BORDER = "1px solid rgba(197,165,90,0.30)";
 const CARD_BORDER_HOVER = "1px solid rgba(212,186,120,0.65)";
 const GOLD = "#C8A84B";
@@ -58,8 +58,8 @@ export default function ProductCard({ product, index = 0 }) {
         {/* Gradient bas */}
         <div
           className="absolute inset-0 transition-opacity duration-400"
-          style={{
-            background: "linear-gradient(to top, rgba(30,22,10,0.65) 0%, transparent 55%)",
+        style={{
+          background: "linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 55%)",
             opacity: hovered ? 1 : 0.3,
           }}
         />
@@ -121,7 +121,7 @@ export default function ProductCard({ product, index = 0 }) {
       {/* ---- Infos ---- */}
       <div
         className="px-3.5 pt-3 pb-4 flex flex-col"
-        style={{ borderTop: "1px solid rgba(197,165,90,0.18)" }}
+        style={{ borderTop: "1px solid rgba(197,165,90,0.15)" }}
       >
         {/* Catégorie */}
         <p

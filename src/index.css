@@ -108,11 +108,11 @@
     font-weight: 700;
   }
 
-  /* Shimmer — fond brun chaud visible */
+  /* Shimmer skeleton */
   .shimmer {
     position: relative;
     overflow: hidden;
-    background: #2a2416;
+    background: #1a1a1a;
   }
   .shimmer::after {
     content: '';
@@ -175,12 +175,12 @@
     animation: shimmerSlide 1.6s ease-in-out infinite;
   }
 
-  /* Card premium — brun chaud visible */
+  /* Card premium — noir avec bordure gold */
   .card-premium {
     position: relative;
     border-radius: 1rem;
     overflow: hidden;
-    background: linear-gradient(160deg, #38311f 0%, #2a2416 100%);
+    background: #111010;
     border: 1px solid rgba(197, 165, 90, 0.25);
     transition: border-color 0.5s ease, transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.5s ease;
   }

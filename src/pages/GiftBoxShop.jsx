@@ -54,7 +54,7 @@ export default function GiftBoxShop() {
           /* Skeletons */
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="rounded-2xl overflow-hidden" style={{ background: "linear-gradient(160deg,#38311f,#2a2416)", border: "1px solid rgba(197,165,90,0.25)" }}>
+              <div key={i} className="rounded-2xl overflow-hidden" style={{ background: "#111010", border: "1px solid rgba(197,165,90,0.25)" }}>
                 <div className="aspect-square shimmer" />
                 <div className="px-3.5 py-3 space-y-2 border-t border-white/[0.05]">
                   <div className="h-2 shimmer rounded w-1/3" />
@@ -81,7 +81,7 @@ export default function GiftBoxShop() {
                 <Link
                   to={`/gift-boxes/${box.id}`}
                   className="group flex flex-col rounded-2xl overflow-hidden transition-all duration-400"
-                  style={{ background: "linear-gradient(160deg,#38311f,#2a2416)", border: "1px solid rgba(197,165,90,0.28)" }}
+                  style={{ background: "#111010", border: "1px solid rgba(197,165,90,0.28)" }}
                 >
                   {/* Image */}
                   <div className="relative w-full aspect-square overflow-hidden">
