@@ -108,7 +108,7 @@ export default function ProductCard({ product, index = 0 }) {
 
         {/* Prix — card fond blanc, écriture gold luisante, centrée */}
         <div
-          className="w-full rounded-lg px-3 py-2 flex flex-col items-center justify-center gap-0.5"
+          className="w-full rounded-lg px-3 py-2 flex items-center justify-center gap-2"
           style={{
             background: "rgba(255,255,255,0.92)",
             border: "1px solid rgba(255,255,255,0.70)",
@@ -117,17 +117,15 @@ export default function ProductCard({ product, index = 0 }) {
         >
           {hasPromo ? (
             <>
-              <span className="text-[10px] line-through text-center" style={{ color: "rgba(0,0,0,0.35)" }}>
+              <span className="text-[10px] line-through" style={{ color: "rgba(0,0,0,0.38)" }}>
                 {product.price.toLocaleString("fr-FR")} FCFA
               </span>
-              <span
-                className="text-gold-shine text-[15px] font-bold text-center"
-              >
+              <span className="text-[15px] font-bold" style={{ color: "#B38728" }}>
                 {product.promo_price.toLocaleString("fr-FR")} FCFA
               </span>
             </>
           ) : (
-            <span className="text-gold-shine text-[15px] font-bold text-center">
+            <span className="text-[15px] font-bold" style={{ color: "#B38728" }}>
               {product.price.toLocaleString("fr-FR")} FCFA
             </span>
           )}
