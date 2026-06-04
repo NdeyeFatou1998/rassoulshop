@@ -80,10 +80,10 @@ export default function GiftBoxShop() {
                 className="group flex flex-col rounded-xl overflow-hidden"
                 style={{ aspectRatio: "1 / 1", background: "#111010", border: "0.5px solid rgba(255,255,255,0.18)" }}
               >
-                {/* Image 60% */}
+                {/* Image 72% */}
                 <Link to={`/gift-boxes/${box.id}`}
                   className="relative block w-full flex-shrink-0 overflow-hidden"
-                  style={{ height: "60%" }}
+                  style={{ height: "72%" }}
                 >
                   <img
                     src={box.image || DEFAULT_IMG}
