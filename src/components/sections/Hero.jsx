@@ -53,7 +53,7 @@ export default function Hero({ imageSrc, title, subtitle }) {
       <div
         className="relative w-full"
         style={{
-          height: "clamp(380px, 62svh, 820px)",
+          height: "clamp(190px, 32svh, 420px)",
         }}
       >
         {/* Couche conic-gradient tournante (le contour doré) */}
