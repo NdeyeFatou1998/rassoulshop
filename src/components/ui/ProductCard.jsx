@@ -17,7 +17,6 @@ export default function ProductCard({ product, index = 0 }) {
 
   const hasPromo = product.promo_active && product.promo_price;
   const displayPrice = hasPromo ? product.promo_price : product.price;
-  const category = product.category_name || product.category;
 
   function handleQuickAdd(e) {
     e.preventDefault();
@@ -90,10 +89,6 @@ export default function ProductCard({ product, index = 0 }) {
 
         {/* Bloc texte éditorial en bas */}
         <div className="absolute inset-x-0 bottom-0 z-10 px-3.5 pb-3.5 pt-6">
-          {category && (
-            <p className="product-card-category mb-1.5 line-clamp-1">{category}</p>
-          )}
-
           <h3 className="product-card-title line-clamp-2 mb-2">{product.title}</h3>
 
           <div className="flex items-end justify-between gap-2">
@@ -102,38 +97,17 @@ export default function ProductCard({ product, index = 0 }) {
               <span className="product-card-price-unit"> FCFA</span>
             </span>
 
-            {/* Bouton ajout panier */}
+            {/* Bouton ajout panier — icône dorée seule */}
             <button
               onClick={handleQuickAdd}
-              className="shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 active:scale-90"
-              style={
-                justAdded
-                  ? { background: "#22c55e", color: "#fff" }
-                  : {
-                      background: "rgba(200,168,75,0.16)",
-                      color: GOLD,
-                      border: "1px solid rgba(200,168,75,0.55)",
-                      backdropFilter: "blur(6px)",
-                    }
-              }
-              onMouseEnter={(e) => {
-                if (!justAdded) {
-                  e.currentTarget.style.background = GOLD;
-                  e.currentTarget.style.color = "#0c0a07";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!justAdded) {
-                  e.currentTarget.style.background = "rgba(200,168,75,0.16)";
-                  e.currentTarget.style.color = GOLD;
-                }
-              }}
+              className="shrink-0 flex items-center justify-center transition-all duration-300 active:scale-90 hover:scale-110"
+              style={{ color: justAdded ? "#22c55e" : GOLD, filter: "drop-shadow(0 1px 5px rgba(0,0,0,0.6))" }}
               aria-label="Ajouter au panier"
             >
               {justAdded ? (
-                <Check size={15} strokeWidth={2.5} />
+                <Check size={26} strokeWidth={2.4} />
               ) : (
-                <ShoppingCart size={15} strokeWidth={1.8} />
+                <ShoppingCart size={26} strokeWidth={1.9} />
               )}
             </button>
           </div>
