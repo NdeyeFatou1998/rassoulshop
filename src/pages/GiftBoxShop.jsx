@@ -80,10 +80,8 @@ export default function GiftBoxShop() {
                 className="group flex flex-col rounded-xl overflow-hidden"
                 style={{ aspectRatio: "1 / 1", background: "#111010", border: "0.5px solid rgba(255,255,255,0.18)" }}
               >
-                {/* Image 78% */}
                 <Link to={`/gift-boxes/${box.id}`}
-                  className="relative block w-full flex-shrink-0 overflow-hidden"
-                  style={{ height: "78%" }}
+                  className="relative block w-full flex-1 min-h-0 overflow-hidden"
                 >
                   <img
                     src={box.image || DEFAULT_IMG}
@@ -105,16 +103,17 @@ export default function GiftBoxShop() {
                   </div>
                 </Link>
 
-                {/* Infos 22% */}
-                <div className="flex flex-col items-center justify-center gap-0.5 px-2 py-1"
-                  style={{ height: "22%", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+                <div
+                  className="flex flex-shrink-0 flex-col items-center justify-center gap-0.5 px-2 py-1.5 w-full min-h-[3.25rem]"
+                  style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
+                >
                   <h3
-                    className="w-full text-center text-[16px] md:text-[17px] font-semibold leading-snug line-clamp-2 px-1"
+                    className="w-full text-center text-[13px] md:text-[15px] font-semibold leading-[1.25] line-clamp-2 px-0.5"
                     style={{ color: "#f0ead8" }}
                   >
                     {box.name}
                   </h3>
-                  <p className="mt-1.5 text-[14px] md:text-[15px] font-bold text-center shrink-0" style={{ color: "#C8A84B" }}>
+                  <p className="mt-1 text-[12px] md:text-[14px] font-bold text-center shrink-0 leading-none" style={{ color: "#C8A84B" }}>
                     {(box.price || 0).toLocaleString("fr-FR")} FCFA
                   </p>
                 </div>

@@ -1,5 +1,5 @@
 /**
- * ProductCard — Card entièrement carrée, image 78%, info 22%
+ * ProductCard — Card carrée : image flexible, zone texte hauteur auto (noms non coupés)
  */
 
 import { useState } from "react";
@@ -37,11 +37,10 @@ export default function ProductCard({ product, index = 0 }) {
         border: "0.5px solid rgba(255,255,255,0.18)",
       }}
     >
-      {/* Image — 78% de la hauteur */}
+      {/* Image — occupe l'espace restant */}
       <Link
         to={`/product/${product.id}`}
-        className="relative block w-full overflow-hidden flex-shrink-0"
-        style={{ height: "78%" }}
+        className="relative block w-full flex-1 min-h-0 overflow-hidden"
       >
         <img
           src={product.image || "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg"}
@@ -97,21 +96,21 @@ export default function ProductCard({ product, index = 0 }) {
         </button>
       </Link>
 
-      {/* Infos — 22% de la hauteur */}
+      {/* Infos — hauteur selon le contenu */}
       <div
-        className="flex flex-col items-center justify-center gap-0.5 px-2 py-1"
-        style={{ height: "22%", borderTop: "1px solid rgba(255,255,255,0.08)" }}
+        className="flex flex-shrink-0 flex-col items-center justify-center gap-0.5 px-2 py-1.5 w-full min-h-[3.25rem]"
+        style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
       >
         {/* Nom produit */}
         <h3
-          className="w-full text-center text-[16px] md:text-[17px] font-semibold leading-snug line-clamp-2 px-1"
+          className="w-full text-center text-[13px] md:text-[15px] font-semibold leading-[1.25] line-clamp-2 px-0.5"
           style={{ color: "#f0ead8" }}
         >
           {product.title}
         </h3>
 
         {/* Prix */}
-        <p className="mt-1.5 text-[14px] md:text-[15px] font-bold text-center shrink-0" style={{ color: GOLD }}>
+        <p className="mt-1 text-[12px] md:text-[14px] font-bold text-center shrink-0 leading-none" style={{ color: GOLD }}>
           {(hasPromo ? product.promo_price : product.price).toLocaleString("fr-FR")} FCFA
         </p>
       </div>
