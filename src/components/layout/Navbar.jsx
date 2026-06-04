@@ -11,6 +11,9 @@ import SearchOverlay from "../ui/SearchOverlay";
 
 const GOLD = "#C8A84B";
 
+const BRAND_GRADIENT =
+  "linear-gradient(100deg, #BF953F 0%, #FCF6BA 38%, #D4AF37 58%, #C8A84B 72%, #FBF5B7 100%)";
+
 export default function Navbar() {
   const location = useLocation();
   const { cartCount } = useCart();
@@ -54,34 +57,48 @@ export default function Navbar() {
           background: "linear-gradient(to bottom, rgba(8,5,2,0.70) 0%, transparent 100%)",
         }}
       >
-        <div className="max-w-7xl mx-auto px-4 lg:px-10 flex items-center justify-between h-16 md:h-[76px]">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-10 flex items-center justify-between h-16 md:h-[76px]">
 
-          {/* Hamburger mobile */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 -ml-2 transition-colors"
-            style={{ color: "rgba(240,234,216,0.90)" }}
-            aria-label="Menu"
-          >
-            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
+          {/* Gauche : menu mobile + logo + nom de marque */}
+          <div className="flex items-center gap-1 sm:gap-2 min-w-0 shrink-0 justify-start">
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="md:hidden p-2 -ml-1 shrink-0 transition-colors"
+              style={{ color: "rgba(240,234,216,0.90)" }}
+              aria-label="Menu"
+            >
+              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
 
-          {/* Logo — centré mobile, gauche desktop */}
-          <Link
-            to="/"
-            className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex items-center"
-          >
-            <img
-              src="/assets/images/RSN2.png"
-              alt="Rassoul Shop Sn"
-              className="object-contain"
-              style={{
-                height: "clamp(44px, 6vw, 56px)",
-                width: "auto",
-                filter: "drop-shadow(0 2px 12px rgba(197,165,90,0.55)) brightness(1.05)",
-              }}
-            />
-          </Link>
+            <Link
+              to="/"
+              className="flex items-center gap-2 sm:gap-3 min-w-0 -ml-0.5 md:ml-0"
+            >
+              <img
+                src="/assets/images/RSN2.png"
+                alt="Rassoul Shop Sn"
+                className="object-contain shrink-0"
+                style={{
+                  height: "clamp(52px, 8vw, 72px)",
+                  width: "auto",
+                  filter: "drop-shadow(0 2px 14px rgba(197,165,90,0.6)) brightness(1.08)",
+                }}
+              />
+              <span
+                className="font-serif font-extrabold uppercase whitespace-nowrap leading-none tracking-[0.06em] sm:tracking-[0.1em]"
+                style={{
+                  fontSize: "clamp(0.72rem, 2.8vw, 1.15rem)",
+                  background: BRAND_GRADIENT,
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  textShadow: "0 0 24px rgba(197,165,90,0.25)",
+                }}
+              >
+                RASSOUL SHOP SN
+              </span>
+            </Link>
+          </div>
 
           {/* Navigation desktop */}
           <nav className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
@@ -161,15 +178,15 @@ export default function Navbar() {
               style={{ borderBottom: "1px solid rgba(197,165,90,0.15)" }}
             >
               <span
-                className="font-serif font-bold text-xl tracking-[0.08em]"
+                className="font-serif font-extrabold text-lg tracking-[0.1em] uppercase"
                 style={{
-                  background: "linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7)",
+                  background: BRAND_GRADIENT,
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
                 }}
               >
-                RASSOUL<span style={{ marginLeft: 4 }}>SHOP</span>
+                RASSOUL SHOP SN
               </span>
               <button
                 onClick={() => setMobileOpen(false)}

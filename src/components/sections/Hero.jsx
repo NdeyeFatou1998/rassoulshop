@@ -67,7 +67,7 @@ export default function Hero({ imageSrc, title, subtitle }) {
 
         {/* ---- Contenu intérieur (image + overlays + texte) ---- */}
         <div
-          className="absolute overflow-hidden flex items-center justify-center"
+          className="absolute overflow-hidden"
           style={{ inset: "3px", borderRadius: HERO_R_IN }}
         >
           {/* Image avec parallax */}
@@ -90,23 +90,31 @@ export default function Hero({ imageSrc, title, subtitle }) {
           <div className="absolute inset-0 bg-gradient-to-b from-noir-950/45 via-noir-950/20 to-noir-950/80 pointer-events-none" />
           <div className="absolute inset-0 bg-noir-950/10 pointer-events-none" />
 
-          {/* L'art d'offrir — collé tout en haut de l'image */}
-          <motion.p
+          {/* L'art d'offrir — en haut + trait gold */}
+          <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute top-4 left-0 right-0 z-10 text-center text-white font-semibold uppercase tracking-[0.32em]"
-            style={{ fontSize: "clamp(0.55rem, 1.5vw, 0.8rem)" }}
+            className="absolute top-4 left-0 right-0 z-10 text-center px-6"
           >
-            L'art d'offrir
-          </motion.p>
+            <p
+              className="text-white font-semibold uppercase tracking-[0.32em]"
+              style={{ fontSize: "clamp(0.55rem, 1.5vw, 0.8rem)" }}
+            >
+              L'art d'offrir
+            </p>
+            <div
+              className="mx-auto mt-2 h-px w-16"
+              style={{ background: "linear-gradient(90deg, transparent, #C8A84B, transparent)" }}
+            />
+          </motion.div>
 
-          {/* Slogan — centré verticalement */}
+          {/* Slogan — en bas de la bannière */}
           <motion.div
             variants={stagger}
             initial="hidden"
             animate="show"
-            className="relative z-10 text-center px-6 sm:px-10 max-w-3xl mx-auto"
+            className="absolute bottom-4 left-0 right-0 z-10 text-center px-6 sm:px-10"
           >
             <motion.p
               variants={fadeUp}

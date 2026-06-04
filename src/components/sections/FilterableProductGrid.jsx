@@ -403,9 +403,6 @@ export default function FilterableProductGrid({
 
         {/* ---- Titre avant les catégories ---- */}
         <div className="text-center mb-6">
-          <p className="text-[9px] uppercase tracking-[0.30em] font-semibold mb-1" style={{ color: "#C8A84B" }}>
-            Notre sélection
-          </p>
           <h2 className="font-serif text-white font-semibold" style={{ fontSize: "clamp(1.1rem, 3vw, 1.6rem)" }}>
             Découvrez nos catégories
           </h2>
