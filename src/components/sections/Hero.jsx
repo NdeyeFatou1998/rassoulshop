@@ -99,30 +99,28 @@ export default function Hero({ imageSrc, title, subtitle }) {
             animate="show"
             className="relative z-10 text-center px-6 sm:px-10 max-w-3xl mx-auto"
           >
-            {/* Kicker */}
-            <motion.div variants={fadeUp} className="flex items-center justify-center gap-4 mb-5">
-              <div className="w-8 h-px bg-gold/50" />
-              <span className="text-[10px] uppercase tracking-[0.4em] text-gold/90 font-medium">
-                L'art d'offrir
-              </span>
-              <div className="w-8 h-px bg-gold/50" />
-            </motion.div>
-
             {/* Titre */}
             <motion.h1
               variants={fadeUp}
               className="font-serif font-medium leading-[1.06] tracking-tight text-white
                          text-[2.2rem] sm:text-5xl md:text-6xl lg:text-[5rem]"
             >
-              {title || "Cadeaux d'exception"}
+              {title || "L'art d'offrir"}
             </motion.h1>
 
-            {/* Sous-titre */}
+            {/* Sous-titre — visible, gras, gold */}
             <motion.p
               variants={fadeUp}
-              className="mt-4 md:mt-5 text-sm md:text-[15px] text-white/80 max-w-md mx-auto leading-relaxed font-light"
+              className="mt-5 md:mt-6 text-base md:text-xl font-semibold max-w-lg mx-auto leading-relaxed tracking-wide"
+              style={{
+                background: "linear-gradient(90deg, #BF953F, #FCF6BA, #C8A84B)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                textShadow: "none",
+              }}
             >
-              {subtitle || "Peluches, montres, bijoux et coffrets premium — Dakar, Sénégal."}
+              {subtitle || "Offrez plus qu'un cadeau, offrez une émotion !"}
             </motion.p>
 
             {/* CTAs */}
