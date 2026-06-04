@@ -108,48 +108,22 @@ export default function Hero({ imageSrc, title, subtitle }) {
               <div className="w-8 h-px bg-gold/50" />
             </motion.div>
 
-            {/* Titre */}
-            <motion.h1
-              variants={fadeUp}
-              className="font-serif font-medium leading-[1.06] tracking-tight text-white
-                         text-[2.2rem] sm:text-5xl md:text-6xl lg:text-[5rem]"
-            >
-              {title || "L'art d'offrir"}
-            </motion.h1>
-
-            {/* Sous-titre — visible, gras, gold */}
+            {/* Slogan premium — grand, serif élégant, gradient gold */}
             <motion.p
               variants={fadeUp}
-              className="mt-5 md:mt-6 text-base md:text-xl font-semibold max-w-lg mx-auto leading-relaxed tracking-wide"
+              className="mt-6 md:mt-8 font-serif max-w-xl mx-auto leading-tight tracking-wide"
               style={{
-                background: "linear-gradient(90deg, #BF953F, #FCF6BA, #C8A84B)",
+                fontSize: "clamp(1.5rem, 4vw, 2.6rem)",
+                fontWeight: 600,
+                fontStyle: "italic",
+                background: "linear-gradient(100deg, #BF953F 0%, #FCF6BA 45%, #C8A84B 70%, #FBF5B7 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
-                textShadow: "none",
               }}
             >
               {subtitle || "Offrez plus qu'un cadeau, offrez une émotion !"}
             </motion.p>
-
-            {/* CTAs */}
-            <motion.div
-              variants={fadeUp}
-              className="mt-8 md:mt-9 flex items-center justify-center gap-3 md:gap-4 flex-wrap"
-            >
-              <Link
-                to="/shop"
-                className="px-7 py-3.5 text-[11px] uppercase tracking-[0.18em] font-semibold bg-gold text-white rounded-full hover:bg-gold-light active:scale-95 transition-all duration-300 shadow-[0_4px_20px_rgba(197,165,90,0.35)]"
-              >
-                Découvrir
-              </Link>
-              <Link
-                to="/gift-boxes"
-                className="px-7 py-3.5 text-[11px] uppercase tracking-[0.18em] font-semibold border border-white/30 text-white/80 rounded-full hover:border-gold/60 hover:text-white active:scale-95 transition-all duration-300"
-              >
-                Coffrets
-              </Link>
-            </motion.div>
           </motion.div>
 
           {/* ---- Scroll indicator ---- */}
