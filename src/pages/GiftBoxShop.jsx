@@ -78,12 +78,12 @@ export default function GiftBoxShop() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.45, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
                 className="group flex flex-col rounded-xl overflow-hidden"
-                style={{ background: "#111010", border: "0.5px solid rgba(255,255,255,0.18)" }}
+                style={{ aspectRatio: "1 / 1", background: "#111010", border: "0.5px solid rgba(255,255,255,0.18)" }}
               >
-                {/* Image carrée */}
+                {/* Image 68% */}
                 <Link to={`/gift-boxes/${box.id}`}
                   className="relative block w-full flex-shrink-0 overflow-hidden"
-                  style={{ aspectRatio: "1 / 1" }}
+                  style={{ height: "68%" }}
                 >
                   <img
                     src={box.image || DEFAULT_IMG}
@@ -100,29 +100,21 @@ export default function GiftBoxShop() {
                   )}
                 </Link>
 
-                {/* Infos EN BAS — tout centré */}
-                <div className="px-2.5 pt-2.5 pb-3 flex flex-col items-center gap-1.5">
-                  <p className="text-[8px] uppercase tracking-[0.18em] font-bold text-center" style={{ color: "#C8A84B" }}>
-                    Coffret cadeau
+                {/* Infos 32% */}
+                <div className="flex flex-col items-center justify-center gap-0.5 px-2"
+                  style={{ height: "32%", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+                  <p className="text-[7px] uppercase tracking-[0.15em] font-bold text-center" style={{ color: "#C8A84B" }}>
+                    Coffret
                   </p>
-                  {/* Nom — contour blanc */}
-                  <div className="w-full rounded-lg px-3 py-2 text-center"
-                    style={{
-                      background: "rgba(255,255,255,0.04)",
-                      border: "1px solid rgba(255,255,255,0.55)",
-                      boxShadow: "0 0 8px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.08)",
-                    }}
-                  >
-                    <h3 className="text-[13px] md:text-[14px] font-semibold leading-tight line-clamp-2" style={{ color: "#f0ead8" }}>
+                  <div className="w-full rounded px-2 py-1 text-center"
+                    style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.45)" }}>
+                    <h3 className="text-[10px] md:text-[11px] font-semibold leading-tight line-clamp-1" style={{ color: "#f0ead8" }}>
                       {box.name}
                     </h3>
                   </div>
-                  {/* Prix — fond blanc, gold luisant */}
-                  <div className="flex items-center justify-center">
-                    <span className="text-[15px] font-bold" style={{ color: "#C8A84B" }}>
-                      {(box.price || 0).toLocaleString("fr-FR")} FCFA
-                    </span>
-                  </div>
+                  <p className="text-[11px] md:text-[12px] font-bold text-center" style={{ color: "#C8A84B" }}>
+                    {(box.price || 0).toLocaleString("fr-FR")} FCFA
+                  </p>
                 </div>
               </motion.div>
             ))}

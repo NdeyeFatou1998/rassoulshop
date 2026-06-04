@@ -1,5 +1,5 @@
 /**
- * ProductCard — Image carrée en haut, texte en bas
+ * ProductCard — Card entièrement carrée, image 70%, info 30%
  */
 
 import { useState } from "react";
@@ -31,13 +31,17 @@ export default function ProductCard({ product, index = 0 }) {
       viewport={{ once: true, margin: "-20px" }}
       transition={{ duration: 0.45, delay: index * 0.04, ease: [0.22, 1, 0.36, 1] }}
       className="group flex flex-col rounded-xl overflow-hidden"
-      style={{ background: "#111010", border: "0.5px solid rgba(255,255,255,0.18)" }}
+      style={{
+        aspectRatio: "1 / 1",
+        background: "#111010",
+        border: "0.5px solid rgba(255,255,255,0.18)",
+      }}
     >
-      {/* ---- Image carrée ---- */}
+      {/* Image — 68% de la hauteur */}
       <Link
         to={`/product/${product.id}`}
-        className="relative block w-full flex-shrink-0 overflow-hidden"
-        style={{ aspectRatio: "1 / 1" }}
+        className="relative block w-full overflow-hidden flex-shrink-0"
+        style={{ height: "68%" }}
       >
         <img
           src={product.image || "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg"}
@@ -47,24 +51,24 @@ export default function ProductCard({ product, index = 0 }) {
         />
 
         {/* Badges haut gauche */}
-        <div className="absolute top-2 left-2 flex flex-col gap-1 z-10">
+        <div className="absolute top-1.5 left-1.5 flex flex-col gap-1 z-10">
           {product.badge && (
-            <span className="px-2 py-[3px] text-[8px] uppercase tracking-[0.12em] font-bold rounded-full"
+            <span className="px-1.5 py-[2px] text-[7px] uppercase tracking-[0.10em] font-bold rounded-full"
               style={{ background: GOLD, color: "#0c0a07" }}>
               {product.badge}
             </span>
           )}
           {product.is_vip && (
-            <span className="inline-flex items-center gap-0.5 text-[7px] uppercase tracking-[0.12em] font-bold px-2 py-[3px] rounded-full"
-              style={{ background: "rgba(0,0,0,0.70)", color: GOLD, border: `1px solid ${GOLD}`, backdropFilter: "blur(4px)" }}>
+            <span className="text-[7px] uppercase font-bold px-1.5 py-[2px] rounded-full"
+              style={{ background: "rgba(0,0,0,0.70)", color: GOLD, border: `1px solid ${GOLD}` }}>
               ★ VIP
             </span>
           )}
         </div>
 
-        {/* Badge promo haut droite */}
+        {/* Badge promo */}
         {hasPromo && (
-          <span className="absolute top-2 right-2 z-10 text-[9px] font-bold px-2 py-0.5 rounded-full"
+          <span className="absolute top-1.5 right-1.5 z-10 text-[8px] font-bold px-1.5 py-0.5 rounded-full"
             style={{ background: "#e53e3e", color: "#fff" }}>
             -{Math.round((1 - product.promo_price / product.price) * 100)}%
           </span>
@@ -73,46 +77,44 @@ export default function ProductCard({ product, index = 0 }) {
         {/* Bouton panier */}
         <button
           onClick={handleQuickAdd}
-          className="absolute bottom-2 right-2 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 active:scale-95 opacity-100 md:opacity-0 md:group-hover:opacity-100"
+          className="absolute bottom-1.5 right-1.5 z-10 w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 active:scale-95 opacity-100 md:opacity-0 md:group-hover:opacity-100"
           style={justAdded
             ? { background: "#22c55e", color: "#fff" }
-            : { background: "rgba(0,0,0,0.75)", backdropFilter: "blur(6px)", color: "#fff", border: "1px solid rgba(255,255,255,0.18)" }
+            : { background: "rgba(0,0,0,0.75)", color: "#fff", border: "1px solid rgba(255,255,255,0.15)" }
           }
           aria-label="Ajouter au panier"
         >
-          {justAdded ? <Check size={12} strokeWidth={2.5} /> : <ShoppingCart size={12} strokeWidth={1.8} />}
+          {justAdded ? <Check size={11} strokeWidth={2.5} /> : <ShoppingCart size={11} strokeWidth={1.8} />}
         </button>
       </Link>
 
-      {/* ---- Infos EN BAS — tout centré ---- */}
-      <div className="px-2.5 pt-2.5 pb-3 flex flex-col items-center gap-1.5">
-
+      {/* Infos — 32% de la hauteur, tout centré */}
+      <div
+        className="flex flex-col items-center justify-center gap-0.5 px-2"
+        style={{ height: "32%", borderTop: "1px solid rgba(255,255,255,0.08)" }}
+      >
         {/* Catégorie */}
-        <p className="text-[8px] uppercase tracking-[0.18em] font-bold text-center" style={{ color: GOLD }}>
+        <p className="text-[7px] uppercase tracking-[0.15em] font-bold text-center" style={{ color: GOLD }}>
           {product.category_name || product.category || ""}
         </p>
 
-        {/* Mini-card contour BLANC — nom uniquement */}
+        {/* Nom — mini-card contour blanc */}
         <div
-          className="w-full rounded-lg px-3 py-2 text-center"
+          className="w-full rounded px-2 py-1 text-center"
           style={{
-            background: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.55)",
-            boxShadow: "0 0 8px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.08)",
+            background: "rgba(255,255,255,0.03)",
+            border: "1px solid rgba(255,255,255,0.45)",
           }}
         >
-          <h3 className="text-[13px] md:text-[14px] font-semibold leading-tight line-clamp-2" style={{ color: "#f0ead8" }}>
+          <h3 className="text-[10px] md:text-[11px] font-semibold leading-tight line-clamp-1" style={{ color: "#f0ead8" }}>
             {product.title}
           </h3>
         </div>
 
-        {/* Prix — card fond blanc, écriture gold luisante, centrée */}
-        <div className="flex items-center justify-center">
-          <span className="text-[15px] font-bold" style={{ color: "#C8A84B" }}>
-            {(hasPromo ? product.promo_price : product.price).toLocaleString("fr-FR")} FCFA
-          </span>
-        </div>
-
+        {/* Prix */}
+        <p className="text-[11px] md:text-[12px] font-bold text-center" style={{ color: GOLD }}>
+          {(hasPromo ? product.promo_price : product.price).toLocaleString("fr-FR")} FCFA
+        </p>
       </div>
     </motion.article>
   );
