@@ -401,6 +401,17 @@ export default function FilterableProductGrid({
           </div>
         )}
 
+        {/* ---- Titre avant les catégories ---- */}
+        <div className="text-center mb-6">
+          <p className="text-[9px] uppercase tracking-[0.30em] font-semibold mb-1" style={{ color: "#C8A84B" }}>
+            Notre sélection
+          </p>
+          <h2 className="font-serif text-white font-semibold" style={{ fontSize: "clamp(1.1rem, 3vw, 1.6rem)" }}>
+            Découvrez nos catégories
+          </h2>
+          <div className="mx-auto mt-2 h-px w-16" style={{ background: "linear-gradient(90deg, transparent, #C8A84B, transparent)" }} />
+        </div>
+
         {/* ---- Bande de squircles — répétée 10× pour défilement infini ---- */}
         <div className="flex gap-5 md:gap-8 overflow-x-auto no-scrollbar pb-8 mb-6 md:mb-10">
           {Array.from({ length: 10 }).flatMap((_, rep) =>
