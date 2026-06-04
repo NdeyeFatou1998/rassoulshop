@@ -80,10 +80,10 @@ export default function GiftBoxShop() {
                 className="group flex flex-col rounded-xl overflow-hidden"
                 style={{ aspectRatio: "1 / 1", background: "#111010", border: "0.5px solid rgba(255,255,255,0.18)" }}
               >
-                {/* Image 72% */}
+                {/* Image 78% */}
                 <Link to={`/gift-boxes/${box.id}`}
                   className="relative block w-full flex-shrink-0 overflow-hidden"
-                  style={{ height: "72%" }}
+                  style={{ height: "78%" }}
                 >
                   <img
                     src={box.image || DEFAULT_IMG}
@@ -105,9 +105,9 @@ export default function GiftBoxShop() {
                   </div>
                 </Link>
 
-                {/* Infos 28% */}
-                <div className="flex flex-col items-center justify-center gap-1 px-2.5 py-1.5"
-                  style={{ height: "28%", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+                {/* Infos 22% */}
+                <div className="flex flex-col items-center justify-center gap-0.5 px-2 py-1"
+                  style={{ height: "22%", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
                   <h3
                     className="w-full text-center text-[16px] md:text-[17px] font-semibold leading-snug line-clamp-2 px-1"
                     style={{ color: "#f0ead8" }}
