@@ -94,7 +94,7 @@ export default function ProductCard({ product, index = 0 }) {
         style={{ height: "32%", borderTop: "1px solid rgba(255,255,255,0.08)" }}
       >
         {/* Catégorie */}
-        <p className="text-[7px] uppercase tracking-[0.15em] font-bold text-center" style={{ color: GOLD }}>
+        <p className="text-[8px] uppercase tracking-[0.15em] font-bold text-center" style={{ color: GOLD }}>
           {product.category_name || product.category || ""}
         </p>
 
@@ -106,13 +106,13 @@ export default function ProductCard({ product, index = 0 }) {
             border: "1px solid rgba(255,255,255,0.45)",
           }}
         >
-          <h3 className="text-[10px] md:text-[11px] font-semibold leading-tight line-clamp-1" style={{ color: "#f0ead8" }}>
+          <h3 className="text-[12px] md:text-[13px] font-semibold leading-tight line-clamp-1" style={{ color: "#f0ead8" }}>
             {product.title}
           </h3>
         </div>
 
         {/* Prix */}
-        <p className="text-[11px] md:text-[12px] font-bold text-center" style={{ color: GOLD }}>
+        <p className="text-[12px] md:text-[13px] font-bold text-center" style={{ color: GOLD }}>
           {(hasPromo ? product.promo_price : product.price).toLocaleString("fr-FR")} FCFA
         </p>
       </div>

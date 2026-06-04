@@ -311,7 +311,7 @@ export default function FilterableProductGrid({
 
   return (
     <section className="py-10 md:py-14" style={{ background: "transparent" }}>
-      <div className="max-w-7xl mx-auto px-5 lg:px-10">
+      <div className="max-w-7xl mx-auto px-2 md:px-5 lg:px-10">
 
         {/* ---- Barre recherche + filtre prix (Shop uniquement) ---- */}
         {showFilters && (
@@ -429,7 +429,7 @@ export default function FilterableProductGrid({
 
         {/* ---- Grille produits ---- */}
         {loading ? (
-          <div className="grid grid-cols-2 gap-3 md:gap-4">
+          <div className="grid grid-cols-2 gap-2 md:gap-3">
             {Array.from({ length: 4 }).map((_, i) => (
               <div key={i}>
                 <div className="aspect-square shimmer rounded-2xl" />
@@ -455,7 +455,7 @@ export default function FilterableProductGrid({
                   {/* Grille du chunk */}
                   <motion.div
                     layout
-                    className="grid grid-cols-2 gap-3 md:gap-4"
+                    className="grid grid-cols-2 gap-2 md:gap-3"
                   >
                     <AnimatePresence mode="popLayout">
                       {chunk.map((product, i) => (
