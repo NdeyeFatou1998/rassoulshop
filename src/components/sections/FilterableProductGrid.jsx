@@ -310,7 +310,7 @@ export default function FilterableProductGrid({
   const hasActiveFilters = search.trim() !== "" || applied !== null;
 
   return (
-    <section className="pt-2 pb-10 md:pt-4 md:pb-14" style={{ background: "transparent" }}>
+    <section className="pt-6 pb-10 md:pt-10 md:pb-14" style={{ background: "transparent" }}>
       <div className="max-w-7xl mx-auto px-1 md:px-4 lg:px-8">
 
         {/* ---- Barre recherche + filtre prix (Shop uniquement) ---- */}
@@ -402,7 +402,7 @@ export default function FilterableProductGrid({
         )}
 
         {/* ---- Titre avant les catégories ---- */}
-        <div className={`text-center mb-4 ${showFilters ? "-mt-1" : "-mt-5"}`}>
+        <div className={`text-center mb-5 ${showFilters ? "mt-4" : "mt-8 md:mt-12"}`}>
           <h2 className="font-serif text-white font-semibold" style={{ fontSize: "clamp(1.1rem, 3vw, 1.6rem)" }}>
             Découvrez nos catégories
           </h2>
