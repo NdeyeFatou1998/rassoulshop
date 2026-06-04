@@ -46,7 +46,7 @@ export default function Hero({ imageSrc, title, subtitle }) {
     /* ---- Section wrapper : fond noir + padding pour laisser voir le contour ---- */
     <section
       ref={sectionRef}
-      className="bg-[#080807] px-3 md:px-5 pt-[72px] md:pt-[84px] pb-4 md:pb-6"
+      className="bg-[#0e0d0b] px-3 md:px-5 pt-[72px] md:pt-[84px] pb-4 md:pb-6"
     >
       {/* ---- Squircle géant avec spinning border ---- */}
       <div
@@ -119,7 +119,7 @@ export default function Hero({ imageSrc, title, subtitle }) {
             {/* Sous-titre */}
             <motion.p
               variants={fadeUp}
-              className="mt-4 md:mt-5 text-sm md:text-[15px] text-white/50 max-w-md mx-auto leading-relaxed font-light"
+              className="mt-4 md:mt-5 text-sm md:text-[15px] text-white/80 max-w-md mx-auto leading-relaxed font-light"
             >
               {subtitle || "Peluches, montres, bijoux et coffrets premium — Dakar, Sénégal."}
             </motion.p>
@@ -154,7 +154,7 @@ export default function Hero({ imageSrc, title, subtitle }) {
             <motion.div
               animate={{ y: [0, 7, 0] }}
               transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-              className="text-white/22"
+              className="text-white/45"
             >
               <ArrowDown size={18} strokeWidth={1} />
             </motion.div>

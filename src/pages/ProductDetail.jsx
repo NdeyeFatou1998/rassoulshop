@@ -173,7 +173,7 @@ export default function ProductDetail() {
           >
             <div
               ref={imgRef}
-              className="rounded-2xl overflow-hidden aspect-[3/4] bg-noir-800 border border-white/[0.05]"
+              className="rounded-2xl overflow-hidden aspect-[3/4] bg-[#1a1815] border border-white/[0.10]"
             >
               <img
                 src={
@@ -255,7 +255,7 @@ export default function ProductDetail() {
             })()}
 
             {/* Description */}
-            <motion.p variants={fadeUp} className="text-[13px] text-cream/50 leading-relaxed mb-6 md:mb-8 max-w-lg">
+            <motion.p variants={fadeUp} className="text-[13px] text-cream/75 leading-relaxed mb-6 md:mb-8 max-w-lg">
               {product.description}
             </motion.p>
 
@@ -266,7 +266,7 @@ export default function ProductDetail() {
                   <div key={type.id}>
                     {/* Label du type + valeur sélectionnée */}
                     <div className="flex items-center gap-2 mb-2.5">
-                      <span className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-semibold">
+                      <span className="text-[10px] uppercase tracking-[0.2em] text-white/65 font-semibold">
                         {type.name}
                       </span>
                       {selectedVariants[type.id] && (
@@ -322,7 +322,7 @@ export default function ProductDetail() {
                             className={`px-4 py-2 rounded-full text-[11px] font-medium border transition-all duration-200 ${
                               isSelected
                                 ? "border-gold bg-gold/10 text-gold shadow-[0_0_10px_rgba(197,165,90,0.2)]"
-                                : "border-white/10 text-white/50 hover:border-white/30 hover:text-white/80"
+                                : "border-white/15 text-white/65 hover:border-white/40 hover:text-white/90"
                             }`}
                           >
                             {opt.name}
@@ -341,7 +341,7 @@ export default function ProductDetail() {
             {/* ---- Compteur quantité + Bouton Ajouter ---- */}
             <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 md:gap-4 mb-6">
               {/* Compteur */}
-              <div className="flex items-center border border-white/[0.08] rounded-full self-start">
+              <div className="flex items-center border border-white/[0.15] rounded-full self-start">
                 <button
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                   className="w-11 h-11 flex items-center justify-center text-cream/50 hover:text-cream active:scale-90 transition-all"
@@ -380,7 +380,7 @@ export default function ProductDetail() {
             </motion.div>
 
             {/* Badges de confiance */}
-            <motion.div variants={fadeUp} className="flex items-center gap-5 text-[10px] text-muted/60">
+            <motion.div variants={fadeUp} className="flex items-center gap-5 text-[10px] text-muted/80">
               <span className="flex items-center gap-1.5"><Truck size={12} /> Livraison rapide</span>
               <span className="flex items-center gap-1.5"><Shield size={12} /> Paiement sécurisé</span>
             </motion.div>

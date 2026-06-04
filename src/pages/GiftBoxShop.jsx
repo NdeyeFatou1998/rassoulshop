@@ -39,7 +39,7 @@ export default function GiftBoxShop() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#080807]">
+    <div className="min-h-screen bg-[#0e0d0b]">
       {/* ---- Header ---- */}
       <section className="pt-20 md:pt-24 pb-5 max-w-7xl mx-auto px-5 lg:px-10 text-center">
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
@@ -54,7 +54,7 @@ export default function GiftBoxShop() {
           /* Skeletons */
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="rounded-2xl overflow-hidden bg-[#0f0f0e] border border-white/[0.07]">
+              <div key={i} className="rounded-2xl overflow-hidden bg-[#181612] border border-white/[0.10]">
                 <div className="aspect-square shimmer" />
                 <div className="px-3.5 py-3 space-y-2 border-t border-white/[0.05]">
                   <div className="h-2 shimmer rounded w-1/3" />
@@ -66,8 +66,8 @@ export default function GiftBoxShop() {
           </div>
         ) : giftBoxes.length === 0 ? (
           <div className="text-center py-24">
-            <Gift size={40} className="mx-auto mb-4 text-white/10" />
-            <p className="text-white/30 text-sm">Aucun coffret disponible pour le moment</p>
+            <Gift size={40} className="mx-auto mb-4 text-white/30" />
+            <p className="text-white/60 text-sm">Aucun coffret disponible pour le moment</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
@@ -81,8 +81,8 @@ export default function GiftBoxShop() {
                 <Link
                   to={`/gift-boxes/${box.id}`}
                   className="group flex flex-col rounded-2xl overflow-hidden
-                             bg-[#0f0f0e] border border-white/[0.07]
-                             hover:border-gold/25 hover:shadow-[0_0_24px_rgba(197,165,90,0.08)]
+                             bg-[#181612] border border-white/[0.10]
+                             hover:border-gold/40 hover:shadow-[0_4px_32px_rgba(197,165,90,0.12)]
                              transition-all duration-400"
                 >
                   {/* Image */}
@@ -108,25 +108,25 @@ export default function GiftBoxShop() {
                   </div>
 
                   {/* Infos */}
-                  <div className="px-3.5 pt-3 pb-3.5 border-t border-white/[0.05]">
-                    <p className="text-[8px] uppercase tracking-[0.22em] text-gold/70 font-semibold mb-1.5">
+                  <div className="px-3.5 pt-3 pb-4 border-t border-white/[0.07]">
+                    <p className="text-[8px] uppercase tracking-[0.22em] text-gold font-semibold mb-1.5 opacity-85">
                       Coffret cadeau
                     </p>
-                    <h3 className="text-[12px] font-medium text-white/90 leading-snug line-clamp-2
+                    <h3 className="text-[13px] font-semibold text-white/95 leading-snug line-clamp-2
                                    group-hover:text-white transition-colors duration-300">
                       {box.name}
                     </h3>
                     {/* Nombre d'articles */}
                     {box.items?.length > 0 && (
-                      <p className="text-[10px] text-white/30 mt-1">
+                      <p className="text-[10px] text-white/50 mt-1">
                         {box.items.length} article{box.items.length > 1 ? "s" : ""}
                       </p>
                     )}
                     {/* Prix */}
-                    <div className="mt-2.5 pt-2.5 border-t border-white/[0.05]">
-                      <span className="text-[13px] font-semibold text-white/90 leading-none">
+                    <div className="mt-3 pt-2.5 border-t border-white/[0.07]">
+                      <span className="text-[15px] font-bold text-white leading-none">
                         {(box.price || 0).toLocaleString("fr-FR")}
-                        <span className="text-[8px] font-normal text-white/30 ml-0.5">FCFA</span>
+                        <span className="text-[9px] font-normal text-white/45 ml-0.5">FCFA</span>
                       </span>
                     </div>
                   </div>

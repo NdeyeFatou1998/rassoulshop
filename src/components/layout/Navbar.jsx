@@ -36,14 +36,14 @@ export default function Navbar() {
 
   /* Classes dark — toujours blanc sur fond noir */
   const headerBg = scrolled
-    ? "bg-noir-950/90 backdrop-blur-xl border-b border-white/[0.05] shadow-[0_1px_30px_rgba(0,0,0,0.5)]"
+    ? "bg-[#0e0d0b]/92 backdrop-blur-xl border-b border-white/[0.08] shadow-[0_1px_30px_rgba(0,0,0,0.5)]"
     : "bg-transparent";
 
   const logoColor = "text-white hover:text-gold";
-  const linkBase  = "text-white/45 hover:text-white";
+  const linkBase  = "text-white/70 hover:text-white";
   const linkActive = "text-white";
-  const iconColor  = "text-white/45 hover:text-white";
-  const burgerColor = "text-white/60 hover:text-white";
+  const iconColor  = "text-white/70 hover:text-white";
+  const burgerColor = "text-white/75 hover:text-white";
 
   const navLinks = [
     { label: "Accueil", path: "/" },
@@ -156,7 +156,7 @@ export default function Navbar() {
                   <Link
                     to={link.path}
                     className={`block py-5 font-serif text-2xl tracking-wide transition-colors ${
-                      location.pathname === link.path ? "text-gold" : "text-white/70 active:text-gold"
+                      location.pathname === link.path ? "text-gold" : "text-white/85 active:text-gold"
                     }`}
                   >
                     {link.label}
@@ -174,7 +174,7 @@ export default function Navbar() {
             >
               <Link
                 to="/cart"
-                className="flex items-center gap-3 text-sm text-white/30 hover:text-gold transition-colors"
+                className="flex items-center gap-3 text-sm text-white/55 hover:text-gold transition-colors"
               >
                 <ShoppingBag size={18} strokeWidth={1.5} />
                 <span>Panier {cartCount > 0 && `(${cartCount})`}</span>
