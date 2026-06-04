@@ -17,8 +17,8 @@ export default function Home() {
       {/* ---- Hero encadré avec spinning border ---- */}
       <Hero
         imageSrc="/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg"
-        title="Cadeaux d'exception"
-        subtitle="Peluches, montres, bijoux et coffrets premium — Dakar, Sénégal."
+        title="L'art d'offrir"
+        subtitle="Offrez plus qu'un cadeau, offrez une émotion !"
       />
 
       {/* ---- Bande défilante marketing ---- */}
