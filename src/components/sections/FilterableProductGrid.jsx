@@ -77,7 +77,7 @@ function CategorySquircle({ label, image, isActive, onClick }) {
         className={`relative transition-transform duration-300 ${
           isActive ? "scale-110" : "scale-100 group-hover:scale-[1.05]"
         }`}
-        style={{ width: 68, height: 68 }}
+        style={{ width: 88, height: 88 }}
       >
         {/* ---- Couche contour doré tournant ---- */}
         {/* conic-gradient simulant un arc lumineux (~35°) qui tourne */}
@@ -123,10 +123,10 @@ function CategorySquircle({ label, image, isActive, onClick }) {
 
       {/* ---- Label ---- */}
       <span
-        className={`text-[10px] uppercase tracking-[0.17em] font-semibold whitespace-nowrap transition-colors duration-300 ${
+        className={`text-[11px] uppercase tracking-[0.15em] font-semibold whitespace-nowrap transition-colors duration-300 ${
           isActive
             ? "text-gold"
-            : "text-white/60 group-hover:text-white/85"
+            : "text-white/65 group-hover:text-white/90"
         }`}
       >
         {label}
@@ -401,17 +401,19 @@ export default function FilterableProductGrid({
           </div>
         )}
 
-        {/* ---- Bande de squircles ---- */}
-        <div className="flex gap-5 md:gap-7 overflow-x-auto no-scrollbar pb-8 mb-6 md:mb-10 md:justify-center">
-          {categories.map((cat) => (
-            <CategorySquircle
-              key={cat.slug ?? "all"}
-              label={cat.label}
-              image={cat.image}
-              isActive={active === cat.slug}
-              onClick={() => setActive(cat.slug)}
-            />
-          ))}
+        {/* ---- Bande de squircles — répétée 10× pour défilement infini ---- */}
+        <div className="flex gap-5 md:gap-8 overflow-x-auto no-scrollbar pb-8 mb-6 md:mb-10">
+          {Array.from({ length: 10 }).flatMap((_, rep) =>
+            categories.map((cat) => (
+              <CategorySquircle
+                key={`${rep}-${cat.slug ?? "all"}`}
+                label={cat.label}
+                image={cat.image}
+                isActive={active === cat.slug}
+                onClick={() => setActive(cat.slug)}
+              />
+            ))
+          )}
         </div>
 
         {/* ---- Grille produits ---- */}
