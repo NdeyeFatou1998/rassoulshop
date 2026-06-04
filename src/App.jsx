@@ -144,6 +144,7 @@ export default function App() {
             {/* ---- Routes Admin (layout séparé, pas de Navbar/Footer) ---- */}
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<Navigate to="/admin/dashboard" replace />} />
               <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="products" element={<AdminProducts />} />
               <Route path="lookbook" element={<AdminLookbook />} />
