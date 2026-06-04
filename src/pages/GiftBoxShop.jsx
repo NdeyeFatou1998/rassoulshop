@@ -96,24 +96,19 @@ export default function GiftBoxShop() {
                       Personnalisable
                     </span>
                   )}
-                  <div className="absolute bottom-0 left-0 right-0 z-10 px-2 py-1.5 bg-gradient-to-t from-black/90 via-black/55 to-transparent pointer-events-none">
-                    <p className="text-[9px] uppercase tracking-[0.14em] font-bold text-center" style={{ color: "#C8A84B" }}>
-                      Coffret
-                    </p>
+                  <div className="absolute bottom-0 left-0 right-0 z-10 px-1.5 py-1 bg-gradient-to-t from-black/92 via-black/50 to-transparent pointer-events-none">
+                    <p className="product-card-category text-center">Coffret</p>
                   </div>
                 </Link>
 
                 <div
-                  className="flex flex-shrink-0 flex-col items-center justify-center gap-0.5 px-2 py-1.5 w-full min-h-[3.25rem]"
-                  style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
+                  className="flex flex-shrink-0 flex-col items-center justify-center gap-px px-1.5 py-1 w-full"
+                  style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
                 >
-                  <h3
-                    className="w-full text-center text-[13px] md:text-[15px] font-semibold leading-[1.25] line-clamp-2 px-0.5"
-                    style={{ color: "#f0ead8" }}
-                  >
+                  <h3 className="product-card-title w-full text-center line-clamp-2 px-0.5">
                     {box.name}
                   </h3>
-                  <p className="mt-1 text-[12px] md:text-[14px] font-bold text-center shrink-0 leading-none" style={{ color: "#C8A84B" }}>
+                  <p className="product-card-price mt-0.5 text-center shrink-0 leading-none">
                     {(box.price || 0).toLocaleString("fr-FR")} FCFA
                   </p>
                 </div>

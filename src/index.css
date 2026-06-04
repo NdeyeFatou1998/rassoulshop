@@ -103,6 +103,52 @@
     background-clip: text;
   }
 
+  /* Cartes produits — typo luxe compacte */
+  .product-card-category {
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 7.5px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #d4bc6a;
+  }
+  @media (min-width: 768px) {
+    .product-card-category {
+      font-size: 8.5px;
+    }
+  }
+
+  .product-card-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    color: #f8f4eb;
+  }
+  @media (min-width: 768px) {
+    .product-card-title {
+      font-size: 0.9rem;
+    }
+  }
+
+  .product-card-price {
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    font-variant-numeric: tabular-nums;
+    background: linear-gradient(100deg, #bf953f 0%, #e8d48b 45%, #c8a84b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  @media (min-width: 768px) {
+    .product-card-price {
+      font-size: 0.75rem;
+    }
+  }
+
   /* Gold texte premium avec reflet luisant */
   .text-gold-shine {
     background: linear-gradient(90deg, #BF953F 0%, #FCF6BA 35%, #C8A84B 50%, #FCF6BA 65%, #BF953F 100%);

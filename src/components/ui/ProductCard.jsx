@@ -75,8 +75,8 @@ export default function ProductCard({ product, index = 0 }) {
 
         {/* Catégorie sur l'image */}
         {(product.category_name || product.category) && (
-          <div className="absolute bottom-0 left-0 right-0 z-10 px-2 py-1.5 bg-gradient-to-t from-black/90 via-black/55 to-transparent pointer-events-none">
-            <p className="text-[9px] md:text-[10px] uppercase tracking-[0.14em] font-bold text-center line-clamp-1" style={{ color: GOLD }}>
+          <div className="absolute bottom-0 left-0 right-0 z-10 px-1.5 py-1 bg-gradient-to-t from-black/92 via-black/50 to-transparent pointer-events-none">
+            <p className="product-card-category text-center line-clamp-1">
               {product.category_name || product.category}
             </p>
           </div>
@@ -98,19 +98,13 @@ export default function ProductCard({ product, index = 0 }) {
 
       {/* Infos — hauteur selon le contenu */}
       <div
-        className="flex flex-shrink-0 flex-col items-center justify-center gap-0.5 px-2 py-1.5 w-full min-h-[3.25rem]"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
+        className="flex flex-shrink-0 flex-col items-center justify-center gap-px px-1.5 py-1 w-full"
+        style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
       >
-        {/* Nom produit */}
-        <h3
-          className="w-full text-center text-[13px] md:text-[15px] font-semibold leading-[1.25] line-clamp-2 px-0.5"
-          style={{ color: "#f0ead8" }}
-        >
+        <h3 className="product-card-title w-full text-center line-clamp-2 px-0.5">
           {product.title}
         </h3>
-
-        {/* Prix */}
-        <p className="mt-1 text-[12px] md:text-[14px] font-bold text-center shrink-0 leading-none" style={{ color: GOLD }}>
+        <p className="product-card-price mt-0.5 text-center shrink-0 leading-none">
           {(hasPromo ? product.promo_price : product.price).toLocaleString("fr-FR")} FCFA
         </p>
       </div>
