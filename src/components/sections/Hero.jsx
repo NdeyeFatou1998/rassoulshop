@@ -10,8 +10,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { ArrowDown } from "lucide-react";
 
 /* Rayon du squircle hero */
 const HERO_R_OUT = 28; /* px — contour tournant */
@@ -99,21 +97,21 @@ export default function Hero({ imageSrc, title, subtitle }) {
             animate="show"
             className="relative z-10 text-center px-6 sm:px-10 max-w-3xl mx-auto"
           >
-            {/* Kicker */}
-            <motion.div variants={fadeUp} className="flex items-center justify-center gap-4 mb-5">
-              <div className="w-8 h-px bg-gold/50" />
-              <span className="text-[10px] uppercase tracking-[0.4em] text-gold/90 font-medium">
-                L'art d'offrir
-              </span>
-              <div className="w-8 h-px bg-gold/50" />
-            </motion.div>
-
-            {/* Slogan premium — grand, serif élégant, gradient gold */}
+            {/* L'art d'offrir — en haut, blanc */}
             <motion.p
               variants={fadeUp}
-              className="mt-6 md:mt-8 font-serif max-w-xl mx-auto leading-tight tracking-wide"
+              className="text-white font-semibold uppercase tracking-[0.32em] mb-3"
+              style={{ fontSize: "clamp(0.6rem, 1.6vw, 0.85rem)" }}
+            >
+              L'art d'offrir
+            </motion.p>
+
+            {/* Slogan premium */}
+            <motion.p
+              variants={fadeUp}
+              className="font-serif max-w-xl mx-auto leading-tight tracking-wide"
               style={{
-                fontSize: "clamp(1.5rem, 4vw, 2.6rem)",
+                fontSize: "clamp(1.1rem, 3vw, 2rem)",
                 fontWeight: 600,
                 fontStyle: "italic",
                 background: "linear-gradient(100deg, #BF953F 0%, #FCF6BA 45%, #C8A84B 70%, #FBF5B7 100%)",
@@ -124,22 +122,6 @@ export default function Hero({ imageSrc, title, subtitle }) {
             >
               {subtitle || "Offrez plus qu'un cadeau, offrez une émotion !"}
             </motion.p>
-          </motion.div>
-
-          {/* ---- Scroll indicator ---- */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 2.2 }}
-            className="absolute bottom-7 left-1/2 -translate-x-1/2 pointer-events-none"
-          >
-            <motion.div
-              animate={{ y: [0, 7, 0] }}
-              transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-              className="text-white/45"
-            >
-              <ArrowDown size={18} strokeWidth={1} />
-            </motion.div>
           </motion.div>
         </div>
       </div>
