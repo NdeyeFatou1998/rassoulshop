@@ -14,6 +14,22 @@ const GOLD = "#C8A84B";
 const BRAND_GRADIENT =
   "linear-gradient(100deg, #BF953F 0%, #FCF6BA 38%, #D4AF37 58%, #C8A84B 72%, #FBF5B7 100%)";
 
+const COFFRETS_CATEGORY = "sets-cadeau";
+
+function isNavLinkActive(link, pathname, search) {
+  const category = new URLSearchParams(search).get("category");
+  if (link.path === `/shop?category=${COFFRETS_CATEGORY}`) {
+    return pathname === "/shop" && category === COFFRETS_CATEGORY;
+  }
+  if (link.path === "/shop") {
+    return pathname === "/shop" && category !== COFFRETS_CATEGORY;
+  }
+  if (link.path === "/gift-boxes") {
+    return pathname === "/gift-boxes" || pathname.startsWith("/gift-boxes/");
+  }
+  return pathname === link.path;
+}
+
 export default function Navbar() {
   const location = useLocation();
   const { cartCount } = useCart();
@@ -34,7 +50,8 @@ export default function Navbar() {
   const navLinks = [
     { label: "Accueil", path: "/" },
     { label: "Boutique", path: "/shop" },
-    { label: "Coffrets", path: "/gift-boxes" },
+    { label: "Coffrets", path: "/shop?category=sets-cadeau" },
+    { label: "Box Cadeau", path: "/gift-boxes" },
     { label: "Lookbook", path: "/lookbook" },
   ];
 
@@ -103,7 +120,7 @@ export default function Navbar() {
           {/* Navigation desktop */}
           <nav className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
             {navLinks.map((link) => {
-              const isActive = location.pathname === link.path;
+              const isActive = isNavLinkActive(link, location.pathname, location.search);
               return (
                 <Link
                   key={link.path}
@@ -200,7 +217,7 @@ export default function Navbar() {
                   <Link
                     to={link.path}
                     className="block py-5 font-serif text-2xl tracking-wide transition-colors"
-                    style={{ color: location.pathname === link.path ? GOLD : "rgba(240,234,216,0.90)" }}
+                    style={{ color: isNavLinkActive(link, location.pathname, location.search) ? GOLD : "rgba(240,234,216,0.90)" }}
                   >
                     {link.label}
                   </Link>

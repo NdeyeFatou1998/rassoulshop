@@ -241,6 +241,10 @@ export default function FilterableProductGrid({
 }) {
   const [active, setActive]       = useState(defaultCategory);
   const [search, setSearch]       = useState("");
+
+  useEffect(() => {
+    setActive(defaultCategory);
+  }, [defaultCategory]);
   const [minVal, setMinVal]       = useState(0);
   const [maxVal, setMaxVal]       = useState(200000);
   const [applied, setApplied]     = useState(null); /* { min, max } ou null */

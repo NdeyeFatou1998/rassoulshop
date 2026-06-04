@@ -43,7 +43,7 @@ export default function GiftBoxShop() {
       {/* ---- Header ---- */}
       <section className="pt-20 md:pt-24 pb-5 max-w-7xl mx-auto px-5 lg:px-10 text-center">
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <h1 className="font-serif text-3xl md:text-4xl text-white">Coffrets Cadeaux</h1>
+          <h1 className="font-serif text-3xl md:text-4xl text-white">Box Cadeau</h1>
           <div className="w-10 h-px bg-gold/50 mx-auto mt-3" />
         </motion.div>
       </section>

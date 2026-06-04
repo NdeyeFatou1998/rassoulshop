@@ -42,7 +42,8 @@ export default function Footer() {
               {[
                 { label: "Accueil", path: "/" },
                 { label: "Boutique", path: "/shop" },
-                { label: "Coffrets", path: "/gift-boxes" },
+                { label: "Coffrets", path: "/shop?category=sets-cadeau" },
+                { label: "Box Cadeau", path: "/gift-boxes" },
                 { label: "Lookbook", path: "/lookbook" },
               ].map((link) => (
                 <Link
