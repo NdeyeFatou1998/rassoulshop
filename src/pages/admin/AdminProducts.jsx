@@ -52,6 +52,8 @@ export default function AdminProducts() {
   const [uploadingImg, setUploadingImg]   = useState(false);
   const [editingOpt, setEditingOpt]       = useState(null);  /* {id, name} option en cours d'édition */
   const [editOptName, setEditOptName]     = useState("");
+  /* Variantes en attente (création produit, avant premier enregistrement) */
+  const [pendingVariants, setPendingVariants] = useState([]);
 
   /* ---- Chargements ---- */
   const loadProducts = useCallback(async () => {
@@ -140,9 +142,48 @@ export default function AdminProducts() {
     setForm(emptyForm);
     setError("");
     setByType([]);
+    setPendingVariants([]);
     setSelTypeId("");
     setNewOptName("");
     setNewOptImage("");
+    setEditingOpt(null);
+  }
+
+  function pendingToByType(pending) {
+    const map = new Map();
+    for (const p of pending) {
+      if (!map.has(p.variant_type_id)) {
+        map.set(p.variant_type_id, {
+          type_id: p.variant_type_id,
+          type_name: p.type_name,
+          options: [],
+        });
+      }
+      map.get(p.variant_type_id).options.push({
+        id: p.tempId,
+        name: p.name,
+        image: p.image,
+        price_modifier: p.price_modifier ?? 0,
+        _pending: true,
+      });
+    }
+    return Array.from(map.values());
+  }
+
+  async function flushPendingVariants(productId) {
+    for (const p of pendingVariants) {
+      await fetch(`/api/products/${productId}/variant-options`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          variant_type_id: p.variant_type_id,
+          name: p.name,
+          image: p.image || null,
+          price_modifier: p.price_modifier ?? 0,
+        }),
+      });
+    }
+    setPendingVariants([]);
   }
 
   /* ---- Sauvegarder produit ---- */
@@ -172,6 +213,11 @@ export default function AdminProducts() {
       });
       const data = await res.json();
       if (!data.success) { setError(data.message || "Erreur"); return; }
+
+      if (isNew && data.product?.id && pendingVariants.length > 0) {
+        await flushPendingVariants(data.product.id);
+      }
+
       await loadProducts();
       /* Feedback succès */
       setSaved(true);
@@ -232,7 +278,26 @@ export default function AdminProducts() {
 
   /* ---- Ajouter option variante ---- */
   async function handleAddOption() {
-    if (!newOptName.trim() || !selTypeId || selected === "new" || !selected) return;
+    if (!newOptName.trim() || !selTypeId || !selected) return;
+
+    if (selected === "new") {
+      const type = variantTypes.find((t) => String(t.id) === selTypeId);
+      setPendingVariants((prev) => [
+        ...prev,
+        {
+          tempId: `pending-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+          variant_type_id: parseInt(selTypeId, 10),
+          type_name: type?.name || "",
+          name: newOptName.trim(),
+          image: newOptImage || null,
+          price_modifier: 0,
+        },
+      ]);
+      setNewOptName("");
+      setNewOptImage("");
+      return;
+    }
+
     await fetch(`/api/products/${selected.id}/variant-options`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -243,14 +308,27 @@ export default function AdminProducts() {
   }
 
   /* ---- Supprimer option variante ---- */
-  async function handleDeleteOption(oid) {
+  async function handleDeleteOption(oid, isPending = false) {
+    if (isPending || String(oid).startsWith("pending-")) {
+      setPendingVariants((prev) => prev.filter((p) => p.tempId !== oid));
+      return;
+    }
     await fetch(`/api/products/variant-options/${oid}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
     if (selected && selected !== "new") loadByType(selected.id);
   }
 
   /* ---- Modifier le nom d'une option variante ---- */
-  async function handleSaveOpt(oid) {
+  async function handleSaveOpt(oid, isPending = false) {
     if (!editOptName.trim()) return;
+
+    if (isPending || String(oid).startsWith("pending-")) {
+      setPendingVariants((prev) =>
+        prev.map((p) => (p.tempId === oid ? { ...p, name: editOptName.trim() } : p))
+      );
+      setEditingOpt(null);
+      return;
+    }
+
     await fetch(`/api/products/variant-options/${oid}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -270,6 +348,8 @@ export default function AdminProducts() {
       setNewOptImage(data.imageUrl || "");
     } finally { setUploadingImg(false); }
   }
+
+  const variantsByType = selected === "new" ? pendingToByType(pendingVariants) : byType;
 
   const filtered = products.filter(p =>
     p.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -549,11 +629,17 @@ export default function AdminProducts() {
             </div>
 
             {/* ================================================================
-                SECTION VARIANTES — dropdown compact (produit existant seulement)
+                SECTION VARIANTES — création (en attente) ou modification (API)
                 ================================================================ */}
-            {selected !== "new" && (
-              <div className="border border-[#222] rounded-xl p-4 space-y-3">
-                <h3 className="text-xs font-semibold text-[#f5f0e8] uppercase tracking-wider">Variantes</h3>
+            <div className="border border-[#222] rounded-xl p-4 space-y-3">
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="text-xs font-semibold text-[#f5f0e8] uppercase tracking-wider">Variantes</h3>
+                  {selected === "new" && pendingVariants.length > 0 && (
+                    <span className="text-[10px] text-[#C5A55A]/80">
+                      {pendingVariants.length} option{pendingVariants.length > 1 ? "s" : ""} — enregistrées avec le produit
+                    </span>
+                  )}
+                </div>
 
                 {variantTypes.length === 0 ? (
                   <p className="text-xs text-[#444] italic">
@@ -586,31 +672,32 @@ export default function AdminProducts() {
                     </div>
 
                     {/* Liste compacte des options groupées par type */}
-                    {byType.filter(bt => bt.options.length > 0).length > 0 && (
+                    {variantsByType.filter(bt => bt.options.length > 0).length > 0 && (
                       <div className="space-y-1.5 pt-1">
-                        {byType.filter(bt => bt.options.length > 0).map(bt => (
+                        {variantsByType.filter(bt => bt.options.length > 0).map(bt => (
                           <div key={bt.type_id} className="flex items-center gap-2 flex-wrap">
                             <span className="text-[10px] text-[#C5A55A] uppercase tracking-wider font-semibold w-20 flex-shrink-0">{bt.type_name}</span>
                             <div className="flex flex-wrap gap-1.5">
-                              {bt.options.map(opt => (
-                                editingOpt?.id === opt.id ? (
+                              {bt.options.map(opt => {
+                                const isPending = !!opt._pending;
+                                return editingOpt?.id === opt.id ? (
                                   /* ---- Mode édition inline ---- */
                                   <span key={opt.id} className="flex items-center gap-1 bg-[#1a1a1a] border border-[#C5A55A]/40 rounded-md overflow-hidden">
                                     {opt.image && <img src={opt.image} alt="" className="w-6 h-6 object-cover flex-shrink-0" />}
                                     <input
                                       value={editOptName}
                                       onChange={e => setEditOptName(e.target.value)}
-                                      onKeyDown={e => { if (e.key==="Enter") handleSaveOpt(opt.id); if (e.key==="Escape") setEditingOpt(null); }}
+                                      onKeyDown={e => { if (e.key==="Enter") handleSaveOpt(opt.id, isPending); if (e.key==="Escape") setEditingOpt(null); }}
                                       autoFocus
                                       className="w-24 px-2 py-1 bg-transparent text-xs text-[#f5f0e8] outline-none" />
-                                    <button type="button" onClick={()=>handleSaveOpt(opt.id)}
+                                    <button type="button" onClick={()=>handleSaveOpt(opt.id, isPending)}
                                       className="px-1.5 text-[#C5A55A] hover:text-white"><Check size={11} /></button>
                                     <button type="button" onClick={()=>setEditingOpt(null)}
                                       className="pr-1.5 text-[#555] hover:text-white"><X size={10} /></button>
                                   </span>
                                 ) : (
                                   /* ---- Mode affichage ---- */
-                                  <span key={opt.id} className="flex items-center gap-1 bg-[#1a1a1a] border border-[#2a2a2a] rounded-md px-2 py-0.5 text-xs text-[#f5f0e8] group">
+                                  <span key={opt.id} className={`flex items-center gap-1 bg-[#1a1a1a] border rounded-md px-2 py-0.5 text-xs text-[#f5f0e8] group ${isPending ? "border-[#C5A55A]/30" : "border-[#2a2a2a]"}`}>
                                     {opt.image && <img src={opt.image} alt="" className="w-4 h-4 rounded object-cover" />}
                                     {opt.name}
                                     <button type="button"
@@ -618,13 +705,13 @@ export default function AdminProducts() {
                                       className="text-[#444] hover:text-[#C5A55A] opacity-0 group-hover:opacity-100 transition-all">
                                       <Pencil size={9} />
                                     </button>
-                                    <button type="button" onClick={()=>handleDeleteOption(opt.id)}
+                                    <button type="button" onClick={()=>handleDeleteOption(opt.id, isPending)}
                                       className="text-[#444] hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all">
                                       <X size={10} />
                                     </button>
                                   </span>
-                                )
-                              ))}
+                                );
+                              })}
                             </div>
                           </div>
                         ))}
@@ -633,7 +720,6 @@ export default function AdminProducts() {
                   </>
                 )}
               </div>
-            )}
           </form>
         )}
       </div>
