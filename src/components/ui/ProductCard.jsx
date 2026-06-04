@@ -1,5 +1,5 @@
 /**
- * ProductCard — Card entièrement carrée, image 60%, info 40%
+ * ProductCard — Card entièrement carrée, image 72%, info 28%
  */
 
 import { useState } from "react";
@@ -37,11 +37,11 @@ export default function ProductCard({ product, index = 0 }) {
         border: "0.5px solid rgba(255,255,255,0.18)",
       }}
     >
-      {/* Image — 60% de la hauteur */}
+      {/* Image — 72% de la hauteur */}
       <Link
         to={`/product/${product.id}`}
         className="relative block w-full overflow-hidden flex-shrink-0"
-        style={{ height: "60%" }}
+        style={{ height: "72%" }}
       >
         <img
           src={product.image || "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg"}
@@ -97,10 +97,10 @@ export default function ProductCard({ product, index = 0 }) {
         </button>
       </Link>
 
-      {/* Infos — 40% de la hauteur, tout centré */}
+      {/* Infos — 28% de la hauteur */}
       <div
-        className="flex flex-col items-center justify-center gap-2 px-3 py-2"
-        style={{ height: "40%", borderTop: "1px solid rgba(255,255,255,0.08)" }}
+        className="flex flex-col items-center justify-center gap-1 px-2.5 py-1.5"
+        style={{ height: "28%", borderTop: "1px solid rgba(255,255,255,0.08)" }}
       >
         {/* Nom produit */}
         <h3

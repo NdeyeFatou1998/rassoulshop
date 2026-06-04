@@ -105,9 +105,9 @@ export default function GiftBoxShop() {
                   </div>
                 </Link>
 
-                {/* Infos 40% */}
-                <div className="flex flex-col items-center justify-center gap-2 px-3 py-2"
-                  style={{ height: "40%", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+                {/* Infos 28% */}
+                <div className="flex flex-col items-center justify-center gap-1 px-2.5 py-1.5"
+                  style={{ height: "28%", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
                   <h3
                     className="w-full text-center text-[16px] md:text-[17px] font-semibold leading-snug line-clamp-2 px-1"
                     style={{ color: "#f0ead8" }}
