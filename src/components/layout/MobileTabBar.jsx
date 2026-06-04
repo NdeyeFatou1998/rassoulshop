@@ -10,7 +10,7 @@ const COFFRETS_CATEGORY = "sets-cadeau";
 
 function isTabActive(tab, pathname, category) {
   if (tab.id === "coffrets") {
-    return pathname === "/shop" && category === COFFRETS_CATEGORY;
+    return pathname === "/coffrets";
   }
   if (tab.id === "boutique") {
     return pathname === "/shop" && category !== COFFRETS_CATEGORY;
@@ -28,7 +28,7 @@ export default function MobileTabBar() {
   const tabs = [
     { id: "accueil", icon: Home, label: "Accueil", path: "/" },
     { id: "boutique", icon: ShoppingBag, label: "Boutique", path: "/shop" },
-    { id: "coffrets", icon: Package, label: "Coffrets", path: `/shop?category=${COFFRETS_CATEGORY}` },
+    { id: "coffrets", icon: Package, label: "Coffrets", path: "/coffrets" },
     { id: "box-cadeau", icon: Gift, label: "Box Cadeau", path: "/gift-boxes" },
     { id: "looks", icon: Camera, label: "Looks", path: "/lookbook" },
   ];

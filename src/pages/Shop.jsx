@@ -9,13 +9,19 @@
  */
 
 import { motion } from "framer-motion";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Navigate } from "react-router-dom";
 import FilterableProductGrid from "../components/sections/FilterableProductGrid";
+
+const COFFRETS_CATEGORY = "sets-cadeau";
 
 export default function Shop() {
   const [searchParams] = useSearchParams();
   /* Catégorie initiale depuis l'URL (?category=montres) — null si absente */
   const initialCategory = searchParams.get("category") || null;
+
+  if (initialCategory === COFFRETS_CATEGORY) {
+    return <Navigate to="/coffrets" replace />;
+  }
 
   return (
     <>

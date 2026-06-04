@@ -18,8 +18,8 @@ const COFFRETS_CATEGORY = "sets-cadeau";
 
 function isNavLinkActive(link, pathname, search) {
   const category = new URLSearchParams(search).get("category");
-  if (link.path === `/shop?category=${COFFRETS_CATEGORY}`) {
-    return pathname === "/shop" && category === COFFRETS_CATEGORY;
+  if (link.path === "/coffrets") {
+    return pathname === "/coffrets";
   }
   if (link.path === "/shop") {
     return pathname === "/shop" && category !== COFFRETS_CATEGORY;
@@ -50,7 +50,7 @@ export default function Navbar() {
   const navLinks = [
     { label: "Accueil", path: "/" },
     { label: "Boutique", path: "/shop" },
-    { label: "Coffrets", path: "/shop?category=sets-cadeau" },
+    { label: "Coffrets", path: "/coffrets" },
     { label: "Box Cadeau", path: "/gift-boxes" },
     { label: "Lookbook", path: "/lookbook" },
   ];

@@ -142,7 +142,7 @@ const PROMO_CARDS = [
     title: "Nos coffrets font la différence.",
     desc: "Sets complets emballés avec soin, prêts à offrir. À partir de 25 000 FCFA.",
     cta: "Voir les coffrets",
-    href: "/shop?category=sets-cadeau",
+    href: "/coffrets",
     image: null,
     accent: "center",
   },
