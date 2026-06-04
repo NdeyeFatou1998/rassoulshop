@@ -157,7 +157,7 @@
     letter-spacing: 0.06em;
   }
 
-  /* Grille produits — cards plus grandes */
+  /* Grille produits — 2 colonnes mobile, 4 colonnes desktop */
   .product-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -170,12 +170,13 @@
   }
   @media (min-width: 768px) {
     .product-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 1.25rem;
     }
   }
   @media (min-width: 1024px) {
     .product-grid {
-      gap: 1.75rem;
+      gap: 1.5rem;
     }
   }
 
