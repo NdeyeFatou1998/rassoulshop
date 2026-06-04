@@ -39,7 +39,7 @@ export default function GiftBoxShop() {
   }, []);
 
   return (
-    <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #0d0a05 0%, #131108 50%, #0d0a05 100%)" }}>
+    <div className="min-h-screen" style={{ background: "#030303" }}>
       {/* ---- Header ---- */}
       <section className="pt-20 md:pt-24 pb-5 max-w-7xl mx-auto px-5 lg:px-10 text-center">
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
@@ -80,10 +80,10 @@ export default function GiftBoxShop() {
                 className="group flex flex-col rounded-xl overflow-hidden"
                 style={{ aspectRatio: "1 / 1", background: "#111010", border: "0.5px solid rgba(255,255,255,0.18)" }}
               >
-                {/* Image 68% */}
+                {/* Image 60% */}
                 <Link to={`/gift-boxes/${box.id}`}
                   className="relative block w-full flex-shrink-0 overflow-hidden"
-                  style={{ height: "68%" }}
+                  style={{ height: "60%" }}
                 >
                   <img
                     src={box.image || DEFAULT_IMG}
@@ -100,19 +100,19 @@ export default function GiftBoxShop() {
                   )}
                 </Link>
 
-                {/* Infos 32% */}
-                <div className="flex flex-col items-center justify-center gap-0.5 px-2"
-                  style={{ height: "32%", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-                  <p className="text-[7px] uppercase tracking-[0.15em] font-bold text-center" style={{ color: "#C8A84B" }}>
+                {/* Infos 40% */}
+                <div className="flex flex-col items-center justify-center gap-1.5 px-3 py-1.5"
+                  style={{ height: "40%", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+                  <p className="text-[10px] uppercase tracking-[0.15em] font-bold text-center" style={{ color: "#C8A84B" }}>
                     Coffret
                   </p>
-                  <div className="w-full rounded px-2 py-1 text-center"
-                    style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.45)" }}>
-                    <h3 className="text-[10px] md:text-[11px] font-semibold leading-tight line-clamp-1" style={{ color: "#f0ead8" }}>
-                      {box.name}
-                    </h3>
-                  </div>
-                  <p className="text-[11px] md:text-[12px] font-bold text-center" style={{ color: "#C8A84B" }}>
+                  <h3
+                    className="w-full text-center text-[16px] md:text-[17px] font-semibold leading-snug line-clamp-2 px-1"
+                    style={{ color: "#f0ead8" }}
+                  >
+                    {box.name}
+                  </h3>
+                  <p className="text-[14px] md:text-[15px] font-bold text-center" style={{ color: "#C8A84B" }}>
                     {(box.price || 0).toLocaleString("fr-FR")} FCFA
                   </p>
                 </div>

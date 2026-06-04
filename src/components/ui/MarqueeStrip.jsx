@@ -18,19 +18,19 @@ export default function MarqueeStrip() {
 
   return (
     <div
-      className="overflow-hidden py-3.5 select-none"
+      className="overflow-hidden py-2 select-none"
       style={{
-        background: "linear-gradient(90deg, #1a1408 0%, #221a0c 50%, #1a1408 100%)",
-        borderTop: "1px solid rgba(197,165,90,0.30)",
-        borderBottom: "1px solid rgba(197,165,90,0.30)",
+        background: "#050505",
+        borderTop: "1px solid rgba(255,255,255,0.06)",
+        borderBottom: "1px solid rgba(255,255,255,0.06)",
       }}
     >
       <div className="flex whitespace-nowrap marquee-track">
         {items.map((msg, i) => (
           <span
             key={i}
-            className="inline-flex items-center gap-5 px-5"
-            style={{ fontSize: "10px", letterSpacing: "0.22em", textTransform: "uppercase", fontWeight: 700 }}
+            className="inline-flex items-center gap-3 px-3.5"
+            style={{ fontSize: "8.5px", letterSpacing: "0.18em", textTransform: "uppercase", fontWeight: 700 }}
           >
             {/* Texte avec gradient gold */}
             <span
@@ -45,7 +45,7 @@ export default function MarqueeStrip() {
             >
               {msg}
             </span>
-            <span style={{ color: "#C8A84B", fontSize: "8px" }}>✦</span>
+            <span style={{ color: "#C8A84B", fontSize: "6px" }}>✦</span>
           </span>
         ))}
       </div>

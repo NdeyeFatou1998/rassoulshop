@@ -45,7 +45,7 @@ export default function Hero({ imageSrc, title, subtitle }) {
     <section
       ref={sectionRef}
       className="px-3 md:px-5 pt-[72px] md:pt-[84px] pb-4 md:pb-6"
-      style={{ background: "#080808" }}
+      style={{ background: "#030303" }}
     >
       {/* ---- Squircle géant avec spinning border ---- */}
       <div

@@ -20,7 +20,7 @@ export default function MobileTabBar() {
     <nav
       className="md:hidden fixed bottom-0 left-0 right-0 z-50 pb-[env(safe-area-inset-bottom)]"
       style={{
-        background: "linear-gradient(180deg, #1c160e 0%, #13100a 100%)",
+        background: "#030303",
         borderTop: "1.5px solid rgba(197,165,90,0.35)",
         boxShadow: "0 -4px 24px rgba(0,0,0,0.6)",
       }}

@@ -1,5 +1,5 @@
 /**
- * ProductCard — Card entièrement carrée, image 70%, info 30%
+ * ProductCard — Card entièrement carrée, image 60%, info 40%
  */
 
 import { useState } from "react";
@@ -37,11 +37,11 @@ export default function ProductCard({ product, index = 0 }) {
         border: "0.5px solid rgba(255,255,255,0.18)",
       }}
     >
-      {/* Image — 68% de la hauteur */}
+      {/* Image — 60% de la hauteur */}
       <Link
         to={`/product/${product.id}`}
         className="relative block w-full overflow-hidden flex-shrink-0"
-        style={{ height: "68%" }}
+        style={{ height: "60%" }}
       >
         <img
           src={product.image || "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg"}
@@ -53,13 +53,13 @@ export default function ProductCard({ product, index = 0 }) {
         {/* Badges haut gauche */}
         <div className="absolute top-1.5 left-1.5 flex flex-col gap-1 z-10">
           {product.badge && (
-            <span className="px-1.5 py-[2px] text-[7px] uppercase tracking-[0.10em] font-bold rounded-full"
+            <span className="px-1.5 py-[2px] text-[8px] uppercase tracking-[0.10em] font-bold rounded-full"
               style={{ background: GOLD, color: "#0c0a07" }}>
               {product.badge}
             </span>
           )}
           {product.is_vip && (
-            <span className="text-[7px] uppercase font-bold px-1.5 py-[2px] rounded-full"
+            <span className="text-[8px] uppercase font-bold px-1.5 py-[2px] rounded-full"
               style={{ background: "rgba(0,0,0,0.70)", color: GOLD, border: `1px solid ${GOLD}` }}>
               ★ VIP
             </span>
@@ -68,7 +68,7 @@ export default function ProductCard({ product, index = 0 }) {
 
         {/* Badge promo */}
         {hasPromo && (
-          <span className="absolute top-1.5 right-1.5 z-10 text-[8px] font-bold px-1.5 py-0.5 rounded-full"
+          <span className="absolute top-1.5 right-1.5 z-10 text-[9px] font-bold px-1.5 py-0.5 rounded-full"
             style={{ background: "#e53e3e", color: "#fff" }}>
             -{Math.round((1 - product.promo_price / product.price) * 100)}%
           </span>
@@ -88,31 +88,26 @@ export default function ProductCard({ product, index = 0 }) {
         </button>
       </Link>
 
-      {/* Infos — 32% de la hauteur, tout centré */}
+      {/* Infos — 40% de la hauteur, tout centré */}
       <div
-        className="flex flex-col items-center justify-center gap-0.5 px-2"
-        style={{ height: "32%", borderTop: "1px solid rgba(255,255,255,0.08)" }}
+        className="flex flex-col items-center justify-center gap-1.5 px-3 py-1.5"
+        style={{ height: "40%", borderTop: "1px solid rgba(255,255,255,0.08)" }}
       >
         {/* Catégorie */}
-        <p className="text-[8px] uppercase tracking-[0.15em] font-bold text-center" style={{ color: GOLD }}>
+        <p className="text-[10px] uppercase tracking-[0.15em] font-bold text-center" style={{ color: GOLD }}>
           {product.category_name || product.category || ""}
         </p>
 
-        {/* Nom — mini-card contour blanc */}
-        <div
-          className="w-full rounded px-2 py-1 text-center"
-          style={{
-            background: "rgba(255,255,255,0.03)",
-            border: "1px solid rgba(255,255,255,0.45)",
-          }}
+        {/* Nom produit */}
+        <h3
+          className="w-full text-center text-[16px] md:text-[17px] font-semibold leading-snug line-clamp-2 px-1"
+          style={{ color: "#f0ead8" }}
         >
-          <h3 className="text-[12px] md:text-[13px] font-semibold leading-tight line-clamp-1" style={{ color: "#f0ead8" }}>
-            {product.title}
-          </h3>
-        </div>
+          {product.title}
+        </h3>
 
         {/* Prix */}
-        <p className="text-[12px] md:text-[13px] font-bold text-center" style={{ color: GOLD }}>
+        <p className="text-[14px] md:text-[15px] font-bold text-center" style={{ color: GOLD }}>
           {(hasPromo ? product.promo_price : product.price).toLocaleString("fr-FR")} FCFA
         </p>
       </div>

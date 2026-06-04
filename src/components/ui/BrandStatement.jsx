@@ -8,9 +8,6 @@ import { Link } from "react-router-dom";
 export default function BrandStatement() {
   return (
     <section className="py-20 md:py-28 px-5 lg:px-10 relative overflow-hidden" style={{ background: "transparent" }}>
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse 70% 50% at 50% 50%, rgba(197,165,90,0.08) 0%, transparent 65%)"
-      }} />
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}

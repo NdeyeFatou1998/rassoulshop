@@ -310,8 +310,8 @@ export default function FilterableProductGrid({
   const hasActiveFilters = search.trim() !== "" || applied !== null;
 
   return (
-    <section className="py-10 md:py-14" style={{ background: "transparent" }}>
-      <div className="max-w-7xl mx-auto px-2 md:px-5 lg:px-10">
+    <section className="pt-2 pb-10 md:pt-4 md:pb-14" style={{ background: "transparent" }}>
+      <div className="max-w-7xl mx-auto px-1 md:px-4 lg:px-8">
 
         {/* ---- Barre recherche + filtre prix (Shop uniquement) ---- */}
         {showFilters && (
@@ -402,7 +402,7 @@ export default function FilterableProductGrid({
         )}
 
         {/* ---- Titre avant les catégories ---- */}
-        <div className="text-center mb-6">
+        <div className={`text-center mb-4 ${showFilters ? "-mt-1" : "-mt-5"}`}>
           <h2 className="font-serif text-white font-semibold" style={{ fontSize: "clamp(1.1rem, 3vw, 1.6rem)" }}>
             Découvrez nos catégories
           </h2>
@@ -426,7 +426,7 @@ export default function FilterableProductGrid({
 
         {/* ---- Grille produits ---- */}
         {loading ? (
-          <div className="grid grid-cols-2 gap-2 md:gap-3">
+          <div className="grid grid-cols-2 gap-1.5 md:gap-2.5">
             {Array.from({ length: 4 }).map((_, i) => (
               <div key={i}>
                 <div className="aspect-square shimmer rounded-2xl" />
@@ -452,7 +452,7 @@ export default function FilterableProductGrid({
                   {/* Grille du chunk */}
                   <motion.div
                     layout
-                    className="grid grid-cols-2 gap-2 md:gap-3"
+                    className="grid grid-cols-2 gap-1.5 md:gap-2.5"
                   >
                     <AnimatePresence mode="popLayout">
                       {chunk.map((product, i) => (

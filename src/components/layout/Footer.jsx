@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-b from-[#0e0d0b] to-[#080602] border-t border-gold/[0.15]">
+    <footer className="border-t border-white/[0.06]" style={{ background: "#030303" }}>
       <div className="max-w-7xl mx-auto px-5 md:px-10 py-12 md:py-16">
 
         {/* Ligne décorative dorée */}

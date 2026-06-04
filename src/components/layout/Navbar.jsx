@@ -161,7 +161,7 @@ export default function Navbar() {
         </div>
       </motion.header>
 
-      {/* Menu mobile — SANS logo, avec texte de marque */}
+      {/* Menu mobile — sans logo ni texte marque (évite chevauchement avec la navbar) */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -172,26 +172,16 @@ export default function Navbar() {
             className="fixed inset-0 z-40 flex flex-col"
             style={{ background: "linear-gradient(180deg, #1a1408 0%, #0e0b06 100%)" }}
           >
-            {/* Header menu mobile : texte marque + croix */}
+            {/* Header menu mobile : fermeture uniquement */}
             <div
-              className="flex items-center justify-between px-5 h-16"
+              className="flex items-center justify-end px-5 h-16"
               style={{ borderBottom: "1px solid rgba(197,165,90,0.15)" }}
             >
-              <span
-                className="font-serif font-extrabold text-lg tracking-[0.1em] uppercase"
-                style={{
-                  background: BRAND_GRADIENT,
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                RASSOUL SHOP SN
-              </span>
               <button
                 onClick={() => setMobileOpen(false)}
                 className="p-2 transition-colors"
                 style={{ color: "rgba(240,234,216,0.60)" }}
+                aria-label="Fermer le menu"
               >
                 <X size={20} />
               </button>

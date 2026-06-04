@@ -20,7 +20,7 @@ export default function Shop() {
   return (
     <>
       {/* ---- Header ---- */}
-      <section className="pt-20 md:pt-24 pb-5" style={{ background: "linear-gradient(180deg, #0d0a05 0%, #131108 100%)" }}>
+      <section className="pt-20 md:pt-24 pb-5" style={{ background: "#030303" }}>
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
