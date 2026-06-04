@@ -100,27 +100,31 @@ export default function GiftBoxShop() {
                   )}
                 </Link>
 
-                {/* Infos EN BAS */}
-                <div className="px-2.5 pt-2.5 pb-3 flex flex-col gap-1.5">
-                  <p className="text-[8px] uppercase tracking-[0.18em] font-bold px-0.5" style={{ color: "#C8A84B" }}>
+                {/* Infos EN BAS — tout centré */}
+                <div className="px-2.5 pt-2.5 pb-3 flex flex-col items-center gap-1.5">
+                  <p className="text-[8px] uppercase tracking-[0.18em] font-bold text-center" style={{ color: "#C8A84B" }}>
                     Coffret cadeau
                   </p>
-                  {/* Mini-card contour gold — nom uniquement */}
-                  <div className="rounded-lg px-3 py-2"
+                  {/* Nom — contour blanc */}
+                  <div className="w-full rounded-lg px-3 py-2 text-center"
                     style={{
-                      background: "linear-gradient(135deg, rgba(197,165,90,0.07) 0%, rgba(197,165,90,0.02) 100%)",
-                      border: "1px solid rgba(197,165,90,0.40)",
-                      boxShadow: "0 0 8px rgba(197,165,90,0.06), inset 0 1px 0 rgba(197,165,90,0.10)",
+                      background: "rgba(255,255,255,0.04)",
+                      border: "1px solid rgba(255,255,255,0.55)",
+                      boxShadow: "0 0 8px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.08)",
                     }}
                   >
                     <h3 className="text-[13px] md:text-[14px] font-semibold leading-tight line-clamp-2" style={{ color: "#f0ead8" }}>
                       {box.name}
                     </h3>
                   </div>
-                  <span className="text-[14px] font-bold px-0.5" style={{ color: "#f0ead8" }}>
-                    {(box.price || 0).toLocaleString("fr-FR")}
-                    <span className="text-[8px] font-normal ml-0.5" style={{ color: "rgba(240,234,216,0.48)" }}>FCFA</span>
-                  </span>
+                  {/* Prix — fond blanc, gold luisant */}
+                  <div className="w-full rounded-lg px-3 py-2 flex items-center justify-center"
+                    style={{ background: "rgba(255,255,255,0.92)", border: "1px solid rgba(255,255,255,0.70)", boxShadow: "0 2px 8px rgba(0,0,0,0.25)" }}
+                  >
+                    <span className="text-gold-shine text-[15px] font-bold text-center">
+                      {(box.price || 0).toLocaleString("fr-FR")} FCFA
+                    </span>
+                  </div>
                 </div>
               </motion.div>
             ))}
