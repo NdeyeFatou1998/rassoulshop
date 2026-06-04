@@ -52,7 +52,7 @@ export default function GiftBoxShop() {
       <section className="max-w-7xl mx-auto px-5 lg:px-10 py-8 pb-24">
         {loading ? (
           /* Skeletons */
-          <div className="grid grid-cols-2 gap-3 md:gap-4">
+          <div className="product-grid">
             {Array.from({ length: 4 }).map((_, i) => (
               <div key={i} className="rounded-2xl overflow-hidden" style={{ background: "#111010", border: "1px solid rgba(197,165,90,0.25)" }}>
                 <div className="aspect-square shimmer" />
@@ -70,7 +70,7 @@ export default function GiftBoxShop() {
             <p className="text-white/60 text-sm">Aucun coffret disponible pour le moment</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-3 md:gap-4">
+          <div className="product-grid">
             {giftBoxes.map((box, i) => (
               <motion.div
                 key={box.id}
@@ -78,7 +78,7 @@ export default function GiftBoxShop() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.45, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
                 className="group flex flex-col rounded-xl overflow-hidden"
-                style={{ aspectRatio: "1 / 1", background: "#111010", border: "0.5px solid rgba(255,255,255,0.18)" }}
+                style={{ aspectRatio: "4 / 5", background: "#111010", border: "0.5px solid rgba(255,255,255,0.18)" }}
               >
                 <Link to={`/gift-boxes/${box.id}`}
                   className="relative block w-full flex-1 min-h-0 overflow-hidden"
@@ -102,7 +102,7 @@ export default function GiftBoxShop() {
                 </Link>
 
                 <div
-                  className="flex flex-shrink-0 flex-col items-center justify-center gap-px px-1.5 py-1 w-full"
+                  className="flex flex-shrink-0 flex-col items-center justify-center gap-1 px-2.5 py-2 w-full"
                   style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
                 >
                   <h3 className="product-card-title w-full text-center line-clamp-2 px-0.5">

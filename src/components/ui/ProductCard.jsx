@@ -1,5 +1,5 @@
 /**
- * ProductCard — Card carrée : image flexible, zone texte hauteur auto (noms non coupés)
+ * ProductCard — Format portrait 4/5, image max, texte Playfair/Inter
  */
 
 import { useState } from "react";
@@ -30,9 +30,9 @@ export default function ProductCard({ product, index = 0 }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-20px" }}
       transition={{ duration: 0.45, delay: index * 0.04, ease: [0.22, 1, 0.36, 1] }}
-      className="group flex flex-col rounded-xl overflow-hidden"
+      className="group flex flex-col w-full rounded-2xl overflow-hidden"
       style={{
-        aspectRatio: "1 / 1",
+        aspectRatio: "4 / 5",
         background: "#111010",
         border: "0.5px solid rgba(255,255,255,0.18)",
       }}
@@ -75,7 +75,7 @@ export default function ProductCard({ product, index = 0 }) {
 
         {/* Catégorie sur l'image */}
         {(product.category_name || product.category) && (
-          <div className="absolute bottom-0 left-0 right-0 z-10 px-1.5 py-1 bg-gradient-to-t from-black/92 via-black/50 to-transparent pointer-events-none">
+          <div className="absolute bottom-0 left-0 right-0 z-10 px-2 py-1.5 bg-gradient-to-t from-black/92 via-black/50 to-transparent pointer-events-none">
             <p className="product-card-category text-center line-clamp-1">
               {product.category_name || product.category}
             </p>
@@ -98,13 +98,13 @@ export default function ProductCard({ product, index = 0 }) {
 
       {/* Infos — hauteur selon le contenu */}
       <div
-        className="flex flex-shrink-0 flex-col items-center justify-center gap-px px-1.5 py-1 w-full"
+        className="flex flex-shrink-0 flex-col items-center justify-center gap-1 px-2.5 py-2 w-full"
         style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
       >
         <h3 className="product-card-title w-full text-center line-clamp-2 px-0.5">
           {product.title}
         </h3>
-        <p className="product-card-price mt-0.5 text-center shrink-0 leading-none">
+        <p className="product-card-price mt-1 text-center shrink-0 leading-none">
           {(hasPromo ? product.promo_price : product.price).toLocaleString("fr-FR")} FCFA
         </p>
       </div>

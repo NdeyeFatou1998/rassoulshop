@@ -103,40 +103,40 @@
     background-clip: text;
   }
 
-  /* Cartes produits — typo luxe compacte */
+  /* Cartes produits — typo luxe lisible */
   .product-card-category {
     font-family: "Inter", system-ui, sans-serif;
-    font-size: 7.5px;
+    font-size: 9px;
     font-weight: 600;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: #d4bc6a;
   }
   @media (min-width: 768px) {
     .product-card-category {
-      font-size: 8.5px;
+      font-size: 10px;
     }
   }
 
   .product-card-title {
     font-family: "Playfair Display", Georgia, serif;
-    font-size: 0.8rem;
+    font-size: 0.95rem;
     font-weight: 500;
-    line-height: 1.2;
+    line-height: 1.22;
     letter-spacing: 0.02em;
     color: #f8f4eb;
   }
   @media (min-width: 768px) {
     .product-card-title {
-      font-size: 0.9rem;
+      font-size: 1.08rem;
     }
   }
 
   .product-card-price {
     font-family: "Inter", system-ui, sans-serif;
-    font-size: 0.68rem;
+    font-size: 0.82rem;
     font-weight: 600;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     font-variant-numeric: tabular-nums;
     background: linear-gradient(100deg, #bf953f 0%, #e8d48b 45%, #c8a84b 100%);
     -webkit-background-clip: text;
@@ -145,7 +145,29 @@
   }
   @media (min-width: 768px) {
     .product-card-price {
-      font-size: 0.75rem;
+      font-size: 0.92rem;
+    }
+  }
+
+  /* Grille produits — cards plus grandes */
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+  @media (min-width: 640px) {
+    .product-grid {
+      gap: 1rem;
+    }
+  }
+  @media (min-width: 768px) {
+    .product-grid {
+      gap: 1.25rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .product-grid {
+      gap: 1.75rem;
     }
   }
 

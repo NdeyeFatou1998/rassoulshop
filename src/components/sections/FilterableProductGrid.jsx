@@ -310,7 +310,7 @@ export default function FilterableProductGrid({
 
   return (
     <section className="pt-6 pb-10 md:pt-10 md:pb-14" style={{ background: "transparent" }}>
-      <div className="max-w-7xl mx-auto px-1 md:px-4 lg:px-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
 
         {/* ---- Barre recherche + filtre prix (Shop uniquement) ---- */}
         {showFilters && (
@@ -425,10 +425,10 @@ export default function FilterableProductGrid({
 
         {/* ---- Grille produits ---- */}
         {loading ? (
-          <div className="grid grid-cols-2 gap-1.5 md:gap-2.5">
+          <div className="product-grid">
             {Array.from({ length: 4 }).map((_, i) => (
               <div key={i}>
-                <div className="aspect-square shimmer rounded-2xl" />
+                <div className="aspect-[4/5] shimmer rounded-2xl" />
                 <div className="mt-3 space-y-2">
                   <div className="h-2 shimmer rounded-full w-1/4" />
                   <div className="h-3 shimmer rounded-full w-3/4" />
@@ -451,7 +451,7 @@ export default function FilterableProductGrid({
                   {/* Grille du chunk */}
                   <motion.div
                     layout
-                    className="grid grid-cols-2 gap-1.5 md:gap-2.5"
+                    className="product-grid"
                   >
                     <AnimatePresence mode="popLayout">
                       {chunk.map((product, i) => (

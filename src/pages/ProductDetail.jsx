@@ -397,7 +397,7 @@ export default function ProductDetail() {
               Vous aimerez aussi
             </span>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="product-grid">
             {similar.slice(0, 4).map((p, i) => (
               <ProductCard key={p.id} product={p} index={i} />
             ))}
