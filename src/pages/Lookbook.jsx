@@ -1,141 +1,29 @@
 /**
- * Page Lookbook — Hero + galerie swipeable (glisser ← →)
- * Vidéos : bouton play/pause + tap sur l'écran pour pause/reprendre
+ * Page Lookbook — Mosaïque bento + lightbox plein écran au clic
  */
 
 import { useState, useRef, useCallback, useEffect } from "react";
-import { motion } from "framer-motion";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Play,
-  Pause,
-  Volume2,
-  VolumeX,
-  ArrowDown,
-} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, Volume2, VolumeX, ChevronLeft, ChevronRight, Play, ArrowDown } from "lucide-react";
+import AnimatedSection from "../components/ui/AnimatedSection";
 
-function LookbookSlide({ look, isActive, index, total, muted, onToggleMute }) {
-  const videoRef = useRef(null);
-  const [playing, setPlaying] = useState(false);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || look.type !== "video") return;
-
-    if (isActive) {
-      video.muted = muted;
-      video
-        .play()
-        .then(() => setPlaying(true))
-        .catch(() => setPlaying(false));
-    } else {
-      video.pause();
-      setPlaying(false);
-    }
-  }, [isActive, look.src, look.type, muted]);
-
-  const togglePlayPause = useCallback(
-    (e) => {
-      e?.stopPropagation?.();
-      const video = videoRef.current;
-      if (!video) return;
-      if (video.paused) {
-        video.play().then(() => setPlaying(true)).catch(() => {});
-      } else {
-        video.pause();
-        setPlaying(false);
-      }
-    },
-    []
-  );
-
-  if (look.type === "video") {
-    return (
-      <div
-        className="relative flex-shrink-0 w-full snap-center snap-always h-[min(78vh,720px)] bg-noir-950 cursor-pointer"
-        onClick={togglePlayPause}
-        role="button"
-        tabIndex={0}
-        aria-label={playing ? "Mettre en pause" : "Lire la vidéo"}
-        onKeyDown={(e) => {
-          if (e.key === " " || e.key === "Enter") {
-            e.preventDefault();
-            togglePlayPause(e);
-          }
-        }}
-      >
-        <video
-          ref={videoRef}
-          src={look.src}
-          loop
-          playsInline
-          muted={muted}
-          className="w-full h-full object-contain bg-noir-950"
-        />
-
-        {/* Bouton play / pause */}
-        <button
-          type="button"
-          onClick={togglePlayPause}
-          className="absolute inset-0 m-auto w-14 h-14 md:w-16 md:h-16 rounded-full bg-noir-900/55 backdrop-blur-sm border border-white/10 text-cream flex items-center justify-center hover:bg-noir-900/75 transition-colors z-10"
-          aria-label={playing ? "Pause" : "Lecture"}
-        >
-          {playing ? (
-            <Pause size={26} fill="currentColor" />
-          ) : (
-            <Play size={26} className="ml-1" fill="currentColor" />
-          )}
-        </button>
-
-        {/* Son */}
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            onToggleMute();
-          }}
-          className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-noir-900/70 backdrop-blur-sm text-cream/80 hover:text-cream flex items-center justify-center"
-          aria-label={muted ? "Activer le son" : "Couper le son"}
-        >
-          {muted ? <VolumeX size={17} /> : <Volume2 size={17} />}
-        </button>
-
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 pointer-events-none">
-          <span className="px-4 py-1.5 rounded-full bg-noir-900/60 backdrop-blur-sm text-[10px] uppercase tracking-[0.15em] text-cream/70 font-medium">
-            {index + 1} / {total}
-          </span>
-          <span className="text-[9px] uppercase tracking-[0.12em] text-cream/45">
-            {playing ? "Tapez pour pause" : "Tapez pour lire"}
-          </span>
-        </div>
-      </div>
-    );
+function getSpanClass(span) {
+  switch (span) {
+    case "tall":
+      return "row-span-2";
+    case "wide":
+      return "col-span-2";
+    default:
+      return "";
   }
-
-  return (
-    <div className="relative flex-shrink-0 w-full snap-center snap-always h-[min(78vh,720px)] bg-noir-950">
-      <img
-        src={look.src}
-        alt={`Look ${index + 1}`}
-        className="w-full h-full object-contain bg-noir-950"
-        draggable={false}
-      />
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-noir-900/60 backdrop-blur-sm">
-        <span className="text-[10px] uppercase tracking-[0.15em] text-cream/70 font-medium">
-          {index + 1} / {total}
-        </span>
-      </div>
-    </div>
-  );
 }
 
 export default function Lookbook() {
   const [looks, setLooks] = useState([]);
   const [banner, setBanner] = useState(null);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [lightboxIndex, setLightboxIndex] = useState(null);
   const [muted, setMuted] = useState(true);
-  const trackRef = useRef(null);
+  const videoRef = useRef(null);
 
   useEffect(() => {
     fetch("/api/lookbook")
@@ -149,40 +37,54 @@ export default function Lookbook() {
       .catch(() => setBanner(null));
   }, []);
 
-  const scrollToIndex = useCallback((idx) => {
-    const track = trackRef.current;
-    if (!track || looks.length === 0) return;
-    const next = Math.max(0, Math.min(idx, looks.length - 1));
-    track.scrollTo({ left: next * track.clientWidth, behavior: "smooth" });
-    setActiveIndex(next);
-  }, [looks.length]);
+  const openLightbox = useCallback((index) => {
+    setLightboxIndex(index);
+    setMuted(true);
+  }, []);
+
+  const closeLightbox = useCallback(() => {
+    setLightboxIndex(null);
+  }, []);
 
   const goNext = useCallback(() => {
-    scrollToIndex((activeIndex + 1) % looks.length);
-  }, [activeIndex, looks.length, scrollToIndex]);
+    setLightboxIndex((prev) => (prev !== null ? (prev + 1) % looks.length : null));
+    setMuted(true);
+  }, [looks.length]);
 
   const goPrev = useCallback(() => {
-    scrollToIndex((activeIndex - 1 + looks.length) % looks.length);
-  }, [activeIndex, looks.length, scrollToIndex]);
-
-  const handleTrackScroll = useCallback(() => {
-    const track = trackRef.current;
-    if (!track?.clientWidth) return;
-    const idx = Math.round(track.scrollLeft / track.clientWidth);
-    if (idx !== activeIndex && idx >= 0 && idx < looks.length) {
-      setActiveIndex(idx);
-    }
-  }, [activeIndex, looks.length]);
+    setLightboxIndex((prev) =>
+      prev !== null ? (prev - 1 + looks.length) % looks.length : null
+    );
+    setMuted(true);
+  }, [looks.length]);
 
   useEffect(() => {
-    if (looks.length === 0) return;
+    if (lightboxIndex === null) return;
     function handleKey(e) {
+      if (e.key === "Escape") closeLightbox();
       if (e.key === "ArrowRight") goNext();
       if (e.key === "ArrowLeft") goPrev();
     }
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [looks.length, goNext, goPrev]);
+  }, [lightboxIndex, closeLightbox, goNext, goPrev]);
+
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [lightboxIndex]);
+
+  const toggleMute = useCallback(() => {
+    setMuted((m) => !m);
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+    }
+  }, []);
+
+  const currentItem = lightboxIndex !== null ? looks[lightboxIndex] : null;
 
   const stagger = {
     hidden: {},
@@ -199,7 +101,7 @@ export default function Lookbook() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-[#080807] px-3 md:px-5 pt-[72px] md:pt-[84px] pb-4 md:pb-6">
+      <section className="px-3 md:px-5 pt-[72px] md:pt-[84px] pb-4 md:pb-6" style={{ background: "#030303" }}>
         <div className="relative w-full" style={{ height: "clamp(380px, 58svh, 760px)" }}>
           <div
             className="spin-border-hero absolute inset-0"
@@ -232,9 +134,10 @@ export default function Lookbook() {
               />
             )}
             {!heroBannerSrc && (
-              <div className="absolute inset-0 bg-gradient-to-br from-noir-950 via-[#1a150a] to-noir-950" />
+              <div className="absolute inset-0 bg-noir-950" />
             )}
             <div className="absolute inset-0 bg-gradient-to-b from-noir-950/55 via-noir-950/30 to-noir-950/80 pointer-events-none" />
+
             <motion.div
               variants={stagger}
               initial="hidden"
@@ -254,13 +157,18 @@ export default function Lookbook() {
               >
                 Lookbook
               </motion.h1>
+              <motion.div
+                variants={fadeUp}
+                className="w-14 h-[1.5px] bg-gradient-to-r from-transparent via-gold to-transparent mx-auto my-5"
+              />
               <motion.p
                 variants={fadeUp}
-                className="text-[12px] md:text-[13px] uppercase tracking-[0.28em] text-white/40 font-light mt-5"
+                className="text-[12px] md:text-[13px] uppercase tracking-[0.28em] text-white/50 font-light"
               >
-                Glissez pour parcourir
+                Cliquez pour agrandir
               </motion.p>
             </motion.div>
+
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -279,80 +187,167 @@ export default function Lookbook() {
         </div>
       </section>
 
-      {/* Galerie swipe */}
-      <section className="bg-[#080807] pb-24">
-        <div className="flex items-center gap-5 px-4 md:px-8 py-5">
-          <div className="flex-1 h-px bg-white/[0.05]" />
-          <span className="text-[10px] uppercase tracking-[0.35em] text-gold/50 font-medium whitespace-nowrap">
-            {looks.length > 0 ? `${activeIndex + 1} / ${looks.length}` : "0 visuel"}
-          </span>
-          <div className="flex-1 h-px bg-white/[0.05]" />
-        </div>
+      {/* Compteur */}
+      <div className="flex items-center gap-5 px-4 md:px-8 py-6" style={{ background: "#030303" }}>
+        <div className="flex-1 h-px bg-white/[0.05]" />
+        <span className="text-[10px] uppercase tracking-[0.35em] text-gold/50 font-medium whitespace-nowrap">
+          {looks.length} visuel{looks.length !== 1 ? "s" : ""}
+        </span>
+        <div className="flex-1 h-px bg-white/[0.05]" />
+      </div>
 
+      {/* Grille mosaïque */}
+      <section className="w-full px-3 md:px-5 lg:px-8 pb-24 pt-2" style={{ background: "#030303" }}>
         {looks.length === 0 ? (
           <p className="text-center text-white/30 text-sm py-20">Aucun média pour le moment</p>
         ) : (
-          <div className="relative">
-            {/* Piste horizontale — scroll / swipe natif */}
-            <div
-              ref={trackRef}
-              onScroll={handleTrackScroll}
-              className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-smooth touch-pan-x"
-            >
-              {looks.map((look, i) => (
-                <LookbookSlide
-                  key={look.id ?? i}
-                  look={look}
-                  index={i}
-                  total={looks.length}
-                  isActive={activeIndex === i}
-                  muted={muted}
-                  onToggleMute={() => setMuted((m) => !m)}
-                />
-              ))}
-            </div>
-
-            {/* Flèches navigation */}
-            {looks.length > 1 && (
-              <>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 auto-rows-[180px] md:auto-rows-[240px] gap-2 md:gap-3">
+            {looks.map((look, i) => (
+              <AnimatedSection
+                key={look.id ?? i}
+                delay={i * 0.04}
+                className={`${getSpanClass(look.span)} group`}
+              >
                 <button
                   type="button"
-                  onClick={goPrev}
-                  className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-noir-900/65 backdrop-blur-sm text-cream/80 hover:text-cream flex items-center justify-center border border-white/10"
-                  aria-label="Précédent"
+                  onClick={() => openLightbox(i)}
+                  className="relative w-full h-full rounded-2xl overflow-hidden cursor-pointer border border-white/[0.06] hover:border-gold/25 transition-all duration-500 text-left"
+                  aria-label={`Ouvrir ${look.type === "video" ? "la vidéo" : "l'image"} ${i + 1}`}
                 >
-                  <ChevronLeft size={22} />
-                </button>
-                <button
-                  type="button"
-                  onClick={goNext}
-                  className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-noir-900/65 backdrop-blur-sm text-cream/80 hover:text-cream flex items-center justify-center border border-white/10"
-                  aria-label="Suivant"
-                >
-                  <ChevronRight size={22} />
-                </button>
-              </>
-            )}
+                  {look.type === "video" ? (
+                    <>
+                      <video
+                        src={look.src}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        className="w-full h-full object-cover img-zoom pointer-events-none"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-cream/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                          <Play size={16} className="text-noir-900 ml-0.5" fill="currentColor" />
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <img
+                      src={look.src}
+                      alt={`Look ${i + 1}`}
+                      loading="lazy"
+                      className="w-full h-full object-cover img-zoom"
+                      draggable={false}
+                    />
+                  )}
 
-            {/* Points indicateurs */}
-            {looks.length > 1 && (
-              <div className="flex justify-center gap-2 mt-5 px-4">
-                {looks.map((_, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => scrollToIndex(i)}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
-                      i === activeIndex ? "w-6 bg-gold" : "w-1.5 bg-white/25 hover:bg-white/40"
-                    }`}
-                    aria-label={`Aller au visuel ${i + 1}`}
-                  />
-                ))}
-              </div>
-            )}
+                  <div className="absolute inset-0 bg-noir-900/0 group-hover:bg-noir-900/20 transition-all duration-500 pointer-events-none" />
+
+                  <div className="absolute bottom-2.5 left-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                    <span className="text-[9px] uppercase tracking-[0.2em] text-cream/80 font-semibold px-2 py-1 rounded-full bg-noir-900/50 backdrop-blur-sm">
+                      {look.type === "video" ? "Vidéo" : "Look"} {String(i + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+                </button>
+              </AnimatedSection>
+            ))}
           </div>
         )}
       </section>
+
+      {/* Lightbox plein écran */}
+      <AnimatePresence>
+        {currentItem && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl flex items-center justify-center"
+            onClick={closeLightbox}
+          >
+            <motion.div
+              initial={{ scale: 0.92, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.92, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="relative w-[92vw] h-[85vh] md:w-[80vw] md:h-[85vh] max-w-5xl rounded-2xl overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {currentItem.type === "video" ? (
+                <video
+                  ref={videoRef}
+                  key={currentItem.src}
+                  src={currentItem.src}
+                  autoPlay
+                  muted={muted}
+                  loop
+                  playsInline
+                  className="w-full h-full object-contain bg-black"
+                />
+              ) : (
+                <img
+                  src={currentItem.src}
+                  alt={`Look ${lightboxIndex + 1}`}
+                  className="w-full h-full object-contain bg-black"
+                />
+              )}
+
+              <button
+                type="button"
+                onClick={closeLightbox}
+                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-noir-900/70 backdrop-blur-sm text-cream/80 hover:text-cream flex items-center justify-center transition-colors btn-press"
+                aria-label="Fermer"
+              >
+                <X size={18} />
+              </button>
+
+              {currentItem.type === "video" && (
+                <button
+                  type="button"
+                  onClick={toggleMute}
+                  className="absolute top-4 left-4 w-10 h-10 rounded-full bg-noir-900/70 backdrop-blur-sm text-cream/80 hover:text-cream flex items-center justify-center transition-colors btn-press"
+                  aria-label={muted ? "Activer le son" : "Couper le son"}
+                >
+                  {muted ? <VolumeX size={17} /> : <Volume2 size={17} />}
+                </button>
+              )}
+
+              {looks.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      goPrev();
+                    }}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-noir-900/60 backdrop-blur-sm text-cream/70 hover:text-cream flex items-center justify-center transition-colors btn-press"
+                    aria-label="Précédent"
+                  >
+                    <ChevronLeft size={20} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      goNext();
+                    }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-noir-900/60 backdrop-blur-sm text-cream/70 hover:text-cream flex items-center justify-center transition-colors btn-press"
+                    aria-label="Suivant"
+                  >
+                    <ChevronRight size={20} />
+                  </button>
+                </>
+              )}
+
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-noir-900/60 backdrop-blur-sm">
+                <span className="text-[10px] uppercase tracking-[0.15em] text-cream/70 font-medium">
+                  {lightboxIndex + 1} / {looks.length}
+                </span>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
