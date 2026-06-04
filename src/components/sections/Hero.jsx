@@ -90,23 +90,24 @@ export default function Hero({ imageSrc, title, subtitle }) {
           <div className="absolute inset-0 bg-gradient-to-b from-noir-950/45 via-noir-950/20 to-noir-950/80 pointer-events-none" />
           <div className="absolute inset-0 bg-noir-950/10 pointer-events-none" />
 
-          {/* ---- Texte centré ---- */}
+          {/* L'art d'offrir — collé tout en haut de l'image */}
+          <motion.p
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute top-4 left-0 right-0 z-10 text-center text-white font-semibold uppercase tracking-[0.32em]"
+            style={{ fontSize: "clamp(0.55rem, 1.5vw, 0.8rem)" }}
+          >
+            L'art d'offrir
+          </motion.p>
+
+          {/* Slogan — centré verticalement */}
           <motion.div
             variants={stagger}
             initial="hidden"
             animate="show"
             className="relative z-10 text-center px-6 sm:px-10 max-w-3xl mx-auto"
           >
-            {/* L'art d'offrir — en haut, blanc */}
-            <motion.p
-              variants={fadeUp}
-              className="text-white font-semibold uppercase tracking-[0.32em] mb-3"
-              style={{ fontSize: "clamp(0.6rem, 1.6vw, 0.85rem)" }}
-            >
-              L'art d'offrir
-            </motion.p>
-
-            {/* Slogan premium */}
             <motion.p
               variants={fadeUp}
               className="font-serif max-w-xl mx-auto leading-tight tracking-wide"
