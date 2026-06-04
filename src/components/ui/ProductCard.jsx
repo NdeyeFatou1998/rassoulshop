@@ -17,6 +17,7 @@ export default function ProductCard({ product, index = 0 }) {
 
   const hasPromo = product.promo_active && product.promo_price;
   const displayPrice = hasPromo ? product.promo_price : product.price;
+  const category = product.category_name || product.category;
 
   function handleQuickAdd(e) {
     e.preventDefault();
@@ -89,7 +90,11 @@ export default function ProductCard({ product, index = 0 }) {
 
         {/* Bloc texte éditorial en bas */}
         <div className="absolute inset-x-0 bottom-0 z-10 px-3.5 pb-3.5 pt-6">
-          <h3 className="product-card-title line-clamp-2 mb-2">{product.title}</h3>
+          <h3 className="product-card-title line-clamp-2 mb-1">{product.title}</h3>
+
+          {category && (
+            <p className="product-card-category line-clamp-1 mb-2">{category}</p>
+          )}
 
           <div className="flex items-end justify-between gap-2">
             <span className="product-card-price leading-none whitespace-nowrap">

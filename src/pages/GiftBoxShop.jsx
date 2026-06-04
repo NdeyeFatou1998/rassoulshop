@@ -107,7 +107,8 @@ export default function GiftBoxShop() {
                     </span>
                   )}
                   <div className="absolute inset-x-0 bottom-0 z-10 px-3.5 pb-3.5 pt-6">
-                    <h3 className="product-card-title line-clamp-2 mb-2">{box.name}</h3>
+                    <h3 className="product-card-title line-clamp-2 mb-1">{box.name}</h3>
+                    <p className="product-card-category mb-2">Coffret</p>
                     <span className="product-card-price leading-none whitespace-nowrap">
                       {(box.price || 0).toLocaleString("fr-FR")}
                       <span className="product-card-price-unit"> FCFA</span>
