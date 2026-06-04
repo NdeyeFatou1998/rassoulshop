@@ -39,7 +39,7 @@ export default function GiftBoxShop() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0c0a07] via-[#0e0d0b] to-[#0c0a07]">
+    <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #0d0a05 0%, #131108 50%, #0d0a05 100%)" }}>
       {/* ---- Header ---- */}
       <section className="pt-20 md:pt-24 pb-5 max-w-7xl mx-auto px-5 lg:px-10 text-center">
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
@@ -54,7 +54,7 @@ export default function GiftBoxShop() {
           /* Skeletons */
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="rounded-2xl overflow-hidden bg-[#211e17] border border-gold/[0.18]">
+              <div key={i} className="rounded-2xl overflow-hidden" style={{ background: "linear-gradient(160deg,#38311f,#2a2416)", border: "1px solid rgba(197,165,90,0.25)" }}>
                 <div className="aspect-square shimmer" />
                 <div className="px-3.5 py-3 space-y-2 border-t border-white/[0.05]">
                   <div className="h-2 shimmer rounded w-1/3" />
@@ -80,10 +80,8 @@ export default function GiftBoxShop() {
               >
                 <Link
                   to={`/gift-boxes/${box.id}`}
-                  className="group flex flex-col rounded-2xl overflow-hidden
-                             bg-[#211e17] border border-gold/[0.18]
-                             hover:border-gold/50 hover:shadow-[0_6px_36px_rgba(197,165,90,0.18)]
-                             transition-all duration-400"
+                  className="group flex flex-col rounded-2xl overflow-hidden transition-all duration-400"
+                  style={{ background: "linear-gradient(160deg,#38311f,#2a2416)", border: "1px solid rgba(197,165,90,0.28)" }}
                 >
                   {/* Image */}
                   <div className="relative w-full aspect-square overflow-hidden">
@@ -108,23 +106,23 @@ export default function GiftBoxShop() {
                   </div>
 
                   {/* Infos */}
-                  <div className="px-3.5 pt-3 pb-4 bg-gradient-to-b from-[#211e17] to-[#1a1710] border-t border-gold/[0.12]">
-                    <p className="text-[8px] uppercase tracking-[0.22em] text-gold/80 font-bold mb-1.5">
+                  <div className="px-3.5 pt-3 pb-4" style={{ borderTop: "1px solid rgba(197,165,90,0.18)" }}>
+                    <p className="text-[8px] uppercase tracking-[0.22em] font-bold mb-1.5" style={{ color: "#C5A55A" }}>
                       Coffret cadeau
                     </p>
-                    <h3 className="text-[13px] font-bold text-gold leading-snug line-clamp-2
-                                   group-hover:text-gold-light transition-colors duration-300">
+                    <h3 className="text-[14px] font-bold leading-snug line-clamp-2 transition-colors duration-300"
+                        style={{ color: "#D4BA78" }}>
                       {box.name}
                     </h3>
                     {box.items?.length > 0 && (
-                      <p className="text-[10px] text-white/60 mt-1">
+                      <p className="text-[10px] mt-1" style={{ color: "rgba(240,234,216,0.65)" }}>
                         {box.items.length} article{box.items.length > 1 ? "s" : ""}
                       </p>
                     )}
-                    <div className="mt-3 pt-2.5 border-t border-gold/[0.12]">
-                      <span className="text-[15px] font-bold text-white leading-none">
+                    <div className="mt-3 pt-2.5" style={{ borderTop: "1px solid rgba(197,165,90,0.15)" }}>
+                      <span className="text-[16px] font-bold" style={{ color: "#f0ead8" }}>
                         {(box.price || 0).toLocaleString("fr-FR")}
-                        <span className="text-[9px] font-normal text-white/55 ml-0.5">FCFA</span>
+                        <span className="text-[9px] font-normal ml-0.5" style={{ color: "rgba(240,234,216,0.60)" }}>FCFA</span>
                       </span>
                     </div>
                   </div>

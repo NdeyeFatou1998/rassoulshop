@@ -1,6 +1,6 @@
 /**
  * ProductCard — Carte produit premium
- * Fond sable chaud, titre en gold gras, prix blanc bold
+ * Fond brun chaud visible, titre gold gras, prix blanc bold
  */
 
 import { useState } from "react";
@@ -29,10 +29,20 @@ export default function ProductCard({ product, index = 0 }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-20px" }}
       transition={{ duration: 0.5, delay: index * 0.04, ease: [0.22, 1, 0.36, 1] }}
-      className="group flex flex-col rounded-2xl overflow-hidden
-                 bg-[#211e17] border border-gold/[0.18]
-                 hover:border-gold/50 hover:shadow-[0_6px_36px_rgba(197,165,90,0.18)]
-                 transition-all duration-400"
+      className="group flex flex-col rounded-2xl overflow-hidden transition-all duration-400"
+      style={{
+        background: "linear-gradient(160deg, #38311f 0%, #2a2416 100%)",
+        border: "1px solid rgba(197,165,90,0.30)",
+        boxShadow: "0 2px 16px rgba(0,0,0,0.5)",
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.border = "1px solid rgba(197,165,90,0.60)";
+        e.currentTarget.style.boxShadow = "0 8px 36px rgba(197,165,90,0.18)";
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.border = "1px solid rgba(197,165,90,0.30)";
+        e.currentTarget.style.boxShadow = "0 2px 16px rgba(0,0,0,0.5)";
+      }}
     >
       {/* ---- Image ---- */}
       <Link to={`/product/${product.id}`} className="relative w-full aspect-square block overflow-hidden">
@@ -43,25 +53,21 @@ export default function ProductCard({ product, index = 0 }) {
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
         />
 
-        {/* Gradient bas subtil */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#211e17]/70 via-transparent to-transparent
+        <div className="absolute inset-0 bg-gradient-to-t from-[#2a2416]/60 via-transparent to-transparent
                         opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
 
-        {/* Badge produit */}
         {product.badge && (
-          <span className="absolute top-2.5 left-2.5 px-2 py-[3px] text-[8px] uppercase tracking-[0.14em] font-bold bg-gold text-[#0c0a07] rounded-full">
+          <span className="absolute top-2.5 left-2.5 px-2 py-[3px] text-[8px] uppercase tracking-[0.14em] font-bold bg-[#C5A55A] text-[#0c0a07] rounded-full">
             {product.badge}
           </span>
         )}
 
-        {/* Badge promo % */}
         {hasPromo && (
-          <span className="absolute top-2.5 right-2.5 text-[8px] font-bold bg-red-500 text-white px-2 py-0.5 rounded-full shadow-md">
+          <span className="absolute top-2.5 right-2.5 text-[8px] font-bold bg-red-500 text-white px-2 py-0.5 rounded-full">
             -{Math.round((1 - product.promo_price / product.price) * 100)}%
           </span>
         )}
 
-        {/* Bouton quick-add */}
         <button
           onClick={handleQuickAdd}
           className={`absolute bottom-2.5 right-2.5 z-10 w-9 h-9 rounded-full flex items-center justify-center
@@ -69,7 +75,7 @@ export default function ProductCard({ product, index = 0 }) {
             opacity-100 md:opacity-0 md:group-hover:opacity-100 ${
               justAdded
                 ? "bg-green-500 text-white scale-110"
-                : "bg-[#0c0a07]/80 backdrop-blur-sm text-white hover:bg-gold hover:text-[#0c0a07]"
+                : "bg-[#0c0a07]/80 backdrop-blur-sm text-white hover:bg-[#C5A55A] hover:text-[#0c0a07]"
             }`}
           aria-label="Ajouter au panier"
         >
@@ -81,16 +87,16 @@ export default function ProductCard({ product, index = 0 }) {
       </Link>
 
       {/* ---- Infos ---- */}
-      <div className="px-3.5 pt-3 pb-4 flex flex-col bg-gradient-to-b from-[#211e17] to-[#1a1710] border-t border-gold/[0.12]">
+      <div className="px-3.5 pt-3 pb-4 flex flex-col" style={{ borderTop: "1px solid rgba(197,165,90,0.20)" }}>
 
         {/* Catégorie */}
-        <p className="text-[8px] uppercase tracking-[0.22em] text-gold/80 font-bold mb-1.5">
+        <p className="text-[8px] uppercase tracking-[0.22em] font-bold mb-1.5" style={{ color: "#C5A55A" }}>
           {product.category_name || product.category || ""}
         </p>
 
-        {/* Titre — gold gras */}
-        <h3 className="text-[13px] font-bold text-gold leading-snug line-clamp-2
-                       group-hover:text-gold-light transition-colors duration-300">
+        {/* Titre — gold gras, VISIBLE */}
+        <h3 className="text-[14px] font-bold leading-snug line-clamp-2 transition-colors duration-300"
+            style={{ color: "#D4BA78" }}>
           {product.title}
         </h3>
 
@@ -104,36 +110,36 @@ export default function ProductCard({ product, index = 0 }) {
             <div className="flex items-center gap-1 mt-2">
               {swatches.map(opt => (
                 <img key={opt.id} src={opt.image} alt={opt.name} title={opt.name}
-                  className="w-4 h-4 rounded-full object-cover border border-gold/25" />
+                  className="w-4 h-4 rounded-full object-cover border border-[#C5A55A]/30" />
               ))}
-              {extra > 0 && <span className="text-[9px] text-white/50 ml-0.5">+{extra}</span>}
+              {extra > 0 && <span className="text-[9px] ml-0.5" style={{ color: "rgba(255,255,255,0.6)" }}>+{extra}</span>}
             </div>
           );
         })()}
 
-        {/* Tag VIP */}
         {product.is_vip && (
-          <span className="self-start mt-2 inline-flex items-center gap-1 text-[7px] uppercase tracking-[0.18em] font-bold bg-gold/20 text-gold border border-gold/40 px-2 py-[3px] rounded-full">
+          <span className="self-start mt-2 inline-flex items-center gap-1 text-[7px] uppercase tracking-[0.18em] font-bold px-2 py-[3px] rounded-full"
+                style={{ background: "rgba(197,165,90,0.15)", color: "#C5A55A", border: "1px solid rgba(197,165,90,0.40)" }}>
             ★ VIP
           </span>
         )}
 
         {/* Prix */}
-        <div className="flex items-baseline gap-2 mt-3 pt-2.5 border-t border-gold/[0.12]">
+        <div className="flex items-baseline gap-2 mt-3 pt-2.5" style={{ borderTop: "1px solid rgba(197,165,90,0.15)" }}>
           {hasPromo ? (
             <>
-              <span className="text-[11px] text-white/40 line-through">
+              <span className="text-[11px] line-through" style={{ color: "rgba(255,255,255,0.45)" }}>
                 {product.price.toLocaleString("fr-FR")}
               </span>
-              <span className="text-[15px] font-bold text-gold leading-none">
+              <span className="text-[16px] font-bold" style={{ color: "#C5A55A" }}>
                 {product.promo_price.toLocaleString("fr-FR")}
-                <span className="text-[9px] font-normal ml-0.5 text-gold/70">FCFA</span>
+                <span className="text-[9px] font-normal ml-0.5" style={{ color: "rgba(197,165,90,0.70)" }}>FCFA</span>
               </span>
             </>
           ) : (
-            <span className="text-[15px] font-bold text-white leading-none">
+            <span className="text-[16px] font-bold" style={{ color: "#f0ead8" }}>
               {product.price.toLocaleString("fr-FR")}
-              <span className="text-[9px] font-normal text-white/55 ml-0.5">FCFA</span>
+              <span className="text-[9px] font-normal ml-0.5" style={{ color: "rgba(240,234,216,0.60)" }}>FCFA</span>
             </span>
           )}
         </div>

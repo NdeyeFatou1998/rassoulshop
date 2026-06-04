@@ -310,7 +310,7 @@ export default function FilterableProductGrid({
   const hasActiveFilters = search.trim() !== "" || applied !== null;
 
   return (
-    <section className="bg-gradient-to-b from-[#0e0d0b] via-[#110f09] to-[#0e0d0b] py-10 md:py-14">
+    <section className="py-10 md:py-14" style={{ background: "linear-gradient(180deg, #131108 0%, #170f07 50%, #131108 100%)" }}>
       <div className="max-w-7xl mx-auto px-5 lg:px-10">
 
         {/* ---- Barre recherche + filtre prix (Shop uniquement) ---- */}

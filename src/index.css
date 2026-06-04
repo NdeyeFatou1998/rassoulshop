@@ -1,10 +1,6 @@
 /**
- * Styles globaux Rassoul Shop — Design Premium v2
- * 
- * Directives Tailwind + animations avancées :
- * - Shimmer loading, glow pulse, gradient animé
- * - Transitions de pages fluides
- * - Effets visuels cohérents web & mobile
+ * Styles globaux Rassoul Shop — Design Premium
+ * Fond noir chaud doré, lisibilité maximale
  */
 
 @tailwind base;
@@ -12,100 +8,88 @@
 @tailwind utilities;
 
 /* ============================================
-   BASE - Reset et styles fondamentaux
+   BASE
    ============================================ */
 
 @layer base {
-  /* Scrollbar personnalisée - fine et dorée au hover */
   ::-webkit-scrollbar {
     width: 5px;
   }
   ::-webkit-scrollbar-track {
-    background: #111009;
+    background: #12100a;
   }
   ::-webkit-scrollbar-thumb {
-    background: #2a2720;
+    background: #3a3020;
     border-radius: 10px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(197, 165, 90, 0.55);
+    background: rgba(197, 165, 90, 0.6);
   }
 
-  /* Fond global — noir chaud légèrement doré */
   body {
-    background-color: #0e0d0b;
-    background-image: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(197,165,90,0.04) 0%, transparent 60%);
+    background-color: #131108;
     color: #F0EAE0;
   }
 
-  /* Scroll fluide global + antialiasing */
   html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Sélection de texte aux couleurs de la marque */
   ::selection {
-    background: rgba(197, 165, 90, 0.3);
-    color: #f5f0eb;
+    background: rgba(197, 165, 90, 0.35);
+    color: #fff8ec;
   }
 
-  /* Transitions fluides globales pour les liens et boutons */
   a, button {
     -webkit-tap-highlight-color: transparent;
   }
 }
 
 /* ============================================
-   COMPONENTS - Classes utilitaires réutilisables
+   COMPONENTS
    ============================================ */
 
 @layer components {
-  /* Effet glassmorphism pour la navbar */
   .glass {
-    background: rgba(14, 13, 11, 0.82);
-    backdrop-filter: blur(24px) saturate(1.2);
-    -webkit-backdrop-filter: blur(24px) saturate(1.2);
+    background: rgba(14, 12, 8, 0.90);
+    backdrop-filter: blur(24px) saturate(1.3);
+    -webkit-backdrop-filter: blur(24px) saturate(1.3);
   }
 
-  /* Effet glassmorphism clair pour le mobile tab bar */
   .glass-light {
-    background: rgba(14, 14, 14, 0.88);
-    backdrop-filter: blur(20px) saturate(1.1);
-    -webkit-backdrop-filter: blur(20px) saturate(1.1);
+    background: rgba(18, 15, 9, 0.95);
+    backdrop-filter: blur(20px) saturate(1.2);
+    -webkit-backdrop-filter: blur(20px) saturate(1.2);
   }
 
-  /* Bordure subtile dorée au hover (desktop) + toujours visible sur mobile */
   .border-gold-hover {
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(197, 165, 90, 0.15);
     transition: border-color 0.4s ease, box-shadow 0.4s ease;
   }
   .border-gold-hover:hover {
-    border-color: rgba(197, 165, 90, 0.3);
-    box-shadow: 0 0 0 1px rgba(197, 165, 90, 0.08);
+    border-color: rgba(197, 165, 90, 0.45);
+    box-shadow: 0 0 0 1px rgba(197, 165, 90, 0.10);
   }
 
-  /* Overlay gradient sombre pour les images/vidéos */
   .overlay-gradient {
     background: linear-gradient(
       to top,
-      rgba(5, 5, 5, 0.92) 0%,
-      rgba(5, 5, 5, 0.35) 45%,
+      rgba(5, 4, 2, 0.90) 0%,
+      rgba(5, 4, 2, 0.30) 45%,
       transparent 100%
     );
   }
 
-  /* Ligne décorative dorée animée */
   .gold-line {
     width: 40px;
     height: 1px;
     background: linear-gradient(to right, #C5A55A, rgba(197, 165, 90, 0.2));
   }
 
-  /* Texte avec gradient doré animé */
   .text-gradient-gold {
-    background: linear-gradient(135deg, #C5A55A 0%, #D4BA78 35%, #C5A55A 65%, #D4BA78 100%);
+    background: linear-gradient(135deg, #C5A55A 0%, #E8C96A 35%, #C5A55A 65%, #D4BA78 100%);
     background-size: 200% 200%;
     animation: goldShift 4s ease-in-out infinite;
     -webkit-background-clip: text;
@@ -113,11 +97,11 @@
     background-clip: text;
   }
 
-  /* Shimmer loading — effet reflet qui glisse sur le skeleton */
+  /* Shimmer — fond brun chaud visible */
   .shimmer {
     position: relative;
     overflow: hidden;
-    background: #211e17;
+    background: #2a2416;
   }
   .shimmer::after {
     content: '';
@@ -126,27 +110,25 @@
     background: linear-gradient(
       90deg,
       transparent 0%,
-      rgba(197, 165, 90, 0.05) 40%,
-      rgba(197, 165, 90, 0.10) 50%,
-      rgba(197, 165, 90, 0.05) 60%,
+      rgba(197, 165, 90, 0.08) 40%,
+      rgba(197, 165, 90, 0.16) 50%,
+      rgba(197, 165, 90, 0.08) 60%,
       transparent 100%
     );
     animation: shimmerSlide 1.8s ease-in-out infinite;
   }
 
-  /* Glow doré subtil pour les CTAs et le panier flottant */
   .glow-gold {
     box-shadow:
-      0 0 15px rgba(197, 165, 90, 0.25),
-      0 0 40px rgba(197, 165, 90, 0.10);
+      0 0 15px rgba(197, 165, 90, 0.30),
+      0 0 40px rgba(197, 165, 90, 0.12);
   }
   .glow-gold-hover:hover {
     box-shadow:
-      0 0 20px rgba(197, 165, 90, 0.4),
-      0 0 60px rgba(197, 165, 90, 0.15);
+      0 0 24px rgba(197, 165, 90, 0.50),
+      0 0 60px rgba(197, 165, 90, 0.18);
   }
 
-  /* Carte sur fond clair : blanc, ombre, lift au hover */
   .card-light {
     background: white;
     border-radius: 1rem;
@@ -163,7 +145,6 @@
     }
   }
 
-  /* Shimmer pour sections claires */
   .shimmer-light {
     position: relative;
     overflow: hidden;
@@ -183,18 +164,18 @@
     animation: shimmerSlide 1.6s ease-in-out infinite;
   }
 
-  /* Card avec bordure gradient animée au hover */
+  /* Card premium — brun chaud visible */
   .card-premium {
     position: relative;
     border-radius: 1rem;
     overflow: hidden;
-    background: #211e17;
-    border: 1px solid rgba(197, 165, 90, 0.18);
+    background: linear-gradient(160deg, #38311f 0%, #2a2416 100%);
+    border: 1px solid rgba(197, 165, 90, 0.25);
     transition: border-color 0.5s ease, transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.5s ease;
   }
   .card-premium:hover {
-    border-color: rgba(197, 165, 90, 0.45);
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 24px rgba(197, 165, 90, 0.12);
+    border-color: rgba(197, 165, 90, 0.55);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 24px rgba(197, 165, 90, 0.15);
   }
   @media (min-width: 768px) {
     .card-premium:hover {
@@ -204,11 +185,10 @@
 }
 
 /* ============================================
-   UTILITIES - Animations et effets spéciaux
+   UTILITIES
    ============================================ */
 
 @layer utilities {
-  /* Transition douce pour les images au hover (plus lente, plus fluide) */
   .img-zoom {
     transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
@@ -216,7 +196,6 @@
     transform: scale(1.06);
   }
 
-  /* Masquer la scrollbar mobile tout en gardant le scroll */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
@@ -225,17 +204,15 @@
     scrollbar-width: none;
   }
 
-  /* Bouton avec effet press (mobile-friendly) */
   .btn-press:active {
     transform: scale(0.96);
   }
 }
 
 /* ============================================
-   KEYFRAMES - Animations custom
+   KEYFRAMES
    ============================================ */
 
-/* Bannière marquee défilante (Hero) */
 @keyframes marquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
@@ -247,19 +224,16 @@
   animation-play-state: paused;
 }
 
-/* Shimmer (reflet glissant sur skeleton) */
 @keyframes shimmerSlide {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
 }
 
-/* Gradient doré qui bouge lentement */
 @keyframes goldShift {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
 
-/* Pulse glow pour le panier flottant */
 @keyframes glowPulse {
   0%, 100% { box-shadow: 0 0 15px rgba(197, 165, 90, 0.3), 0 0 40px rgba(197, 165, 90, 0.10); }
   50% { box-shadow: 0 0 25px rgba(197, 165, 90, 0.5), 0 0 60px rgba(197, 165, 90, 0.2); }
@@ -268,7 +242,6 @@
   animation: glowPulse 3s ease-in-out infinite;
 }
 
-/* Spin loader premium (doré) */
 @keyframes spinGold {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -277,7 +250,6 @@
   animation: spinGold 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
 }
 
-/* Fade-in par le bas pour les transitions de pages */
 @keyframes pageEnter {
   0% { opacity: 0; transform: translateY(16px); }
   100% { opacity: 1; transform: translateY(0); }
@@ -286,20 +258,16 @@
   animation: pageEnter 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
-/* Contour doré qui tourne — squircle catégories */
 @keyframes spinBorder {
   0%   { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-/* Vitesse normale (inactif) */
 .spin-border-slow {
   animation: spinBorder 4s linear infinite;
 }
-/* Vitesse rapide + lueur renforcée (actif) */
 .spin-border-fast {
   animation: spinBorder 2.2s linear infinite;
 }
-/* Vitesse lente pour grande surface (hero/bannière) */
 .spin-border-hero {
   animation: spinBorder 6s linear infinite;
 }
@@ -322,7 +290,7 @@
   height: 20px;
   border-radius: 50%;
   background: #C5A55A;
-  border: 2px solid #080807;
+  border: 2px solid #131108;
   cursor: pointer;
   pointer-events: all;
   box-shadow: 0 0 8px rgba(197, 165, 90, 0.45);
@@ -337,7 +305,7 @@
   height: 20px;
   border-radius: 50%;
   background: #C5A55A;
-  border: 2px solid #080807;
+  border: 2px solid #131108;
   cursor: pointer;
   pointer-events: all;
   box-shadow: 0 0 8px rgba(197, 165, 90, 0.45);
