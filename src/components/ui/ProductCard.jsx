@@ -1,5 +1,6 @@
 /**
- * ProductCard — Format portrait 4/5, image max, texte Playfair/Inter
+ * ProductCard — Design éditorial plein cadre
+ * L'image remplit toute la carte ; nom, catégorie et prix posés sur un voile dégradé.
  */
 
 import { useState } from "react";
@@ -15,6 +16,8 @@ export default function ProductCard({ product, index = 0 }) {
   const [justAdded, setJustAdded] = useState(false);
 
   const hasPromo = product.promo_active && product.promo_price;
+  const displayPrice = hasPromo ? product.promo_price : product.price;
+  const category = product.category_name || product.category;
 
   function handleQuickAdd(e) {
     e.preventDefault();
@@ -30,84 +33,118 @@ export default function ProductCard({ product, index = 0 }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-20px" }}
       transition={{ duration: 0.45, delay: index * 0.04, ease: [0.22, 1, 0.36, 1] }}
-      className="group flex flex-col w-full rounded-2xl overflow-hidden"
+      className="group relative w-full overflow-hidden rounded-2xl"
       style={{
         aspectRatio: "4 / 5",
         background: "#111010",
-        border: "0.5px solid rgba(255,255,255,0.18)",
+        border: "0.5px solid rgba(255,255,255,0.14)",
+        boxShadow: "0 10px 30px -12px rgba(0,0,0,0.7)",
       }}
     >
-      {/* Image — occupe l'espace restant */}
-      <Link
-        to={`/product/${product.id}`}
-        className="relative block w-full flex-1 min-h-0 overflow-hidden"
-      >
+      <Link to={`/product/${product.id}`} className="absolute inset-0 block">
+        {/* Image plein cadre */}
         <img
           src={product.image || "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg"}
           alt={product.title}
           loading="lazy"
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.05]"
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.07]"
         />
 
-        {/* Badges haut gauche */}
-        <div className="absolute top-1.5 left-1.5 flex flex-col gap-1 z-10">
+        {/* Voile dégradé pour la lisibilité du texte en bas */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-3/5 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(to top, rgba(6,5,3,0.94) 0%, rgba(6,5,3,0.78) 28%, rgba(6,5,3,0.30) 62%, transparent 100%)",
+          }}
+        />
+
+        {/* Badges haut */}
+        <div className="absolute top-2.5 left-2.5 z-10 flex flex-col gap-1.5">
           {product.badge && (
-            <span className="px-1.5 py-[2px] text-[8px] uppercase tracking-[0.10em] font-bold rounded-full"
-              style={{ background: GOLD, color: "#0c0a07" }}>
+            <span
+              className="px-2 py-[3px] text-[8px] uppercase tracking-[0.14em] font-bold rounded-full"
+              style={{ background: GOLD, color: "#0c0a07" }}
+            >
               {product.badge}
             </span>
           )}
           {product.is_vip && (
-            <span className="text-[8px] uppercase font-bold px-1.5 py-[2px] rounded-full"
-              style={{ background: "rgba(0,0,0,0.70)", color: GOLD, border: `1px solid ${GOLD}` }}>
+            <span
+              className="text-[8px] uppercase font-bold px-2 py-[3px] rounded-full backdrop-blur-sm"
+              style={{ background: "rgba(0,0,0,0.55)", color: GOLD, border: `1px solid ${GOLD}` }}
+            >
               ★ VIP
             </span>
           )}
         </div>
 
-        {/* Badge promo */}
         {hasPromo && (
-          <span className="absolute top-1.5 right-1.5 z-10 text-[9px] font-bold px-1.5 py-0.5 rounded-full"
-            style={{ background: "#e53e3e", color: "#fff" }}>
+          <span
+            className="absolute top-2.5 right-2.5 z-10 text-[9px] font-bold px-2 py-[3px] rounded-full"
+            style={{ background: "#e53e3e", color: "#fff" }}
+          >
             -{Math.round((1 - product.promo_price / product.price) * 100)}%
           </span>
         )}
 
-        {/* Catégorie sur l'image */}
-        {(product.category_name || product.category) && (
-          <div className="absolute bottom-0 left-0 right-0 z-10 px-2 py-1.5 bg-gradient-to-t from-black/92 via-black/50 to-transparent pointer-events-none">
-            <p className="product-card-category text-center line-clamp-1">
-              {product.category_name || product.category}
-            </p>
+        {/* Bloc texte éditorial en bas */}
+        <div className="absolute inset-x-0 bottom-0 z-10 px-3.5 pb-3.5 pt-6">
+          {category && (
+            <p className="product-card-category mb-1.5 line-clamp-1">{category}</p>
+          )}
+
+          <h3 className="product-card-title line-clamp-2 mb-2">{product.title}</h3>
+
+          <div className="flex items-end justify-between gap-2">
+            <div className="flex items-baseline gap-2">
+              <span className="product-card-price leading-none">
+                {Number(displayPrice).toLocaleString("fr-FR")} FCFA
+              </span>
+              {hasPromo && (
+                <span className="text-[11px] text-white/45 line-through leading-none">
+                  {Number(product.price).toLocaleString("fr-FR")}
+                </span>
+              )}
+            </div>
+
+            {/* Bouton ajout panier */}
+            <button
+              onClick={handleQuickAdd}
+              className="shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 active:scale-90"
+              style={
+                justAdded
+                  ? { background: "#22c55e", color: "#fff" }
+                  : {
+                      background: "rgba(200,168,75,0.16)",
+                      color: GOLD,
+                      border: "1px solid rgba(200,168,75,0.55)",
+                      backdropFilter: "blur(6px)",
+                    }
+              }
+              onMouseEnter={(e) => {
+                if (!justAdded) {
+                  e.currentTarget.style.background = GOLD;
+                  e.currentTarget.style.color = "#0c0a07";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!justAdded) {
+                  e.currentTarget.style.background = "rgba(200,168,75,0.16)";
+                  e.currentTarget.style.color = GOLD;
+                }
+              }}
+              aria-label="Ajouter au panier"
+            >
+              {justAdded ? (
+                <Check size={15} strokeWidth={2.5} />
+              ) : (
+                <ShoppingCart size={15} strokeWidth={1.8} />
+              )}
+            </button>
           </div>
-        )}
-
-        {/* Bouton panier */}
-        <button
-          onClick={handleQuickAdd}
-          className="absolute bottom-1.5 right-1.5 z-10 w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 active:scale-95 opacity-100 md:opacity-0 md:group-hover:opacity-100"
-          style={justAdded
-            ? { background: "#22c55e", color: "#fff" }
-            : { background: "rgba(0,0,0,0.75)", color: "#fff", border: "1px solid rgba(255,255,255,0.15)" }
-          }
-          aria-label="Ajouter au panier"
-        >
-          {justAdded ? <Check size={11} strokeWidth={2.5} /> : <ShoppingCart size={11} strokeWidth={1.8} />}
-        </button>
+        </div>
       </Link>
-
-      {/* Infos — hauteur selon le contenu */}
-      <div
-        className="flex flex-shrink-0 flex-col items-center justify-center gap-1 px-2.5 py-2 w-full"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
-      >
-        <h3 className="product-card-title w-full text-center line-clamp-2 px-0.5">
-          {product.title}
-        </h3>
-        <p className="product-card-price mt-1 text-center shrink-0 leading-none">
-          {(hasPromo ? product.promo_price : product.price).toLocaleString("fr-FR")} FCFA
-        </p>
-      </div>
     </motion.article>
   );
 }

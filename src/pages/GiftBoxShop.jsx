@@ -77,41 +77,43 @@ export default function GiftBoxShop() {
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.45, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
-                className="group flex flex-col rounded-xl overflow-hidden"
-                style={{ aspectRatio: "4 / 5", background: "#111010", border: "0.5px solid rgba(255,255,255,0.18)" }}
+                className="group relative overflow-hidden rounded-2xl"
+                style={{
+                  aspectRatio: "4 / 5",
+                  background: "#111010",
+                  border: "0.5px solid rgba(255,255,255,0.14)",
+                  boxShadow: "0 10px 30px -12px rgba(0,0,0,0.7)",
+                }}
               >
-                <Link to={`/gift-boxes/${box.id}`}
-                  className="relative block w-full flex-1 min-h-0 overflow-hidden"
-                >
+                <Link to={`/gift-boxes/${box.id}`} className="absolute inset-0 block">
                   <img
                     src={box.image || DEFAULT_IMG}
                     alt={box.name}
                     loading="lazy"
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.05]"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.07]"
                     onError={e => { e.currentTarget.src = DEFAULT_IMG; }}
                   />
+                  <div
+                    className="absolute inset-x-0 bottom-0 h-3/5 pointer-events-none"
+                    style={{
+                      background:
+                        "linear-gradient(to top, rgba(6,5,3,0.94) 0%, rgba(6,5,3,0.78) 28%, rgba(6,5,3,0.30) 62%, transparent 100%)",
+                    }}
+                  />
                   {box.is_customizable && (
-                    <span className="absolute top-2 left-2 z-10 text-[7px] uppercase tracking-[0.14em] font-bold px-2 py-[3px] rounded-full"
+                    <span className="absolute top-2.5 left-2.5 z-10 text-[8px] uppercase tracking-[0.14em] font-bold px-2 py-[3px] rounded-full"
                       style={{ background: "#C8A84B", color: "#0c0a07" }}>
                       Personnalisable
                     </span>
                   )}
-                  <div className="absolute bottom-0 left-0 right-0 z-10 px-1.5 py-1 bg-gradient-to-t from-black/92 via-black/50 to-transparent pointer-events-none">
-                    <p className="product-card-category text-center">Coffret</p>
+                  <div className="absolute inset-x-0 bottom-0 z-10 px-3.5 pb-3.5 pt-6">
+                    <p className="product-card-category mb-1.5">Coffret</p>
+                    <h3 className="product-card-title line-clamp-2 mb-2">{box.name}</h3>
+                    <span className="product-card-price leading-none">
+                      {(box.price || 0).toLocaleString("fr-FR")} FCFA
+                    </span>
                   </div>
                 </Link>
-
-                <div
-                  className="flex flex-shrink-0 flex-col items-center justify-center gap-1 px-2.5 py-2 w-full"
-                  style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
-                >
-                  <h3 className="product-card-title w-full text-center line-clamp-2 px-0.5">
-                    {box.name}
-                  </h3>
-                  <p className="product-card-price mt-0.5 text-center shrink-0 leading-none">
-                    {(box.price || 0).toLocaleString("fr-FR")} FCFA
-                  </p>
-                </div>
               </motion.div>
             ))}
           </div>
