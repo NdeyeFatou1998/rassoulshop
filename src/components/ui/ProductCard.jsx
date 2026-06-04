@@ -97,16 +97,10 @@ export default function ProductCard({ product, index = 0 }) {
           <h3 className="product-card-title line-clamp-2 mb-2">{product.title}</h3>
 
           <div className="flex items-end justify-between gap-2">
-            <div className="flex items-baseline gap-2">
-              <span className="product-card-price leading-none">
-                {Number(displayPrice).toLocaleString("fr-FR")} FCFA
-              </span>
-              {hasPromo && (
-                <span className="text-[11px] text-white/45 line-through leading-none">
-                  {Number(product.price).toLocaleString("fr-FR")}
-                </span>
-              )}
-            </div>
+            <span className="product-card-price leading-none whitespace-nowrap">
+              {Number(displayPrice).toLocaleString("fr-FR")}
+              <span className="product-card-price-unit"> FCFA</span>
+            </span>
 
             {/* Bouton ajout panier */}
             <button

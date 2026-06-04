@@ -151,6 +151,12 @@
     }
   }
 
+  .product-card-price-unit {
+    font-size: 0.62em;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+  }
+
   /* Grille produits — cards plus grandes */
   .product-grid {
     display: grid;
