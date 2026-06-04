@@ -168,7 +168,7 @@ function PromoCard({ card }) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-40px" }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className="w-full my-2 rounded-2xl border border-gold/20 bg-gradient-to-br from-[#1c1a14] to-[#141210] px-8 py-10 text-center"
+        className="w-full my-2 rounded-2xl border border-gold/25 bg-gradient-to-br from-[#211e14] to-[#16130c] px-8 py-10 text-center"
       >
         <span className="text-[9px] uppercase tracking-[0.28em] text-gold font-bold">
           {card.tag}
@@ -196,7 +196,7 @@ function PromoCard({ card }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="w-full my-2 rounded-2xl border border-white/[0.10] bg-gradient-to-r from-[#1c1a14] to-[#151310] overflow-hidden flex flex-col md:flex-row items-stretch"
+      className="w-full my-2 rounded-2xl border border-gold/20 bg-gradient-to-r from-[#211e14] to-[#16130c] overflow-hidden flex flex-col md:flex-row items-stretch"
     >
       {/* Texte */}
       <div className="flex-1 px-7 md:px-10 py-8 md:py-9 flex flex-col justify-center">
@@ -310,7 +310,7 @@ export default function FilterableProductGrid({
   const hasActiveFilters = search.trim() !== "" || applied !== null;
 
   return (
-    <section className="bg-[#0e0d0b] py-10 md:py-14">
+    <section className="bg-gradient-to-b from-[#0e0d0b] via-[#110f09] to-[#0e0d0b] py-10 md:py-14">
       <div className="max-w-7xl mx-auto px-5 lg:px-10">
 
         {/* ---- Barre recherche + filtre prix (Shop uniquement) ---- */}
@@ -324,9 +324,9 @@ export default function FilterableProductGrid({
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Rechercher un produit…"
-                className="w-full pl-11 pr-10 py-3 bg-[#1a1815] border border-white/[0.12] rounded-xl
-                           text-sm text-white placeholder-white/45
-                           focus:border-gold/50 focus:outline-none focus:bg-[#1e1c18]
+                className="w-full pl-11 pr-10 py-3 bg-[#1e1b12] border border-gold/[0.20] rounded-xl
+                           text-sm text-white placeholder-white/50
+                           focus:border-gold/60 focus:outline-none focus:bg-[#231f14]
                            transition-all duration-300"
               />
               {search && (
@@ -340,7 +340,7 @@ export default function FilterableProductGrid({
             </div>
 
             {/* Double slider prix — compact inline */}
-            <div className="flex items-center gap-3 bg-[#1a1815] border border-white/[0.10] rounded-xl px-4 py-3">
+            <div className="flex items-center gap-3 bg-[#1e1b12] border border-gold/[0.18] rounded-xl px-4 py-3">
               {/* Icône + label */}
               <SlidersHorizontal size={13} className="text-gold/50 flex-shrink-0" />
 

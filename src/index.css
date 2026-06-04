@@ -31,9 +31,10 @@
     background: rgba(197, 165, 90, 0.55);
   }
 
-  /* Fond global — noir chaud (pas pur) pour réduire la sensation d'écrasement */
+  /* Fond global — noir chaud légèrement doré */
   body {
     background-color: #0e0d0b;
+    background-image: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(197,165,90,0.04) 0%, transparent 60%);
     color: #F0EAE0;
   }
 
@@ -116,7 +117,7 @@
   .shimmer {
     position: relative;
     overflow: hidden;
-    background: #1c1a16;
+    background: #211e17;
   }
   .shimmer::after {
     content: '';
@@ -187,13 +188,13 @@
     position: relative;
     border-radius: 1rem;
     overflow: hidden;
-    background: #1a1814;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #211e17;
+    border: 1px solid rgba(197, 165, 90, 0.18);
     transition: border-color 0.5s ease, transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.5s ease;
   }
   .card-premium:hover {
-    border-color: rgba(197, 165, 90, 0.35);
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(197, 165, 90, 0.12);
+    border-color: rgba(197, 165, 90, 0.45);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 24px rgba(197, 165, 90, 0.12);
   }
   @media (min-width: 768px) {
     .card-premium:hover {

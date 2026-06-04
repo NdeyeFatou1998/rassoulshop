@@ -39,7 +39,7 @@ export default function GiftBoxShop() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0e0d0b]">
+    <div className="min-h-screen bg-gradient-to-b from-[#0c0a07] via-[#0e0d0b] to-[#0c0a07]">
       {/* ---- Header ---- */}
       <section className="pt-20 md:pt-24 pb-5 max-w-7xl mx-auto px-5 lg:px-10 text-center">
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
@@ -54,7 +54,7 @@ export default function GiftBoxShop() {
           /* Skeletons */
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="rounded-2xl overflow-hidden bg-[#181612] border border-white/[0.10]">
+              <div key={i} className="rounded-2xl overflow-hidden bg-[#211e17] border border-gold/[0.18]">
                 <div className="aspect-square shimmer" />
                 <div className="px-3.5 py-3 space-y-2 border-t border-white/[0.05]">
                   <div className="h-2 shimmer rounded w-1/3" />
@@ -81,8 +81,8 @@ export default function GiftBoxShop() {
                 <Link
                   to={`/gift-boxes/${box.id}`}
                   className="group flex flex-col rounded-2xl overflow-hidden
-                             bg-[#181612] border border-white/[0.10]
-                             hover:border-gold/40 hover:shadow-[0_4px_32px_rgba(197,165,90,0.12)]
+                             bg-[#211e17] border border-gold/[0.18]
+                             hover:border-gold/50 hover:shadow-[0_6px_36px_rgba(197,165,90,0.18)]
                              transition-all duration-400"
                 >
                   {/* Image */}
@@ -108,25 +108,23 @@ export default function GiftBoxShop() {
                   </div>
 
                   {/* Infos */}
-                  <div className="px-3.5 pt-3 pb-4 border-t border-white/[0.07]">
-                    <p className="text-[8px] uppercase tracking-[0.22em] text-gold font-semibold mb-1.5 opacity-85">
+                  <div className="px-3.5 pt-3 pb-4 bg-gradient-to-b from-[#211e17] to-[#1a1710] border-t border-gold/[0.12]">
+                    <p className="text-[8px] uppercase tracking-[0.22em] text-gold/80 font-bold mb-1.5">
                       Coffret cadeau
                     </p>
-                    <h3 className="text-[13px] font-semibold text-white/95 leading-snug line-clamp-2
-                                   group-hover:text-white transition-colors duration-300">
+                    <h3 className="text-[13px] font-bold text-gold leading-snug line-clamp-2
+                                   group-hover:text-gold-light transition-colors duration-300">
                       {box.name}
                     </h3>
-                    {/* Nombre d'articles */}
                     {box.items?.length > 0 && (
-                      <p className="text-[10px] text-white/50 mt-1">
+                      <p className="text-[10px] text-white/60 mt-1">
                         {box.items.length} article{box.items.length > 1 ? "s" : ""}
                       </p>
                     )}
-                    {/* Prix */}
-                    <div className="mt-3 pt-2.5 border-t border-white/[0.07]">
+                    <div className="mt-3 pt-2.5 border-t border-gold/[0.12]">
                       <span className="text-[15px] font-bold text-white leading-none">
                         {(box.price || 0).toLocaleString("fr-FR")}
-                        <span className="text-[9px] font-normal text-white/45 ml-0.5">FCFA</span>
+                        <span className="text-[9px] font-normal text-white/55 ml-0.5">FCFA</span>
                       </span>
                     </div>
                   </div>

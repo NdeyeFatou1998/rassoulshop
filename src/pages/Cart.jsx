@@ -86,12 +86,12 @@ export default function Cart() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, x: -80, transition: { duration: 0.3 } }}
                   transition={{ delay: i * 0.05 }}
-                  className="flex gap-3 md:gap-5 p-3 md:p-4 rounded-2xl bg-noir-800 border border-white/[0.04] hover:border-gold/10 transition-all duration-300"
+                  className="flex gap-3 md:gap-5 p-3 md:p-4 rounded-2xl bg-[#211e17] border border-gold/[0.12] hover:border-gold/35 transition-all duration-300"
                 >
                   {/* Image miniature cliquable */}
                   <Link
                     to={`/product/${item.product.id}`}
-                    className="flex-shrink-0 w-[72px] h-[90px] md:w-24 md:h-[120px] rounded-xl overflow-hidden bg-noir-700"
+                    className="flex-shrink-0 w-[72px] h-[90px] md:w-24 md:h-[120px] rounded-xl overflow-hidden bg-[#1a1710]"
                   >
                     <img
                       src={
@@ -107,18 +107,18 @@ export default function Cart() {
                   <div className="flex-1 flex flex-col justify-between min-w-0 py-0.5">
                     <div>
                       {/* Catégorie micro-label */}
-                      <p className="text-[8px] md:text-[9px] uppercase tracking-[0.15em] text-gold/50 font-medium mb-0.5">
+                      <p className="text-[8px] md:text-[9px] uppercase tracking-[0.15em] text-gold font-bold mb-0.5">
                         {item.product.category}
                       </p>
                       {/* Titre */}
                       <Link
                         to={`/product/${item.product.id}`}
-                        className="font-serif text-[13px] md:text-sm text-cream hover:text-gold transition-colors line-clamp-1"
+                        className="font-serif text-[13px] md:text-sm text-gold font-bold hover:text-gold-light transition-colors line-clamp-1"
                       >
                         {item.product.title}
                       </Link>
                       {/* Prix unitaire */}
-                      <p className="text-[11px] text-muted mt-0.5">
+                      <p className="text-[11px] text-white/70 mt-0.5">
                         {getProductUnitPrice(item.product).toLocaleString("fr-FR")} FCFA
                       </p>
                     </div>
@@ -126,10 +126,10 @@ export default function Cart() {
                     {/* Compteur + sous-total */}
                     <div className="flex items-center justify-between mt-2">
                       {/* Compteur +/- */}
-                      <div className="flex items-center border border-white/[0.06] rounded-full">
+                      <div className="flex items-center border border-gold/[0.15] rounded-full">
                         <button
                           onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                          className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center text-cream/40 hover:text-cream active:scale-90 transition-all"
+                          className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center text-white/70 hover:text-cream active:scale-90 transition-all"
                         >
                           <Minus size={11} />
                         </button>
@@ -143,7 +143,7 @@ export default function Cart() {
                         </motion.span>
                         <button
                           onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                          className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center text-cream/40 hover:text-cream active:scale-90 transition-all"
+                          className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center text-white/70 hover:text-cream active:scale-90 transition-all"
                         >
                           <Plus size={11} />
                         </button>
@@ -159,7 +159,7 @@ export default function Cart() {
                   {/* Bouton supprimer */}
                   <button
                     onClick={() => removeFromCart(item.product.id)}
-                    className="flex-shrink-0 self-start p-1.5 md:p-2 text-muted/30 hover:text-red-400 active:scale-90 transition-all"
+                    className="flex-shrink-0 self-start p-1.5 md:p-2 text-white/60 hover:text-red-400 active:scale-90 transition-all"
                     aria-label="Supprimer"
                   >
                     <Trash2 size={14} />
@@ -176,11 +176,11 @@ export default function Cart() {
             transition={{ delay: 0.2 }}
             className="lg:col-span-1"
           >
-            <div className="sticky top-28 rounded-2xl bg-noir-800 border border-white/[0.04] p-5 md:p-7">
+            <div className="sticky top-28 rounded-2xl bg-[#211e17] border border-gold/[0.12] p-5 md:p-7">
               <h3 className="font-serif text-base md:text-lg text-cream mb-5">Résumé</h3>
 
               {/* Lignes de détail */}
-              <div className="space-y-2.5 mb-5 pb-5 border-b border-white/[0.05]">
+              <div className="space-y-2.5 mb-5 pb-5 border-b border-gold/[0.12]">
                 <div className="flex justify-between text-[12px] md:text-sm">
                   <span className="text-muted">Sous-total</span>
                   <span className="text-cream">{cartTotal.toLocaleString("fr-FR")} FCFA</span>
@@ -211,13 +211,13 @@ export default function Cart() {
               {/* Vider le panier */}
               <button
                 onClick={clearCart}
-                className="w-full mt-2.5 py-2.5 rounded-full border border-white/[0.06] text-muted/60 text-[10px] uppercase tracking-[0.15em] hover:border-red-400/20 hover:text-red-400 transition-all duration-300 btn-press"
+                className="w-full mt-2.5 py-2.5 rounded-full border border-gold/[0.15] text-muted/60 text-[10px] uppercase tracking-[0.15em] hover:border-red-400/20 hover:text-red-400 transition-all duration-300 btn-press"
               >
                 Vider le panier
               </button>
 
               {/* Badges de confiance */}
-              <div className="mt-5 pt-4 border-t border-white/[0.04] space-y-2">
+              <div className="mt-5 pt-4 border-t border-gold/[0.12] space-y-2">
                 <div className="flex items-center gap-2 text-[10px] text-muted/50">
                   <Truck size={12} /> <span>Livraison rapide sous 48h</span>
                 </div>

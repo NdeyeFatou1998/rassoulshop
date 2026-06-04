@@ -46,7 +46,7 @@ export default function Hero({ imageSrc, title, subtitle }) {
     /* ---- Section wrapper : fond noir + padding pour laisser voir le contour ---- */
     <section
       ref={sectionRef}
-      className="bg-[#0e0d0b] px-3 md:px-5 pt-[72px] md:pt-[84px] pb-4 md:pb-6"
+      className="bg-gradient-to-b from-[#0c0a07] via-[#0e0d0b] to-[#0e0d0b] px-3 md:px-5 pt-[72px] md:pt-[84px] pb-4 md:pb-6"
     >
       {/* ---- Squircle géant avec spinning border ---- */}
       <div

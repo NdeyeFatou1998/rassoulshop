@@ -173,7 +173,7 @@ export default function ProductDetail() {
           >
             <div
               ref={imgRef}
-              className="rounded-2xl overflow-hidden aspect-[3/4] bg-[#1a1815] border border-white/[0.10]"
+              className="rounded-2xl overflow-hidden aspect-[3/4] bg-[#211e17] border border-gold/[0.20]"
             >
               <img
                 src={
@@ -208,7 +208,7 @@ export default function ProductDetail() {
             </motion.div>
 
             {/* Titre */}
-            <motion.h1 variants={fadeUp} className="font-serif text-2xl md:text-4xl lg:text-5xl text-cream leading-tight mb-3 md:mb-4">
+            <motion.h1 variants={fadeUp} className="font-serif text-2xl md:text-4xl lg:text-5xl text-white leading-tight mb-3 md:mb-4">
               {product.title}
             </motion.h1>
 
@@ -240,7 +240,7 @@ export default function ProductDetail() {
                   </p>
                   {/* Prix barré : prix original si promo active, ou prix sans variantes si modificateur */}
                   {(hasPromo || variantsExtra > 0) && (
-                    <span className="text-xs text-white/30 line-through">
+                    <span className="text-xs text-white/50 line-through">
                       {product.price.toLocaleString("fr-FR")}
                     </span>
                   )}
@@ -255,7 +255,7 @@ export default function ProductDetail() {
             })()}
 
             {/* Description */}
-            <motion.p variants={fadeUp} className="text-[13px] text-cream/75 leading-relaxed mb-6 md:mb-8 max-w-lg">
+            <motion.p variants={fadeUp} className="text-[14px] text-white/80 leading-relaxed mb-6 md:mb-8 max-w-lg">
               {product.description}
             </motion.p>
 
