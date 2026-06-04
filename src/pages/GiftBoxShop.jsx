@@ -77,56 +77,45 @@ export default function GiftBoxShop() {
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.45, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
+                className="group relative rounded-xl overflow-hidden"
+                style={{ aspectRatio: "1 / 1", border: "1px solid rgba(197,165,90,0.22)" }}
               >
-                <Link
-                  to={`/gift-boxes/${box.id}`}
-                  className="group flex flex-col rounded-2xl overflow-hidden transition-all duration-400"
-                  style={{ background: "#111010", border: "1px solid rgba(197,165,90,0.28)" }}
-                >
-                  {/* Image */}
-                  <div className="relative w-full aspect-square overflow-hidden">
-                    <img
-                      src={box.image || DEFAULT_IMG}
-                      alt={box.name}
-                      loading="lazy"
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
-                      onError={(e) => {
-                        e.currentTarget.src = DEFAULT_IMG;
-                      }}
-                    />
-                    {/* Overlay hover */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent
-                                    opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
-                    {/* Badge personnalisable */}
-                    {box.is_customizable && (
-                      <span className="absolute top-2.5 left-2.5 text-[7px] uppercase tracking-[0.16em] font-bold bg-gold text-noir-950 px-2 py-[3px] rounded-full">
-                        Personnalisable
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Infos */}
-                  <div className="px-3.5 pt-3 pb-4" style={{ borderTop: "1px solid rgba(197,165,90,0.18)" }}>
-                    <p className="text-[8px] uppercase tracking-[0.22em] font-bold mb-1.5" style={{ color: "#C5A55A" }}>
-                      Coffret cadeau
-                    </p>
-                    <h3 className="text-[14px] font-bold leading-snug line-clamp-2 transition-colors duration-300"
-                        style={{ color: "#D4BA78" }}>
-                      {box.name}
-                    </h3>
-                    {box.items?.length > 0 && (
-                      <p className="text-[10px] mt-1" style={{ color: "rgba(240,234,216,0.65)" }}>
-                        {box.items.length} article{box.items.length > 1 ? "s" : ""}
-                      </p>
-                    )}
-                    <div className="mt-3 pt-2.5" style={{ borderTop: "1px solid rgba(197,165,90,0.15)" }}>
-                      <span className="text-[16px] font-bold" style={{ color: "#f0ead8" }}>
-                        {(box.price || 0).toLocaleString("fr-FR")}
-                        <span className="text-[9px] font-normal ml-0.5" style={{ color: "rgba(240,234,216,0.60)" }}>FCFA</span>
-                      </span>
-                    </div>
-                  </div>
+                {/* Image plein format */}
+                <Link to={`/gift-boxes/${box.id}`} className="absolute inset-0 block">
+                  <img
+                    src={box.image || DEFAULT_IMG}
+                    alt={box.name}
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
+                    onError={e => { e.currentTarget.src = DEFAULT_IMG; }}
+                  />
                 </Link>
+
+                {/* Gradient bas */}
+                <div className="absolute inset-0 pointer-events-none"
+                  style={{ background: "linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.20) 45%, transparent 70%)" }} />
+
+                {/* Badge personnalisable */}
+                {box.is_customizable && (
+                  <span className="absolute top-2 left-2 z-10 text-[7px] uppercase tracking-[0.14em] font-bold px-2 py-[3px] rounded-full"
+                    style={{ background: "#C8A84B", color: "#0c0a07" }}>
+                    Personnalisable
+                  </span>
+                )}
+
+                {/* Infos overlay bas */}
+                <div className="absolute bottom-0 left-0 right-0 z-10 px-3 pb-3 pt-6 pointer-events-none">
+                  <p className="text-[8px] uppercase tracking-[0.18em] font-semibold mb-0.5" style={{ color: "#C8A84B" }}>
+                    Coffret cadeau
+                  </p>
+                  <h3 className="text-[13px] md:text-[14px] font-semibold leading-tight line-clamp-2" style={{ color: "#f0ead8" }}>
+                    {box.name}
+                  </h3>
+                  <p className="text-[14px] font-bold mt-1.5" style={{ color: "#f0ead8" }}>
+                    {(box.price || 0).toLocaleString("fr-FR")}
+                    <span className="text-[8px] font-normal ml-0.5" style={{ color: "rgba(240,234,216,0.55)" }}>FCFA</span>
+                  </p>
+                </div>
               </motion.div>
             ))}
           </div>
