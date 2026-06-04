@@ -47,7 +47,7 @@ export default function Hero({ imageSrc, title, subtitle }) {
     <section
       ref={sectionRef}
       className="px-3 md:px-5 pt-[72px] md:pt-[84px] pb-4 md:pb-6"
-      style={{ background: "linear-gradient(180deg, #0d0a05 0%, #131108 100%)" }}
+      style={{ background: "linear-gradient(180deg, #080602 0%, #0e0c08 100%)" }}
     >
       {/* ---- Squircle géant avec spinning border ---- */}
       <div
