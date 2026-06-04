@@ -77,34 +77,31 @@ export default function GiftBoxShop() {
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.45, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
-                className="group relative rounded-xl overflow-hidden"
-                style={{ aspectRatio: "1 / 1", border: "1px solid rgba(197,165,90,0.22)" }}
+                className="group flex flex-col rounded-xl overflow-hidden"
+                style={{ background: "#111010", border: "1px solid rgba(197,165,90,0.22)" }}
               >
-                {/* Image plein format */}
-                <Link to={`/gift-boxes/${box.id}`} className="absolute inset-0 block">
+                {/* Image carrée */}
+                <Link to={`/gift-boxes/${box.id}`}
+                  className="relative block w-full flex-shrink-0 overflow-hidden"
+                  style={{ aspectRatio: "1 / 1" }}
+                >
                   <img
                     src={box.image || DEFAULT_IMG}
                     alt={box.name}
                     loading="lazy"
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.05]"
                     onError={e => { e.currentTarget.src = DEFAULT_IMG; }}
                   />
+                  {box.is_customizable && (
+                    <span className="absolute top-2 left-2 z-10 text-[7px] uppercase tracking-[0.14em] font-bold px-2 py-[3px] rounded-full"
+                      style={{ background: "#C8A84B", color: "#0c0a07" }}>
+                      Personnalisable
+                    </span>
+                  )}
                 </Link>
 
-                {/* Gradient bas */}
-                <div className="absolute inset-0 pointer-events-none"
-                  style={{ background: "linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.20) 45%, transparent 70%)" }} />
-
-                {/* Badge personnalisable */}
-                {box.is_customizable && (
-                  <span className="absolute top-2 left-2 z-10 text-[7px] uppercase tracking-[0.14em] font-bold px-2 py-[3px] rounded-full"
-                    style={{ background: "#C8A84B", color: "#0c0a07" }}>
-                    Personnalisable
-                  </span>
-                )}
-
-                {/* Infos overlay bas */}
-                <div className="absolute bottom-0 left-0 right-0 z-10 px-3 pb-3 pt-6 pointer-events-none">
+                {/* Texte EN BAS */}
+                <div className="px-3 pt-2.5 pb-3" style={{ borderTop: "1px solid rgba(197,165,90,0.12)" }}>
                   <p className="text-[8px] uppercase tracking-[0.18em] font-semibold mb-0.5" style={{ color: "#C8A84B" }}>
                     Coffret cadeau
                   </p>
@@ -113,7 +110,7 @@ export default function GiftBoxShop() {
                   </h3>
                   <p className="text-[14px] font-bold mt-1.5" style={{ color: "#f0ead8" }}>
                     {(box.price || 0).toLocaleString("fr-FR")}
-                    <span className="text-[8px] font-normal ml-0.5" style={{ color: "rgba(240,234,216,0.55)" }}>FCFA</span>
+                    <span className="text-[8px] font-normal ml-0.5" style={{ color: "rgba(240,234,216,0.50)" }}>FCFA</span>
                   </p>
                 </div>
               </motion.div>
