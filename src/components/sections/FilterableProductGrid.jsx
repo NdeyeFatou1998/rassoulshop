@@ -70,7 +70,7 @@ function CategorySquircle({ label, image, isActive, onClick }) {
   return (
     <button
       onClick={onClick}
-      className="flex-shrink-0 flex flex-col items-center gap-3 group focus:outline-none"
+      className="flex-shrink-0 group focus:outline-none"
     >
       {/* Conteneur squircle */}
       <div
@@ -118,19 +118,18 @@ function CategorySquircle({ label, image, isActive, onClick }) {
             className="absolute inset-0 transition-opacity duration-300"
             style={{ background: "rgba(0,0,0,0.38)", opacity: isActive ? 0 : 1 }}
           />
+          {/* Nom catégorie sur l'image */}
+          <div className="absolute inset-x-0 bottom-0 z-10 px-1.5 py-1.5 bg-gradient-to-t from-black/92 via-black/60 to-transparent">
+            <span
+              className={`block text-center text-[9px] uppercase tracking-[0.12em] font-bold leading-tight line-clamp-2 transition-colors duration-300 ${
+                isActive ? "text-gold" : "text-white/90 group-hover:text-gold"
+              }`}
+            >
+              {label}
+            </span>
+          </div>
         </div>
       </div>
-
-      {/* ---- Label ---- */}
-      <span
-        className={`text-[11px] uppercase tracking-[0.15em] font-semibold whitespace-nowrap transition-colors duration-300 ${
-          isActive
-            ? "text-gold"
-            : "text-white/65 group-hover:text-white/90"
-        }`}
-      >
-        {label}
-      </span>
     </button>
   );
 }

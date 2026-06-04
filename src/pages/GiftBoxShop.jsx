@@ -98,14 +98,16 @@ export default function GiftBoxShop() {
                       Personnalisable
                     </span>
                   )}
+                  <div className="absolute bottom-0 left-0 right-0 z-10 px-2 py-1.5 bg-gradient-to-t from-black/90 via-black/55 to-transparent pointer-events-none">
+                    <p className="text-[9px] uppercase tracking-[0.14em] font-bold text-center" style={{ color: "#C8A84B" }}>
+                      Coffret
+                    </p>
+                  </div>
                 </Link>
 
                 {/* Infos 40% */}
-                <div className="flex flex-col items-center justify-center gap-1.5 px-3 py-1.5"
+                <div className="flex flex-col items-center justify-center gap-2 px-3 py-2"
                   style={{ height: "40%", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-                  <p className="text-[10px] uppercase tracking-[0.15em] font-bold text-center" style={{ color: "#C8A84B" }}>
-                    Coffret
-                  </p>
                   <h3
                     className="w-full text-center text-[16px] md:text-[17px] font-semibold leading-snug line-clamp-2 px-1"
                     style={{ color: "#f0ead8" }}

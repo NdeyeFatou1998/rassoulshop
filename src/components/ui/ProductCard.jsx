@@ -74,6 +74,15 @@ export default function ProductCard({ product, index = 0 }) {
           </span>
         )}
 
+        {/* Catégorie sur l'image */}
+        {(product.category_name || product.category) && (
+          <div className="absolute bottom-0 left-0 right-0 z-10 px-2 py-1.5 bg-gradient-to-t from-black/90 via-black/55 to-transparent pointer-events-none">
+            <p className="text-[9px] md:text-[10px] uppercase tracking-[0.14em] font-bold text-center line-clamp-1" style={{ color: GOLD }}>
+              {product.category_name || product.category}
+            </p>
+          </div>
+        )}
+
         {/* Bouton panier */}
         <button
           onClick={handleQuickAdd}
@@ -90,14 +99,9 @@ export default function ProductCard({ product, index = 0 }) {
 
       {/* Infos — 40% de la hauteur, tout centré */}
       <div
-        className="flex flex-col items-center justify-center gap-1.5 px-3 py-1.5"
+        className="flex flex-col items-center justify-center gap-2 px-3 py-2"
         style={{ height: "40%", borderTop: "1px solid rgba(255,255,255,0.08)" }}
       >
-        {/* Catégorie */}
-        <p className="text-[10px] uppercase tracking-[0.15em] font-bold text-center" style={{ color: GOLD }}>
-          {product.category_name || product.category || ""}
-        </p>
-
         {/* Nom produit */}
         <h3
           className="w-full text-center text-[16px] md:text-[17px] font-semibold leading-snug line-clamp-2 px-1"
