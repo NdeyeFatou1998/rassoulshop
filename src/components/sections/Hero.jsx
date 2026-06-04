@@ -99,6 +99,15 @@ export default function Hero({ imageSrc, title, subtitle }) {
             animate="show"
             className="relative z-10 text-center px-6 sm:px-10 max-w-3xl mx-auto"
           >
+            {/* Kicker */}
+            <motion.div variants={fadeUp} className="flex items-center justify-center gap-4 mb-5">
+              <div className="w-8 h-px bg-gold/50" />
+              <span className="text-[10px] uppercase tracking-[0.4em] text-gold/90 font-medium">
+                L'art d'offrir
+              </span>
+              <div className="w-8 h-px bg-gold/50" />
+            </motion.div>
+
             {/* Titre */}
             <motion.h1
               variants={fadeUp}
