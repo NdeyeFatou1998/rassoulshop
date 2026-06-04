@@ -84,31 +84,45 @@ export default function ProductCard({ product, index = 0 }) {
         </button>
       </Link>
 
-      {/* ---- Texte EN BAS de l'image ---- */}
-      <div className="px-3 pt-2.5 pb-3" style={{ borderTop: "1px solid rgba(197,165,90,0.12)" }}>
-        <p className="text-[8px] uppercase tracking-[0.18em] font-semibold mb-0.5" style={{ color: GOLD }}>
-          {product.category_name || product.category || ""}
-        </p>
-        <h3 className="text-[13px] md:text-[14px] font-semibold leading-tight line-clamp-2" style={{ color: "#f0ead8" }}>
-          {product.title}
-        </h3>
-        <div className="flex items-baseline gap-1.5 mt-1.5">
-          {hasPromo ? (
-            <>
-              <span className="text-[10px] line-through" style={{ color: "rgba(255,255,255,0.38)" }}>
+      {/* ---- Mini-card infos EN BAS avec contour gold ---- */}
+      <div className="px-2.5 py-2.5">
+        <div
+          className="rounded-lg px-3 py-2.5 flex flex-col gap-1"
+          style={{
+            background: "linear-gradient(135deg, rgba(197,165,90,0.08) 0%, rgba(197,165,90,0.03) 100%)",
+            border: "1px solid rgba(197,165,90,0.40)",
+            boxShadow: "0 0 10px rgba(197,165,90,0.07), inset 0 1px 0 rgba(197,165,90,0.12)",
+          }}
+        >
+          {/* Catégorie */}
+          <p className="text-[8px] uppercase tracking-[0.18em] font-bold" style={{ color: GOLD }}>
+            {product.category_name || product.category || ""}
+          </p>
+
+          {/* Nom encadré */}
+          <h3 className="text-[13px] md:text-[14px] font-semibold leading-tight line-clamp-2" style={{ color: "#f0ead8" }}>
+            {product.title}
+          </h3>
+
+          {/* Prix */}
+          <div className="flex items-baseline gap-1.5 pt-1.5" style={{ borderTop: "1px solid rgba(197,165,90,0.18)" }}>
+            {hasPromo ? (
+              <>
+                <span className="text-[10px] line-through" style={{ color: "rgba(255,255,255,0.35)" }}>
+                  {product.price.toLocaleString("fr-FR")}
+                </span>
+                <span className="text-[14px] font-bold" style={{ color: GOLD }}>
+                  {product.promo_price.toLocaleString("fr-FR")}
+                  <span className="text-[8px] font-normal ml-0.5" style={{ color: "rgba(200,168,75,0.60)" }}>FCFA</span>
+                </span>
+              </>
+            ) : (
+              <span className="text-[14px] font-bold" style={{ color: "#f0ead8" }}>
                 {product.price.toLocaleString("fr-FR")}
+                <span className="text-[8px] font-normal ml-0.5" style={{ color: "rgba(240,234,216,0.48)" }}>FCFA</span>
               </span>
-              <span className="text-[14px] font-bold" style={{ color: GOLD }}>
-                {product.promo_price.toLocaleString("fr-FR")}
-                <span className="text-[8px] font-normal ml-0.5" style={{ color: "rgba(200,168,75,0.65)" }}>FCFA</span>
-              </span>
-            </>
-          ) : (
-            <span className="text-[14px] font-bold" style={{ color: "#f0ead8" }}>
-              {product.price.toLocaleString("fr-FR")}
-              <span className="text-[8px] font-normal ml-0.5" style={{ color: "rgba(240,234,216,0.50)" }}>FCFA</span>
-            </span>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </motion.article>
