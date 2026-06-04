@@ -78,7 +78,7 @@ export default function GiftBoxShop() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.45, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
                 className="group flex flex-col rounded-xl overflow-hidden"
-                style={{ background: "#111010", border: "1px solid rgba(197,165,90,0.22)" }}
+                style={{ background: "#111010" }}
               >
                 {/* Image carrée */}
                 <Link to={`/gift-boxes/${box.id}`}
@@ -100,28 +100,27 @@ export default function GiftBoxShop() {
                   )}
                 </Link>
 
-                {/* Mini-card infos EN BAS */}
-                <div className="px-2.5 py-2.5">
-                  <div className="rounded-lg px-3 py-2.5 flex flex-col gap-1"
+                {/* Infos EN BAS */}
+                <div className="px-2.5 pt-2.5 pb-3 flex flex-col gap-1.5">
+                  <p className="text-[8px] uppercase tracking-[0.18em] font-bold px-0.5" style={{ color: "#C8A84B" }}>
+                    Coffret cadeau
+                  </p>
+                  {/* Mini-card contour gold — nom uniquement */}
+                  <div className="rounded-lg px-3 py-2"
                     style={{
-                      background: "linear-gradient(135deg, rgba(197,165,90,0.08) 0%, rgba(197,165,90,0.03) 100%)",
+                      background: "linear-gradient(135deg, rgba(197,165,90,0.07) 0%, rgba(197,165,90,0.02) 100%)",
                       border: "1px solid rgba(197,165,90,0.40)",
-                      boxShadow: "0 0 10px rgba(197,165,90,0.07), inset 0 1px 0 rgba(197,165,90,0.12)",
+                      boxShadow: "0 0 8px rgba(197,165,90,0.06), inset 0 1px 0 rgba(197,165,90,0.10)",
                     }}
                   >
-                    <p className="text-[8px] uppercase tracking-[0.18em] font-bold" style={{ color: "#C8A84B" }}>
-                      Coffret cadeau
-                    </p>
                     <h3 className="text-[13px] md:text-[14px] font-semibold leading-tight line-clamp-2" style={{ color: "#f0ead8" }}>
                       {box.name}
                     </h3>
-                    <div className="pt-1.5" style={{ borderTop: "1px solid rgba(197,165,90,0.18)" }}>
-                      <span className="text-[14px] font-bold" style={{ color: "#f0ead8" }}>
-                        {(box.price || 0).toLocaleString("fr-FR")}
-                        <span className="text-[8px] font-normal ml-0.5" style={{ color: "rgba(240,234,216,0.48)" }}>FCFA</span>
-                      </span>
-                    </div>
                   </div>
+                  <span className="text-[14px] font-bold px-0.5" style={{ color: "#f0ead8" }}>
+                    {(box.price || 0).toLocaleString("fr-FR")}
+                    <span className="text-[8px] font-normal ml-0.5" style={{ color: "rgba(240,234,216,0.48)" }}>FCFA</span>
+                  </span>
                 </div>
               </motion.div>
             ))}
