@@ -111,7 +111,7 @@ export default function ProductCard({ product, index = 0 }) {
         </h3>
 
         {/* Prix */}
-        <p className="text-[14px] md:text-[15px] font-bold text-center" style={{ color: GOLD }}>
+        <p className="mt-1.5 text-[14px] md:text-[15px] font-bold text-center shrink-0" style={{ color: GOLD }}>
           {(hasPromo ? product.promo_price : product.price).toLocaleString("fr-FR")} FCFA
         </p>
       </div>

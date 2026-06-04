@@ -114,7 +114,7 @@ export default function GiftBoxShop() {
                   >
                     {box.name}
                   </h3>
-                  <p className="text-[14px] md:text-[15px] font-bold text-center" style={{ color: "#C8A84B" }}>
+                  <p className="mt-1.5 text-[14px] md:text-[15px] font-bold text-center shrink-0" style={{ color: "#C8A84B" }}>
                     {(box.price || 0).toLocaleString("fr-FR")} FCFA
                   </p>
                 </div>
