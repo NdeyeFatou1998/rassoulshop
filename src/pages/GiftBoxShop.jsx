@@ -52,7 +52,7 @@ export default function GiftBoxShop() {
       <section className="max-w-7xl mx-auto px-5 lg:px-10 py-8 pb-24">
         {loading ? (
           /* Skeletons */
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
+          <div className="grid grid-cols-2 gap-3 md:gap-4">
             {Array.from({ length: 4 }).map((_, i) => (
               <div key={i} className="rounded-2xl overflow-hidden" style={{ background: "#111010", border: "1px solid rgba(197,165,90,0.25)" }}>
                 <div className="aspect-square shimmer" />
@@ -70,7 +70,7 @@ export default function GiftBoxShop() {
             <p className="text-white/60 text-sm">Aucun coffret disponible pour le moment</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
+          <div className="grid grid-cols-2 gap-3 md:gap-4">
             {giftBoxes.map((box, i) => (
               <motion.div
                 key={box.id}

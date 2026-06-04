@@ -416,8 +416,8 @@ export default function FilterableProductGrid({
 
         {/* ---- Grille produits ---- */}
         {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
-            {Array.from({ length: 6 }).map((_, i) => (
+          <div className="grid grid-cols-2 gap-3 md:gap-4">
+            {Array.from({ length: 4 }).map((_, i) => (
               <div key={i}>
                 <div className="aspect-square shimmer rounded-2xl" />
                 <div className="mt-3 space-y-2">
@@ -442,7 +442,7 @@ export default function FilterableProductGrid({
                   {/* Grille du chunk */}
                   <motion.div
                     layout
-                    className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5"
+                    className="grid grid-cols-2 gap-3 md:gap-4"
                   >
                     <AnimatePresence mode="popLayout">
                       {chunk.map((product, i) => (
