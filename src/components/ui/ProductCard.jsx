@@ -47,7 +47,7 @@ export default function ProductCard({ product, index = 0 }) {
       onMouseLeave={() => setHovered(false)}
     >
       {/* ---- Image ---- */}
-      <Link to={`/product/${product.id}`} className="relative w-full aspect-square block overflow-hidden">
+      <Link to={`/product/${product.id}`} className="relative w-full block overflow-hidden" style={{ aspectRatio: "1/1" }}>
         <img
           src={product.image || "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg"}
           alt={product.title}
@@ -120,7 +120,7 @@ export default function ProductCard({ product, index = 0 }) {
 
       {/* ---- Infos ---- */}
       <div
-        className="px-3.5 pt-3 pb-4 flex flex-col"
+        className="px-4 pt-3.5 pb-4 flex flex-col"
         style={{ borderTop: "1px solid rgba(197,165,90,0.15)" }}
       >
         {/* Catégorie */}
@@ -132,7 +132,7 @@ export default function ProductCard({ product, index = 0 }) {
         </p>
 
         {/* Titre — gold luisant animé */}
-        <h3 className="text-gold-shine text-[14px] leading-snug line-clamp-2">
+        <h3 className="text-gold-shine text-[15px] leading-snug line-clamp-2">
           {product.title}
         </h3>
 
