@@ -5,9 +5,12 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
-export default function BrandStatement() {
+export default function BrandStatement({ lightBackground = false }) {
   return (
-    <section className="py-20 md:py-28 px-5 lg:px-10 relative overflow-hidden" style={{ background: "transparent" }}>
+    <section
+      className="py-20 md:py-28 px-5 lg:px-10 relative overflow-hidden"
+      style={{ background: lightBackground ? "#ffffff" : "transparent" }}
+    >
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -23,14 +26,18 @@ export default function BrandStatement() {
         </div>
 
         {/* Citation principale */}
-        <blockquote className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] text-white leading-[1.3] tracking-tight">
+        <blockquote className={`font-serif text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] leading-[1.3] tracking-tight ${
+          lightBackground ? "text-[#1a1612]" : "text-white"
+        }`}>
           "L'art d'offrir, c'est l'art de rendre{" "}
           <em className="not-italic text-gold">inoubliable</em>{" "}
           un instant."
         </blockquote>
 
         {/* Attribution */}
-        <p className="mt-6 text-[10px] uppercase tracking-[0.28em] text-white/45 font-medium">
+        <p className={`mt-6 text-[10px] uppercase tracking-[0.28em] font-medium ${
+          lightBackground ? "text-neutral-500" : "text-white/45"
+        }`}>
           — Rassoul Shop, Dakar
         </p>
 

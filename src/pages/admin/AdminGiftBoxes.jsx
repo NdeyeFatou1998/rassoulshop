@@ -14,6 +14,7 @@ import { motion } from "framer-motion";
 import { Plus, Trash2, Gift, Package, Check, ArrowRight } from "lucide-react";
 
 export default function AdminGiftBoxes() {
+  const token = localStorage.getItem("rassoul_admin_token");
   const [giftBoxes, setGiftBoxes] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,7 +25,7 @@ export default function AdminGiftBoxes() {
 
   /* État du formulaire box avec personnalisation */
   const emptyForm = {
-    name: "", description: "", price: "", image: "", active: true,
+    name: "", description: "", price: "", stock: "0", image: "", active: true,
     is_customizable: false,
     selectedItems: [] // { product_id, quantity, is_replaceable, replacements: [product_id] }
   };
@@ -34,7 +35,9 @@ export default function AdminGiftBoxes() {
   async function loadGiftBoxes() {
     setLoading(true);
     try {
-      const res = await fetch("/api/gift-boxes");
+      const res = await fetch("/api/gift-boxes?admin=true", {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
       const data = await res.json();
       setGiftBoxes(data.giftBoxes || []);
     } catch (err) {
@@ -46,7 +49,9 @@ export default function AdminGiftBoxes() {
 
   async function loadProducts() {
     try {
-      const res = await fetch("/api/products");
+      const res = await fetch("/api/products?admin=true&limit=500", {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
       const data = await res.json();
       setProducts(data.products || []);
     } catch (err) {
@@ -71,6 +76,7 @@ export default function AdminGiftBoxes() {
       name: box.name || "",
       description: box.description || "",
       price: String(box.price || ""),
+      stock: String(box.stock ?? 0),
       image: box.image || "",
       active: box.active,
       is_customizable: box.is_customizable || false,
@@ -171,6 +177,7 @@ export default function AdminGiftBoxes() {
           name: form.name,
           description: form.description || null,
           price: parseInt(form.price, 10) || 0,
+          stock: parseInt(form.stock, 10) || 0,
           image: form.image || null,
           active: form.active,
           is_customizable: form.is_customizable
@@ -247,6 +254,7 @@ export default function AdminGiftBoxes() {
           name: form.name,
           description: form.description || null,
           price: parseInt(form.price, 10) || 0,
+          stock: parseInt(form.stock, 10) || 0,
           image: form.image || null,
           active: form.active,
           is_customizable: form.is_customizable,
@@ -400,11 +408,17 @@ export default function AdminGiftBoxes() {
                         Inactif
                       </span>
                     )}
+                    {Number(box.stock) <= 0 && (
+                      <span className="text-[10px] uppercase tracking-wider bg-red-500/20 text-red-400 px-2 py-0.5 rounded">
+                        Rupture
+                      </span>
+                    )}
                   </div>
                   {box.description && (
                     <p className="text-sm text-[#888] mb-2">{box.description}</p>
                   )}
                   <p className="text-[#C5A55A] font-semibold text-lg">{fmtPrice(box.price)}</p>
+                  <p className="text-xs text-[#888] mt-1">Stock : {Number(box.stock) || 0}</p>
 
                   {/* Articles de la box */}
                   {box.items?.length > 0 && (
@@ -500,6 +514,21 @@ export default function AdminGiftBoxes() {
                     className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#C5A55A] focus:outline-none transition-colors"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
+                  Stock disponible
+                </label>
+                <input
+                  type="number"
+                  value={form.stock}
+                  onChange={(e) => setForm({ ...form, stock: e.target.value })}
+                  min="0"
+                  placeholder="0 = masquée sur le site"
+                  className="w-full max-w-xs px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#C5A55A] focus:outline-none transition-colors"
+                />
+                <p className="text-[10px] text-[#555] mt-1">À 0, la box n&apos;apparaît plus sur la page Box Cadeau.</p>
               </div>
 
               {/* Description */}

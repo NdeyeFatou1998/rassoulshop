@@ -389,6 +389,20 @@ export async function fetchAuditLogs(params = {}) {
   });
 }
 
+/** GET /api/settings — Paramètres boutique */
+export async function fetchShopSettings() {
+  return apiRequest(`${API_BASE}/settings`, { headers: authHeaders() });
+}
+
+/** PUT /api/settings/low-stock-threshold — Seuil stock faible */
+export async function updateLowStockThreshold(lowStockThreshold) {
+  return apiRequest(`${API_BASE}/settings/low-stock-threshold`, {
+    method: "PUT",
+    headers: authHeaders(),
+    body: JSON.stringify({ lowStockThreshold }),
+  });
+}
+
 /** GET /api/orders/stats/summary — Statistiques dashboard (camelCase) */
 export async function fetchDashboardStats() {
   const data = await apiRequest(`${API_BASE}/orders/stats/summary`, {

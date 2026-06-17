@@ -17,7 +17,8 @@ import {
   Plus, Trash2, Search, X, Tag, Save,
   ChevronRight, Image as ImageIcon, Check, Pencil, Flag
 } from "lucide-react";
-import { getStockAlert } from "../../utils/stockAlert";
+import { getStockAlert, DEFAULT_LOW_STOCK_THRESHOLD } from "../../utils/stockAlert";
+import { fetchShopSettings } from "../../services/adminApi";
 
 export default function AdminProducts() {
   const token = localStorage.getItem("rassoul_admin_token");
@@ -54,6 +55,9 @@ export default function AdminProducts() {
   const [editOptName, setEditOptName]     = useState("");
   /* Variantes en attente (création produit, avant premier enregistrement) */
   const [pendingVariants, setPendingVariants] = useState([]);
+  const [lowStockThreshold, setLowStockThreshold] = useState(DEFAULT_LOW_STOCK_THRESHOLD);
+
+  const stockAlert = (stock) => getStockAlert(stock, lowStockThreshold);
 
   /* ---- Chargements ---- */
   const loadProducts = useCallback(async () => {
@@ -83,7 +87,18 @@ export default function AdminProducts() {
     setByType(data.by_type || []);
   }
 
-  useEffect(() => { loadProducts(); loadCategories(); loadVariantTypes(); }, []);
+  useEffect(() => {
+    loadProducts();
+    loadCategories();
+    loadVariantTypes();
+    fetchShopSettings()
+      .then((data) => {
+        if (data.lowStockThreshold != null) {
+          setLowStockThreshold(Number(data.lowStockThreshold));
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   /* ---- Sélectionner un produit : re-fetch complet depuis l'API puis charger form ---- */
   async function selectProduct(p) {
@@ -94,7 +109,7 @@ export default function AdminProducts() {
     setNewOptImage("");
     /* Re-fetch pour avoir TOUS les champs (promo, active, etc.) */
     try {
-      const res = await fetch(`/api/products/${p.id}`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`/api/products/${p.id}?admin=true`, { headers: { Authorization: `Bearer ${token}` } });
       const data = await res.json();
       const full = data.product || p;
       setSelected(full);
@@ -398,13 +413,13 @@ export default function AdminProducts() {
         <div className="flex-1 overflow-y-auto divide-y divide-[#1a1a1a]">
           {loading ? Array.from({length:6}).map((_,i) => <div key={i} className="h-14 mx-2 my-1 bg-[#141414] rounded-lg animate-pulse" />) :
           filtered.map(p => {
-            const stockAlert = getStockAlert(p.stock);
+            const alert = stockAlert(p.stock);
             return (
             <div
               key={p.id}
               className={`flex items-center gap-2 px-2.5 py-2 transition-colors ${
                 selected !== "new" && selected?.id === p.id ? "bg-[#C5A55A]/10" : "hover:bg-[#1a1a1a]"
-              } ${stockAlert ? "border-l-2 border-l-red-500 bg-red-500/[0.04]" : ""}`}
+              } ${alert ? "border-l-2 border-l-red-500 bg-red-500/[0.04]" : ""}`}
             >
               {/* Image + indicateur stock */}
               <div className="relative flex-shrink-0">
@@ -412,10 +427,10 @@ export default function AdminProducts() {
                   ? <img src={p.image} alt="" className="w-8 h-8 rounded-md object-cover" />
                   : <div className="w-8 h-8 rounded-md bg-[#222] flex items-center justify-center"><Tag size={11} className="text-[#555]" /></div>
                 }
-                {stockAlert && (
+                {alert && (
                   <span
                     className="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-red-600 rounded-full border border-[#111] shadow-sm"
-                    title={stockAlert.label}
+                    title={alert.label}
                   >
                     <Flag size={9} className="text-white fill-white" />
                   </span>
@@ -430,18 +445,18 @@ export default function AdminProducts() {
               >
                 <div className="flex items-center gap-1 min-w-0">
                   <p className="text-xs font-medium text-[#f5f0e8] truncate leading-tight">{p.title}</p>
-                  {stockAlert && (
+                  {alert && (
                     <span
                       className="flex-shrink-0 flex items-center gap-0.5 px-1 py-0.5 rounded bg-red-500/20 text-red-400 text-[8px] font-bold uppercase tracking-wide"
-                      title={stockAlert.label}
+                      title={alert.label}
                     >
                       <Flag size={8} className="fill-red-400" />
-                      {stockAlert.level === "out" ? "Rupture" : "Faible"}
+                      {alert.level === "out" ? "Rupture" : "Faible"}
                     </span>
                   )}
                 </div>
                 <p className={`text-[10px] leading-tight mt-0.5 ${
-                  stockAlert ? "text-red-400 font-medium" : "text-[#555]"
+                  alert ? "text-red-400 font-medium" : "text-[#555]"
                 }`}>
                   {fmtP(p.price)} · Stock : {Number(p.stock) || 0}
                 </p>
@@ -498,10 +513,10 @@ export default function AdminProducts() {
                 <h2 className="text-sm font-semibold text-[#f5f0e8] truncate">
                   {selected === "new" ? "Nouveau produit" : selected.title}
                 </h2>
-                {selected !== "new" && getStockAlert(selected.stock ?? form.stock) && (
+                {selected !== "new" && stockAlert(selected.stock ?? form.stock) && (
                   <p className="flex items-center gap-1 text-[10px] text-red-400 font-semibold mt-0.5">
                     <Flag size={10} className="fill-red-400" />
-                    {getStockAlert(selected.stock ?? form.stock).label}
+                    {stockAlert(selected.stock ?? form.stock).label}
                   </p>
                 )}
               </div>

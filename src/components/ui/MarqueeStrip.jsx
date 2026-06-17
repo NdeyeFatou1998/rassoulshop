@@ -13,16 +13,16 @@ const MESSAGES = [
   "Cadeaux uniques & mémorables",
 ];
 
-export default function MarqueeStrip() {
+export default function MarqueeStrip({ lightBackground = false }) {
   const items = [...MESSAGES, ...MESSAGES];
 
   return (
     <div
       className="overflow-hidden py-2 select-none"
       style={{
-        background: "#050505",
-        borderTop: "1px solid rgba(255,255,255,0.06)",
-        borderBottom: "1px solid rgba(255,255,255,0.06)",
+        background: lightBackground ? "#fafafa" : "#050505",
+        borderTop: lightBackground ? "1px solid rgba(0,0,0,0.06)" : "1px solid rgba(255,255,255,0.06)",
+        borderBottom: lightBackground ? "1px solid rgba(0,0,0,0.06)" : "1px solid rgba(255,255,255,0.06)",
       }}
     >
       <div className="flex whitespace-nowrap marquee-track">

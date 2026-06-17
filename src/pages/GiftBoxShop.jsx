@@ -33,7 +33,7 @@ export default function GiftBoxShop() {
   useEffect(() => {
     fetch("/api/gift-boxes")
       .then(r => r.json())
-      .then(d => setGiftBoxes((d.giftBoxes || []).filter(b => b.active)))
+      .then(d => setGiftBoxes((d.giftBoxes || []).filter(b => b.active && Number(b.stock) > 0)))
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);

@@ -238,6 +238,7 @@ export default function FilterableProductGrid({
   defaultCategory = null,
   showFilters = false,
   showPromoCards = true,
+  lightBackground = false,
 }) {
   const [active, setActive]       = useState(defaultCategory);
   const [search, setSearch]       = useState("");
@@ -313,7 +314,10 @@ export default function FilterableProductGrid({
   const hasActiveFilters = search.trim() !== "" || applied !== null;
 
   return (
-    <section className="pt-6 pb-10 md:pt-10 md:pb-14" style={{ background: "transparent" }}>
+    <section
+      className="pt-6 pb-10 md:pt-10 md:pb-14"
+      style={{ background: lightBackground ? "#ffffff" : "transparent" }}
+    >
       <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
 
         {/* ---- Barre recherche + filtre prix (Shop uniquement) ---- */}
@@ -406,7 +410,9 @@ export default function FilterableProductGrid({
 
         {/* ---- Titre avant les catégories ---- */}
         <div className={`text-center mb-5 ${showFilters ? "mt-4" : "mt-8 md:mt-12"}`}>
-          <h2 className="font-serif text-white font-semibold" style={{ fontSize: "clamp(1.1rem, 3vw, 1.6rem)" }}>
+          <h2 className={`font-serif font-semibold ${
+            lightBackground ? "text-[#1a1612]" : "text-white"
+          }`} style={{ fontSize: "clamp(1.1rem, 3vw, 1.6rem)" }}>
             Découvrez nos catégories
           </h2>
           <div className="mx-auto mt-2 h-px w-16" style={{ background: "linear-gradient(90deg, transparent, #C8A84B, transparent)" }} />
@@ -443,7 +449,9 @@ export default function FilterableProductGrid({
           </div>
         ) : filtered.length === 0 ? (
           <div className="py-24 text-center">
-            <p className="text-white/55 text-sm">Aucun produit dans cette catégorie.</p>
+            <p className={`text-sm ${lightBackground ? "text-neutral-500" : "text-white/55"}`}>
+              Aucun produit dans cette catégorie.
+            </p>
           </div>
         ) : (
           /* Rendu en chunks : grille → promo → grille → promo → ... */

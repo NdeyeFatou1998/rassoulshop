@@ -21,7 +21,7 @@ async function loadAll() {
     cachedProducts ? Promise.resolve(cachedProducts) : fetchProducts({ limit: 200 }),
     cachedGiftBoxes
       ? Promise.resolve(cachedGiftBoxes)
-      : fetch("/api/gift-boxes").then(r => r.json()).then(d => (d.giftBoxes || []).filter(b => b.active)),
+      : fetch("/api/gift-boxes").then(r => r.json()).then(d => (d.giftBoxes || []).filter(b => b.active && Number(b.stock) > 0)),
   ]);
   cachedProducts = products || [];
   cachedGiftBoxes = Array.isArray(cachedGiftBoxes) ? cachedGiftBoxes : (cachedGiftBoxes || []);

@@ -15,7 +15,7 @@ import { motion } from "framer-motion";
 const HERO_R_OUT = 28; /* px — contour tournant */
 const HERO_R_IN  = 24; /* px — image intérieure   */
 
-export default function Hero({ imageSrc, title, subtitle }) {
+export default function Hero({ imageSrc, title, subtitle, lightBackground = false }) {
   /* Parallax léger (sur l'image intérieure uniquement) */
   const [scrollY, setScrollY] = useState(0);
   const sectionRef = useRef(null);
@@ -45,7 +45,7 @@ export default function Hero({ imageSrc, title, subtitle }) {
     <section
       ref={sectionRef}
       className="px-3 md:px-5 pt-[72px] md:pt-[84px] pb-4 md:pb-6"
-      style={{ background: "#030303" }}
+      style={{ background: lightBackground ? "#ffffff" : "#030303" }}
     >
       {/* ---- Squircle géant avec spinning border ---- */}
       <div
