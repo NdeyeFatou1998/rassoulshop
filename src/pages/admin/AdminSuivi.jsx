@@ -36,7 +36,7 @@ export default function AdminSuivi() {
   const [search, setSearch] = useState("");
   const [actorType, setActorType] = useState("");
 
-  if (user?.role === "assistant") {
+  if (user?.role !== "admin") {
     return <Navigate to="/admin/dashboard" replace />;
   }
 

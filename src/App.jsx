@@ -53,6 +53,7 @@ import AdminCategories from "./pages/admin/AdminCategories";
 import AdminGiftBoxes from "./pages/admin/AdminGiftBoxes";
 import AdminVariants from "./pages/admin/AdminVariants";
 import AdminSettings from "./pages/admin/AdminSettings";
+import AdminPointage from "./pages/admin/AdminPointage";
 
 /**
  * ScrollToTop - Remet le scroll en haut à chaque navigation
@@ -150,6 +151,7 @@ export default function App() {
               <Route path="lookbook" element={<AdminLookbook />} />
               <Route path="about" element={<AdminAbout />} />
               <Route path="orders" element={<AdminOrders />} />
+              <Route path="pointage" element={<AdminPointage />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="suivi" element={<AdminSuivi />} />
               <Route path="assistants" element={<Navigate to="/admin/users" replace />} />

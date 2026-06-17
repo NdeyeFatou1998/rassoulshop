@@ -6,8 +6,9 @@
  */
 
 import { useState, useEffect } from "react";
+import { Navigate } from "react-router-dom";
 import {
-  Plus, Edit2, Trash2, X, Save, Users, Shield, UserCheck, Copy, Check, Mail
+  Plus, Edit2, Trash2, X, Save, Users, Shield, UserCheck, Copy, Check, Mail, ShieldCheck
 } from "lucide-react";
 import { fetchUsers, createUser, updateUser, deleteUser } from "../../services/adminApi";
 import { useAuth } from "../../context/AuthContext";
@@ -17,22 +18,33 @@ const TABS = [
   { id: "assistant", label: "Assistants", icon: UserCheck },
 ];
 
+const ROLE_LABELS = {
+  admin: "Administrateur",
+  sub_admin: "Sous-administrateur",
+  assistant: "Assistant",
+};
+
 function UserRow({ user, currentUser, onEdit, onDelete }) {
   return (
     <div className="px-6 py-4 flex items-center justify-between hover:bg-[#1a1a1a] transition-colors">
       <div className="flex items-center gap-4">
         <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold ${
-          user.role === "admin"
+          user.role === "admin" || user.role === "sub_admin"
             ? "bg-[#D7A12B]/20 text-[#D7A12B]"
             : "bg-blue-500/20 text-blue-400"
         }`}>
           {user.firstName?.[0]}{user.lastName?.[0]}
         </div>
         <div>
-          <p className="text-sm font-medium text-[#f5f0e8]">
+          <p className="text-sm font-medium text-[#f5f0e8] flex items-center gap-2">
             {user.firstName} {user.lastName}
+            {user.role === "sub_admin" && (
+              <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-[#D7A12B]/15 text-[#D7A12B] uppercase tracking-wider font-semibold">
+                Sous-admin
+              </span>
+            )}
             {user.id === currentUser?.id && (
-              <span className="text-[10px] text-[#555] ml-2">(vous)</span>
+              <span className="text-[10px] text-[#555]">(vous)</span>
             )}
           </p>
           <p className="text-xs text-[#888]">{user.email}</p>
@@ -106,7 +118,9 @@ export default function AdminUsers() {
   const [email, setEmail] = useState("");
   const [createRole, setCreateRole] = useState("admin");
 
-  const admins = users.filter((u) => u.role === "admin" && !u.isEnvAdmin);
+  const admins = users.filter(
+    (u) => (u.role === "admin" || u.role === "sub_admin") && !u.isEnvAdmin
+  );
   const assistants = users.filter((u) => u.role === "assistant");
   const tabUsers = activeTab === "admin" ? admins : assistants;
 
@@ -206,12 +220,18 @@ export default function AdminUsers() {
   }
 
   const modalTitle = editingUser
-    ? `Modifier ${editingUser.role === "admin" ? "l'administrateur" : "l'assistant"}`
-    : createRole === "admin"
+    ? `Modifier ${ROLE_LABELS[editingUser.role] || "l'utilisateur"}`
+    : activeTab === "admin"
       ? "Nouvel administrateur"
       : "Nouvel assistant";
 
-  const successLabel = createRole === "admin" ? "Administrateur créé" : "Assistant créé";
+  const successLabel =
+    createRole === "assistant" ? "Assistant créé" : `${ROLE_LABELS[createRole]} créé`;
+
+  // Sous-admin et assistant n'ont pas accès à la gestion des utilisateurs
+  if (currentUser && currentUser.role !== "admin") {
+    return <Navigate to="/admin/dashboard" replace />;
+  }
 
   return (
     <div className="space-y-6">
@@ -379,6 +399,46 @@ export default function AdminUsers() {
                     className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none"
                   />
                 </div>
+
+                {!editingUser && activeTab === "admin" && (
+                  <div>
+                    <label className="block text-xs text-[#888] uppercase tracking-wider mb-2">
+                      Type de compte
+                    </label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setCreateRole("admin")}
+                        className={`flex items-start gap-2 p-3 rounded-lg border text-left transition-colors ${
+                          createRole === "admin"
+                            ? "border-[#D7A12B] bg-[#D7A12B]/10"
+                            : "border-[#333] bg-[#1a1a1a] hover:border-[#555]"
+                        }`}
+                      >
+                        <Shield size={16} className="text-[#D7A12B] shrink-0 mt-0.5" />
+                        <span>
+                          <span className="block text-sm text-[#f5f0e8] font-medium">Administrateur</span>
+                          <span className="block text-[11px] text-[#888] mt-0.5">Accès complet</span>
+                        </span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setCreateRole("sub_admin")}
+                        className={`flex items-start gap-2 p-3 rounded-lg border text-left transition-colors ${
+                          createRole === "sub_admin"
+                            ? "border-[#D7A12B] bg-[#D7A12B]/10"
+                            : "border-[#333] bg-[#1a1a1a] hover:border-[#555]"
+                        }`}
+                      >
+                        <ShieldCheck size={16} className="text-[#D7A12B] shrink-0 mt-0.5" />
+                        <span>
+                          <span className="block text-sm text-[#f5f0e8] font-medium">Sous-admin</span>
+                          <span className="block text-[11px] text-[#888] mt-0.5">Sauf Utilisateurs & Suivi</span>
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                )}
 
                 {!editingUser && (
                   <p className="text-xs text-[#888] bg-[#1a1a1a] p-3 rounded-lg">

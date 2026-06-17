@@ -389,6 +389,51 @@ export async function fetchAuditLogs(params = {}) {
   });
 }
 
+/* ================================================================== */
+/*  POINTAGE (ATTENDANCE)                                              */
+/* ================================================================== */
+
+/** GET /api/attendance/assistants — liste assistants + statut pointage */
+export async function fetchAttendanceAssistants() {
+  return apiRequest(`${API_BASE}/attendance/assistants`, {
+    headers: authHeaders(),
+  });
+}
+
+/** POST /api/attendance/clock — pointer (arrivée/descente auto) avec PIN + photo */
+export async function clockAttendance({ assistantId, pin, photo }) {
+  return apiRequest(`${API_BASE}/attendance/clock`, {
+    method: "POST",
+    headers: authHeaders(),
+    body: JSON.stringify({ assistantId, pin, photo }),
+  });
+}
+
+/** GET /api/attendance/history — historique des sessions */
+export async function fetchAttendanceHistory(params = {}) {
+  const qs = new URLSearchParams(params).toString();
+  return apiRequest(`${API_BASE}/attendance/history${qs ? `?${qs}` : ""}`, {
+    headers: authHeaders(),
+  });
+}
+
+/** PUT /api/attendance/pin — un assistant change son PIN (PIN actuel requis) */
+export async function changeAttendancePin({ assistantId, currentPin, newPin }) {
+  return apiRequest(`${API_BASE}/attendance/pin`, {
+    method: "PUT",
+    headers: authHeaders(),
+    body: JSON.stringify({ assistantId, currentPin, newPin }),
+  });
+}
+
+/** PUT /api/attendance/pin/reset/:id — admin réinitialise le PIN (1234) */
+export async function resetAttendancePin(assistantId) {
+  return apiRequest(`${API_BASE}/attendance/pin/reset/${assistantId}`, {
+    method: "PUT",
+    headers: authHeaders(),
+  });
+}
+
 /** GET /api/settings — Paramètres boutique */
 export async function fetchShopSettings() {
   return apiRequest(`${API_BASE}/settings`, { headers: authHeaders() });

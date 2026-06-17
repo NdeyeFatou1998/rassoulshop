@@ -13,7 +13,7 @@ import { Outlet, Link, useLocation, useNavigate, Navigate } from "react-router-d
 import { useAuth } from "../../context/AuthContext";
 import {
   LayoutDashboard, Package, Image, FileText, ShoppingCart,
-  Users, Tags, Gift, LogOut, Menu, X, ChevronRight, Settings, Layers, ScrollText
+  Users, Tags, Gift, LogOut, Menu, X, ChevronRight, Settings, Layers, ScrollText, Clock
 } from "lucide-react";
 
 /** Liens de navigation du sidebar admin */
@@ -23,16 +23,25 @@ const NAV_ITEMS = [
   { label: "Lookbook", path: "/admin/lookbook", icon: Image },
   { label: "À Propos", path: "/admin/about", icon: FileText },
   { label: "Commandes", path: "/admin/orders", icon: ShoppingCart },
-  { label: "Utilisateurs", path: "/admin/users", icon: Users },
-  { label: "Suivi", path: "/admin/suivi", icon: ScrollText, adminOnly: true },
+  { label: "Pointage", path: "/admin/pointage", icon: Clock },
+  { label: "Utilisateurs", path: "/admin/users", icon: Users, fullAdminOnly: true },
+  { label: "Suivi", path: "/admin/suivi", icon: ScrollText, fullAdminOnly: true },
   { label: "Catégories", path: "/admin/categories", icon: Tags },
   { label: "Box Cadeau", path: "/admin/gift-boxes", icon: Gift },
   { label: "Variantes", path: "/admin/variants", icon: Layers },
   { label: "Paramètres", path: "/admin/settings", icon: Settings },
 ];
 
-/** Pages réservées aux administrateurs (pas aux assistants) */
-const ADMIN_ONLY_PATHS = ["/admin/users", "/admin/suivi"];
+/**
+ * Navigation selon le rôle :
+ * - admin       : tout
+ * - sub_admin   : tout sauf Utilisateurs et Suivi
+ * - assistant   : sans Utilisateurs ni Suivi (accès limité)
+ */
+function getNavItemsForRole(role) {
+  if (role === "admin") return NAV_ITEMS;
+  return NAV_ITEMS.filter((item) => !item.fullAdminOnly);
+}
 
 export default function AdminLayout() {
   const { user, isAuthenticated, loading, logoutUser } = useAuth();
@@ -61,10 +70,7 @@ export default function AdminLayout() {
   }
 
   /** Titre de la page actuelle */
-  const navItems =
-    user?.role === "assistant"
-      ? NAV_ITEMS.filter((item) => !item.adminOnly && !ADMIN_ONLY_PATHS.includes(item.path))
-      : NAV_ITEMS;
+  const navItems = getNavItemsForRole(user?.role);
 
   const currentPage = navItems.find((item) => location.pathname.startsWith(item.path));
   const pageTitle = currentPage?.label || "Admin";
@@ -104,7 +110,11 @@ export default function AdminLayout() {
             {user?.firstName} {user?.lastName}
           </p>
           <p className="text-xs text-[#D7A12B] uppercase tracking-wider mt-0.5">
-            {user?.role}
+            {user?.role === "admin"
+              ? "Administrateur"
+              : user?.role === "sub_admin"
+                ? "Sous-administrateur"
+                : "Assistant"}
           </p>
         </div>
 
