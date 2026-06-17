@@ -61,12 +61,12 @@ export default function ProductCard({ product, index = 0 }) {
 
         {/* Badges haut */}
         <div className="absolute top-2.5 left-2.5 z-10 flex flex-col gap-1.5">
-          {product.badge && (
+          {category && (
             <span
-              className="px-2 py-[3px] text-[8px] uppercase tracking-[0.14em] font-bold rounded-full"
-              style={{ background: GOLD, color: "#0c0a07" }}
+              className="px-2 py-[3px] text-[8px] uppercase tracking-[0.16em] font-bold rounded-full backdrop-blur-sm max-w-[160px] truncate"
+              style={{ background: "rgba(0,0,0,0.55)", color: GOLD, border: `1px solid ${GOLD}` }}
             >
-              {product.badge}
+              {category}
             </span>
           )}
           {product.is_vip && (
@@ -90,11 +90,7 @@ export default function ProductCard({ product, index = 0 }) {
 
         {/* Bloc texte éditorial en bas */}
         <div className="absolute inset-x-0 bottom-0 z-10 px-3.5 pb-3.5 pt-6">
-          <h3 className="product-card-title line-clamp-2 mb-1">{product.title}</h3>
-
-          {category && (
-            <p className="product-card-category line-clamp-1 mb-2">{category}</p>
-          )}
+          <h3 className="product-card-title line-clamp-2 mb-2">{product.title}</h3>
 
           <div className="flex items-end justify-between gap-2">
             <span className="product-card-price leading-none whitespace-nowrap">
