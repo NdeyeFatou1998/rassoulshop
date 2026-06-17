@@ -34,10 +34,32 @@ function authHeaders(extra = {}) {
   };
 }
 
-/** Headers pour upload multipart (pas de Content-Type, multer gère) */
-function authHeadersMultipart() {
+/** Headers pour requêtes binaires (PDF, etc.) */
+function authHeadersBinary(extra = {}) {
   const token = getToken();
-  return token ? { Authorization: `Bearer ${token}` } : {};
+  return {
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...extra,
+  };
+}
+
+/** Déclenche le téléchargement d'un Blob (compatible Safari / Chrome) */
+export function downloadBlobAsFile(blob, filename) {
+  const pdfBlob =
+    blob.type && blob.type.includes("pdf")
+      ? blob
+      : new Blob([blob], { type: "application/pdf" });
+  const url = URL.createObjectURL(pdfBlob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.rel = "noopener";
+  document.body.appendChild(a);
+  a.click();
+  window.setTimeout(() => {
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 500);
 }
 
 /** Requête générique avec gestion d'erreur */
@@ -316,13 +338,30 @@ export async function fetchOrder(id) {
 /** GET /api/orders/:id/invoice — Facture PDF (même fichier que l'email client) */
 export async function fetchOrderInvoicePdf(id) {
   const response = await fetch(`${API_BASE}/orders/${id}/invoice`, {
-    headers: authHeaders(),
+    headers: authHeadersBinary(),
   });
+  const contentType = response.headers.get("content-type") || "";
+
   if (!response.ok) {
     const data = await response.json().catch(() => ({}));
     throw new Error(data.message || data.error || `Erreur ${response.status}`);
   }
-  return response.blob();
+
+  if (!contentType.includes("pdf")) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error(data.message || "Réponse invalide (PDF attendu)");
+  }
+
+  const blob = await response.blob();
+  return blob.type.includes("pdf")
+    ? blob
+    : new Blob([await blob.arrayBuffer()], { type: "application/pdf" });
+}
+
+/** Télécharge la facture PDF d'une commande */
+export async function downloadOrderInvoicePdf(id, filename) {
+  const blob = await fetchOrderInvoicePdf(id);
+  downloadBlobAsFile(blob, filename);
 }
 
 /** PUT /api/orders/:id — Modifier le statut */

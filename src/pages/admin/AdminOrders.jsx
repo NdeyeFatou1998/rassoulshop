@@ -7,7 +7,7 @@ import {
   Search, Eye, Trash2, X, Clock, CheckCircle, Truck,
   Package, XCircle, Filter, Download, ImageIcon, Maximize2, FileText, RotateCcw,
 } from "lucide-react";
-import { fetchOrders, updateOrderStatus, deleteOrder, fetchOrderInvoicePdf } from "../../services/adminApi";
+import { fetchOrders, updateOrderStatus, deleteOrder, fetchOrderInvoicePdf, downloadBlobAsFile } from "../../services/adminApi";
 import { normalizeOrder } from "../../utils/normalizeOrder";
 
 const STATUS_CONFIG = {
@@ -36,12 +36,14 @@ export default function AdminOrders() {
   const [invoiceUrl, setInvoiceUrl] = useState(null);
   const [invoiceError, setInvoiceError] = useState(null);
   const invoiceUrlRef = useRef(null);
+  const invoiceBlobRef = useRef(null);
 
   function revokeInvoiceUrl() {
     if (invoiceUrlRef.current) {
       URL.revokeObjectURL(invoiceUrlRef.current);
       invoiceUrlRef.current = null;
     }
+    invoiceBlobRef.current = null;
     setInvoiceUrl(null);
   }
 
@@ -58,6 +60,7 @@ export default function AdminOrders() {
     fetchOrderInvoicePdf(selectedOrder.id)
       .then((blob) => {
         if (cancelled) return;
+        invoiceBlobRef.current = blob;
         const url = URL.createObjectURL(blob);
         invoiceUrlRef.current = url;
         setInvoiceUrl(url);
@@ -130,12 +133,25 @@ export default function AdminOrders() {
     }
   }
 
-  function downloadInvoice() {
-    if (!invoiceUrl || !selectedOrder) return;
-    const a = document.createElement("a");
-    a.href = invoiceUrl;
-    a.download = `${selectedOrder.reference}-facture.pdf`;
-    a.click();
+  async function downloadInvoice(e) {
+    e?.stopPropagation?.();
+    if (!selectedOrder?.id) return;
+
+    const filename = `${String(selectedOrder.reference).replace(/[/\\?%*:|"<>]/g, "-")}-facture.pdf`;
+
+    setInvoiceLoading(true);
+    try {
+      let blob = invoiceBlobRef.current;
+      if (!blob) {
+        blob = await fetchOrderInvoicePdf(selectedOrder.id);
+        invoiceBlobRef.current = blob;
+      }
+      downloadBlobAsFile(blob, filename);
+    } catch (err) {
+      alert(err.message || "Impossible de télécharger la facture");
+    } finally {
+      setInvoiceLoading(false);
+    }
   }
 
   function fmtPrice(n) {
@@ -342,7 +358,20 @@ export default function AdminOrders() {
 
               {/* Miniature facture — clic pour plein écran */}
               <div>
-                <h3 className="text-xs text-[#888] uppercase tracking-wider mb-2">Facture</h3>
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-xs text-[#888] uppercase tracking-wider">Facture</h3>
+                  {invoiceUrl && !invoiceError && (
+                    <button
+                      type="button"
+                      onClick={downloadInvoice}
+                      disabled={invoiceLoading}
+                      className="text-[10px] text-[#C5A55A] hover:text-[#e0c878] flex items-center gap-1 disabled:opacity-50"
+                    >
+                      <Download size={12} />
+                      Télécharger PDF
+                    </button>
+                  )}
+                </div>
                 <button
                   type="button"
                   onClick={() => !invoiceError && invoiceUrl && setInvoiceFullscreen(true)}
@@ -419,7 +448,7 @@ export default function AdminOrders() {
             <button
               type="button"
               onClick={downloadInvoice}
-              disabled={invoiceLoading || !invoiceUrl}
+              disabled={invoiceLoading || !!invoiceError}
               className="p-2 rounded-lg text-[#C5A55A] hover:bg-[#C5A55A]/15 transition-colors disabled:opacity-50"
               aria-label="Télécharger la facture"
               title="Télécharger PDF"
