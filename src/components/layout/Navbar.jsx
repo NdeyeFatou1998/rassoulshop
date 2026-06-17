@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ShoppingCart, ShoppingBag, Search } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import SearchOverlay from "../ui/SearchOverlay";
+import { BRAND_LOGO } from "../../constants/brand";
 
 const GOLD = "#C8A84B";
 
@@ -92,7 +93,7 @@ export default function Navbar() {
               className="flex items-center gap-2 sm:gap-3 min-w-0 -ml-0.5 md:ml-0"
             >
               <img
-                src="/assets/images/RSN2.png"
+                src={BRAND_LOGO}
                 alt="Rassoul Shop Sn"
                 className="object-contain shrink-0"
                 style={{

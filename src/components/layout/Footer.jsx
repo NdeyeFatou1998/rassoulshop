@@ -3,6 +3,7 @@
  */
 
 import { Link } from "react-router-dom";
+import { BRAND_LOGO } from "../../constants/brand";
 
 export default function Footer() {
   return (
@@ -20,7 +21,7 @@ export default function Footer() {
           {/* Logo + accroche */}
           <div className="space-y-4">
             <img
-              src="/assets/images/RSN2.png"
+              src={BRAND_LOGO}
               alt="Rassoul Shop Sn"
               className="h-16 w-auto object-contain"
               style={{ filter: "drop-shadow(0 0 8px rgba(197,165,90,0.35))" }}

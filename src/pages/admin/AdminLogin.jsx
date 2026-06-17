@@ -9,6 +9,7 @@
 import { useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { BRAND_LOGO } from "../../constants/brand";
 
 export default function AdminLogin() {
   const { loginUser, isAuthenticated, loading: authLoading } = useAuth();
@@ -53,9 +54,12 @@ export default function AdminLogin() {
       <div className="w-full max-w-md">
         {/* Logo / Titre */}
         <div className="text-center mb-8">
-          <h1 className="font-serif text-3xl text-[#f5f0e8] tracking-wider mb-2">
-            Rassoul Shop
-          </h1>
+          <img
+            src={BRAND_LOGO}
+            alt="Rassoul Shop Sn"
+            className="h-20 w-auto mx-auto mb-4 object-contain"
+            style={{ filter: "drop-shadow(0 0 12px rgba(197,165,90,0.35))" }}
+          />
           <p className="text-xs uppercase tracking-[0.3em] text-[#C5A55A]">
             Administration
           </p>
