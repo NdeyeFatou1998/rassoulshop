@@ -112,7 +112,7 @@ export default function AdminSettings() {
             <span className="text-xs text-[#888] uppercase tracking-wider">Rôle</span>
             <span className={`text-xs px-2.5 py-1 rounded-full ${
               user?.role === "admin"
-                ? "bg-[#C5A55A]/20 text-[#C5A55A]"
+                ? "bg-[#D7A12B]/20 text-[#D7A12B]"
                 : "bg-blue-500/20 text-blue-400"
             }`}>
               {user?.role === "admin" ? "Administrateur" : "Assistant"}
@@ -124,7 +124,7 @@ export default function AdminSettings() {
       {/* ---- Gestion stock ---- */}
       <div className="bg-[#141414] border border-[#222] rounded-xl p-6">
         <div className="flex items-center gap-2 mb-4">
-          <Package size={16} className="text-[#C5A55A]" />
+          <Package size={16} className="text-[#D7A12B]" />
           <h2 className="text-sm font-medium text-[#f5f0e8]">Gestion du stock</h2>
         </div>
 
@@ -160,7 +160,7 @@ export default function AdminSettings() {
               onChange={(e) => setLowStockThreshold(e.target.value)}
               disabled={stockLoading}
               required
-              className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none disabled:opacity-50"
+              className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none disabled:opacity-50"
             />
             <p className="text-[10px] text-[#555] mt-1.5">
               Exemple : avec 5, un produit à 3 unités affiche « Stock faible », à 0 il disparaît du site.
@@ -170,7 +170,7 @@ export default function AdminSettings() {
           <button
             type="submit"
             disabled={stockSaving || stockLoading}
-            className="w-full py-2.5 bg-[#C5A55A] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#D4B56E] disabled:opacity-50 transition-colors"
+            className="w-full py-2.5 bg-[#D7A12B] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#E8B945] disabled:opacity-50 transition-colors"
           >
             {stockSaving ? "Enregistrement..." : "Enregistrer le seuil"}
           </button>
@@ -180,7 +180,7 @@ export default function AdminSettings() {
       {/* ---- Changement de mot de passe ---- */}
       <div className="bg-[#141414] border border-[#222] rounded-xl p-6">
         <div className="flex items-center gap-2 mb-4">
-          <Lock size={16} className="text-[#C5A55A]" />
+          <Lock size={16} className="text-[#D7A12B]" />
           <h2 className="text-sm font-medium text-[#f5f0e8]">Changer le mot de passe</h2>
         </div>
 
@@ -208,7 +208,7 @@ export default function AdminSettings() {
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
               required
-              className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
+              className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none"
             />
           </div>
 
@@ -222,7 +222,7 @@ export default function AdminSettings() {
               onChange={(e) => setNewPassword(e.target.value)}
               required
               minLength={6}
-              className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
+              className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none"
             />
           </div>
 
@@ -235,14 +235,14 @@ export default function AdminSettings() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
+              className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none"
             />
           </div>
 
           <button
             type="submit"
             disabled={saving}
-            className="w-full py-2.5 bg-[#C5A55A] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#D4B56E] disabled:opacity-50 transition-colors"
+            className="w-full py-2.5 bg-[#D7A12B] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#E8B945] disabled:opacity-50 transition-colors"
           >
             {saving ? "Modification..." : "Modifier le mot de passe"}
           </button>

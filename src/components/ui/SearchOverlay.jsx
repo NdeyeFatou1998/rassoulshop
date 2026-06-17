@@ -9,7 +9,7 @@ import { Search, X, ShoppingCart, Gift, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { fetchProducts } from "../../services/api";
 
-const GOLD = "#C8A84B";
+const GOLD = "#D7A12B";
 const GOLD_LIGHT = "#F0D060";
 
 /* Chargement unique au premier ouverture */
@@ -100,7 +100,7 @@ export default function SearchOverlay({ open, onClose }) {
             className="fixed top-0 left-0 right-0 z-[61] max-h-[85vh] overflow-y-auto"
             style={{
               background: "linear-gradient(180deg, #1c160e 0%, #131108 100%)",
-              borderBottom: "1px solid rgba(197,165,90,0.30)",
+              borderBottom: "1px solid rgba(215,161,43,0.30)",
               boxShadow: "0 20px 60px rgba(0,0,0,0.8)",
             }}
           >
@@ -108,7 +108,7 @@ export default function SearchOverlay({ open, onClose }) {
             <div className="max-w-3xl mx-auto px-4 py-5">
               <div
                 className="flex items-center gap-3 rounded-2xl px-4 py-3"
-                style={{ background: "rgba(255,255,255,0.06)", border: "1.5px solid rgba(197,165,90,0.35)" }}
+                style={{ background: "rgba(255,255,255,0.06)", border: "1.5px solid rgba(215,161,43,0.35)" }}
               >
                 <Search size={18} style={{ color: GOLD, flexShrink: 0 }} />
                 <input
@@ -162,8 +162,8 @@ export default function SearchOverlay({ open, onClose }) {
                             to={`/product/${p.id}`}
                             onClick={onClose}
                             className="group flex gap-3 rounded-xl p-2.5 transition-all duration-200"
-                            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(197,165,90,0.15)" }}
-                            onMouseEnter={e => e.currentTarget.style.background = "rgba(197,165,90,0.08)"}
+                            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(215,161,43,0.15)" }}
+                            onMouseEnter={e => e.currentTarget.style.background = "rgba(215,161,43,0.08)"}
                             onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.04)"}
                           >
                             <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
@@ -174,7 +174,7 @@ export default function SearchOverlay({ open, onClose }) {
                               />
                             </div>
                             <div className="min-w-0 flex-1">
-                              <p className="text-[11px] font-bold truncate" style={{ color: "#D4BA78" }}>{p.title}</p>
+                              <p className="text-[11px] font-bold truncate" style={{ color: "#F3CF5C" }}>{p.title}</p>
                               <p className="text-[9px] mt-0.5" style={{ color: "rgba(255,255,255,0.50)" }}>{p.category}</p>
                               <p className="text-[11px] font-bold mt-1" style={{ color: "#f0ead8" }}>
                                 {(p.promo_active && p.promo_price ? p.promo_price : p.price)?.toLocaleString("fr-FR")}
@@ -200,8 +200,8 @@ export default function SearchOverlay({ open, onClose }) {
                             to={`/gift-boxes/${b.id}`}
                             onClick={onClose}
                             className="group flex gap-3 rounded-xl p-2.5 transition-all duration-200"
-                            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(197,165,90,0.15)" }}
-                            onMouseEnter={e => e.currentTarget.style.background = "rgba(197,165,90,0.08)"}
+                            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(215,161,43,0.15)" }}
+                            onMouseEnter={e => e.currentTarget.style.background = "rgba(215,161,43,0.08)"}
                             onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.04)"}
                           >
                             <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center" style={{ background: "#2a2416" }}>
@@ -211,7 +211,7 @@ export default function SearchOverlay({ open, onClose }) {
                               }
                             </div>
                             <div className="min-w-0 flex-1">
-                              <p className="text-[11px] font-bold truncate" style={{ color: "#D4BA78" }}>{b.name}</p>
+                              <p className="text-[11px] font-bold truncate" style={{ color: "#F3CF5C" }}>{b.name}</p>
                               <p className="text-[9px] mt-0.5" style={{ color: "rgba(255,255,255,0.50)" }}>Coffret</p>
                               <p className="text-[11px] font-bold mt-1" style={{ color: "#f0ead8" }}>
                                 {(b.price || 0).toLocaleString("fr-FR")}
@@ -231,7 +231,7 @@ export default function SearchOverlay({ open, onClose }) {
                         to={`/shop?q=${encodeURIComponent(query)}`}
                         onClick={onClose}
                         className="flex items-center gap-2 text-[10px] uppercase tracking-[0.18em] font-bold px-4 py-2 rounded-full transition-all"
-                        style={{ background: "rgba(197,165,90,0.12)", color: GOLD, border: "1px solid rgba(197,165,90,0.30)" }}
+                        style={{ background: "rgba(215,161,43,0.12)", color: GOLD, border: "1px solid rgba(215,161,43,0.30)" }}
                       >
                         Tous les produits <ArrowRight size={12} />
                       </Link>

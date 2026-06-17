@@ -9,7 +9,7 @@ import { ShoppingCart, Check } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 
-const GOLD = "#C8A84B";
+const GOLD = "#D7A12B";
 
 export default function ProductCard({ product, index = 0 }) {
   const { addToCart } = useCart();

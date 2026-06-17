@@ -20,9 +20,9 @@ export default function MarqueeStrip({ lightBackground = false }) {
     <div
       className="overflow-hidden py-2 select-none"
       style={{
-        background: lightBackground ? "#fafafa" : "#050505",
-        borderTop: lightBackground ? "1px solid rgba(0,0,0,0.06)" : "1px solid rgba(255,255,255,0.06)",
-        borderBottom: lightBackground ? "1px solid rgba(0,0,0,0.06)" : "1px solid rgba(255,255,255,0.06)",
+        background: lightBackground ? "#fafafa" : "linear-gradient(90deg, #1c1108 0%, #2a1305 50%, #1c1108 100%)",
+        borderTop: lightBackground ? "1px solid rgba(0,0,0,0.06)" : "1px solid rgba(215,161,43,0.14)",
+        borderBottom: lightBackground ? "1px solid rgba(0,0,0,0.06)" : "1px solid rgba(215,161,43,0.14)",
       }}
     >
       <div className="flex whitespace-nowrap marquee-track">
@@ -35,7 +35,7 @@ export default function MarqueeStrip({ lightBackground = false }) {
             {/* Texte avec gradient gold */}
             <span
               style={{
-                background: "linear-gradient(90deg, #BF953F 0%, #FCF6BA 40%, #C8A84B 60%, #BF953F 100%)",
+                background: "linear-gradient(90deg, #B5811E 0%, #FCE9A8 40%, #D7A12B 60%, #B5811E 100%)",
                 backgroundSize: "300% 100%",
                 animation: "goldShine 4s ease-in-out infinite",
                 WebkitBackgroundClip: "text",
@@ -45,7 +45,7 @@ export default function MarqueeStrip({ lightBackground = false }) {
             >
               {msg}
             </span>
-            <span style={{ color: "#C8A84B", fontSize: "6px" }}>✦</span>
+            <span style={{ color: "#D7A12B", fontSize: "6px" }}>✦</span>
           </span>
         ))}
       </div>

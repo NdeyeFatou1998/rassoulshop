@@ -23,7 +23,7 @@ export default function AdminLogin() {
   if (authLoading) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#C5A55A] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#D7A12B] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -58,15 +58,15 @@ export default function AdminLogin() {
             src={BRAND_LOGO}
             alt="Rassoul Shop Sn"
             className="h-20 w-auto mx-auto mb-4 object-contain"
-            style={{ filter: "drop-shadow(0 0 12px rgba(197,165,90,0.35))" }}
+            style={{ filter: "drop-shadow(0 0 12px rgba(215,161,43,0.35))" }}
           />
-          <p className="text-xs uppercase tracking-[0.3em] text-[#C5A55A]">
+          <p className="text-xs uppercase tracking-[0.3em] text-[#D7A12B]">
             Administration
           </p>
         </div>
 
         {/* Carte de connexion */}
-        <div className="bg-[#141414] border border-[#C5A55A]/20 rounded-2xl p-8 shadow-2xl">
+        <div className="bg-[#141414] border border-[#D7A12B]/20 rounded-2xl p-8 shadow-2xl">
           <h2 className="text-lg font-medium text-[#f5f0e8] mb-6">
             Connexion
           </h2>
@@ -81,7 +81,7 @@ export default function AdminLogin() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Champ Email */}
             <div>
-              <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
+              <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
                 Email
               </label>
               <input
@@ -89,14 +89,14 @@ export default function AdminLogin() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#C5A55A] focus:outline-none transition-colors"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
                 placeholder="admin@rassoulshop.com"
               />
             </div>
 
             {/* Champ Mot de passe */}
             <div>
-              <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
+              <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
                 Mot de passe
               </label>
               <input
@@ -104,7 +104,7 @@ export default function AdminLogin() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#C5A55A] focus:outline-none transition-colors"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
                 placeholder="••••••••"
               />
             </div>
@@ -113,7 +113,7 @@ export default function AdminLogin() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-[#C5A55A] text-[#0a0a0a] font-semibold text-sm uppercase tracking-wider rounded-lg hover:bg-[#D4B56E] disabled:opacity-50 transition-all duration-300"
+              className="w-full py-3 bg-[#D7A12B] text-[#0a0a0a] font-semibold text-sm uppercase tracking-wider rounded-lg hover:bg-[#E8B945] disabled:opacity-50 transition-all duration-300"
             >
               {loading ? "Connexion..." : "Se connecter"}
             </button>
@@ -122,7 +122,7 @@ export default function AdminLogin() {
 
         {/* Lien retour site */}
         <p className="text-center mt-6 text-[#555] text-xs">
-          <a href="/" className="hover:text-[#C5A55A] transition-colors">
+          <a href="/" className="hover:text-[#D7A12B] transition-colors">
             ← Retour au site
           </a>
         </p>

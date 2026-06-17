@@ -174,7 +174,7 @@ export default function AdminLookbook() {
           <label className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold cursor-pointer transition-colors ${
             bannerUploading
               ? "bg-[#333] text-[#888] cursor-not-allowed"
-              : "bg-[#C5A55A] text-[#0a0a0a] hover:bg-[#D4B56E]"
+              : "bg-[#D7A12B] text-[#0a0a0a] hover:bg-[#E8B945]"
           }`}>
             <Upload size={14} />
             {bannerUploading ? "Envoi..." : banner ? "Changer" : "Uploader"}
@@ -226,7 +226,7 @@ export default function AdminLookbook() {
           )}
 
           {bannerFile && !bannerUploading && (
-            <p className="mt-2 text-xs text-[#C5A55A]">Fichier sélectionné : {bannerFile.name}</p>
+            <p className="mt-2 text-xs text-[#D7A12B]">Fichier sélectionné : {bannerFile.name}</p>
           )}
         </div>
       </div>
@@ -248,7 +248,7 @@ export default function AdminLookbook() {
           </div>
           <button
             onClick={openNew}
-            className="flex items-center gap-2 px-4 py-2 bg-[#C5A55A] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#D4B56E] transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-[#D7A12B] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#E8B945] transition-colors"
           >
             <Plus size={14} />
             Ajouter un média
@@ -298,7 +298,7 @@ export default function AdminLookbook() {
                       {item.type === "video" ? <Film size={9} /> : <Image size={9} />}
                       {item.type}
                     </span>
-                    <span className="px-1.5 py-0.5 bg-black/70 backdrop-blur-sm rounded text-[9px] text-[#C5A55A]">
+                    <span className="px-1.5 py-0.5 bg-black/70 backdrop-blur-sm rounded text-[9px] text-[#D7A12B]">
                       {item.span}
                     </span>
                   </div>
@@ -307,7 +307,7 @@ export default function AdminLookbook() {
                   <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                     <button
                       onClick={() => openEdit(item)}
-                      className="p-2.5 bg-[#C5A55A] rounded-full text-[#0a0a0a] hover:bg-[#D4B56E] transition-colors"
+                      className="p-2.5 bg-[#D7A12B] rounded-full text-[#0a0a0a] hover:bg-[#E8B945] transition-colors"
                       title="Modifier"
                     >
                       <Edit2 size={13} />
@@ -362,7 +362,7 @@ export default function AdminLookbook() {
                   <label className="block text-[10px] text-[#888] uppercase tracking-wider mb-2">
                     Fichier *
                   </label>
-                  <label className="flex flex-col items-center gap-2 p-6 bg-[#1a1a1a] border-2 border-dashed border-[#333] rounded-xl cursor-pointer hover:border-[#C5A55A] transition-colors">
+                  <label className="flex flex-col items-center gap-2 p-6 bg-[#1a1a1a] border-2 border-dashed border-[#333] rounded-xl cursor-pointer hover:border-[#D7A12B] transition-colors">
                     <Upload size={22} className="text-[#555]" />
                     <span className="text-sm text-[#777]">
                       {file ? file.name : "Cliquer pour sélectionner (image ou vidéo)"}
@@ -385,7 +385,7 @@ export default function AdminLookbook() {
                 <select
                   value={span}
                   onChange={(e) => setSpan(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
+                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none"
                 >
                   {SPAN_OPTIONS.map((o) => (
                     <option key={o.value} value={o.value}>{o.label}</option>
@@ -405,7 +405,7 @@ export default function AdminLookbook() {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-[#C5A55A] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#D4B56E] disabled:opacity-50 transition-colors"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-[#D7A12B] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#E8B945] disabled:opacity-50 transition-colors"
                 >
                   <Save size={14} />
                   {saving ? "Enregistrement..." : "Enregistrer"}

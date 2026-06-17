@@ -45,7 +45,7 @@ export default function Hero({ imageSrc, title, subtitle, lightBackground = fals
     <section
       ref={sectionRef}
       className="px-3 md:px-5 pt-[72px] md:pt-[84px] pb-4 md:pb-6"
-      style={{ background: lightBackground ? "#ffffff" : "#030303" }}
+      style={{ background: lightBackground ? "#ffffff" : "#080503" }}
     >
       {/* ---- Squircle géant avec spinning border ---- */}
       <div
@@ -60,8 +60,8 @@ export default function Hero({ imageSrc, title, subtitle, lightBackground = fals
           style={{
             borderRadius: HERO_R_OUT,
             background:
-              "conic-gradient(from 0deg, transparent 65%, rgba(197,165,90,0.35) 74%, rgba(255,215,100,0.92) 80%, rgba(197,165,90,0.35) 86%, transparent 100%)",
-            boxShadow: "0 0 28px rgba(197,165,90,0.22), 0 0 6px rgba(197,165,90,0.12)",
+              "conic-gradient(from 0deg, transparent 65%, rgba(181,129,30,0.35) 74%, rgba(243,207,92,0.95) 80%, rgba(181,129,30,0.35) 86%, transparent 100%)",
+            boxShadow: "0 0 28px rgba(215,161,43,0.24), 0 0 6px rgba(215,161,43,0.14)",
           }}
         />
 
@@ -105,7 +105,7 @@ export default function Hero({ imageSrc, title, subtitle, lightBackground = fals
             </p>
             <div
               className="mx-auto mt-2 h-px w-16"
-              style={{ background: "linear-gradient(90deg, transparent, #C8A84B, transparent)" }}
+              style={{ background: "linear-gradient(90deg, transparent, #D7A12B, transparent)" }}
             />
           </motion.div>
 
@@ -123,7 +123,7 @@ export default function Hero({ imageSrc, title, subtitle, lightBackground = fals
                 fontSize: "clamp(1.1rem, 3vw, 2rem)",
                 fontWeight: 600,
                 fontStyle: "italic",
-                background: "linear-gradient(100deg, #BF953F 0%, #FCF6BA 45%, #C8A84B 70%, #FBF5B7 100%)",
+                background: "linear-gradient(100deg, #B5811E 0%, #FCE9A8 45%, #D7A12B 70%, #F3CF5C 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",

@@ -62,7 +62,7 @@ export default function CategoryCircles() {
                 to={`/shop?category=${encodeURIComponent(cat.slug)}`}
                 className="group flex-shrink-0 flex flex-col items-center gap-3 w-[88px] md:w-[104px]"
               >
-                <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-2xl overflow-hidden border border-white/[0.08] bg-[#111110] transition-all duration-400 group-hover:border-gold/40 group-hover:shadow-[0_0_20px_rgba(197,165,90,0.15)] group-hover:scale-[1.03]">
+                <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-2xl overflow-hidden border border-white/[0.08] bg-[#111110] transition-all duration-400 group-hover:border-gold/40 group-hover:shadow-[0_0_20px_rgba(215,161,43,0.15)] group-hover:scale-[1.03]">
                   <img
                     src={getCategoryImageUrl(cat.image_url)}
                     alt={cat.name}

@@ -89,11 +89,11 @@ function CategorySquircle({ label, image, isActive, onClick }) {
             borderRadius: R_OUT,
             /* Arc doré court → effet "comète lumineuse" */
             background: isActive
-              ? "conic-gradient(from 0deg, transparent 60%, rgba(197,165,90,0.55) 72%, rgba(255,215,100,1) 80%, rgba(197,165,90,0.55) 88%, transparent 100%)"
-              : "conic-gradient(from 0deg, transparent 68%, rgba(197,165,90,0.3) 78%, rgba(197,165,90,0.65) 83%, rgba(197,165,90,0.3) 88%, transparent 100%)",
+              ? "conic-gradient(from 0deg, transparent 60%, rgba(181,129,30,0.55) 72%, rgba(243,207,92,1) 80%, rgba(181,129,30,0.55) 88%, transparent 100%)"
+              : "conic-gradient(from 0deg, transparent 68%, rgba(215,161,43,0.3) 78%, rgba(215,161,43,0.65) 83%, rgba(215,161,43,0.3) 88%, transparent 100%)",
             /* Lueur dorée externe uniquement sur l'actif */
             boxShadow: isActive
-              ? "0 0 18px rgba(197,165,90,0.45), 0 0 4px rgba(197,165,90,0.25)"
+              ? "0 0 18px rgba(215,161,43,0.48), 0 0 4px rgba(215,161,43,0.28)"
               : "none",
           }}
         />
@@ -167,7 +167,7 @@ function PromoCard({ card }) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-40px" }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className="w-full my-2 rounded-2xl border border-gold/25 bg-gradient-to-br from-[#211e14] to-[#16130c] px-8 py-10 text-center"
+        className="w-full my-2 rounded-2xl border border-gold/25 bg-gradient-to-br from-[#2a1809] to-[#15100a] px-8 py-10 text-center"
       >
         <span className="text-[9px] uppercase tracking-[0.28em] text-gold font-bold">
           {card.tag}
@@ -195,7 +195,7 @@ function PromoCard({ card }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="w-full my-2 rounded-2xl border border-gold/20 bg-gradient-to-r from-[#211e14] to-[#16130c] overflow-hidden flex flex-col md:flex-row items-stretch"
+      className="w-full my-2 rounded-2xl border border-gold/20 bg-gradient-to-r from-[#2a1809] to-[#15100a] overflow-hidden flex flex-col md:flex-row items-stretch"
     >
       {/* Texte */}
       <div className="flex-1 px-7 md:px-10 py-8 md:py-9 flex flex-col justify-center">
@@ -415,7 +415,7 @@ export default function FilterableProductGrid({
           }`} style={{ fontSize: "clamp(1.1rem, 3vw, 1.6rem)" }}>
             Découvrez nos catégories
           </h2>
-          <div className="mx-auto mt-2 h-px w-16" style={{ background: "linear-gradient(90deg, transparent, #C8A84B, transparent)" }} />
+          <div className="mx-auto mt-2 h-px w-16" style={{ background: "linear-gradient(90deg, transparent, #D7A12B, transparent)" }} />
         </div>
 
         {/* ---- Bande de squircles — répétée 10× pour défilement infini ---- */}

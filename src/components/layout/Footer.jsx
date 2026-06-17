@@ -7,7 +7,7 @@ import { BRAND_LOGO } from "../../constants/brand";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/[0.06]" style={{ background: "#030303" }}>
+    <footer className="border-t border-gold/[0.12]" style={{ background: "linear-gradient(180deg, #140c06 0%, #080503 100%)" }}>
       <div className="max-w-7xl mx-auto px-5 md:px-10 py-12 md:py-16">
 
         {/* Ligne décorative dorée */}
@@ -24,7 +24,7 @@ export default function Footer() {
               src={BRAND_LOGO}
               alt="Rassoul Shop Sn"
               className="h-16 w-auto object-contain"
-              style={{ filter: "drop-shadow(0 0 8px rgba(197,165,90,0.35))" }}
+              style={{ filter: "drop-shadow(0 0 8px rgba(215,161,43,0.35))" }}
             />
             <p className="text-[12px] text-white/65 max-w-xs leading-relaxed">
               Boutique cadeau premium au Sénégal.<br />Peluches, montres, bijoux et coffrets sur mesure.

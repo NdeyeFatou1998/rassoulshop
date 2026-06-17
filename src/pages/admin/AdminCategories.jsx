@@ -184,7 +184,7 @@ export default function AdminCategories() {
         </div>
         <button
           onClick={() => openModal()}
-          className="px-4 py-2 bg-[#C5A55A] text-[#0a0a0a] font-semibold text-sm uppercase tracking-wider rounded-lg hover:bg-[#D4B56E] transition-all duration-300"
+          className="px-4 py-2 bg-[#D7A12B] text-[#0a0a0a] font-semibold text-sm uppercase tracking-wider rounded-lg hover:bg-[#E8B945] transition-all duration-300"
         >
           + Nouvelle Catégorie
         </button>
@@ -205,7 +205,7 @@ export default function AdminCategories() {
               animate={{ opacity: 1, y: 0 }}
               className={`bg-[#141414] border rounded-xl p-5 transition-colors ${
                 category.active
-                  ? "border-[#C5A55A]/20 hover:border-[#C5A55A]/40"
+                  ? "border-[#D7A12B]/20 hover:border-[#D7A12B]/40"
                   : "border-[#333]/50 opacity-60"
               }`}
             >
@@ -252,7 +252,7 @@ export default function AdminCategories() {
                   </button>
                   <button
                     onClick={() => openModal(category)}
-                    className="px-3 py-1.5 bg-[#C5A55A]/20 text-[#C5A55A] text-sm rounded-lg hover:bg-[#C5A55A]/30 transition-colors"
+                    className="px-3 py-1.5 bg-[#D7A12B]/20 text-[#D7A12B] text-sm rounded-lg hover:bg-[#D7A12B]/30 transition-colors"
                   >
                     Modifier
                   </button>
@@ -274,7 +274,7 @@ export default function AdminCategories() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-[#141414] border border-[#C5A55A]/20 rounded-2xl p-6 w-full max-w-md"
+            className="bg-[#141414] border border-[#D7A12B]/20 rounded-2xl p-6 w-full max-w-md"
           >
             <h2 className="font-serif text-xl text-[#f5f0e8] mb-6">
               {editingCategory ? "Modifier la catégorie" : "Nouvelle catégorie"}
@@ -282,7 +282,7 @@ export default function AdminCategories() {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
+                <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
                   Nom *
                 </label>
                 <input
@@ -291,12 +291,12 @@ export default function AdminCategories() {
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
                   placeholder="Ex : Peluches"
-                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#C5A55A] focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
+                <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
                   Image
                 </label>
                 <div className="flex items-start gap-4">
@@ -323,10 +323,10 @@ export default function AdminCategories() {
                         if (file) uploadCategoryImage(file);
                         e.target.value = "";
                       }}
-                      className="block w-full text-xs text-[#888] file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-[#C5A55A]/20 file:text-[#C5A55A] hover:file:bg-[#C5A55A]/30"
+                      className="block w-full text-xs text-[#888] file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-[#D7A12B]/20 file:text-[#D7A12B] hover:file:bg-[#D7A12B]/30"
                     />
                     {uploadingImg && (
-                      <p className="text-xs text-[#C5A55A]">Upload en cours…</p>
+                      <p className="text-xs text-[#D7A12B]">Upload en cours…</p>
                     )}
                     {formData.image_url && (
                       <button
@@ -342,7 +342,7 @@ export default function AdminCategories() {
               </div>
 
               <div>
-                <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
+                <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
                   Ordre d'affichage <span className="text-[#555] normal-case tracking-normal">(optionnel)</span>
                 </label>
                 <input
@@ -351,18 +351,18 @@ export default function AdminCategories() {
                   onChange={(e) => setFormData({ ...formData, display_order: e.target.value })}
                   min={0}
                   placeholder="Laisser vide pour tri automatique"
-                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#C5A55A] focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
+                <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
                   Statut
                 </label>
                 <select
                   value={formData.active ? "true" : "false"}
                   onChange={(e) => setFormData({ ...formData, active: e.target.value === "true" })}
-                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] focus:border-[#C5A55A] focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] focus:border-[#D7A12B] focus:outline-none transition-colors"
                 >
                   <option value="true">Actif</option>
                   <option value="false">Inactif</option>
@@ -379,7 +379,7 @@ export default function AdminCategories() {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-3 bg-[#C5A55A] text-[#0a0a0a] font-semibold text-sm rounded-lg hover:bg-[#D4B56E] transition-colors"
+                  className="flex-1 py-3 bg-[#D7A12B] text-[#0a0a0a] font-semibold text-sm rounded-lg hover:bg-[#E8B945] transition-colors"
                 >
                   {editingCategory ? "Modifier" : "Créer"}
                 </button>

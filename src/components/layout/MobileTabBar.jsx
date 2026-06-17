@@ -38,7 +38,7 @@ export default function MobileTabBar() {
       className="md:hidden fixed bottom-0 left-0 right-0 z-50 pb-[env(safe-area-inset-bottom)]"
       style={{
         background: "#030303",
-        borderTop: "1.5px solid rgba(197,165,90,0.35)",
+        borderTop: "1.5px solid rgba(215,161,43,0.35)",
         boxShadow: "0 -4px 24px rgba(0,0,0,0.6)",
       }}
     >
@@ -52,7 +52,7 @@ export default function MobileTabBar() {
               key={tab.id}
               to={tab.path}
               className="relative flex flex-col items-center gap-0.5 py-2 transition-all duration-300"
-              style={{ color: isActive ? "#C5A55A" : "rgba(240,234,216,0.80)" }}
+              style={{ color: isActive ? "#D7A12B" : "rgba(240,234,216,0.80)" }}
             >
               <Icon size={18} strokeWidth={isActive ? 2 : 1.5} />
               <span className="text-[7px] font-bold tracking-wide uppercase leading-tight text-center px-0.5">
@@ -62,7 +62,7 @@ export default function MobileTabBar() {
                 <motion.div
                   layoutId="mobile-tab-dot"
                   className="w-4 h-[2.5px] rounded-full mt-0.5"
-                  style={{ background: "#C5A55A" }}
+                  style={{ background: "#D7A12B" }}
                   transition={{ type: "spring", stiffness: 400, damping: 28 }}
                 />
               )}

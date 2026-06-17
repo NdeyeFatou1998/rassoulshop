@@ -18,24 +18,34 @@ export default {
   theme: {
     extend: {
       colors: {
-        /* Palette principale premium */
+        /* Palette principale premium — alignée sur le logo (marron + or vif) */
         noir: {
-          950: "#050505",
-          900: "#0a0a0a",
-          800: "#141414",
-          700: "#1e1e1e",
-          600: "#2a2a2a",
+          950: "#070503",
+          900: "#0c0805",
+          800: "#161009",
+          700: "#21180e",
+          600: "#2d2113",
         },
+        /* Or vif et lumineux du logo */
         gold: {
-          DEFAULT: "#C5A55A",
-          light: "#D4BA78",
-          dark: "#A68B3C",
+          DEFAULT: "#D7A12B",
+          light: "#F3CF5C",
+          pale: "#FCE9A8",
+          deep: "#B5811E",
+          dark: "#9A6E18",
+        },
+        /* Marron chocolat du logo (gift box + bandeau SHOP SN) */
+        brand: {
+          brown: "#6E3410",
+          brownDark: "#4A2208",
+          brownDeep: "#2A1305",
+          brownLight: "#8C4A1E",
         },
         cream: {
-          DEFAULT: "#f5f0eb",
-          soft: "#e8e0d6",
+          DEFAULT: "#f7f1e6",
+          soft: "#ece1d0",
         },
-        muted: "#8a8279",
+        muted: "#9a8a76",
       },
       fontFamily: {
         serif: ['"Playfair Display"', "Georgia", "serif"],

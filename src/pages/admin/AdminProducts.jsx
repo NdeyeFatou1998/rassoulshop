@@ -396,7 +396,7 @@ export default function AdminProducts() {
         <div className="p-3 border-b border-[#222] space-y-2">
           <button
             onClick={selectNew}
-            className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors ${selected === "new" ? "bg-[#C5A55A] text-[#0a0a0a]" : "bg-[#C5A55A]/10 text-[#C5A55A] hover:bg-[#C5A55A]/20"}`}
+            className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors ${selected === "new" ? "bg-[#D7A12B] text-[#0a0a0a]" : "bg-[#D7A12B]/10 text-[#D7A12B] hover:bg-[#D7A12B]/20"}`}
           >
             <Plus size={15} /> Nouveau produit
           </button>
@@ -405,7 +405,7 @@ export default function AdminProducts() {
             <input
               value={search} onChange={e => setSearch(e.target.value)}
               placeholder="Rechercher..."
-              className="w-full pl-9 pr-3 py-2 bg-[#1a1a1a] border border-[#333] rounded-lg text-xs text-[#f5f0e8] placeholder-[#555] focus:border-[#C5A55A] focus:outline-none"
+              className="w-full pl-9 pr-3 py-2 bg-[#1a1a1a] border border-[#333] rounded-lg text-xs text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none"
             />
           </div>
         </div>
@@ -418,7 +418,7 @@ export default function AdminProducts() {
             <div
               key={p.id}
               className={`flex items-center gap-2 px-2.5 py-2 transition-colors ${
-                selected !== "new" && selected?.id === p.id ? "bg-[#C5A55A]/10" : "hover:bg-[#1a1a1a]"
+                selected !== "new" && selected?.id === p.id ? "bg-[#D7A12B]/10" : "hover:bg-[#1a1a1a]"
               } ${alert ? "border-l-2 border-l-red-500 bg-red-500/[0.04]" : ""}`}
             >
               {/* Image + indicateur stock */}
@@ -468,7 +468,7 @@ export default function AdminProducts() {
                   type="button"
                   title="Modifier"
                   onClick={() => selectProduct(p)}
-                  className="p-1.5 rounded-md text-[#555] hover:text-[#C5A55A] hover:bg-[#C5A55A]/10 transition-colors"
+                  className="p-1.5 rounded-md text-[#555] hover:text-[#D7A12B] hover:bg-[#D7A12B]/10 transition-colors"
                 >
                   <Pencil size={12} />
                 </button>
@@ -529,7 +529,7 @@ export default function AdminProducts() {
                 )}
                 <button type="submit" disabled={saving}
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-colors disabled:opacity-50 ${
-                    saved ? 'bg-emerald-500 text-white' : 'bg-[#C5A55A] text-[#0a0a0a] hover:bg-[#d4b472]'
+                    saved ? 'bg-emerald-500 text-white' : 'bg-[#D7A12B] text-[#0a0a0a] hover:bg-[#E8B945]'
                   }`}>
                   <Save size={13} />
                   <span className="hidden sm:inline">{saving ? "Enregistrement…" : saved ? "✓ Sauvegardé" : "Enregistrer"}</span>
@@ -545,11 +545,11 @@ export default function AdminProducts() {
               <div className="flex-1">
                 <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">Titre *</label>
                 <input value={form.title} onChange={e => setForm(f=>({...f,title:e.target.value}))} required
-                  className="w-full px-3 py-2.5 bg-[#141414] border border-[#222] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none" />
+                  className="w-full px-3 py-2.5 bg-[#141414] border border-[#222] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none" />
               </div>
               <div className="flex-shrink-0 pt-5">
                 <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={form.active} onChange={e=>setForm(f=>({...f,active:e.target.checked}))} className="w-4 h-4 accent-[#C5A55A]" />
+                  <input type="checkbox" checked={form.active} onChange={e=>setForm(f=>({...f,active:e.target.checked}))} className="w-4 h-4 accent-[#D7A12B]" />
                   <span className="text-xs text-[#888] uppercase tracking-wider">Visible</span>
                 </label>
               </div>
@@ -559,7 +559,7 @@ export default function AdminProducts() {
             <div>
               <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">Description</label>
               <textarea value={form.description} onChange={e => setForm(f=>({...f,description:e.target.value}))} rows={3}
-                className="w-full px-3 py-2.5 bg-[#141414] border border-[#222] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none resize-none" />
+                className="w-full px-3 py-2.5 bg-[#141414] border border-[#222] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none resize-none" />
             </div>
 
             {/* ---- Image ---- */}
@@ -573,7 +573,7 @@ export default function AdminProducts() {
                 <div className="flex-1">
                   <input type="file" accept="image/*"
                     onChange={e => e.target.files[0] && uploadProductImage(e.target.files[0])}
-                    className="w-full text-sm text-[#888] file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#C5A55A] file:text-[#0a0a0a] hover:file:bg-[#d4b472] file:cursor-pointer" />
+                    className="w-full text-sm text-[#888] file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#D7A12B] file:text-[#0a0a0a] hover:file:bg-[#E8B945] file:cursor-pointer" />
                   {form.image && <button type="button" onClick={()=>setForm(f=>({...f,image:""}))} className="mt-1 text-xs text-red-400">Supprimer</button>}
                 </div>
               </div>
@@ -587,7 +587,7 @@ export default function AdminProducts() {
                   <input type={type} value={form[key]} min={min} max={key==="rating"?"5":undefined} step={key==="rating"?"0.1":undefined}
                     onChange={e => setForm(f=>({...f,[key]:e.target.value}))}
                     required={key==="price"}
-                    className="w-full px-3 py-2.5 bg-[#141414] border border-[#222] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none" />
+                    className="w-full px-3 py-2.5 bg-[#141414] border border-[#222] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none" />
                 </div>
               ))}
             </div>
@@ -597,7 +597,7 @@ export default function AdminProducts() {
               <div>
                 <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">Catégorie</label>
                 <select value={form.category_id} onChange={handleCatSelect}
-                  className="w-full px-3 py-2.5 bg-[#141414] border border-[#222] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none">
+                  className="w-full px-3 py-2.5 bg-[#141414] border border-[#222] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none">
                   <option value="">— Choisir —</option>
                   {categories.filter(c=>c.active).map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                 </select>
@@ -608,23 +608,23 @@ export default function AdminProducts() {
                       type="checkbox"
                       checked={form.is_vip}
                       onChange={e => setForm(f => ({...f, is_vip: e.target.checked}))}
-                      className="w-4 h-4 accent-[#C5A55A]"
+                      className="w-4 h-4 accent-[#D7A12B]"
                     />
-                    <span className="text-xs text-[#C5A55A] font-semibold uppercase tracking-wider">Boîte VIP</span>
+                    <span className="text-xs text-[#D7A12B] font-semibold uppercase tracking-wider">Boîte VIP</span>
                   </label>
                 )}
               </div>
               <div>
                 <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">Badge</label>
                 <input value={form.badge} onChange={e=>setForm(f=>({...f,badge:e.target.value}))} placeholder="Nouveau, Best-seller…"
-                  className="w-full px-3 py-2.5 bg-[#141414] border border-[#222] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none" />
+                  className="w-full px-3 py-2.5 bg-[#141414] border border-[#222] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none" />
               </div>
             </div>
 
             {/* ---- Promo ---- */}
             <div className="border border-[#222] rounded-xl p-4 space-y-3">
               <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={form.promoActive} onChange={e=>setForm(f=>({...f,promoActive:e.target.checked}))} className="w-4 h-4 accent-[#C5A55A]" />
+                <input type="checkbox" checked={form.promoActive} onChange={e=>setForm(f=>({...f,promoActive:e.target.checked}))} className="w-4 h-4 accent-[#D7A12B]" />
                 <span className="text-sm text-[#f5f0e8]">Activer la promotion</span>
               </label>
               {form.promoActive && (
@@ -632,12 +632,12 @@ export default function AdminProducts() {
                   <div>
                     <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">Prix promo (FCFA)</label>
                     <input type="number" value={form.promoPrice} min="0" onChange={e=>setForm(f=>({...f,promoPrice:e.target.value}))}
-                      className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none" />
+                      className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none" />
                   </div>
                   <div>
                     <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">Fin de la promo</label>
                     <input type="datetime-local" value={form.promoEndsAt} onChange={e=>setForm(f=>({...f,promoEndsAt:e.target.value}))}
-                      className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none" />
+                      className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none" />
                   </div>
                 </div>
               )}
@@ -650,7 +650,7 @@ export default function AdminProducts() {
                 <div className="flex items-center justify-between gap-2">
                   <h3 className="text-xs font-semibold text-[#f5f0e8] uppercase tracking-wider">Variantes</h3>
                   {selected === "new" && pendingVariants.length > 0 && (
-                    <span className="text-[10px] text-[#C5A55A]/80">
+                    <span className="text-[10px] text-[#D7A12B]/80">
                       {pendingVariants.length} option{pendingVariants.length > 1 ? "s" : ""} — enregistrées avec le produit
                     </span>
                   )}
@@ -658,30 +658,30 @@ export default function AdminProducts() {
 
                 {variantTypes.length === 0 ? (
                   <p className="text-xs text-[#444] italic">
-                    Aucun type défini — créez-en dans l'onglet <span className="text-[#C5A55A]">Variantes</span>.
+                    Aucun type défini — créez-en dans l'onglet <span className="text-[#D7A12B]">Variantes</span>.
                   </p>
                 ) : (
                   <>
                     {/* Formulaire compact : dropdown type + nom + prix + bouton */}
                     <div className="flex gap-2 flex-wrap items-center">
                       <select value={selTypeId} onChange={e=>setSelTypeId(e.target.value)}
-                        className="px-3 py-2 bg-[#1a1a1a] border border-[#333] rounded-lg text-xs text-[#f5f0e8] focus:border-[#C5A55A] focus:outline-none">
+                        className="px-3 py-2 bg-[#1a1a1a] border border-[#333] rounded-lg text-xs text-[#f5f0e8] focus:border-[#D7A12B] focus:outline-none">
                         <option value="">— Type —</option>
                         {variantTypes.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
                       </select>
                       <input value={newOptName} onChange={e=>setNewOptName(e.target.value)}
                         onKeyDown={e=>e.key==="Enter" && handleAddOption()}
                         placeholder="Nom (Rouge, XL…)"
-                        className="flex-1 min-w-[120px] px-3 py-2 bg-[#1a1a1a] border border-[#333] rounded-lg text-xs text-[#f5f0e8] placeholder-[#555] focus:border-[#C5A55A] focus:outline-none" />
+                        className="flex-1 min-w-[120px] px-3 py-2 bg-[#1a1a1a] border border-[#333] rounded-lg text-xs text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none" />
                       {/* Photo option */}
-                      <label className="w-9 h-9 rounded-lg bg-[#1a1a1a] border border-[#333] flex items-center justify-center cursor-pointer overflow-hidden hover:border-[#C5A55A] transition-colors flex-shrink-0" title="Photo (optionnel)">
-                        {uploadingImg ? <div className="w-3.5 h-3.5 border border-[#C5A55A] border-t-transparent rounded-full animate-spin" />
+                      <label className="w-9 h-9 rounded-lg bg-[#1a1a1a] border border-[#333] flex items-center justify-center cursor-pointer overflow-hidden hover:border-[#D7A12B] transition-colors flex-shrink-0" title="Photo (optionnel)">
+                        {uploadingImg ? <div className="w-3.5 h-3.5 border border-[#D7A12B] border-t-transparent rounded-full animate-spin" />
                           : newOptImage ? <img src={newOptImage} alt="" className="w-full h-full object-cover" />
                           : <ImageIcon size={13} className="text-[#444]" />}
                         <input type="file" accept="image/*" className="hidden" onChange={e=>e.target.files[0]&&uploadOptImage(e.target.files[0])} />
                       </label>
                       <button type="button" onClick={handleAddOption} disabled={!newOptName.trim()||!selTypeId}
-                        className="flex items-center gap-1 px-3 py-2 bg-[#C5A55A] text-[#0a0a0a] rounded-lg text-xs font-semibold disabled:opacity-40 hover:bg-[#d4b472] transition-colors flex-shrink-0">
+                        className="flex items-center gap-1 px-3 py-2 bg-[#D7A12B] text-[#0a0a0a] rounded-lg text-xs font-semibold disabled:opacity-40 hover:bg-[#E8B945] transition-colors flex-shrink-0">
                         <Plus size={12} /> Ajouter
                       </button>
                     </div>
@@ -691,13 +691,13 @@ export default function AdminProducts() {
                       <div className="space-y-1.5 pt-1">
                         {variantsByType.filter(bt => bt.options.length > 0).map(bt => (
                           <div key={bt.type_id} className="flex items-center gap-2 flex-wrap">
-                            <span className="text-[10px] text-[#C5A55A] uppercase tracking-wider font-semibold w-20 flex-shrink-0">{bt.type_name}</span>
+                            <span className="text-[10px] text-[#D7A12B] uppercase tracking-wider font-semibold w-20 flex-shrink-0">{bt.type_name}</span>
                             <div className="flex flex-wrap gap-1.5">
                               {bt.options.map(opt => {
                                 const isPending = !!opt._pending;
                                 return editingOpt?.id === opt.id ? (
                                   /* ---- Mode édition inline ---- */
-                                  <span key={opt.id} className="flex items-center gap-1 bg-[#1a1a1a] border border-[#C5A55A]/40 rounded-md overflow-hidden">
+                                  <span key={opt.id} className="flex items-center gap-1 bg-[#1a1a1a] border border-[#D7A12B]/40 rounded-md overflow-hidden">
                                     {opt.image && <img src={opt.image} alt="" className="w-6 h-6 object-cover flex-shrink-0" />}
                                     <input
                                       value={editOptName}
@@ -706,18 +706,18 @@ export default function AdminProducts() {
                                       autoFocus
                                       className="w-24 px-2 py-1 bg-transparent text-xs text-[#f5f0e8] outline-none" />
                                     <button type="button" onClick={()=>handleSaveOpt(opt.id, isPending)}
-                                      className="px-1.5 text-[#C5A55A] hover:text-white"><Check size={11} /></button>
+                                      className="px-1.5 text-[#D7A12B] hover:text-white"><Check size={11} /></button>
                                     <button type="button" onClick={()=>setEditingOpt(null)}
                                       className="pr-1.5 text-[#555] hover:text-white"><X size={10} /></button>
                                   </span>
                                 ) : (
                                   /* ---- Mode affichage ---- */
-                                  <span key={opt.id} className={`flex items-center gap-1 bg-[#1a1a1a] border rounded-md px-2 py-0.5 text-xs text-[#f5f0e8] group ${isPending ? "border-[#C5A55A]/30" : "border-[#2a2a2a]"}`}>
+                                  <span key={opt.id} className={`flex items-center gap-1 bg-[#1a1a1a] border rounded-md px-2 py-0.5 text-xs text-[#f5f0e8] group ${isPending ? "border-[#D7A12B]/30" : "border-[#2a2a2a]"}`}>
                                     {opt.image && <img src={opt.image} alt="" className="w-4 h-4 rounded object-cover" />}
                                     {opt.name}
                                     <button type="button"
                                       onClick={()=>{ setEditingOpt(opt); setEditOptName(opt.name); }}
-                                      className="text-[#444] hover:text-[#C5A55A] opacity-0 group-hover:opacity-100 transition-all">
+                                      className="text-[#444] hover:text-[#D7A12B] opacity-0 group-hover:opacity-100 transition-all">
                                       <Pencil size={9} />
                                     </button>
                                     <button type="button" onClick={()=>handleDeleteOption(opt.id, isPending)}

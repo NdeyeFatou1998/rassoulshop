@@ -73,12 +73,12 @@ export default function AdminVariants() {
           <h2 className="text-base font-semibold text-[#f5f0e8]">Types de variantes globaux</h2>
           <p className="text-xs text-[#555] mt-0.5">
             Ces types (Couleur, Taille…) sont disponibles pour tous les produits.
-            Les options (Rouge, XL…) se configurent dans l'onglet <span className="text-[#C5A55A]">Produits</span>.
+            Les options (Rouge, XL…) se configurent dans l'onglet <span className="text-[#D7A12B]">Produits</span>.
           </p>
         </div>
         <button
           onClick={() => { setAdding(true); setNewName(""); }}
-          className="flex items-center gap-2 px-4 py-2 bg-[#C5A55A] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#d4b472] transition-colors flex-shrink-0"
+          className="flex items-center gap-2 px-4 py-2 bg-[#D7A12B] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#E8B945] transition-colors flex-shrink-0"
         >
           <Plus size={15} />
           Nouveau type
@@ -87,7 +87,7 @@ export default function AdminVariants() {
 
       {/* Form ajout */}
       {adding && (
-        <div className="flex gap-2 p-3 bg-[#111] border border-[#C5A55A]/25 rounded-xl">
+        <div className="flex gap-2 p-3 bg-[#111] border border-[#D7A12B]/25 rounded-xl">
           <input
             type="text"
             value={newName}
@@ -95,9 +95,9 @@ export default function AdminVariants() {
             onKeyDown={e => e.key === "Enter" && handleAdd()}
             placeholder="ex: Couleur, Taille, Matière, Parfum…"
             autoFocus
-            className="flex-1 px-3 py-2 bg-[#1a1a1a] border border-[#333] rounded-lg text-sm text-[#f5f0e8] placeholder-[#555] focus:border-[#C5A55A] focus:outline-none"
+            className="flex-1 px-3 py-2 bg-[#1a1a1a] border border-[#333] rounded-lg text-sm text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none"
           />
-          <button onClick={handleAdd} className="px-4 py-2 bg-[#C5A55A] text-[#0a0a0a] rounded-lg text-sm font-semibold">
+          <button onClick={handleAdd} className="px-4 py-2 bg-[#D7A12B] text-[#0a0a0a] rounded-lg text-sm font-semibold">
             Créer
           </button>
           <button onClick={() => setAdding(false)} className="px-3 py-2 text-[#555] hover:text-[#f5f0e8]">
@@ -129,9 +129,9 @@ export default function AdminVariants() {
                     onChange={e => setEditName(e.target.value)}
                     onKeyDown={e => { if (e.key === "Enter") handleRename(t.id); if (e.key === "Escape") setEditId(null); }}
                     autoFocus
-                    className="flex-1 px-2 py-1 bg-[#1a1a1a] border border-[#C5A55A]/40 rounded text-sm text-[#f5f0e8] focus:outline-none"
+                    className="flex-1 px-2 py-1 bg-[#1a1a1a] border border-[#D7A12B]/40 rounded text-sm text-[#f5f0e8] focus:outline-none"
                   />
-                  <button onClick={() => handleRename(t.id)} className="text-[#C5A55A]"><Check size={15} /></button>
+                  <button onClick={() => handleRename(t.id)} className="text-[#D7A12B]"><Check size={15} /></button>
                   <button onClick={() => setEditId(null)} className="text-[#555]"><X size={15} /></button>
                 </div>
               ) : (
@@ -141,7 +141,7 @@ export default function AdminVariants() {
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
                     onClick={() => { setEditId(t.id); setEditName(t.name); }}
-                    className="p-1.5 text-[#555] hover:text-[#C5A55A] rounded-lg hover:bg-[#C5A55A]/10 transition-all"
+                    className="p-1.5 text-[#555] hover:text-[#D7A12B] rounded-lg hover:bg-[#D7A12B]/10 transition-all"
                   >
                     <Pencil size={13} />
                   </button>

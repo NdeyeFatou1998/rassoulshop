@@ -9,7 +9,7 @@ import { useAuth } from "../../context/AuthContext";
 import { fetchAuditLogs } from "../../services/adminApi";
 
 const ROLE_STYLES = {
-  Administrateur: "bg-[#C5A55A]/20 text-[#C5A55A]",
+  Administrateur: "bg-[#D7A12B]/20 text-[#D7A12B]",
   Assistant: "bg-blue-500/20 text-blue-400",
   "Client (boutique)": "bg-emerald-500/20 text-emerald-400",
   Système: "bg-[#333] text-[#888]",
@@ -70,7 +70,7 @@ export default function AdminSuivi() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <p className="text-sm text-[#888] flex items-center gap-2">
-            <ScrollText size={16} className="text-[#C5A55A]" />
+            <ScrollText size={16} className="text-[#D7A12B]" />
             {total} action(s) enregistrée(s)
           </p>
         </div>
@@ -92,13 +92,13 @@ export default function AdminSuivi() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Rechercher (nom, email, action…)"
-            className="w-full pl-9 pr-3 py-2.5 bg-[#141414] border border-[#333] rounded-lg text-sm text-[#f5f0e8] placeholder-[#555] focus:border-[#C5A55A] focus:outline-none"
+            className="w-full pl-9 pr-3 py-2.5 bg-[#141414] border border-[#333] rounded-lg text-sm text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none"
           />
         </form>
         <select
           value={actorType}
           onChange={(e) => setActorType(e.target.value)}
-          className="px-3 py-2.5 bg-[#141414] border border-[#333] rounded-lg text-sm text-[#f5f0e8] focus:border-[#C5A55A] focus:outline-none"
+          className="px-3 py-2.5 bg-[#141414] border border-[#333] rounded-lg text-sm text-[#f5f0e8] focus:border-[#D7A12B] focus:outline-none"
         >
           <option value="">Tous les profils</option>
           <option value="admin">Administrateurs</option>
@@ -146,7 +146,7 @@ export default function AdminSuivi() {
                       <p className="text-sm font-medium text-[#f5f0e8] leading-snug">
                         {log.summary}
                       </p>
-                      <p className="text-xs text-[#C5A55A]/90 mt-1">{log.actionLabel}</p>
+                      <p className="text-xs text-[#D7A12B]/90 mt-1">{log.actionLabel}</p>
                       <div className="flex flex-wrap items-center gap-2 mt-2">
                         <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase ${roleCls}`}>
                           {log.actorRole}

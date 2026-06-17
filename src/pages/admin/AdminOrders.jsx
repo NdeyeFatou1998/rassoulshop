@@ -187,7 +187,7 @@ export default function AdminOrders() {
             placeholder="Référence, prénom, nom, tél..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-[#141414] border border-[#222] rounded-lg text-[#f5f0e8] placeholder-[#555] text-sm focus:border-[#C5A55A] focus:outline-none"
+            className="w-full pl-10 pr-4 py-2.5 bg-[#141414] border border-[#222] rounded-lg text-[#f5f0e8] placeholder-[#555] text-sm focus:border-[#D7A12B] focus:outline-none"
           />
         </div>
         <div className="flex items-center gap-2">
@@ -195,7 +195,7 @@ export default function AdminOrders() {
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-3 py-2.5 bg-[#141414] border border-[#222] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
+            className="px-3 py-2.5 bg-[#141414] border border-[#222] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none"
           >
             <option value="">Tous les statuts</option>
             {Object.entries(STATUS_CONFIG).map(([key, val]) => (
@@ -228,7 +228,7 @@ export default function AdminOrders() {
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-xs font-mono text-[#C5A55A] bg-[#C5A55A]/10 px-2 py-0.5 rounded">
+                    <span className="text-xs font-mono text-[#D7A12B] bg-[#D7A12B]/10 px-2 py-0.5 rounded">
                       {order.reference}
                     </span>
                     <span className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${st.cls}`}>
@@ -244,7 +244,7 @@ export default function AdminOrders() {
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <p className="text-sm font-semibold text-[#C5A55A]">{fmtPrice(order.total)}</p>
+                  <p className="text-sm font-semibold text-[#D7A12B]">{fmtPrice(order.total)}</p>
                   <select
                     value={order.status}
                     onChange={(e) => handleStatusChange(order, e.target.value)}
@@ -258,7 +258,7 @@ export default function AdminOrders() {
                   </select>
                   <button
                     onClick={() => setSelectedOrder(order)}
-                    className="p-2 rounded-lg hover:bg-[#222] text-[#888] hover:text-[#C5A55A] transition-colors"
+                    className="p-2 rounded-lg hover:bg-[#222] text-[#888] hover:text-[#D7A12B] transition-colors"
                     title="Détails"
                   >
                     <Eye size={16} />
@@ -347,7 +347,7 @@ export default function AdminOrders() {
                           <p className="text-sm text-[#f5f0e8] font-medium truncate">{item.title}</p>
                           <p className="text-xs text-[#555]">Qté : {item.quantity}</p>
                         </div>
-                        <p className="text-sm text-[#C5A55A] font-semibold shrink-0">
+                        <p className="text-sm text-[#D7A12B] font-semibold shrink-0">
                           {fmtPrice((item.price || 0) * (item.quantity || 1))}
                         </p>
                       </div>
@@ -365,7 +365,7 @@ export default function AdminOrders() {
                       type="button"
                       onClick={downloadInvoice}
                       disabled={invoiceLoading}
-                      className="text-[10px] text-[#C5A55A] hover:text-[#e0c878] flex items-center gap-1 disabled:opacity-50"
+                      className="text-[10px] text-[#D7A12B] hover:text-[#F3CF5C] flex items-center gap-1 disabled:opacity-50"
                     >
                       <Download size={12} />
                       Télécharger PDF
@@ -376,7 +376,7 @@ export default function AdminOrders() {
                   type="button"
                   onClick={() => !invoiceError && invoiceUrl && setInvoiceFullscreen(true)}
                   disabled={!invoiceUrl || !!invoiceError}
-                  className="w-full max-w-[220px] text-left rounded-xl border border-[#333] bg-[#1a1a1a] overflow-hidden hover:border-[#C5A55A]/50 hover:bg-[#1f1f1f] transition-all group disabled:opacity-50 disabled:pointer-events-none"
+                  className="w-full max-w-[220px] text-left rounded-xl border border-[#333] bg-[#1a1a1a] overflow-hidden hover:border-[#D7A12B]/50 hover:bg-[#1f1f1f] transition-all group disabled:opacity-50 disabled:pointer-events-none"
                 >
                   <div className="h-[88px] overflow-hidden relative bg-white">
                     {invoiceLoading && (
@@ -398,7 +398,7 @@ export default function AdminOrders() {
                       />
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                    <div className="absolute bottom-2 right-2 w-7 h-7 rounded-full bg-black/55 flex items-center justify-center text-[#C5A55A]">
+                    <div className="absolute bottom-2 right-2 w-7 h-7 rounded-full bg-black/55 flex items-center justify-center text-[#D7A12B]">
                       <Maximize2 size={13} />
                     </div>
                   </div>
@@ -408,9 +408,9 @@ export default function AdminOrders() {
                         <FileText size={11} />
                         PDF officiel
                       </p>
-                      <p className="text-xs font-mono text-[#C5A55A] truncate">{selectedOrder.reference}</p>
+                      <p className="text-xs font-mono text-[#D7A12B] truncate">{selectedOrder.reference}</p>
                     </div>
-                    <p className="text-[10px] text-[#888] group-hover:text-[#C5A55A] shrink-0">
+                    <p className="text-[10px] text-[#888] group-hover:text-[#D7A12B] shrink-0">
                       Ouvrir →
                     </p>
                   </div>
@@ -419,7 +419,7 @@ export default function AdminOrders() {
 
               <div className="flex items-center justify-between pt-2 border-t border-[#222]">
                 <p className="text-xs text-[#888]">Total commande</p>
-                <p className="text-xl font-bold text-[#C5A55A]">{fmtPrice(selectedOrder.total)}</p>
+                <p className="text-xl font-bold text-[#D7A12B]">{fmtPrice(selectedOrder.total)}</p>
               </div>
             </div>
           </div>
@@ -444,12 +444,12 @@ export default function AdminOrders() {
             >
               <X size={22} />
             </button>
-            <p className="text-sm font-mono text-[#C5A55A]">{selectedOrder.reference}</p>
+            <p className="text-sm font-mono text-[#D7A12B]">{selectedOrder.reference}</p>
             <button
               type="button"
               onClick={downloadInvoice}
               disabled={invoiceLoading || !!invoiceError}
-              className="p-2 rounded-lg text-[#C5A55A] hover:bg-[#C5A55A]/15 transition-colors disabled:opacity-50"
+              className="p-2 rounded-lg text-[#D7A12B] hover:bg-[#D7A12B]/15 transition-colors disabled:opacity-50"
               aria-label="Télécharger la facture"
               title="Télécharger PDF"
             >

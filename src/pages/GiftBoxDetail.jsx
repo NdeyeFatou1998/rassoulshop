@@ -27,7 +27,7 @@ const DEFAULT_IMG = `data:image/svg+xml;utf8,${encodeURIComponent(`
   <rect width="800" height="800" fill="url(#g)"/>
   <rect x="70" y="70" width="660" height="660" rx="48" fill="#ffffff" stroke="#e8dfd0" stroke-width="10"/>
   <path d="M270 380h260v260H270z" fill="#ffffff" stroke="#e8dfd0" stroke-width="8" rx="20"/>
-  <path d="M400 245c-42-62-145-42-145 36 0 54 52 89 145 129 93-40 145-75 145-129 0-78-103-98-145-36z" fill="#C5A55A" opacity="0.35"/>
+  <path d="M400 245c-42-62-145-42-145 36 0 54 52 89 145 129 93-40 145-75 145-129 0-78-103-98-145-36z" fill="#D7A12B" opacity="0.35"/>
   <text x="400" y="560" font-family="Georgia, serif" font-size="34" font-weight="700" fill="#1a1612" text-anchor="middle">Coffret</text>
   <text x="400" y="604" font-family="Arial, sans-serif" font-size="18" fill="#8a6a42" text-anchor="middle" letter-spacing="2">RASSOUL SHOP</text>
 </svg>
@@ -232,7 +232,7 @@ export default function GiftBoxDetail() {
                           }}
                           className={`relative flex flex-col rounded-lg overflow-hidden border transition-all duration-250 ${
                             item.is_replaceable ? "cursor-pointer hover:border-gold/35" : "cursor-default"
-                          } ${isOpen ? "border-gold/50 shadow-[0_0_12px_rgba(197,165,90,0.12)]" : "border-white/[0.07]"} bg-[#0f0f0e]`}
+                          } ${isOpen ? "border-gold/50 shadow-[0_0_12px_rgba(215,161,43,0.12)]" : "border-white/[0.07]"} bg-[#0f0f0e]`}
                         >
                           <div className="relative aspect-square overflow-hidden bg-[#141412]">
                             <img
@@ -481,7 +481,7 @@ export default function GiftBoxDetail() {
                 disabled={boxType === "vip" && !vipProductId && boxProducts.length > 0}
                 className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold uppercase tracking-wider
                             transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed ${
-                  justAdded ? "bg-green-500 text-white" : "bg-gold text-[#0a0a09] hover:bg-[#d4b472]"
+                  justAdded ? "bg-green-500 text-white" : "bg-gold text-[#0a0a09] hover:bg-[#E8B945]"
                 }`}
               >
                 {justAdded

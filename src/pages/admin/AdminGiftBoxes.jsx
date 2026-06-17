@@ -353,7 +353,7 @@ export default function AdminGiftBoxes() {
         </div>
         <button
           onClick={handleNew}
-          className="px-4 py-2 bg-[#C5A55A] text-[#0a0a0a] font-semibold text-sm uppercase tracking-wider rounded-lg hover:bg-[#D4B56E] transition-all duration-300"
+          className="px-4 py-2 bg-[#D7A12B] text-[#0a0a0a] font-semibold text-sm uppercase tracking-wider rounded-lg hover:bg-[#E8B945] transition-all duration-300"
         >
           + Nouvelle Box
         </button>
@@ -376,7 +376,7 @@ export default function AdminGiftBoxes() {
               animate={{ opacity: 1, y: 0 }}
               className={`bg-[#141414] border rounded-xl p-5 transition-colors ${
                 box.active
-                  ? "border-[#C5A55A]/20 hover:border-[#C5A55A]/40"
+                  ? "border-[#D7A12B]/20 hover:border-[#D7A12B]/40"
                   : "border-[#333]/50 opacity-60"
               }`}
             >
@@ -399,7 +399,7 @@ export default function AdminGiftBoxes() {
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-semibold text-[#f5f0e8] text-lg">{box.name}</h3>
                     {box.is_customizable && (
-                      <span className="text-[10px] uppercase tracking-wider bg-[#C5A55A]/20 text-[#C5A55A] px-2 py-0.5 rounded">
+                      <span className="text-[10px] uppercase tracking-wider bg-[#D7A12B]/20 text-[#D7A12B] px-2 py-0.5 rounded">
                         Personnalisable
                       </span>
                     )}
@@ -417,7 +417,7 @@ export default function AdminGiftBoxes() {
                   {box.description && (
                     <p className="text-sm text-[#888] mb-2">{box.description}</p>
                   )}
-                  <p className="text-[#C5A55A] font-semibold text-lg">{fmtPrice(box.price)}</p>
+                  <p className="text-[#D7A12B] font-semibold text-lg">{fmtPrice(box.price)}</p>
                   <p className="text-xs text-[#888] mt-1">Stock : {Number(box.stock) || 0}</p>
 
                   {/* Articles de la box */}
@@ -428,13 +428,13 @@ export default function AdminGiftBoxes() {
                           key={item.item_id}
                           className={`inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full ${
                             item.is_replaceable
-                              ? "bg-[#C5A55A]/15 text-[#C5A55A] border border-[#C5A55A]/30"
+                              ? "bg-[#D7A12B]/15 text-[#D7A12B] border border-[#D7A12B]/30"
                               : "bg-[#222] text-[#888]"
                           }`}
                         >
                           <Package size={10} />
                           {item.title}
-                          {item.quantity > 1 && <span className="text-[#C5A55A]">x{item.quantity}</span>}
+                          {item.quantity > 1 && <span className="text-[#D7A12B]">x{item.quantity}</span>}
                           {item.is_replaceable && <span className="ml-1">↔</span>}
                         </span>
                       ))}
@@ -449,7 +449,7 @@ export default function AdminGiftBoxes() {
                 <div className="flex flex-col gap-2">
                   <button
                     onClick={() => handleEdit(box)}
-                    className="px-3 py-1.5 bg-[#C5A55A]/20 text-[#C5A55A] text-sm rounded-lg hover:bg-[#C5A55A]/30 transition-colors"
+                    className="px-3 py-1.5 bg-[#D7A12B]/20 text-[#D7A12B] text-sm rounded-lg hover:bg-[#D7A12B]/30 transition-colors"
                   >
                     Modifier
                   </button>
@@ -472,7 +472,7 @@ export default function AdminGiftBoxes() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-[#141414] border border-[#C5A55A]/20 rounded-2xl p-6 w-full max-w-2xl my-8"
+            className="bg-[#141414] border border-[#D7A12B]/20 rounded-2xl p-6 w-full max-w-2xl my-8"
           >
             <h2 className="font-serif text-xl text-[#f5f0e8] mb-6">
               {editingBox ? "Modifier la box" : "Nouvelle box cadeau"}
@@ -488,7 +488,7 @@ export default function AdminGiftBoxes() {
               {/* Nom + Prix en ligne */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
+                  <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
                     Nom de la box *
                   </label>
                   <input
@@ -497,11 +497,11 @@ export default function AdminGiftBoxes() {
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     required
                     placeholder="Ex : Box Prestige"
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#C5A55A] focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
+                  <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
                     Prix du box (FCFA) *
                   </label>
                   <input
@@ -511,13 +511,13 @@ export default function AdminGiftBoxes() {
                     required
                     min="0"
                     placeholder="Prix défini par l'admin"
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#C5A55A] focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
+                <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
                   Stock disponible
                 </label>
                 <input
@@ -526,14 +526,14 @@ export default function AdminGiftBoxes() {
                   onChange={(e) => setForm({ ...form, stock: e.target.value })}
                   min="0"
                   placeholder="0 = masquée sur le site"
-                  className="w-full max-w-xs px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#C5A55A] focus:outline-none transition-colors"
+                  className="w-full max-w-xs px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
                 />
                 <p className="text-[10px] text-[#555] mt-1">À 0, la box n&apos;apparaît plus sur la page Box Cadeau.</p>
               </div>
 
               {/* Description */}
               <div>
-                <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
+                <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
                   Description
                 </label>
                 <textarea
@@ -541,13 +541,13 @@ export default function AdminGiftBoxes() {
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
                   rows={2}
                   placeholder="Description de la box cadeau"
-                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#C5A55A] focus:outline-none transition-colors resize-none"
+                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors resize-none"
                 />
               </div>
 
               {/* Image Upload */}
               <div>
-                <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
+                <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
                   Image de la box
                 </label>
                 <div className="flex items-center gap-4">
@@ -563,7 +563,7 @@ export default function AdminGiftBoxes() {
                       type="file"
                       accept="image/jpeg,image/png,image/gif,image/webp"
                       onChange={handleImageUpload}
-                      className="w-full text-sm text-[#888] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#C5A55A] file:text-[#0a0a0a] hover:file:bg-[#D4B56E] file:cursor-pointer"
+                      className="w-full text-sm text-[#888] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#D7A12B] file:text-[#0a0a0a] hover:file:bg-[#E8B945] file:cursor-pointer"
                     />
                     <p className="text-[10px] text-[#555] mt-1">JPEG, PNG, GIF, WebP — Max 5MB</p>
                   </div>
@@ -582,7 +582,7 @@ export default function AdminGiftBoxes() {
               {/* ---- Sélection des articles ---- */}
               <div className="border border-[#333] rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
-                  <label className="text-xs uppercase tracking-wider text-[#C5A55A]/70">
+                  <label className="text-xs uppercase tracking-wider text-[#D7A12B]/70">
                     Choisir les articles de la box
                   </label>
                   <span className="text-xs text-[#888]">
@@ -597,7 +597,7 @@ export default function AdminGiftBoxes() {
                       <span>Valeur totale des articles :</span>
                       <span>{fmtPrice(itemsTotal)}</span>
                     </div>
-                    <div className="flex justify-between text-[#C5A55A] font-semibold mt-1">
+                    <div className="flex justify-between text-[#D7A12B] font-semibold mt-1">
                       <span>Prix du box :</span>
                       <span>{fmtPrice(parseInt(form.price) || 0)}</span>
                     </div>
@@ -620,13 +620,13 @@ export default function AdminGiftBoxes() {
                             onClick={() => toggleProduct(product.id)}
                             className={`flex items-center gap-3 px-4 py-3 rounded-lg border cursor-pointer transition-colors ${
                               selected
-                                ? "bg-[#C5A55A]/10 border-[#C5A55A]/40"
+                                ? "bg-[#D7A12B]/10 border-[#D7A12B]/40"
                                 : "bg-[#1a1a1a] border-[#333] hover:border-[#555]"
                             }`}
                           >
                             {/* Checkbox custom */}
                             <div className={`w-5 h-5 rounded border flex items-center justify-center flex-shrink-0 ${
-                              selected ? "bg-[#C5A55A] border-[#C5A55A]" : "border-[#555]"
+                              selected ? "bg-[#D7A12B] border-[#D7A12B]" : "border-[#555]"
                             }`}>
                               {selected && <Check size={14} className="text-[#0a0a0a]" />}
                             </div>
@@ -665,7 +665,7 @@ export default function AdminGiftBoxes() {
                                     onClick={() => toggleReplaceable(product.id)}
                                     className={`px-2 py-1 rounded text-[10px] uppercase tracking-wider font-semibold transition-colors ${
                                       selItem?.is_replaceable
-                                        ? "bg-[#C5A55A] text-[#0a0a0a]"
+                                        ? "bg-[#D7A12B] text-[#0a0a0a]"
                                         : "bg-[#333] text-[#888] hover:bg-[#444]"
                                     }`}
                                     title="Cet article peut être remplacé par le client"
@@ -679,8 +679,8 @@ export default function AdminGiftBoxes() {
 
                           {/* ---- Sous-section : produits de remplacement ---- */}
                           {selected && selItem?.is_replaceable && form.is_customizable && (
-                            <div className="ml-8 mt-1 mb-2 border-l-2 border-[#C5A55A]/30 pl-3">
-                              <p className="text-[10px] uppercase tracking-wider text-[#C5A55A]/60 mb-2">
+                            <div className="ml-8 mt-1 mb-2 border-l-2 border-[#D7A12B]/30 pl-3">
+                              <p className="text-[10px] uppercase tracking-wider text-[#D7A12B]/60 mb-2">
                                 <ArrowRight size={10} className="inline mr-1" />
                                 Produits pouvant remplacer "{product.title}"
                               </p>
@@ -695,12 +695,12 @@ export default function AdminGiftBoxes() {
                                         onClick={() => toggleReplacement(product.id, rp.id)}
                                         className={`flex items-center gap-2 px-3 py-2 rounded border cursor-pointer transition-colors text-xs ${
                                           isReplacement
-                                            ? "bg-[#C5A55A]/10 border-[#C5A55A]/30"
+                                            ? "bg-[#D7A12B]/10 border-[#D7A12B]/30"
                                             : "bg-[#1a1a1a] border-[#333] hover:border-[#555]"
                                         }`}
                                       >
                                         <div className={`w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 ${
-                                          isReplacement ? "bg-[#C5A55A] border-[#C5A55A]" : "border-[#555]"
+                                          isReplacement ? "bg-[#D7A12B] border-[#D7A12B]" : "border-[#555]"
                                         }`}>
                                           {isReplacement && <Check size={10} className="text-[#0a0a0a]" />}
                                         </div>
@@ -729,26 +729,26 @@ export default function AdminGiftBoxes() {
               {/* Box personnalisable + Statut en ligne */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
+                  <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
                     Box personnalisable
                   </label>
                   <select
                     value={form.is_customizable ? "true" : "false"}
                     onChange={(e) => setForm({ ...form, is_customizable: e.target.value === "true" })}
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] focus:border-[#C5A55A] focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] focus:border-[#D7A12B] focus:outline-none transition-colors"
                   >
                     <option value="false">Non</option>
                     <option value="true">Oui — le client peut remplacer des articles</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
+                  <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
                     Statut
                   </label>
                   <select
                     value={form.active ? "true" : "false"}
                     onChange={(e) => setForm({ ...form, active: e.target.value === "true" })}
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] focus:border-[#C5A55A] focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] focus:border-[#D7A12B] focus:outline-none transition-colors"
                   >
                     <option value="true">Actif</option>
                     <option value="false">Inactif</option>
@@ -767,7 +767,7 @@ export default function AdminGiftBoxes() {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex-1 py-3 bg-[#C5A55A] text-[#0a0a0a] font-semibold text-sm rounded-lg hover:bg-[#D4B56E] disabled:opacity-50 transition-colors"
+                  className="flex-1 py-3 bg-[#D7A12B] text-[#0a0a0a] font-semibold text-sm rounded-lg hover:bg-[#E8B945] disabled:opacity-50 transition-colors"
                 >
                   {saving ? "Enregistrement..." : editingBox ? "Modifier" : "Créer"}
                 </button>

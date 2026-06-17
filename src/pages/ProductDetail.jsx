@@ -19,7 +19,7 @@ import { fetchProducts, fetchProductById } from "../services/api";
 import { useCart } from "../context/CartContext";
 import ProductCard from "../components/ui/ProductCard";
 
-const GOLD = "#C8A84B";
+const GOLD = "#D7A12B";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -159,7 +159,7 @@ export default function ProductDetail() {
       {/* Halo doré décoratif en haut */}
       <div
         className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 w-[680px] h-[680px] rounded-full opacity-[0.10] blur-[120px]"
-        style={{ background: "radial-gradient(circle, #C8A84B 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(circle, #D7A12B 0%, transparent 70%)" }}
       />
 
       <section className="relative max-w-6xl mx-auto px-4 md:px-8 pt-24 md:pt-32 pb-12 md:pb-16">
@@ -323,7 +323,7 @@ export default function ProductDetail() {
                             <div
                               className={`relative w-12 h-12 rounded-xl overflow-hidden border-2 transition-all duration-200 ${
                                 isSelected
-                                  ? "border-gold scale-105 shadow-[0_0_12px_rgba(197,165,90,0.4)]"
+                                  ? "border-gold scale-105 shadow-[0_0_12px_rgba(215,161,43,0.4)]"
                                   : "border-white/10 group-hover:border-white/30"
                               }`}
                             >
@@ -355,7 +355,7 @@ export default function ProductDetail() {
                             }
                             className={`px-4 py-2 rounded-full text-[11px] font-medium border transition-all duration-200 ${
                               isSelected
-                                ? "border-gold bg-gold/10 text-gold shadow-[0_0_10px_rgba(197,165,90,0.2)]"
+                                ? "border-gold bg-gold/10 text-gold shadow-[0_0_10px_rgba(215,161,43,0.2)]"
                                 : "border-white/15 text-white/65 hover:border-white/40 hover:text-white/90"
                             }`}
                           >
@@ -406,7 +406,7 @@ export default function ProductDetail() {
                     ? "bg-green-500 text-white shadow-[0_0_24px_rgba(34,197,94,0.35)]"
                     : "text-noir-900 shadow-[0_8px_24px_-6px_rgba(200,168,75,0.6)] hover:shadow-[0_10px_30px_-6px_rgba(200,168,75,0.8)]"
                 }`}
-                style={added ? undefined : { background: "linear-gradient(100deg, #d9b85a 0%, #f6e6a8 50%, #c8a84b 100%)" }}
+                style={added ? undefined : { background: "linear-gradient(100deg, #D7A12B 0%, #FCE9A8 50%, #E0A92A 100%)" }}
               >
                 {added ? <Check size={16} strokeWidth={3} /> : <ShoppingCart size={16} />}
                 {added ? "Ajouté au panier" : "Ajouter au panier"}

@@ -23,7 +23,7 @@ function UserRow({ user, currentUser, onEdit, onDelete }) {
       <div className="flex items-center gap-4">
         <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold ${
           user.role === "admin"
-            ? "bg-[#C5A55A]/20 text-[#C5A55A]"
+            ? "bg-[#D7A12B]/20 text-[#D7A12B]"
             : "bg-blue-500/20 text-blue-400"
         }`}>
           {user.firstName?.[0]}{user.lastName?.[0]}
@@ -42,7 +42,7 @@ function UserRow({ user, currentUser, onEdit, onDelete }) {
       <div className="flex items-center gap-2">
         <button
           onClick={() => onEdit(user)}
-          className="p-2 rounded-lg hover:bg-[#222] text-[#888] hover:text-[#C5A55A] transition-colors"
+          className="p-2 rounded-lg hover:bg-[#222] text-[#888] hover:text-[#D7A12B] transition-colors"
           title="Modifier"
         >
           <Edit2 size={16} />
@@ -229,7 +229,7 @@ export default function AdminUsers() {
               className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 isActive
                   ? tab.id === "admin"
-                    ? "bg-[#C5A55A]/15 text-[#C5A55A]"
+                    ? "bg-[#D7A12B]/15 text-[#D7A12B]"
                     : "bg-blue-500/15 text-blue-400"
                   : "text-[#888] hover:text-[#f5f0e8]"
               }`}
@@ -256,7 +256,7 @@ export default function AdminUsers() {
         <button
           type="button"
           onClick={() => handleNew(activeTab)}
-          className="flex items-center gap-2 px-4 py-2.5 bg-[#C5A55A] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#D4B56E] transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 bg-[#D7A12B] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#E8B945] transition-colors"
         >
           <Plus size={16} />
           {activeTab === "admin" ? "Ajouter un administrateur" : "Ajouter un assistant"}
@@ -333,7 +333,7 @@ export default function AdminUsers() {
                 <button
                   type="button"
                   onClick={closeSuccessModal}
-                  className="w-full py-2.5 bg-[#C5A55A] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#D4B56E]"
+                  className="w-full py-2.5 bg-[#D7A12B] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#E8B945]"
                 >
                   Fermer
                 </button>
@@ -354,7 +354,7 @@ export default function AdminUsers() {
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
                       required
-                      className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
+                      className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none"
                     />
                   </div>
                   <div>
@@ -364,7 +364,7 @@ export default function AdminUsers() {
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
                       required
-                      className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
+                      className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none"
                     />
                   </div>
                 </div>
@@ -376,7 +376,7 @@ export default function AdminUsers() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#C5A55A] focus:outline-none"
+                    className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none"
                   />
                 </div>
 
@@ -397,7 +397,7 @@ export default function AdminUsers() {
                   <button
                     type="submit"
                     disabled={saving}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-[#C5A55A] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#D4B56E] disabled:opacity-50"
+                    className="flex items-center gap-2 px-5 py-2.5 bg-[#D7A12B] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#E8B945] disabled:opacity-50"
                   >
                     <Save size={16} />
                     {saving ? "Enregistrement..." : editingUser ? "Enregistrer" : "Créer"}

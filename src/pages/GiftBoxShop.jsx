@@ -20,7 +20,7 @@ const DEFAULT_IMG = `data:image/svg+xml;utf8,${encodeURIComponent(`
   <rect x="70" y="70" width="660" height="660" rx="48" fill="#ffffff" stroke="#e8dfd0" stroke-width="10"/>
   <path d="M260 340h280v300H260z" fill="#1a1612" opacity="0.06"/>
   <path d="M270 380h260v260H270z" fill="#ffffff" stroke="#e8dfd0" stroke-width="8" rx="20"/>
-  <path d="M400 245c-42-62-145-42-145 36 0 54 52 89 145 129 93-40 145-75 145-129 0-78-103-98-145-36z" fill="#C5A55A" opacity="0.35"/>
+  <path d="M400 245c-42-62-145-42-145 36 0 54 52 89 145 129 93-40 145-75 145-129 0-78-103-98-145-36z" fill="#D7A12B" opacity="0.35"/>
   <text x="400" y="560" font-family="Georgia, serif" font-size="34" font-weight="700" fill="#1a1612" text-anchor="middle">Coffret</text>
   <text x="400" y="604" font-family="Arial, sans-serif" font-size="18" fill="#8a6a42" text-anchor="middle" letter-spacing="2">RASSOUL SHOP</text>
 </svg>
@@ -54,7 +54,7 @@ export default function GiftBoxShop() {
           /* Skeletons */
           <div className="product-grid">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="rounded-2xl overflow-hidden" style={{ background: "#111010", border: "1px solid rgba(197,165,90,0.25)" }}>
+              <div key={i} className="rounded-2xl overflow-hidden" style={{ background: "#111010", border: "1px solid rgba(215,161,43,0.25)" }}>
                 <div className="aspect-square shimmer" />
                 <div className="px-3.5 py-3 space-y-2 border-t border-white/[0.05]">
                   <div className="h-2 shimmer rounded w-1/3" />
@@ -102,7 +102,7 @@ export default function GiftBoxShop() {
                   />
                   {box.is_customizable && (
                     <span className="absolute top-2.5 left-2.5 z-10 text-[8px] uppercase tracking-[0.14em] font-bold px-2 py-[3px] rounded-full"
-                      style={{ background: "#C8A84B", color: "#0c0a07" }}>
+                      style={{ background: "#D7A12B", color: "#0c0a07" }}>
                       Personnalisable
                     </span>
                   )}

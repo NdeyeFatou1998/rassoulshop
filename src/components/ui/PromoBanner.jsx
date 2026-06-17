@@ -21,13 +21,13 @@ function PromoItem({ product }) {
       to={`/product/${product.id}`}
       className="inline-flex items-center gap-1.5 mx-8 whitespace-nowrap group"
     >
-      <span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A55A]/80 group-hover:text-[#C5A55A] transition-colors">
+      <span className="text-[10px] uppercase tracking-[0.2em] text-[#D7A12B]/80 group-hover:text-[#D7A12B] transition-colors">
         {product.title}
       </span>
       <span className="text-[10px] text-[#555] line-through">
         {product.price?.toLocaleString("fr-FR")}F
       </span>
-      <span className="text-[10px] text-[#C5A55A] font-medium">
+      <span className="text-[10px] text-[#D7A12B] font-medium">
         {product.promoPrice?.toLocaleString("fr-FR")}F
       </span>
       <span className="text-[#333] mx-4">•</span>

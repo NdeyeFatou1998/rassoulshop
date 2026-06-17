@@ -182,7 +182,7 @@ export default function AdminAssistants() {
         </div>
         <button
           onClick={() => openModal()}
-          className="px-4 py-2 bg-[#C5A55A] text-[#0a0a0a] font-semibold text-sm uppercase tracking-wider rounded-lg hover:bg-[#D4B56E] transition-all duration-300"
+          className="px-4 py-2 bg-[#D7A12B] text-[#0a0a0a] font-semibold text-sm uppercase tracking-wider rounded-lg hover:bg-[#E8B945] transition-all duration-300"
         >
           + Nouvel Assistant
         </button>
@@ -202,7 +202,7 @@ export default function AdminAssistants() {
               key={assistant.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-[#141414] border border-[#C5A55A]/20 rounded-xl p-5 hover:border-[#C5A55A]/40 transition-colors"
+              className="bg-[#141414] border border-[#D7A12B]/20 rounded-xl p-5 hover:border-[#D7A12B]/40 transition-colors"
             >
               <div className="flex items-start justify-between">
                 <div>
@@ -217,7 +217,7 @@ export default function AdminAssistants() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => openModal(assistant)}
-                    className="px-3 py-1.5 bg-[#C5A55A]/20 text-[#C5A55A] text-sm rounded-lg hover:bg-[#C5A55A]/30 transition-colors"
+                    className="px-3 py-1.5 bg-[#D7A12B]/20 text-[#D7A12B] text-sm rounded-lg hover:bg-[#D7A12B]/30 transition-colors"
                   >
                     Modifier
                   </button>
@@ -240,7 +240,7 @@ export default function AdminAssistants() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-[#141414] border border-[#C5A55A]/20 rounded-2xl p-6 w-full max-w-md"
+            className="bg-[#141414] border border-[#D7A12B]/20 rounded-2xl p-6 w-full max-w-md"
           >
             <h2 className="font-serif text-xl text-[#f5f0e8] mb-6">
               {editingAssistant ? "Modifier l'assistant" : "Nouvel assistant"}
@@ -248,8 +248,8 @@ export default function AdminAssistants() {
 
             {/* Mot de passe affiché après création */}
             {generatedPassword && !editingAssistant && (
-              <div className="mb-6 p-4 bg-[#C5A55A]/20 border border-[#C5A55A]/40 rounded-lg">
-                <p className="text-sm text-[#C5A55A] font-semibold mb-2">
+              <div className="mb-6 p-4 bg-[#D7A12B]/20 border border-[#D7A12B]/40 rounded-lg">
+                <p className="text-sm text-[#D7A12B] font-semibold mb-2">
                   ✅ Assistant créé ! Mot de passe généré :
                 </p>
                 <div className="flex items-center gap-2">
@@ -259,7 +259,7 @@ export default function AdminAssistants() {
                       navigator.clipboard.writeText(generatedPassword);
                       alert("Mot de passe copié !");
                     }}
-                    className="px-3 py-2 bg-[#C5A55A] text-[#0a0a0a] text-xs font-bold rounded hover:bg-[#D4B56E] transition-colors whitespace-nowrap"
+                    className="px-3 py-2 bg-[#D7A12B] text-[#0a0a0a] text-xs font-bold rounded hover:bg-[#E8B945] transition-colors whitespace-nowrap"
                   >
                     Copier
                   </button>
@@ -272,8 +272,8 @@ export default function AdminAssistants() {
 
             {/* Mot de passe affiché après reset */}
             {resetPassword && editingAssistant && (
-              <div className="mb-6 p-4 bg-[#C5A55A]/20 border border-[#C5A55A]/40 rounded-lg">
-                <p className="text-sm text-[#C5A55A] font-semibold mb-2">
+              <div className="mb-6 p-4 bg-[#D7A12B]/20 border border-[#D7A12B]/40 rounded-lg">
+                <p className="text-sm text-[#D7A12B] font-semibold mb-2">
                   ✅ Nouveau mot de passe généré :
                 </p>
                 <div className="flex items-center gap-2">
@@ -283,7 +283,7 @@ export default function AdminAssistants() {
                       navigator.clipboard.writeText(resetPassword);
                       alert("Mot de passe copié !");
                     }}
-                    className="px-3 py-2 bg-[#C5A55A] text-[#0a0a0a] text-xs font-bold rounded hover:bg-[#D4B56E] transition-colors whitespace-nowrap"
+                    className="px-3 py-2 bg-[#D7A12B] text-[#0a0a0a] text-xs font-bold rounded hover:bg-[#E8B945] transition-colors whitespace-nowrap"
                   >
                     Copier
                   </button>
@@ -307,7 +307,7 @@ export default function AdminAssistants() {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
+                <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
                   Prénom
                 </label>
                 <input
@@ -315,12 +315,12 @@ export default function AdminAssistants() {
                   value={formData.first_name}
                   onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
                   required
-                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#C5A55A] focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
+                <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
                   Nom
                 </label>
                 <input
@@ -328,12 +328,12 @@ export default function AdminAssistants() {
                   value={formData.last_name}
                   onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
                   required
-                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#C5A55A] focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
+                <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
                   Email
                 </label>
                 <input
@@ -341,19 +341,19 @@ export default function AdminAssistants() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
-                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#C5A55A] focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-xs uppercase tracking-wider text-[#C5A55A]/70 mb-2">
+                <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
                   Téléphone
                 </label>
                 <input
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#C5A55A] focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
                 />
               </div>
 
@@ -368,7 +368,7 @@ export default function AdminAssistants() {
                 {!generatedPassword && !resetPassword && (
                   <button
                     type="submit"
-                    className="flex-1 py-3 bg-[#C5A55A] text-[#0a0a0a] font-semibold text-sm rounded-lg hover:bg-[#D4B56E] transition-colors"
+                    className="flex-1 py-3 bg-[#D7A12B] text-[#0a0a0a] font-semibold text-sm rounded-lg hover:bg-[#E8B945] transition-colors"
                   >
                     {editingAssistant ? "Modifier" : "Créer"}
                   </button>

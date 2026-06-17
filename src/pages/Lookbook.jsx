@@ -108,8 +108,8 @@ export default function Lookbook() {
             style={{
               borderRadius: 28,
               background:
-                "conic-gradient(from 0deg, transparent 60%, rgba(197,165,90,0.3) 72%, rgba(255,215,100,0.88) 80%, rgba(197,165,90,0.3) 88%, transparent 100%)",
-              boxShadow: "0 0 32px rgba(197,165,90,0.18), 0 0 8px rgba(197,165,90,0.1)",
+                "conic-gradient(from 0deg, transparent 60%, rgba(215,161,43,0.3) 72%, rgba(243,207,92,0.92) 80%, rgba(215,161,43,0.3) 88%, transparent 100%)",
+              boxShadow: "0 0 32px rgba(215,161,43,0.18), 0 0 8px rgba(215,161,43,0.1)",
             }}
           />
           <div

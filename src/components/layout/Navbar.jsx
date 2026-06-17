@@ -10,7 +10,7 @@ import { useCart } from "../../context/CartContext";
 import SearchOverlay from "../ui/SearchOverlay";
 import { BRAND_LOGO } from "../../constants/brand";
 
-const GOLD = "#C8A84B";
+const GOLD = "#D7A12B";
 
 const COFFRETS_CATEGORY = "sets-cadeau";
 
@@ -63,13 +63,13 @@ export default function Navbar() {
         transition={{ duration: 0.5 }}
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
         style={scrolled ? {
-          background: "rgba(14,11,6,0.96)",
+          background: "rgba(20,13,6,0.96)",
           backdropFilter: "blur(24px)",
           WebkitBackdropFilter: "blur(24px)",
-          borderBottom: "1px solid rgba(197,165,90,0.22)",
+          borderBottom: "1px solid rgba(215,161,43,0.24)",
           boxShadow: "0 2px 30px rgba(0,0,0,0.7)",
         } : {
-          background: "linear-gradient(to bottom, rgba(8,5,2,0.70) 0%, transparent 100%)",
+          background: "linear-gradient(to bottom, rgba(20,13,6,0.72) 0%, transparent 100%)",
         }}
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-10 flex items-center justify-between h-16 md:h-[76px]">
@@ -96,7 +96,7 @@ export default function Navbar() {
                 style={{
                   height: "clamp(52px, 8vw, 72px)",
                   width: "auto",
-                  filter: "drop-shadow(0 2px 14px rgba(197,165,90,0.6)) brightness(1.08)",
+                  filter: "drop-shadow(0 2px 14px rgba(215,161,43,0.55)) brightness(1.06)",
                 }}
               />
             </Link>
@@ -134,7 +134,7 @@ export default function Navbar() {
               onClick={() => setSearchOpen(true)}
               className="p-2 rounded-lg transition-all duration-300"
               style={{ color: "rgba(240,234,216,0.85)" }}
-              onMouseEnter={e => { e.currentTarget.style.color = GOLD; e.currentTarget.style.background = "rgba(197,165,90,0.10)"; }}
+              onMouseEnter={e => { e.currentTarget.style.color = GOLD; e.currentTarget.style.background = "rgba(215,161,43,0.10)"; }}
               onMouseLeave={e => { e.currentTarget.style.color = "rgba(240,234,216,0.85)"; e.currentTarget.style.background = "transparent"; }}
               aria-label="Rechercher"
             >
@@ -172,12 +172,12 @@ export default function Navbar() {
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.25 }}
             className="fixed inset-0 z-40 flex flex-col"
-            style={{ background: "linear-gradient(180deg, #1a1408 0%, #0e0b06 100%)" }}
+            style={{ background: "linear-gradient(180deg, #20130a 0%, #0c0805 100%)" }}
           >
             {/* Header menu mobile : fermeture uniquement */}
             <div
               className="flex items-center justify-end px-5 h-16"
-              style={{ borderBottom: "1px solid rgba(197,165,90,0.15)" }}
+              style={{ borderBottom: "1px solid rgba(215,161,43,0.16)" }}
             >
               <button
                 onClick={() => setMobileOpen(false)}
