@@ -89,8 +89,8 @@ export default function ProductCard({ product, index = 0 }) {
         )}
 
         {/* Bloc texte éditorial en bas */}
-        <div className="absolute inset-x-0 bottom-0 z-10 px-3.5 pb-3.5 pt-6">
-          <h3 className="product-card-title line-clamp-2 mb-2">{product.title}</h3>
+        <div className="absolute inset-x-0 bottom-0 z-10 px-3.5 pb-3 h-[52%] flex flex-col justify-end">
+          <h3 className="product-card-title line-clamp-2 mb-1">{product.title}</h3>
 
           <div className="flex items-end justify-between gap-2">
             <span className="product-card-price leading-none whitespace-nowrap">
