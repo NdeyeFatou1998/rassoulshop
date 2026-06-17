@@ -13,23 +13,22 @@ import BrandStatement from "../components/ui/BrandStatement";
 
 export default function Home() {
   return (
-    <div className="bg-white">
+    <>
       {/* ---- Hero encadré avec spinning border ---- */}
       <Hero
         imageSrc="/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg"
         title="L'art d'offrir"
         subtitle="Offrez plus qu'un cadeau, offrez une émotion !"
-        lightBackground
       />
 
       {/* ---- Bande défilante marketing ---- */}
-      <MarqueeStrip lightBackground />
+      <MarqueeStrip />
 
       {/* ---- Grille produits filtrables (avec filtres catégories) ---- */}
-      <FilterableProductGrid limit={60} showPromoCards={false} lightBackground />
+      <FilterableProductGrid limit={60} showPromoCards={false} />
 
       {/* ---- Citation de marque premium ---- */}
-      <BrandStatement lightBackground />
-    </div>
+      <BrandStatement />
+    </>
   );
 }

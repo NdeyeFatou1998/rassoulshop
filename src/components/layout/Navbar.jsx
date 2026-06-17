@@ -12,9 +12,6 @@ import { BRAND_LOGO } from "../../constants/brand";
 
 const GOLD = "#C8A84B";
 
-const BRAND_GRADIENT =
-  "linear-gradient(100deg, #BF953F 0%, #FCF6BA 38%, #D4AF37 58%, #C8A84B 72%, #FBF5B7 100%)";
-
 const COFFRETS_CATEGORY = "sets-cadeau";
 
 function isNavLinkActive(link, pathname, search) {
@@ -77,7 +74,7 @@ export default function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-10 flex items-center justify-between h-16 md:h-[76px]">
 
-          {/* Gauche : menu mobile + logo + nom de marque */}
+          {/* Gauche : menu mobile + logo */}
           <div className="flex items-center gap-1 sm:gap-2 min-w-0 shrink-0 justify-start">
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
@@ -90,7 +87,7 @@ export default function Navbar() {
 
             <Link
               to="/"
-              className="flex items-center gap-2 sm:gap-3 min-w-0 -ml-0.5 md:ml-0"
+              className="flex items-center min-w-0 -ml-0.5 md:ml-0"
             >
               <img
                 src={BRAND_LOGO}
@@ -102,19 +99,6 @@ export default function Navbar() {
                   filter: "drop-shadow(0 2px 14px rgba(197,165,90,0.6)) brightness(1.08)",
                 }}
               />
-              <span
-                className="font-serif font-extrabold uppercase whitespace-nowrap leading-none tracking-[0.06em] sm:tracking-[0.1em]"
-                style={{
-                  fontSize: "clamp(0.72rem, 2.8vw, 1.15rem)",
-                  background: BRAND_GRADIENT,
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                  textShadow: "0 0 24px rgba(197,165,90,0.25)",
-                }}
-              >
-                RASSOUL SHOP SN
-              </span>
             </Link>
           </div>
 
