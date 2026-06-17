@@ -313,6 +313,18 @@ export async function fetchOrder(id) {
   });
 }
 
+/** GET /api/orders/:id/invoice — Facture PDF (même fichier que l'email client) */
+export async function fetchOrderInvoicePdf(id) {
+  const response = await fetch(`${API_BASE}/orders/${id}/invoice`, {
+    headers: authHeaders(),
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error(data.message || data.error || `Erreur ${response.status}`);
+  }
+  return response.blob();
+}
+
 /** PUT /api/orders/:id — Modifier le statut */
 export async function updateOrderStatus(id, status) {
   return apiRequest(`${API_BASE}/orders/${id}`, {

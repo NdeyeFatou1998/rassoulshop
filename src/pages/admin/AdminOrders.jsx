@@ -7,10 +7,8 @@ import {
   Search, Eye, Trash2, X, Clock, CheckCircle, Truck,
   Package, XCircle, Filter, Download, ImageIcon, Maximize2, FileText, RotateCcw,
 } from "lucide-react";
-import html2canvas from "html2canvas";
-import { fetchOrders, updateOrderStatus, deleteOrder } from "../../services/adminApi";
+import { fetchOrders, updateOrderStatus, deleteOrder, fetchOrderInvoicePdf } from "../../services/adminApi";
 import { normalizeOrder } from "../../utils/normalizeOrder";
-import OrderInvoicePreview from "../../components/admin/OrderInvoicePreview";
 
 const STATUS_CONFIG = {
   pending:   { label: "En attente",  icon: Clock,       cls: "bg-amber-500/20 text-amber-400",   border: "border-amber-500/30" },
@@ -35,28 +33,50 @@ export default function AdminOrders() {
   const [search, setSearch] = useState("");
   const [invoiceLoading, setInvoiceLoading] = useState(false);
   const [invoiceFullscreen, setInvoiceFullscreen] = useState(false);
-  const invoiceRef = useRef(null);
+  const [invoiceUrl, setInvoiceUrl] = useState(null);
+  const [invoiceError, setInvoiceError] = useState(null);
+  const invoiceUrlRef = useRef(null);
+
+  function revokeInvoiceUrl() {
+    if (invoiceUrlRef.current) {
+      URL.revokeObjectURL(invoiceUrlRef.current);
+      invoiceUrlRef.current = null;
+    }
+    setInvoiceUrl(null);
+  }
 
   useEffect(() => {
     setInvoiceFullscreen(false);
+    revokeInvoiceUrl();
+    setInvoiceError(null);
+
+    if (!selectedOrder?.id) return undefined;
+
+    let cancelled = false;
+    setInvoiceLoading(true);
+
+    fetchOrderInvoicePdf(selectedOrder.id)
+      .then((blob) => {
+        if (cancelled) return;
+        const url = URL.createObjectURL(blob);
+        invoiceUrlRef.current = url;
+        setInvoiceUrl(url);
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setInvoiceError(err.message || "Impossible de charger la facture");
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setInvoiceLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [selectedOrder?.id]);
 
-  /** Attendre le chargement des images avant capture PNG */
-  async function waitForInvoiceImages(el) {
-    const imgs = el.querySelectorAll("img");
-    await Promise.all(
-      [...imgs].map(
-        (img) =>
-          new Promise((resolve) => {
-            if (img.complete) resolve();
-            else {
-              img.onload = resolve;
-              img.onerror = resolve;
-            }
-          })
-      )
-    );
-  }
+  useEffect(() => () => revokeInvoiceUrl(), []);
 
   async function loadOrders() {
     setLoading(true);
@@ -110,30 +130,12 @@ export default function AdminOrders() {
     }
   }
 
-  async function downloadInvoice() {
-    if (!invoiceRef.current || !selectedOrder) return;
-    setInvoiceLoading(true);
-    try {
-      await waitForInvoiceImages(invoiceRef.current);
-      await new Promise((r) => setTimeout(r, 200));
-      const canvas = await html2canvas(invoiceRef.current, {
-        scale: 2,
-        backgroundColor: "#ffffff",
-        useCORS: true,
-        allowTaint: true,
-        logging: false,
-      });
-      const url = canvas.toDataURL("image/png");
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${selectedOrder.reference}-facture.png`;
-      a.click();
-    } catch (err) {
-      console.error("Erreur export facture:", err);
-      alert("Impossible d'exporter la facture. Réessayez.");
-    } finally {
-      setInvoiceLoading(false);
-    }
+  function downloadInvoice() {
+    if (!invoiceUrl || !selectedOrder) return;
+    const a = document.createElement("a");
+    a.href = invoiceUrl;
+    a.download = `${selectedOrder.reference}-facture.pdf`;
+    a.click();
   }
 
   function fmtPrice(n) {
@@ -343,20 +345,29 @@ export default function AdminOrders() {
                 <h3 className="text-xs text-[#888] uppercase tracking-wider mb-2">Facture</h3>
                 <button
                   type="button"
-                  onClick={() => setInvoiceFullscreen(true)}
-                  className="w-full max-w-[220px] text-left rounded-xl border border-[#333] bg-[#1a1a1a] overflow-hidden hover:border-[#C5A55A]/50 hover:bg-[#1f1f1f] transition-all group"
+                  onClick={() => !invoiceError && invoiceUrl && setInvoiceFullscreen(true)}
+                  disabled={!invoiceUrl || !!invoiceError}
+                  className="w-full max-w-[220px] text-left rounded-xl border border-[#333] bg-[#1a1a1a] overflow-hidden hover:border-[#C5A55A]/50 hover:bg-[#1f1f1f] transition-all group disabled:opacity-50 disabled:pointer-events-none"
                 >
                   <div className="h-[88px] overflow-hidden relative bg-white">
-                    <div
-                      className="absolute top-0 left-0 origin-top-left pointer-events-none"
-                      style={{ transform: "scale(0.26)", width: 400 }}
-                    >
-                      <OrderInvoicePreview
-                        order={selectedOrder}
-                        fmtPrice={fmtPrice}
-                        fmtDate={fmtDate}
+                    {invoiceLoading && (
+                      <div className="absolute inset-0 flex items-center justify-center text-[10px] text-[#888]">
+                        Chargement…
+                      </div>
+                    )}
+                    {invoiceError && (
+                      <div className="absolute inset-0 flex items-center justify-center text-[10px] text-red-400 px-2 text-center">
+                        {invoiceError}
+                      </div>
+                    )}
+                    {invoiceUrl && (
+                      <iframe
+                        src={`${invoiceUrl}#toolbar=0&navpanes=0`}
+                        title={`Aperçu facture ${selectedOrder.reference}`}
+                        className="absolute top-0 left-0 border-0 pointer-events-none origin-top-left"
+                        style={{ transform: "scale(0.12)", width: 595, height: 842 }}
                       />
-                    </div>
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                     <div className="absolute bottom-2 right-2 w-7 h-7 rounded-full bg-black/55 flex items-center justify-center text-[#C5A55A]">
                       <Maximize2 size={13} />
@@ -366,7 +377,7 @@ export default function AdminOrders() {
                     <div className="min-w-0">
                       <p className="text-[10px] text-[#888] flex items-center gap-1">
                         <FileText size={11} />
-                        Aperçu
+                        PDF officiel
                       </p>
                       <p className="text-xs font-mono text-[#C5A55A] truncate">{selectedOrder.reference}</p>
                     </div>
@@ -408,10 +419,10 @@ export default function AdminOrders() {
             <button
               type="button"
               onClick={downloadInvoice}
-              disabled={invoiceLoading}
+              disabled={invoiceLoading || !invoiceUrl}
               className="p-2 rounded-lg text-[#C5A55A] hover:bg-[#C5A55A]/15 transition-colors disabled:opacity-50"
               aria-label="Télécharger la facture"
-              title="Télécharger PNG"
+              title="Télécharger PDF"
             >
               <Download size={22} />
             </button>
@@ -421,20 +432,24 @@ export default function AdminOrders() {
             className="flex-1 overflow-y-auto p-4 md:p-8 flex justify-center items-start"
             onClick={(e) => e.stopPropagation()}
           >
-            <div ref={invoiceRef} className="w-full max-w-md shadow-2xl rounded-xl overflow-hidden relative">
-              {invoiceLoading && (
-                <div className="absolute inset-0 bg-black/30 flex items-center justify-center z-10 rounded-xl">
-                  <span className="text-sm text-white bg-black/70 px-4 py-2 rounded-full">
-                    Export en cours…
-                  </span>
-                </div>
-              )}
-              <OrderInvoicePreview
-                order={selectedOrder}
-                fmtPrice={fmtPrice}
-                fmtDate={fmtDate}
+            {invoiceLoading && (
+              <div className="flex items-center justify-center py-20 text-[#888] text-sm">
+                Chargement de la facture…
+              </div>
+            )}
+            {invoiceError && (
+              <div className="flex items-center justify-center py-20 text-red-400 text-sm">
+                {invoiceError}
+              </div>
+            )}
+            {invoiceUrl && (
+              <iframe
+                src={`${invoiceUrl}#toolbar=0`}
+                title={`Facture ${selectedOrder.reference}`}
+                className="w-full max-w-2xl bg-white shadow-2xl rounded-xl border-0"
+                style={{ height: "min(842px, 85vh)" }}
               />
-            </div>
+            )}
           </div>
         </div>
       )}
