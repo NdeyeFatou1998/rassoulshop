@@ -3,6 +3,7 @@
  *
  * Vue ADMIN COMPLET :
  * - Liste des assistants avec Pointer + Changer PIN (PIN admin requis)
+ * - Historique : suppression unitaire ou multiple (définitive, photos incluses)
  *
  * Vue SOUS-ADMIN (compte borne pointage boutique) :
  * - Tous les onglets admin sauf Utilisateurs et Suivi
@@ -21,13 +22,15 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Clock, Camera, LogIn, LogOut, KeyRound, X, Check,
-  AlertCircle, RefreshCw, Image as ImageIcon, History, User,
+  AlertCircle, RefreshCw, Image as ImageIcon, History, Trash2,
 } from "lucide-react";
 import {
   fetchAttendanceAssistants,
   clockAttendance,
   fetchAttendanceHistory,
   changeAttendancePin,
+  deleteAttendanceSession,
+  deleteAttendanceSessions,
 } from "../../services/adminApi";
 import { useAuth } from "../../context/AuthContext";
 
@@ -477,13 +480,42 @@ function PinError({ message }) {
 /*  Historique (partagé)                                               */
 /* ------------------------------------------------------------------ */
 
-function HistorySection({ history, loading, showAssistantName, photoPreview, setPhotoPreview }) {
+function HistorySection({
+  history,
+  loading,
+  showAssistantName,
+  photoPreview,
+  setPhotoPreview,
+  canDelete,
+  selectedIds,
+  onToggleSelect,
+  onToggleSelectAll,
+  onDeleteOne,
+  onDeleteSelected,
+  deleting,
+}) {
+  const allSelected = history.length > 0 && history.every((s) => selectedIds.has(s.id));
+  const someSelected = selectedIds.size > 0;
+
   return (
     <section>
-      <h2 className="text-sm font-semibold text-[#f5f0e8] uppercase tracking-wider mb-4 flex items-center gap-2">
-        <History size={16} className="text-[#D7A12B]" />
-        Historique des pointages
-      </h2>
+      <div className="flex items-center justify-between mb-4 gap-3 flex-wrap">
+        <h2 className="text-sm font-semibold text-[#f5f0e8] uppercase tracking-wider flex items-center gap-2">
+          <History size={16} className="text-[#D7A12B]" />
+          Historique des pointages
+        </h2>
+        {canDelete && someSelected && (
+          <button
+            type="button"
+            onClick={onDeleteSelected}
+            disabled={deleting}
+            className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-lg bg-red-500/15 text-red-400 border border-red-500/30 hover:bg-red-500/25 disabled:opacity-50"
+          >
+            <Trash2 size={14} />
+            {deleting ? "Suppression…" : `Supprimer (${selectedIds.size})`}
+          </button>
+        )}
+      </div>
 
       {loading ? (
         <div className="space-y-3">
@@ -496,51 +528,87 @@ function HistorySection({ history, loading, showAssistantName, photoPreview, set
           Aucun pointage enregistré pour le moment.
         </div>
       ) : (
-        <div className="bg-[#141414] border border-[#222] rounded-xl overflow-hidden divide-y divide-[#222]">
-          {history.map((s) => (
-            <div key={s.id} className="p-4 flex items-center gap-4">
-              <div className="flex gap-2 shrink-0">
-                <PhotoThumb
-                  src={s.clockInPhoto}
-                  label="Arrivée"
-                  onClick={() => s.clockInPhoto && setPhotoPreview(s.clockInPhoto)}
+        <div className="bg-[#141414] border border-[#222] rounded-xl overflow-hidden">
+          {canDelete && (
+            <div className="px-4 py-2.5 border-b border-[#222] flex items-center gap-3">
+              <label className="flex items-center gap-2 text-xs text-[#888] cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={allSelected}
+                  onChange={onToggleSelectAll}
+                  className="rounded border-[#444] bg-[#1a1a1a] text-[#D7A12B] focus:ring-[#D7A12B]"
                 />
-                <PhotoThumb
-                  src={s.clockOutPhoto}
-                  label="Descente"
-                  onClick={() => s.clockOutPhoto && setPhotoPreview(s.clockOutPhoto)}
-                />
-              </div>
-              <div className="flex-1 min-w-0">
-                {showAssistantName && (
-                  <p className="text-sm font-medium text-[#f5f0e8] truncate">{s.assistantName}</p>
+                Tout sélectionner
+              </label>
+            </div>
+          )}
+          <div className="divide-y divide-[#222]">
+            {history.map((s) => (
+              <div key={s.id} className="p-4 flex items-center gap-4">
+                {canDelete && (
+                  <input
+                    type="checkbox"
+                    checked={selectedIds.has(s.id)}
+                    onChange={() => onToggleSelect(s.id)}
+                    className="shrink-0 rounded border-[#444] bg-[#1a1a1a] text-[#D7A12B] focus:ring-[#D7A12B]"
+                  />
                 )}
-                <div className={`flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-[#888] ${showAssistantName ? "mt-1" : ""}`}>
-                  <span className="flex items-center gap-1 text-emerald-400/90">
-                    <LogIn size={12} /> {formatDateTime(s.clockInAt)}
-                  </span>
-                  {s.clockOutAt ? (
-                    <span className="flex items-center gap-1 text-red-400/90">
-                      <LogOut size={12} /> {formatDateTime(s.clockOutAt)}
+                <div className="flex gap-2 shrink-0">
+                  <PhotoThumb
+                    src={s.clockInPhoto}
+                    label="Arrivée"
+                    onClick={() => s.clockInPhoto && setPhotoPreview(s.clockInPhoto)}
+                  />
+                  <PhotoThumb
+                    src={s.clockOutPhoto}
+                    label="Descente"
+                    onClick={() => s.clockOutPhoto && setPhotoPreview(s.clockOutPhoto)}
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  {showAssistantName && (
+                    <p className="text-sm font-medium text-[#f5f0e8] truncate">{s.assistantName}</p>
+                  )}
+                  <div className={`flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-[#888] ${showAssistantName ? "mt-1" : ""}`}>
+                    <span className="flex items-center gap-1 text-emerald-400/90">
+                      <LogIn size={12} /> {formatDateTime(s.clockInAt)}
                     </span>
-                  ) : (
-                    <span className="text-emerald-400">En cours…</span>
+                    {s.clockOutAt ? (
+                      <span className="flex items-center gap-1 text-red-400/90">
+                        <LogOut size={12} /> {formatDateTime(s.clockOutAt)}
+                      </span>
+                    ) : (
+                      <span className="text-emerald-400">En cours…</span>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <div className="text-right">
+                    {s.durationMinutes != null ? (
+                      <span className="text-sm font-semibold text-[#D7A12B]">
+                        {formatDuration(s.durationMinutes)}
+                      </span>
+                    ) : (
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 uppercase tracking-wider font-semibold">
+                        En service
+                      </span>
+                    )}
+                  </div>
+                  {canDelete && (
+                    <button
+                      type="button"
+                      onClick={() => onDeleteOne(s)}
+                      disabled={deleting}
+                      title="Supprimer définitivement"
+                      className="p-2 rounded-lg text-[#666] hover:text-red-400 hover:bg-red-500/10 disabled:opacity-50 transition-colors"
+                    >
+                      <Trash2 size={16} />
+                    </button>
                   )}
                 </div>
               </div>
-              <div className="text-right shrink-0">
-                {s.durationMinutes != null ? (
-                  <span className="text-sm font-semibold text-[#D7A12B]">
-                    {formatDuration(s.durationMinutes)}
-                  </span>
-                ) : (
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 uppercase tracking-wider font-semibold">
-                    En service
-                  </span>
-                )}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       )}
     </section>
@@ -585,6 +653,8 @@ export default function AdminPointage() {
   const [pinTarget, setPinTarget] = useState(null);
   const [showAssistantPin, setShowAssistantPin] = useState(false);
   const [photoPreview, setPhotoPreview] = useState(null);
+  const [selectedIds, setSelectedIds] = useState(new Set());
+  const [deleting, setDeleting] = useState(false);
 
   const loadAll = useCallback(async () => {
     try {
@@ -612,6 +682,69 @@ export default function AdminPointage() {
 
   const onDutyCount = assistants.filter((a) => a.onDuty).length;
   const openSession = isAssistant ? history.find((s) => !s.clockOutAt) : null;
+
+  function toggleSelect(id) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function toggleSelectAll() {
+    if (history.length && history.every((s) => selectedIds.has(s.id))) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(history.map((s) => s.id)));
+    }
+  }
+
+  async function handleDeleteOne(session) {
+    const label = `${session.assistantName || "Pointage"} — ${formatDateTime(session.clockInAt)}`;
+    if (
+      !confirm(
+        `Supprimer définitivement ce pointage ?\n\n${label}\n\nLes photos seront aussi effacées. Cette action est irréversible.`
+      )
+    ) {
+      return;
+    }
+    setDeleting(true);
+    try {
+      await deleteAttendanceSession(session.id);
+      setSelectedIds((prev) => {
+        const next = new Set(prev);
+        next.delete(session.id);
+        return next;
+      });
+      await loadAll();
+    } catch (err) {
+      alert(err.message || "Erreur lors de la suppression.");
+    } finally {
+      setDeleting(false);
+    }
+  }
+
+  async function handleDeleteSelected() {
+    const count = selectedIds.size;
+    if (
+      !confirm(
+        `Supprimer définitivement ${count} pointage(s) ?\n\nLes photos associées seront effacées. Cette action est irréversible.`
+      )
+    ) {
+      return;
+    }
+    setDeleting(true);
+    try {
+      await deleteAttendanceSessions([...selectedIds]);
+      setSelectedIds(new Set());
+      await loadAll();
+    } catch (err) {
+      alert(err.message || "Erreur lors de la suppression.");
+    } finally {
+      setDeleting(false);
+    }
+  }
 
   return (
     <div className="space-y-8">
@@ -756,6 +889,13 @@ export default function AdminPointage() {
         showAssistantName={staffAdmin}
         photoPreview={photoPreview}
         setPhotoPreview={setPhotoPreview}
+        canDelete={isFullAdmin}
+        selectedIds={selectedIds}
+        onToggleSelect={toggleSelect}
+        onToggleSelectAll={toggleSelectAll}
+        onDeleteOne={handleDeleteOne}
+        onDeleteSelected={handleDeleteSelected}
+        deleting={deleting}
       />
 
       <AnimatePresence>

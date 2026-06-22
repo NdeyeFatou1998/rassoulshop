@@ -435,6 +435,23 @@ export async function changeAdminPin({ currentPin, newPin }) {
   });
 }
 
+/** DELETE /api/attendance/:id — admin supprime un pointage */
+export async function deleteAttendanceSession(id) {
+  return apiRequest(`${API_BASE}/attendance/${id}`, {
+    method: "DELETE",
+    headers: authHeaders(),
+  });
+}
+
+/** DELETE /api/attendance — admin supprime plusieurs pointages */
+export async function deleteAttendanceSessions(ids) {
+  return apiRequest(`${API_BASE}/attendance`, {
+    method: "DELETE",
+    headers: authHeaders(),
+    body: JSON.stringify({ ids }),
+  });
+}
+
 /** GET /api/settings — Paramètres boutique */
 export async function fetchShopSettings() {
   return apiRequest(`${API_BASE}/settings`, { headers: authHeaders() });
