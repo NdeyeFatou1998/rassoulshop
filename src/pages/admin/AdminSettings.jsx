@@ -8,9 +8,9 @@
  */
 
 import { useState, useEffect } from "react";
-import { Lock, Check, AlertCircle, Package } from "lucide-react";
+import { Lock, Check, AlertCircle, Package, KeyRound } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
-import { changePassword, fetchShopSettings, updateLowStockThreshold } from "../../services/adminApi";
+import { changePassword, changeAdminPin, fetchShopSettings, updateLowStockThreshold } from "../../services/adminApi";
 
 export default function AdminSettings() {
   const { user } = useAuth();
@@ -22,6 +22,16 @@ export default function AdminSettings() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  /* Code PIN de pointage (admin / sous-admin) */
+  const [currentPin, setCurrentPin] = useState("");
+  const [newPin, setNewPin] = useState("");
+  const [confirmPin, setConfirmPin] = useState("");
+  const [pinSaving, setPinSaving] = useState(false);
+  const [pinError, setPinError] = useState("");
+  const [pinSuccess, setPinSuccess] = useState("");
+
+  const isStaffAdmin = user?.role === "admin" || user?.role === "sub_admin";
 
   /* Gestion stock */
   const [lowStockThreshold, setLowStockThreshold] = useState("5");
@@ -94,6 +104,41 @@ export default function AdminSettings() {
     }
   }
 
+  async function handleChangePin(e) {
+    e.preventDefault();
+    setPinError("");
+    setPinSuccess("");
+
+    if (newPin !== confirmPin) {
+      setPinError("Les nouveaux PIN ne correspondent pas");
+      return;
+    }
+    if (!/^\d{4,6}$/.test(newPin)) {
+      setPinError("Le PIN doit contenir 4 à 6 chiffres");
+      return;
+    }
+
+    setPinSaving(true);
+    try {
+      await changeAdminPin({ currentPin, newPin });
+      setPinSuccess("Code PIN modifié avec succès !");
+      setCurrentPin("");
+      setNewPin("");
+      setConfirmPin("");
+    } catch (err) {
+      setPinError(err.message);
+    } finally {
+      setPinSaving(false);
+    }
+  }
+
+  const roleLabel =
+    user?.role === "admin"
+      ? "Administrateur"
+      : user?.role === "sub_admin"
+        ? "Sous-administrateur"
+        : "Assistant";
+
   return (
     <div className="max-w-xl space-y-6">
       {/* ---- Profil ---- */}
@@ -111,11 +156,11 @@ export default function AdminSettings() {
           <div className="flex items-center justify-between">
             <span className="text-xs text-[#888] uppercase tracking-wider">Rôle</span>
             <span className={`text-xs px-2.5 py-1 rounded-full ${
-              user?.role === "admin"
+              user?.role === "admin" || user?.role === "sub_admin"
                 ? "bg-[#D7A12B]/20 text-[#D7A12B]"
                 : "bg-blue-500/20 text-blue-400"
             }`}>
-              {user?.role === "admin" ? "Administrateur" : "Assistant"}
+              {roleLabel}
             </span>
           </div>
         </div>
@@ -176,6 +221,83 @@ export default function AdminSettings() {
           </button>
         </form>
       </div>
+
+      {/* ---- Code PIN de pointage (admin / sous-admin) ---- */}
+      {isStaffAdmin && (
+        <div className="bg-[#141414] border border-[#222] rounded-xl p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <KeyRound size={16} className="text-[#D7A12B]" />
+            <h2 className="text-sm font-medium text-[#f5f0e8]">Code PIN de pointage</h2>
+          </div>
+
+          <p className="text-xs text-[#888] leading-relaxed mb-4">
+            Ce PIN vous identifie lorsque vous modifiez le code PIN d&apos;un assistant depuis la page Pointage.
+            Par défaut : <strong className="text-[#D7A12B]">1234</strong>.
+          </p>
+
+          {pinSuccess && (
+            <div className="mb-4 p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg flex items-center gap-2 text-emerald-400 text-sm">
+              <Check size={16} />
+              {pinSuccess}
+            </div>
+          )}
+          {pinError && (
+            <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg flex items-center gap-2 text-red-400 text-sm">
+              <AlertCircle size={16} />
+              {pinError}
+            </div>
+          )}
+
+          <form onSubmit={handleChangePin} className="space-y-4">
+            <div>
+              <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">
+                PIN actuel
+              </label>
+              <input
+                type="password"
+                inputMode="numeric"
+                value={currentPin}
+                onChange={(e) => setCurrentPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                required
+                className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm text-center tracking-[0.3em] font-mono focus:border-[#D7A12B] focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">
+                Nouveau PIN
+              </label>
+              <input
+                type="password"
+                inputMode="numeric"
+                value={newPin}
+                onChange={(e) => setNewPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                required
+                className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm text-center tracking-[0.3em] font-mono focus:border-[#D7A12B] focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">
+                Confirmer le nouveau PIN
+              </label>
+              <input
+                type="password"
+                inputMode="numeric"
+                value={confirmPin}
+                onChange={(e) => setConfirmPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                required
+                className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm text-center tracking-[0.3em] font-mono focus:border-[#D7A12B] focus:outline-none"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={pinSaving}
+              className="w-full py-2.5 bg-[#D7A12B] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#E8B945] disabled:opacity-50 transition-colors"
+            >
+              {pinSaving ? "Modification..." : "Modifier le code PIN"}
+            </button>
+          </form>
+        </div>
+      )}
 
       {/* ---- Changement de mot de passe ---- */}
       <div className="bg-[#141414] border border-[#222] rounded-xl p-6">

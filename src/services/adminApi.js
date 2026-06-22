@@ -67,7 +67,7 @@ async function apiRequest(url, options = {}) {
   const response = await fetch(url, options);
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
-    throw new Error(data.error || `Erreur ${response.status}`);
+    throw new Error(data.message || data.error || `Erreur ${response.status}`);
   }
   return data;
 }
@@ -417,20 +417,21 @@ export async function fetchAttendanceHistory(params = {}) {
   });
 }
 
-/** PUT /api/attendance/pin — un assistant change son PIN (PIN actuel requis) */
-export async function changeAttendancePin({ assistantId, currentPin, newPin }) {
+/** PUT /api/attendance/pin — assistant change son PIN (currentPin) ou admin change PIN assistant (adminPin) */
+export async function changeAttendancePin(payload) {
   return apiRequest(`${API_BASE}/attendance/pin`, {
     method: "PUT",
     headers: authHeaders(),
-    body: JSON.stringify({ assistantId, currentPin, newPin }),
+    body: JSON.stringify(payload),
   });
 }
 
-/** PUT /api/attendance/pin/reset/:id — admin réinitialise le PIN (1234) */
-export async function resetAttendancePin(assistantId) {
-  return apiRequest(`${API_BASE}/attendance/pin/reset/${assistantId}`, {
+/** PUT /api/attendance/admin-pin — admin / sous-admin change son propre PIN */
+export async function changeAdminPin({ currentPin, newPin }) {
+  return apiRequest(`${API_BASE}/attendance/admin-pin`, {
     method: "PUT",
     headers: authHeaders(),
+    body: JSON.stringify({ currentPin, newPin }),
   });
 }
 
