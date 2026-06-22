@@ -32,6 +32,8 @@ export default function AdminSettings() {
   const [pinSuccess, setPinSuccess] = useState("");
 
   const isStaffAdmin = user?.role === "admin" || user?.role === "sub_admin";
+  const isSubAdmin = user?.role === "sub_admin";
+  const isFullAdmin = user?.role === "admin";
 
   /* Gestion stock */
   const [lowStockThreshold, setLowStockThreshold] = useState("5");
@@ -136,7 +138,7 @@ export default function AdminSettings() {
     user?.role === "admin"
       ? "Administrateur"
       : user?.role === "sub_admin"
-        ? "Sous-administrateur"
+        ? "Compte pointage"
         : "Assistant";
 
   return (
@@ -231,8 +233,18 @@ export default function AdminSettings() {
           </div>
 
           <p className="text-xs text-[#888] leading-relaxed mb-4">
-            Ce PIN vous identifie lorsque vous modifiez le code PIN d&apos;un assistant depuis la page Pointage.
-            Par défaut : <strong className="text-[#D7A12B]">1234</strong>.
+            {isSubAdmin ? (
+              <>
+                PIN du compte borne pointage en boutique. Par défaut :{" "}
+                <strong className="text-[#D7A12B]">1234</strong>. Ce compte ne peut pas modifier
+                le PIN des assistants.
+              </>
+            ) : (
+              <>
+                Ce PIN vous identifie lorsque vous modifiez le code PIN d&apos;un assistant depuis
+                la page Pointage. Par défaut : <strong className="text-[#D7A12B]">1234</strong>.
+              </>
+            )}
           </p>
 
           {pinSuccess && (

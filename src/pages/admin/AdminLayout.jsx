@@ -113,7 +113,7 @@ export default function AdminLayout() {
             {user?.role === "admin"
               ? "Administrateur"
               : user?.role === "sub_admin"
-                ? "Sous-administrateur"
+                ? "Compte pointage"
                 : "Assistant"}
           </p>
         </div>

@@ -20,7 +20,7 @@ const TABS = [
 
 const ROLE_LABELS = {
   admin: "Administrateur",
-  sub_admin: "Sous-administrateur",
+  sub_admin: "Compte pointage",
   assistant: "Assistant",
 };
 
@@ -40,7 +40,7 @@ function UserRow({ user, currentUser, onEdit, onDelete }) {
             {user.firstName} {user.lastName}
             {user.role === "sub_admin" && (
               <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-[#D7A12B]/15 text-[#D7A12B] uppercase tracking-wider font-semibold">
-                Sous-admin
+                Pointage
               </span>
             )}
             {user.id === currentUser?.id && (
@@ -432,8 +432,10 @@ export default function AdminUsers() {
                       >
                         <ShieldCheck size={16} className="text-[#D7A12B] shrink-0 mt-0.5" />
                         <span>
-                          <span className="block text-sm text-[#f5f0e8] font-medium">Sous-admin</span>
-                          <span className="block text-[11px] text-[#888] mt-0.5">Sauf Utilisateurs & Suivi</span>
+                          <span className="block text-sm text-[#f5f0e8] font-medium">Compte pointage</span>
+                          <span className="block text-[11px] text-[#888] mt-0.5">
+                            Borne boutique — pointer les assistants, sans Utilisateurs / Suivi / changement PIN assistant
+                          </span>
                         </span>
                       </button>
                     </div>

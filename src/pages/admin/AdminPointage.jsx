@@ -1,10 +1,13 @@
 /**
  * Page Pointage — /admin/pointage
  *
- * Vue ADMIN / SOUS-ADMIN (borne boutique) :
- * - Liste des assistants avec boutons Pointer + Changer PIN
- * - Changer le PIN d'un assistant : l'admin doit saisir SON propre PIN
- * - Historique de tous les pointages
+ * Vue ADMIN COMPLET :
+ * - Liste des assistants avec Pointer + Changer PIN (PIN admin requis)
+ *
+ * Vue SOUS-ADMIN (compte borne pointage boutique) :
+ * - Tous les onglets admin sauf Utilisateurs et Suivi
+ * - Pointer uniquement — pas de modification du PIN des assistants
+ * - Historique complet des pointages
  *
  * Vue ASSISTANT :
  * - Pas de bouton Pointer
@@ -571,6 +574,8 @@ function PhotoThumb({ src, label, onClick }) {
 export default function AdminPointage() {
   const { user } = useAuth();
   const staffAdmin = isStaffAdmin(user?.role);
+  const isFullAdmin = user?.role === "admin";
+  const isSubAdmin = user?.role === "sub_admin";
   const isAssistant = user?.role === "assistant";
 
   const [assistants, setAssistants] = useState([]);
@@ -617,9 +622,11 @@ export default function AdminPointage() {
             Pointage
           </h1>
           <p className="text-sm text-[#888]">
-            {staffAdmin
+            {isFullAdmin
               ? "Borne de pointage — arrivée et descente avec PIN et photo"
-              : "Consultez votre historique et gérez votre code PIN"}
+              : isSubAdmin
+                ? "Compte borne pointage — pointer les assistants (PIN assistant requis)"
+                : "Consultez votre historique et gérez votre code PIN"}
           </p>
         </div>
         <button
@@ -716,7 +723,9 @@ export default function AdminPointage() {
 
                   <button
                     onClick={() => setClockTarget(a)}
-                    className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-semibold transition-colors mb-2 ${
+                    className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
+                      isFullAdmin ? "mb-2" : ""
+                    } ${
                       a.onDuty
                         ? "bg-red-500/90 text-white hover:bg-red-600"
                         : "bg-emerald-500/90 text-white hover:bg-emerald-600"
@@ -726,12 +735,14 @@ export default function AdminPointage() {
                     {a.onDuty ? "Pointer la descente" : "Pointer l'arrivée"}
                   </button>
 
-                  <button
-                    onClick={() => setPinTarget(a)}
-                    className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs text-[#888] hover:text-[#f5f0e8] border border-[#222] hover:border-[#333]"
-                  >
-                    <KeyRound size={13} /> Changer PIN
-                  </button>
+                  {isFullAdmin && (
+                    <button
+                      onClick={() => setPinTarget(a)}
+                      className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs text-[#888] hover:text-[#f5f0e8] border border-[#222] hover:border-[#333]"
+                    >
+                      <KeyRound size={13} /> Changer PIN
+                    </button>
+                  )}
                 </motion.div>
               ))}
             </div>
