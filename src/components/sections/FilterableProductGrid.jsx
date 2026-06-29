@@ -440,10 +440,8 @@ export default function FilterableProductGrid({
 
         {/* ---- Bande de squircles ---- */}
         <div
-          className={`flex gap-5 md:gap-8 pb-8 mb-6 md:mb-10 ${
-            premium
-              ? "flex-wrap justify-center"
-              : "overflow-x-auto no-scrollbar"
+          className={`flex gap-5 md:gap-8 pb-8 mb-6 md:mb-10 overflow-x-auto no-scrollbar ${
+            premium ? "justify-start md:justify-center flex-nowrap" : ""
           }`}
         >
           {(premium
