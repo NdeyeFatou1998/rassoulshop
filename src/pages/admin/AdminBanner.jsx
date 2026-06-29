@@ -6,6 +6,7 @@
 import { useState, useEffect } from "react";
 import { Upload, Image, Home } from "lucide-react";
 import { fetchHomeBanner, updateHomeBanner } from "../../services/adminApi";
+import { DEFAULT_HOME_BANNER } from "../../constants/home";
 
 export default function AdminBanner() {
   const [banner, setBanner] = useState(null);
@@ -13,17 +14,22 @@ export default function AdminBanner() {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
 
+  const isCustom = Boolean(banner?.src);
+  const displaySrc = banner?.src || DEFAULT_HOME_BANNER;
+
   useEffect(() => {
     loadBanner();
   }, []);
 
   async function loadBanner() {
     setLoading(true);
+    setError("");
     try {
       const data = await fetchHomeBanner();
       setBanner(data.banner || null);
     } catch (err) {
       console.error("Erreur chargement bannière:", err);
+      setBanner(null);
     } finally {
       setLoading(false);
     }
@@ -76,7 +82,7 @@ export default function AdminBanner() {
             }`}
           >
             <Upload size={14} />
-            {uploading ? "Envoi..." : banner?.src ? "Changer" : "Uploader"}
+            {uploading ? "Envoi..." : isCustom ? "Changer" : "Uploader"}
             <input
               type="file"
               accept="image/*"
@@ -96,24 +102,24 @@ export default function AdminBanner() {
 
           {loading ? (
             <div className="h-[220px] rounded-xl bg-[#1a1a1a] animate-pulse" />
-          ) : banner?.src ? (
+          ) : (
             <div className="relative rounded-xl overflow-hidden bg-[#0a0a0a]" style={{ height: "220px" }}>
               <img
-                src={banner.src}
+                src={displaySrc}
                 alt="Bannière accueil"
                 className="w-full h-full object-cover"
               />
               <span className="absolute top-3 left-3 flex items-center gap-1 px-2.5 py-1 bg-black/60 backdrop-blur-sm rounded-full text-[10px] text-white uppercase tracking-wider">
                 <Image size={10} />
-                Bannière active
+                {isCustom ? "Bannière personnalisée" : "Image par défaut"}
               </span>
             </div>
-          ) : (
-            <div className="h-[220px] rounded-xl border border-dashed border-[#333] flex flex-col items-center justify-center text-[#555] gap-2">
-              <Image size={32} strokeWidth={1.2} />
-              <p className="text-sm">Aucune bannière personnalisée</p>
-              <p className="text-xs text-[#444]">L&apos;image par défaut du site sera affichée</p>
-            </div>
+          )}
+
+          {!loading && !isCustom && (
+            <p className="text-xs text-[#666] mt-4">
+              C&apos;est l&apos;image actuellement visible sur la page d&apos;accueil. Uploadez une nouvelle photo pour la remplacer.
+            </p>
           )}
 
           {banner?.updated_at && (

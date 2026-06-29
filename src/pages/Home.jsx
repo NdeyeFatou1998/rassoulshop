@@ -9,11 +9,10 @@ import FilterableProductGrid from "../components/sections/FilterableProductGrid"
 import MarqueeStrip from "../components/ui/MarqueeStrip";
 import BrandStatement from "../components/ui/BrandStatement";
 import { fetchHomeBanner } from "../services/api";
-
-const DEFAULT_HERO_IMAGE = "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg";
+import { DEFAULT_HOME_BANNER } from "../constants/home";
 
 export default function Home() {
-  const [heroImage, setHeroImage] = useState(DEFAULT_HERO_IMAGE);
+  const [heroImage, setHeroImage] = useState(DEFAULT_HOME_BANNER);
 
   useEffect(() => {
     fetchHomeBanner().then((banner) => {
