@@ -66,39 +66,33 @@ const FALLBACK_CATEGORIES = [
 ];
 
 /* ---- Squircle individuel ---- */
-function CategorySquircle({ label, image, isActive, onClick }) {
+function CategorySquircle({ label, image, isActive, onClick, lightBackground = false, premium = false }) {
   return (
     <button
       onClick={onClick}
-      className="flex-shrink-0 group focus:outline-none"
+      className="flex-shrink-0 group focus:outline-none flex flex-col items-center gap-1.5"
     >
-      {/* Conteneur squircle */}
       <div
         className={`relative transition-transform duration-300 ${
-          isActive ? "scale-110" : "scale-100 group-hover:scale-[1.05]"
+          isActive ? "scale-105" : "scale-100 group-hover:scale-[1.03]"
         }`}
         style={{ width: 88, height: 88 }}
       >
-        {/* ---- Couche contour doré tournant ---- */}
-        {/* conic-gradient simulant un arc lumineux (~35°) qui tourne */}
         <div
           className={isActive ? "spin-border-fast" : "spin-border-slow"}
           style={{
             position: "absolute",
             inset: 0,
             borderRadius: R_OUT,
-            /* Arc doré court → effet "comète lumineuse" */
             background: isActive
               ? "conic-gradient(from 0deg, transparent 60%, rgba(181,129,30,0.55) 72%, rgba(243,207,92,1) 80%, rgba(181,129,30,0.55) 88%, transparent 100%)"
               : "conic-gradient(from 0deg, transparent 68%, rgba(215,161,43,0.3) 78%, rgba(215,161,43,0.65) 83%, rgba(215,161,43,0.3) 88%, transparent 100%)",
-            /* Lueur dorée externe uniquement sur l'actif */
             boxShadow: isActive
               ? "0 0 18px rgba(215,161,43,0.48), 0 0 4px rgba(215,161,43,0.28)"
               : "none",
           }}
         />
 
-        {/* ---- Image intérieure (ne tourne PAS) ---- */}
         <div
           style={{
             position: "absolute",
@@ -111,25 +105,26 @@ function CategorySquircle({ label, image, isActive, onClick }) {
           <img
             src={image}
             alt={label}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
-          {/* Assombrir légèrement l'inactif pour faire ressortir l'actif */}
           <div
             className="absolute inset-0 transition-opacity duration-300"
-            style={{ background: "rgba(0,0,0,0.38)", opacity: isActive ? 0 : 1 }}
+            style={{ background: "rgba(0,0,0,0.22)", opacity: isActive ? 0 : 1 }}
           />
-          {/* Nom catégorie sur l'image */}
-          <div className="absolute inset-x-0 bottom-0 z-10 px-1.5 py-1.5 bg-gradient-to-t from-black/92 via-black/60 to-transparent">
-            <span
-              className={`block text-center text-[9px] uppercase tracking-[0.12em] font-bold leading-tight line-clamp-2 transition-colors duration-300 ${
-                isActive ? "text-gold" : "text-white/90 group-hover:text-gold"
-              }`}
-            >
-              {label}
-            </span>
-          </div>
         </div>
       </div>
+
+      <span
+        className={`block text-center text-[9px] uppercase tracking-[0.14em] font-bold leading-tight line-clamp-2 max-w-[96px] transition-colors duration-300 ${
+          isActive
+            ? "text-gold"
+            : premium || lightBackground
+              ? "text-neutral-500 group-hover:text-[#0a0a0a]"
+              : "text-white/70 group-hover:text-gold"
+        }`}
+      >
+        {label}
+      </span>
     </button>
   );
 }
@@ -453,6 +448,8 @@ export default function FilterableProductGrid({
                 image={cat.image}
                 isActive={active === cat.slug}
                 onClick={() => setActive(cat.slug)}
+                lightBackground={lightBackground}
+                premium={premium}
               />
             ))
           )}
