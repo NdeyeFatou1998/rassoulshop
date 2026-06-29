@@ -9,7 +9,7 @@ export default function BrandStatement({ lightBackground = false }) {
   return (
     <section
       className="py-20 md:py-28 px-5 lg:px-10 relative overflow-hidden"
-      style={{ background: lightBackground ? "#ffffff" : "transparent" }}
+      style={{ background: lightBackground ? "transparent" : "transparent" }}
     >
       <motion.div
         initial={{ opacity: 0, y: 30 }}

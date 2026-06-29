@@ -316,7 +316,7 @@ export default function FilterableProductGrid({
   return (
     <section
       className="pt-6 pb-10 md:pt-10 md:pb-14"
-      style={{ background: lightBackground ? "#ffffff" : "transparent" }}
+      style={{ background: "transparent" }}
     >
       <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
 

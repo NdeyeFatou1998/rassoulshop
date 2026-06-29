@@ -20,9 +20,11 @@ export default function MarqueeStrip({ lightBackground = false }) {
     <div
       className="overflow-hidden py-2 select-none"
       style={{
-        background: lightBackground ? "#fafafa" : "linear-gradient(90deg, #1c1108 0%, #2a1305 50%, #1c1108 100%)",
-        borderTop: lightBackground ? "1px solid rgba(0,0,0,0.06)" : "1px solid rgba(215,161,43,0.14)",
-        borderBottom: lightBackground ? "1px solid rgba(0,0,0,0.06)" : "1px solid rgba(215,161,43,0.14)",
+        background: lightBackground
+          ? "linear-gradient(90deg, #FFF8EE 0%, #F8F0E0 50%, #FFF8EE 100%)"
+          : "linear-gradient(90deg, #1c1108 0%, #2a1305 50%, #1c1108 100%)",
+        borderTop: lightBackground ? "1px solid rgba(215,161,43,0.22)" : "1px solid rgba(215,161,43,0.14)",
+        borderBottom: lightBackground ? "1px solid rgba(215,161,43,0.22)" : "1px solid rgba(215,161,43,0.14)",
       }}
     >
       <div className="flex whitespace-nowrap marquee-track">

@@ -11,11 +11,6 @@ import SearchOverlay from "../ui/SearchOverlay";
 import { BRAND_LOGO } from "../../constants/brand";
 
 const GOLD = "#D7A12B";
-const HOME_NAV_BG = "linear-gradient(180deg, #FFFCF5 0%, #F8F0E0 100%)";
-const HOME_NAV_BG_SCROLLED = "rgba(255, 252, 245, 0.97)";
-const HOME_NAV_BORDER = "1px solid rgba(215, 161, 43, 0.38)";
-const HOME_NAV_TEXT = "#6B5430";
-const HOME_NAV_TEXT_ACTIVE = "#A67C00";
 
 const COFFRETS_CATEGORY = "sets-cadeau";
 
@@ -50,7 +45,6 @@ export default function Navbar() {
     setMobileOpen(false);
   }, [location.pathname]);
 
-  const isHome = location.pathname === "/";
   const navLinks = [
     { label: "Accueil", path: "/" },
     { label: "Boutique", path: "/shop" },
@@ -68,33 +62,15 @@ export default function Navbar() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
-        style={
-          isHome
-            ? scrolled
-              ? {
-                  background: HOME_NAV_BG_SCROLLED,
-                  backdropFilter: "blur(20px)",
-                  WebkitBackdropFilter: "blur(20px)",
-                  borderBottom: HOME_NAV_BORDER,
-                  boxShadow: "0 2px 24px rgba(215,161,43,0.12)",
-                }
-              : {
-                  background: HOME_NAV_BG,
-                  borderBottom: HOME_NAV_BORDER,
-                  boxShadow: "0 1px 16px rgba(215,161,43,0.08)",
-                }
-            : scrolled
-              ? {
-                  background: "rgba(20,13,6,0.96)",
-                  backdropFilter: "blur(24px)",
-                  WebkitBackdropFilter: "blur(24px)",
-                  borderBottom: "1px solid rgba(215,161,43,0.24)",
-                  boxShadow: "0 2px 30px rgba(0,0,0,0.7)",
-                }
-              : {
-                  background: "linear-gradient(to bottom, rgba(20,13,6,0.72) 0%, transparent 100%)",
-                }
-        }
+        style={scrolled ? {
+          background: "rgba(20,13,6,0.96)",
+          backdropFilter: "blur(24px)",
+          WebkitBackdropFilter: "blur(24px)",
+          borderBottom: "1px solid rgba(215,161,43,0.24)",
+          boxShadow: "0 2px 30px rgba(0,0,0,0.7)",
+        } : {
+          background: "linear-gradient(to bottom, rgba(20,13,6,0.72) 0%, transparent 100%)",
+        }}
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-10 flex items-center justify-between h-16 md:h-[76px]">
 
@@ -103,7 +79,7 @@ export default function Navbar() {
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               className="md:hidden p-2 -ml-1 shrink-0 transition-colors"
-              style={{ color: isHome ? HOME_NAV_TEXT : "rgba(240,234,216,0.90)" }}
+              style={{ color: "rgba(240,234,216,0.90)" }}
               aria-label="Menu"
             >
               {mobileOpen ? <X size={22} /> : <Menu size={22} />}
@@ -120,9 +96,7 @@ export default function Navbar() {
                 style={{
                   height: "clamp(52px, 8vw, 72px)",
                   width: "auto",
-                  filter: isHome
-                    ? "drop-shadow(0 2px 8px rgba(215,161,43,0.35))"
-                    : "drop-shadow(0 2px 14px rgba(215,161,43,0.55)) brightness(1.06)",
+                  filter: "drop-shadow(0 2px 14px rgba(215,161,43,0.55)) brightness(1.06)",
                 }}
               />
             </Link>
@@ -137,11 +111,7 @@ export default function Navbar() {
                   key={link.path}
                   to={link.path}
                   className="relative text-[11px] uppercase tracking-[0.18em] font-semibold py-2 transition-colors duration-300"
-                  style={{
-                    color: isActive
-                      ? (isHome ? HOME_NAV_TEXT_ACTIVE : GOLD)
-                      : (isHome ? HOME_NAV_TEXT : "rgba(240,234,216,0.85)"),
-                  }}
+                  style={{ color: isActive ? GOLD : "rgba(240,234,216,0.85)" }}
                 >
                   {link.label}
                   {isActive && (
@@ -163,15 +133,9 @@ export default function Navbar() {
             <button
               onClick={() => setSearchOpen(true)}
               className="p-2 rounded-lg transition-all duration-300"
-              style={{ color: isHome ? HOME_NAV_TEXT : "rgba(240,234,216,0.85)" }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = isHome ? HOME_NAV_TEXT_ACTIVE : GOLD;
-                e.currentTarget.style.background = isHome ? "rgba(215,161,43,0.12)" : "rgba(215,161,43,0.10)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = isHome ? HOME_NAV_TEXT : "rgba(240,234,216,0.85)";
-                e.currentTarget.style.background = "transparent";
-              }}
+              style={{ color: "rgba(240,234,216,0.85)" }}
+              onMouseEnter={e => { e.currentTarget.style.color = GOLD; e.currentTarget.style.background = "rgba(215,161,43,0.10)"; }}
+              onMouseLeave={e => { e.currentTarget.style.color = "rgba(240,234,216,0.85)"; e.currentTarget.style.background = "transparent"; }}
               aria-label="Rechercher"
             >
               <Search size={19} strokeWidth={1.8} />
@@ -181,9 +145,9 @@ export default function Navbar() {
             <Link
               to="/cart"
               className="relative p-2 -mr-2 transition-colors duration-300"
-              style={{ color: isHome ? HOME_NAV_TEXT : "rgba(240,234,216,0.85)" }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = isHome ? HOME_NAV_TEXT_ACTIVE : GOLD; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = isHome ? HOME_NAV_TEXT : "rgba(240,234,216,0.85)"; }}
+              style={{ color: "rgba(240,234,216,0.85)" }}
+              onMouseEnter={e => e.currentTarget.style.color = GOLD}
+              onMouseLeave={e => e.currentTarget.style.color = "rgba(240,234,216,0.85)"}
             >
               <ShoppingCart size={19} strokeWidth={1.5} />
               {cartCount > 0 && (
