@@ -102,7 +102,7 @@ export default function ProductCard({ product, index = 0, lightBackground = fals
       {/* Légende compacte sous l'image */}
       <Link
         to={`/product/${product.id}`}
-        className="block px-2.5 py-2 transition-colors duration-300"
+        className="block px-2.5 py-2 text-center transition-colors duration-300"
         style={{
           borderTop: lightBackground
             ? "1px solid rgba(215,161,43,0.14)"
@@ -116,7 +116,7 @@ export default function ProductCard({ product, index = 0, lightBackground = fals
         >
           {product.title}
         </h3>
-        <div className="flex items-baseline gap-1.5 mt-0.5 min-h-[1.15rem]">
+        <div className="flex items-baseline justify-center gap-1.5 mt-0.5 min-h-[1.15rem]">
           <span className="product-card-price-below leading-none whitespace-nowrap">
             {Number(displayPrice).toLocaleString("fr-FR")}
             <span className="product-card-price-unit"> FCFA</span>
