@@ -1,12 +1,79 @@
 /**
- * BrandStatement — Citation de marque (clair ou bande noire premium)
+ * BrandStatement — Citation de marque (compacte sur accueil, bande sombre ailleurs)
  */
 
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 export default function BrandStatement({ lightBackground = false, variant = "auto" }) {
-  const isDark = variant === "dark" || (!lightBackground && variant === "auto");
+  const isCompact = variant === "compact";
+  const isDark = !isCompact && (variant === "dark" || (!lightBackground && variant === "auto"));
+
+  if (isCompact) {
+    return (
+      <section className="px-4 sm:px-6 pb-10 md:pb-12 pt-2">
+        <motion.div
+          initial={{ opacity: 0, y: 20, scale: 0.98 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          whileHover={{ y: -3, transition: { duration: 0.25 } }}
+          className="brand-statement-card relative max-w-md mx-auto"
+        >
+          {/* Contour doré animé */}
+          <div className="brand-statement-card-border spin-border-slow" aria-hidden />
+
+          <div className="brand-statement-card-inner relative z-10 text-center px-5 py-6 sm:px-6 sm:py-7">
+            <motion.span
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.15, duration: 0.5 }}
+              className="inline-block text-gold/80 text-[8px] mb-3 tracking-[0.35em]"
+            >
+              ✦
+            </motion.span>
+
+            <motion.blockquote
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.55 }}
+              className="font-serif text-[1.05rem] sm:text-xl leading-snug text-[#faf8f4] tracking-tight"
+            >
+              "L'art d'offrir, c'est rendre{" "}
+              <em className="not-italic text-gold">inoubliable</em> un instant."
+            </motion.blockquote>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.35, duration: 0.45 }}
+              className="mt-3 text-[9px] uppercase tracking-[0.24em] text-white/40 font-medium"
+            >
+              Rassoul Shop · Dakar
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 6 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.45, duration: 0.45 }}
+            >
+              <Link
+                to="/shop"
+                className="inline-flex items-center gap-1.5 mt-4 px-5 py-2 text-[9px] uppercase tracking-[0.2em] font-bold text-[#0a0a0a] bg-gold rounded-full hover:bg-[#F3CF5C] transition-all duration-300 hover:shadow-[0_6px_20px_rgba(215,161,43,0.35)]"
+              >
+                Découvrir
+                <span className="text-[7px]">→</span>
+              </Link>
+            </motion.div>
+          </div>
+        </motion.div>
+      </section>
+    );
+  }
 
   return (
     <section

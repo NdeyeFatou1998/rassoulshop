@@ -7,7 +7,7 @@ import { BRAND_LOGO } from "../../constants/brand";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-gold/[0.12]" style={{ background: "linear-gradient(180deg, #140c06 0%, #080503 100%)" }}>
+    <footer className="border-t border-gold/[0.15]" style={{ background: "#0a0a0a" }}>
       <div className="max-w-7xl mx-auto px-5 md:px-10 py-12 md:py-16">
 
         {/* Ligne décorative dorée */}

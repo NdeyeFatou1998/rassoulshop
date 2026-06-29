@@ -63,13 +63,13 @@ export default function Navbar() {
         transition={{ duration: 0.5 }}
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
         style={scrolled ? {
-          background: "rgba(20,13,6,0.96)",
+          background: "rgba(10,10,10,0.98)",
           backdropFilter: "blur(24px)",
           WebkitBackdropFilter: "blur(24px)",
-          borderBottom: "1px solid rgba(215,161,43,0.24)",
-          boxShadow: "0 2px 30px rgba(0,0,0,0.7)",
+          borderBottom: "1px solid rgba(215,161,43,0.22)",
+          boxShadow: "0 2px 24px rgba(0,0,0,0.85)",
         } : {
-          background: "linear-gradient(to bottom, rgba(20,13,6,0.72) 0%, transparent 100%)",
+          background: "linear-gradient(to bottom, rgba(10,10,10,0.75) 0%, transparent 100%)",
         }}
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-10 flex items-center justify-between h-16 md:h-[76px]">
@@ -172,7 +172,7 @@ export default function Navbar() {
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.25 }}
             className="fixed inset-0 z-40 flex flex-col"
-            style={{ background: "linear-gradient(180deg, #20130a 0%, #0c0805 100%)" }}
+            style={{ background: "#0a0a0a" }}
           >
             {/* Header menu mobile : fermeture uniquement */}
             <div

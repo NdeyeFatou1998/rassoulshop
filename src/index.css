@@ -256,8 +256,33 @@
   }
 
   .home-brand-dark {
-    background: linear-gradient(180deg, #0c0c0c 0%, #050505 100%);
+    background: #0a0a0a;
     border-top: 1px solid rgba(215, 161, 43, 0.22);
+  }
+
+  /* Carte citation accueil — compacte, bordure dorée animée */
+  .brand-statement-card {
+    border-radius: 1.25rem;
+    padding: 2px;
+    box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.2);
+  }
+  .brand-statement-card-border {
+    position: absolute;
+    inset: 0;
+    border-radius: 1.25rem;
+    background: conic-gradient(
+      from 0deg,
+      transparent 62%,
+      rgba(181, 129, 30, 0.35) 72%,
+      rgba(243, 207, 92, 0.9) 80%,
+      rgba(181, 129, 30, 0.35) 90%,
+      transparent 100%
+    );
+    opacity: 0.85;
+  }
+  .brand-statement-card-inner {
+    border-radius: calc(1.25rem - 2px);
+    background: #0a0a0a;
   }
 
   .home-products-premium .product-grid {

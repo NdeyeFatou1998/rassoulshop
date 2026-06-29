@@ -39,7 +39,7 @@ export default function Home() {
         showPageHeader
       />
 
-      <BrandStatement variant="dark" />
+      <BrandStatement variant="compact" />
     </div>
   );
 }
