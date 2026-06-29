@@ -336,11 +336,9 @@ export default function FilterableProductGrid({
               className="mx-auto mt-3 h-px w-24"
               style={{ background: "linear-gradient(90deg, transparent, #D7A12B, transparent)" }}
             />
-            {!loading && (
-              <p className="mt-3 text-[10px] uppercase tracking-[0.22em] text-neutral-400 font-medium">
-                {filtered.length} produit{filtered.length !== 1 ? "s" : ""} · Triés par popularité
-              </p>
-            )}
+            <p className="mt-3 text-[10px] uppercase tracking-[0.22em] text-neutral-400 font-medium max-w-md mx-auto leading-relaxed">
+              Des cadeaux qui transforment un instant en souvenir
+            </p>
           </header>
         )}
 
