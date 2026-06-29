@@ -102,7 +102,7 @@ export default function ProductCard({ product, index = 0, lightBackground = fals
       {/* Légende compacte sous l'image */}
       <Link
         to={`/product/${product.id}`}
-        className="block px-2.5 py-2 text-center transition-colors duration-300"
+        className="block px-2 py-1.5 text-center transition-colors duration-300"
         style={{
           borderTop: lightBackground
             ? "1px solid rgba(215,161,43,0.14)"
@@ -116,15 +116,19 @@ export default function ProductCard({ product, index = 0, lightBackground = fals
         >
           {product.title}
         </h3>
-        <div className="flex items-baseline justify-center gap-1.5 mt-0.5 min-h-[1.15rem]">
-          <span className="product-card-price-below leading-none whitespace-nowrap">
+        <div className="flex items-baseline justify-center gap-1.5 mt-px min-h-[1.1rem]">
+          <span
+            className={`product-card-price-below leading-none whitespace-nowrap ${
+              lightBackground ? "product-card-price-below--light" : ""
+            }`}
+          >
             {Number(displayPrice).toLocaleString("fr-FR")}
-            <span className="product-card-price-unit"> FCFA</span>
+            <span className="product-card-price-unit-below"> FCFA</span>
           </span>
           {hasPromo && (
             <span
-              className={`text-[10px] line-through leading-none ${
-                lightBackground ? "text-neutral-400" : "text-white/30"
+              className={`product-card-price-old ${
+                lightBackground ? "product-card-price-old--light" : ""
               }`}
             >
               {Number(product.price).toLocaleString("fr-FR")}

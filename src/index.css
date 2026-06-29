@@ -174,40 +174,65 @@
     letter-spacing: 0.06em;
   }
 
-  /* Légende sous l'image — compacte */
+  /* Légende sous l'image — compacte, lisible, frappante */
   .product-card-title-below {
     font-family: "Cormorant Garamond", "Playfair Display", Georgia, serif;
-    font-size: 0.84rem;
-    font-weight: 600;
-    line-height: 1.2;
-    letter-spacing: 0.01em;
-    color: #f5f0e6;
+    font-size: 0.94rem;
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: 0.025em;
+    color: #fff9f0;
     text-align: center;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
   }
   .product-card-title-below--light {
-    color: #1a1612;
+    color: #0f0c08;
+    text-shadow: none;
   }
   @media (min-width: 768px) {
     .product-card-title-below {
-      font-size: 0.9rem;
+      font-size: 1rem;
     }
   }
 
   .product-card-price-below {
     font-family: "DM Sans", "Inter", system-ui, sans-serif;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
+    font-size: 0.84rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
     font-variant-numeric: tabular-nums;
-    background: linear-gradient(100deg, #D7A12B 0%, #FCE9A8 45%, #E0A92A 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #F3CF5C;
+    -webkit-text-fill-color: #F3CF5C;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.45));
+  }
+  .product-card-price-below--light {
+    color: #8B5E0A;
+    -webkit-text-fill-color: #8B5E0A;
+    filter: none;
   }
   @media (min-width: 768px) {
     .product-card-price-below {
-      font-size: 0.84rem;
+      font-size: 0.9rem;
     }
+  }
+
+  .product-card-price-unit-below {
+    font-size: 0.62em;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+  }
+
+  .product-card-price-old {
+    font-family: "DM Sans", "Inter", system-ui, sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: rgba(255, 255, 255, 0.38);
+    text-decoration: line-through;
+  }
+  .product-card-price-old--light {
+    color: rgba(15, 12, 8, 0.35);
   }
 
   /* Grille produits — 2 colonnes mobile, 4 colonnes desktop */
