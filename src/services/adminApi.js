@@ -261,6 +261,28 @@ export async function updateLookbookBanner(formData) {
 }
 
 /* ================================================================== */
+/*  BANNIÈRE ACCUEIL                                                   */
+/* ================================================================== */
+
+/** GET /api/home/banner — Bannière hero accueil */
+export async function fetchHomeBanner() {
+  return apiRequest(`${API_BASE}/home/banner`);
+}
+
+/** PUT /api/home/banner — Modifier la bannière accueil (FormData avec fichier) */
+export async function updateHomeBanner(formData) {
+  const token = getToken();
+  const response = await fetch(`${API_BASE}/home/banner`, {
+    method: "PUT",
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    body: formData,
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.message || data.error || "Erreur upload bannière");
+  return data;
+}
+
+/* ================================================================== */
 /*  ABOUT                                                              */
 /* ================================================================== */
 

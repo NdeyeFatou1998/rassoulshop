@@ -13,12 +13,13 @@ import { Outlet, Link, useLocation, useNavigate, Navigate } from "react-router-d
 import { useAuth } from "../../context/AuthContext";
 import {
   LayoutDashboard, Package, Image, FileText, ShoppingCart,
-  Users, Tags, Gift, LogOut, Menu, X, ChevronRight, Settings, Layers, ScrollText, Clock
+  Users, Tags, Gift, LogOut, Menu, X, ChevronRight, Settings, Layers, ScrollText, Clock, PanelTop
 } from "lucide-react";
 
 /** Liens de navigation du sidebar admin */
 const NAV_ITEMS = [
   { label: "Dashboard", path: "/admin/dashboard", icon: LayoutDashboard },
+  { label: "Bannière", path: "/admin/banner", icon: PanelTop },
   { label: "Produits", path: "/admin/products", icon: Package },
   { label: "Lookbook", path: "/admin/lookbook", icon: Image },
   { label: "À Propos", path: "/admin/about", icon: FileText },

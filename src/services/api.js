@@ -94,3 +94,16 @@ export async function fetchCategoriesFull({ activeOnly = true } = {}) {
   }
 }
 
+/** GET /api/home/banner — Bannière hero page d'accueil */
+export async function fetchHomeBanner() {
+  try {
+    const response = await fetch(`${API_BASE}/home/banner`);
+    if (!response.ok) throw new Error("Bannière indisponible");
+    const data = await response.json();
+    return data.banner || null;
+  } catch (error) {
+    console.warn("Erreur bannière accueil:", error.message);
+    return null;
+  }
+}
+

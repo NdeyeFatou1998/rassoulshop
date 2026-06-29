@@ -45,6 +45,7 @@ import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProducts from "./pages/admin/AdminProducts";
 import AdminLookbook from "./pages/admin/AdminLookbook";
+import AdminBanner from "./pages/admin/AdminBanner";
 import AdminAbout from "./pages/admin/AdminAbout";
 import AdminOrders from "./pages/admin/AdminOrders";
 import AdminUsers from "./pages/admin/AdminUsers";
@@ -149,6 +150,7 @@ export default function App() {
               <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="products" element={<AdminProducts />} />
               <Route path="lookbook" element={<AdminLookbook />} />
+              <Route path="banner" element={<AdminBanner />} />
               <Route path="about" element={<AdminAbout />} />
               <Route path="orders" element={<AdminOrders />} />
               <Route path="pointage" element={<AdminPointage />} />
