@@ -237,7 +237,7 @@
 
   /* ---- Accueil premium (blanc doré + noir) ---- */
   .home-premium {
-    background: linear-gradient(180deg, #FFFCF7 0%, #FAF6EE 28%, #F7F0E4 55%, #FAF6EE 100%);
+    background: #ffffff;
     min-height: 100vh;
   }
 
