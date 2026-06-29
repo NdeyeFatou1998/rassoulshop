@@ -119,8 +119,8 @@ function CategorySquircle({ label, image, isActive, onClick, lightBackground = f
           isActive
             ? "text-gold"
             : premium || lightBackground
-              ? "text-neutral-500 group-hover:text-[#0a0a0a]"
-              : "text-white/70 group-hover:text-gold"
+              ? "text-[#0a0a0a] group-hover:text-gold group-active:text-gold"
+              : "text-white/70 group-hover:text-gold group-active:text-gold"
         }`}
       >
         {label}
@@ -438,12 +438,22 @@ export default function FilterableProductGrid({
           <div className="mx-auto mt-2 h-px w-16" style={{ background: "linear-gradient(90deg, transparent, #D7A12B, transparent)" }} />
         </div>
 
-        {/* ---- Bande de squircles — répétée 10× pour défilement infini ---- */}
-        <div className={`flex gap-5 md:gap-8 overflow-x-auto no-scrollbar pb-8 mb-6 md:mb-10 ${premium ? "justify-center md:justify-start" : ""}`}>
-          {Array.from({ length: 10 }).flatMap((_, rep) =>
-            categories.map((cat) => (
+        {/* ---- Bande de squircles ---- */}
+        <div
+          className={`flex gap-5 md:gap-8 pb-8 mb-6 md:mb-10 ${
+            premium
+              ? "flex-wrap justify-center"
+              : "overflow-x-auto no-scrollbar"
+          }`}
+        >
+          {(premium
+            ? categories
+            : Array.from({ length: 10 }).flatMap((_, rep) =>
+                categories.map((cat) => ({ ...cat, _key: `${rep}-${cat.slug ?? "all"}` }))
+              )
+          ).map((cat) => (
               <CategorySquircle
-                key={`${rep}-${cat.slug ?? "all"}`}
+                key={cat._key ?? cat.slug ?? "all"}
                 label={cat.label}
                 image={cat.image}
                 isActive={active === cat.slug}
@@ -451,8 +461,7 @@ export default function FilterableProductGrid({
                 lightBackground={lightBackground}
                 premium={premium}
               />
-            ))
-          )}
+          ))}
         </div>
 
         {/* ---- Grille produits ---- */}
