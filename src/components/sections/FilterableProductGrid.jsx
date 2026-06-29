@@ -227,6 +227,10 @@ function PromoCard({ card }) {
 /* Pas du slider prix en FCFA */
 const PRICE_STEP = 500;
 
+function productInCategory(product, slug) {
+  return product.category_slug === slug || product.category === slug;
+}
+
 /* ---- Composant principal ---- */
 export default function FilterableProductGrid({
   limit = 80,
@@ -309,6 +313,20 @@ export default function FilterableProductGrid({
 
   /* Actif si au moins un filtre secondaire est appliqué */
   const hasActiveFilters = search.trim() !== "" || applied !== null;
+
+  /* Masquer les catégories sans produit dans le jeu chargé */
+  const visibleCategories = useMemo(() => {
+    return categories.filter((cat) => {
+      if (cat.slug === null) return products.length > 0;
+      return products.some((p) => productInCategory(p, cat.slug));
+    });
+  }, [categories, products]);
+
+  useEffect(() => {
+    if (active && !visibleCategories.some((c) => c.slug === active)) {
+      setActive(null);
+    }
+  }, [active, visibleCategories]);
 
   return (
     <section
@@ -445,9 +463,9 @@ export default function FilterableProductGrid({
           }`}
         >
           {(premium
-            ? categories
+            ? visibleCategories
             : Array.from({ length: 10 }).flatMap((_, rep) =>
-                categories.map((cat) => ({ ...cat, _key: `${rep}-${cat.slug ?? "all"}` }))
+                visibleCategories.map((cat) => ({ ...cat, _key: `${rep}-${cat.slug ?? "all"}` }))
               )
           ).map((cat) => (
               <CategorySquircle
