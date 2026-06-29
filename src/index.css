@@ -235,6 +235,77 @@
     color: rgba(15, 12, 8, 0.35);
   }
 
+  /* ---- Accueil premium (blanc doré + noir) ---- */
+  .home-premium {
+    background: linear-gradient(180deg, #FFFCF7 0%, #FAF6EE 28%, #F7F0E4 55%, #FAF6EE 100%);
+    min-height: 100vh;
+  }
+
+  .home-hero-premium {
+    position: relative;
+  }
+  .home-hero-premium::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(92%, 680px);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(215, 161, 43, 0.35), transparent);
+  }
+
+  .home-brand-dark {
+    background: linear-gradient(180deg, #0c0c0c 0%, #050505 100%);
+    border-top: 1px solid rgba(215, 161, 43, 0.22);
+  }
+
+  .home-products-premium .product-grid {
+    gap: 1rem;
+  }
+  @media (min-width: 768px) {
+    .home-products-premium .product-grid {
+      gap: 1.35rem;
+    }
+  }
+
+  /* Carte produit premium (style boutique claire) */
+  .product-card-premium {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    box-shadow: 0 2px 16px -4px rgba(0, 0, 0, 0.07), 0 1px 0 rgba(215, 161, 43, 0.08);
+  }
+  .product-card-premium:hover {
+    border-color: rgba(215, 161, 43, 0.28);
+    box-shadow: 0 14px 36px -10px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(215, 161, 43, 0.1);
+    transform: translateY(-3px);
+  }
+
+  .product-card-caption-premium {
+    background: #ffffff;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .product-card-title-below--premium {
+    color: #0a0a0a;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-shadow: none;
+    letter-spacing: 0.015em;
+  }
+
+  .product-card-price-below--premium {
+    color: #0a0a0a;
+    -webkit-text-fill-color: #0a0a0a;
+    font-weight: 800;
+    filter: none;
+  }
+  .product-card-price-below--premium .product-card-price-unit-below {
+    color: #8B6914;
+    -webkit-text-fill-color: #8B6914;
+    font-weight: 700;
+  }
+
   /* Grille produits — 2 colonnes mobile, 4 colonnes desktop */
   .product-grid {
     display: grid;

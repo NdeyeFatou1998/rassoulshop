@@ -239,6 +239,8 @@ export default function FilterableProductGrid({
   showFilters = false,
   showPromoCards = true,
   lightBackground = false,
+  premium = false,
+  showPageHeader = false,
 }) {
   const [active, setActive]       = useState(defaultCategory);
   const [search, setSearch]       = useState("");
@@ -315,10 +317,32 @@ export default function FilterableProductGrid({
 
   return (
     <section
-      className="pt-6 pb-10 md:pt-10 md:pb-14"
+      className={`${premium ? "home-products-premium" : ""} ${
+        lightBackground ? "pt-4 pb-12 md:pt-8 md:pb-16" : "pt-6 pb-10 md:pt-10 md:pb-14"
+      }`}
       style={{ background: "transparent" }}
     >
-      <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+
+        {showPageHeader && (
+          <header className="text-center mb-8 md:mb-12 pt-2 md:pt-4">
+            <p className="text-[10px] uppercase tracking-[0.32em] text-neutral-400 font-semibold mb-3">
+              Accueil · Collections
+            </p>
+            <h1 className="font-serif text-[1.75rem] sm:text-4xl md:text-[2.65rem] font-semibold text-[#0a0a0a] tracking-tight leading-tight">
+              Nos Créations
+            </h1>
+            <div
+              className="mx-auto mt-3 h-px w-24"
+              style={{ background: "linear-gradient(90deg, transparent, #D7A12B, transparent)" }}
+            />
+            {!loading && (
+              <p className="mt-3 text-[10px] uppercase tracking-[0.22em] text-neutral-400 font-medium">
+                {filtered.length} produit{filtered.length !== 1 ? "s" : ""} · Triés par popularité
+              </p>
+            )}
+          </header>
+        )}
 
         {/* ---- Barre recherche + filtre prix (Shop uniquement) ---- */}
         {showFilters && (
@@ -409,17 +433,20 @@ export default function FilterableProductGrid({
         )}
 
         {/* ---- Titre avant les catégories ---- */}
-        <div className={`text-center mb-5 ${showFilters ? "mt-4" : "mt-8 md:mt-12"}`}>
-          <h2 className={`font-serif font-semibold ${
-            lightBackground ? "text-[#1a1612]" : "text-white"
-          }`} style={{ fontSize: "clamp(1.1rem, 3vw, 1.6rem)" }}>
-            Découvrez nos catégories
+        <div className={`text-center mb-5 ${showFilters ? "mt-4" : showPageHeader ? "mt-2" : "mt-8 md:mt-12"}`}>
+          <h2
+            className={`font-serif font-semibold ${
+              lightBackground ? (premium ? "text-[#0a0a0a] text-lg md:text-xl" : "text-[#1a1612]") : "text-white"
+            }`}
+            style={!premium ? { fontSize: "clamp(1.1rem, 3vw, 1.6rem)" } : undefined}
+          >
+            {premium ? "Parcourir par catégorie" : "Découvrez nos catégories"}
           </h2>
           <div className="mx-auto mt-2 h-px w-16" style={{ background: "linear-gradient(90deg, transparent, #D7A12B, transparent)" }} />
         </div>
 
         {/* ---- Bande de squircles — répétée 10× pour défilement infini ---- */}
-        <div className="flex gap-5 md:gap-8 overflow-x-auto no-scrollbar pb-8 mb-6 md:mb-10">
+        <div className={`flex gap-5 md:gap-8 overflow-x-auto no-scrollbar pb-8 mb-6 md:mb-10 ${premium ? "justify-center md:justify-start" : ""}`}>
           {Array.from({ length: 10 }).flatMap((_, rep) =>
             categories.map((cat) => (
               <CategorySquircle
@@ -437,7 +464,13 @@ export default function FilterableProductGrid({
         {loading ? (
           <div className="product-grid">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="rounded-2xl overflow-hidden" style={{ border: "0.5px solid rgba(255,255,255,0.08)" }}>
+              <div
+                key={i}
+                className={`rounded-2xl overflow-hidden ${
+                  premium ? "bg-white border border-black/[0.06]" : ""
+                }`}
+                style={!premium ? { border: "0.5px solid rgba(255,255,255,0.08)" } : undefined}
+              >
                 <div className="aspect-[4/5] shimmer" />
                 <div className="px-2.5 py-2 space-y-1.5">
                   <div className="h-2.5 shimmer rounded-full w-[88%]" />
@@ -478,7 +511,12 @@ export default function FilterableProductGrid({
                             ease: [0.22, 1, 0.36, 1],
                           }}
                         >
-                          <ProductCard product={product} index={chunkIdx * 8 + i} lightBackground={lightBackground} />
+                          <ProductCard
+                            product={product}
+                            index={chunkIdx * 8 + i}
+                            lightBackground={lightBackground}
+                            premium={premium}
+                          />
                         </motion.div>
                       ))}
                     </AnimatePresence>
