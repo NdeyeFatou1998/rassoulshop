@@ -437,12 +437,11 @@ export default function FilterableProductGrid({
         {loading ? (
           <div className="product-grid">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i}>
-                <div className="aspect-[4/5] shimmer rounded-2xl" />
-                <div className="mt-3 space-y-2">
-                  <div className="h-2 shimmer rounded-full w-1/4" />
-                  <div className="h-3 shimmer rounded-full w-3/4" />
-                  <div className="h-3 shimmer rounded-full w-2/5" />
+              <div key={i} className="rounded-2xl overflow-hidden" style={{ border: "0.5px solid rgba(255,255,255,0.08)" }}>
+                <div className="aspect-[4/5] shimmer" />
+                <div className="px-2.5 py-2 space-y-1.5">
+                  <div className="h-2.5 shimmer rounded-full w-[88%]" />
+                  <div className="h-2 shimmer rounded-full w-2/5" />
                 </div>
               </div>
             ))}
@@ -479,7 +478,7 @@ export default function FilterableProductGrid({
                             ease: [0.22, 1, 0.36, 1],
                           }}
                         >
-                          <ProductCard product={product} index={chunkIdx * 8 + i} />
+                          <ProductCard product={product} index={chunkIdx * 8 + i} lightBackground={lightBackground} />
                         </motion.div>
                       ))}
                     </AnimatePresence>
