@@ -73,11 +73,19 @@ export default function GiftBoxDetail() {
     load();
   }, [id]);
 
+  function getSelectedVipProduct() {
+    if (!vipProductId) return null;
+    return boxProducts.find((p) => p.id === vipProductId) || null;
+  }
+
   function calcPrice() {
     if (!box) return 0;
     let total = parseFloat(box.price) || 0;
     if (boxType === "vip" && vipProductId) {
-      total = Math.round(total * 1.25);
+      const vipProduct = getSelectedVipProduct();
+      if (vipProduct) {
+        total += parseFloat(vipProduct.price) || 0;
+      }
     }
     return total;
   }
@@ -135,6 +143,8 @@ export default function GiftBoxDetail() {
   }
 
   const finalPrice = calcPrice();
+  const selectedVip = getSelectedVipProduct();
+  const vipExtraPrice = selectedVip ? parseFloat(selectedVip.price) || 0 : 0;
 
   return (
     <>
@@ -455,7 +465,11 @@ export default function GiftBoxDetail() {
                   >
                     Boîte VIP
                   </p>
-                  <p className="text-[10px] text-neutral-500 mt-1">+25% du prix total</p>
+                  <p className="text-[10px] text-neutral-500 mt-1">
+                    {vipExtraPrice > 0
+                      ? `+ ${fmt(vipExtraPrice)} FCFA`
+                      : "Prix de la boîte en supplément"}
+                  </p>
                 </button>
               </div>
 
@@ -481,7 +495,7 @@ export default function GiftBoxDetail() {
                       <p className="text-[9px] uppercase tracking-wider text-[#8B6914] font-semibold mb-3">
                         Choisir votre boîte VIP
                         <span className="ml-2 text-neutral-500 normal-case font-normal tracking-normal">
-                          · prix coffret +25%
+                          · son prix s&apos;ajoute au coffret
                         </span>
                       </p>
 
@@ -527,6 +541,9 @@ export default function GiftBoxDetail() {
                                   <p className="text-[8px] text-[#0a0a0a] line-clamp-2 leading-tight font-medium">
                                     {bp.title}
                                   </p>
+                                  <p className="text-[7px] text-[#D7A12B] font-semibold mt-0.5">
+                                    +{fmt(bp.price)} F
+                                  </p>
                                 </div>
                               </button>
                             );
@@ -541,6 +558,18 @@ export default function GiftBoxDetail() {
 
             {/* Total + panier */}
             <div className="pt-4 border-t border-black/[0.06]">
+              {boxType === "vip" && vipExtraPrice > 0 && (
+                <div className="mb-3 p-3 rounded-lg bg-neutral-50 border border-black/[0.06] text-xs space-y-1">
+                  <div className="flex justify-between text-neutral-500">
+                    <span>Coffret</span>
+                    <span>{fmt(parseFloat(box.price) || 0)} FCFA</span>
+                  </div>
+                  <div className="flex justify-between text-neutral-500">
+                    <span>Boîte VIP · {selectedVip?.title}</span>
+                    <span>+ {fmt(vipExtraPrice)} FCFA</span>
+                  </div>
+                </div>
+              )}
               <div className="flex items-baseline justify-between mb-4">
                 <p className="text-[10px] uppercase tracking-[0.18em] text-neutral-400">Total</p>
                 <p className="text-xl font-semibold text-[#D7A12B]">
