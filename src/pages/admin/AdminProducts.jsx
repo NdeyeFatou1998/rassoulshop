@@ -42,6 +42,7 @@ export default function AdminProducts() {
     title:"", description:"", price:"", promoPrice:"", promoActive:false,
     promoEndsAt:"", category_id:"", category:"", stock:"0", badge:"", rating:"0", image:"", active:true,
     is_vip: false,
+    personalizable: false,
   };
   const [form, setForm] = useState(emptyForm);
 
@@ -129,6 +130,7 @@ export default function AdminProducts() {
         image: full.image || "",
         active: full.active !== false,
         is_vip: !!full.is_vip,
+        personalizable: !!full.is_personalizable,
       });
       loadByType(full.id);
     } catch {
@@ -148,6 +150,7 @@ export default function AdminProducts() {
         image: p.image || "",
         active: p.active !== false,
         is_vip: !!p.is_vip,
+        personalizable: !!p.is_personalizable,
       });
       loadByType(p.id);
     }
@@ -219,6 +222,7 @@ export default function AdminProducts() {
         badge: form.badge || null, rating: parseFloat(form.rating) || 0,
         image: form.image || null,
         is_vip: form.category === BOITES_VIP_SLUG,
+        is_personalizable: form.personalizable,
       };
       const isNew = selected === "new";
       const url = isNew ? "/api/products" : `/api/products/${selected.id}`;
@@ -638,6 +642,20 @@ export default function AdminProducts() {
                       className="w-full px-3 py-2.5 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-sm focus:border-[#D7A12B] focus:outline-none" />
                   </div>
                 </div>
+              )}
+              <label className="flex items-center gap-2 cursor-pointer pt-1">
+                <input
+                  type="checkbox"
+                  checked={form.personalizable}
+                  onChange={(e) => setForm((f) => ({ ...f, personalizable: e.target.checked }))}
+                  className="w-4 h-4 accent-[#D7A12B]"
+                />
+                <span className="text-sm text-[#0a0a0a]">Produit personnalisable</span>
+              </label>
+              {form.personalizable && (
+                <p className="text-xs text-neutral-500 leading-relaxed">
+                  Le client devra saisir le texte ou l&apos;inscription à graver, broder ou imprimer lors de l&apos;achat.
+                </p>
               )}
             </div>
 

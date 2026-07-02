@@ -345,6 +345,11 @@ export default function AdminOrders() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm text-[#0a0a0a] font-medium truncate">{item.title}</p>
+                          {item.personalization && (
+                            <p className="text-xs text-neutral-500 truncate">
+                              Personnalisation : « {item.personalization} »
+                            </p>
+                          )}
                           <p className="text-xs text-neutral-400">Qté : {item.quantity}</p>
                         </div>
                         <p className="text-sm text-[#D7A12B] font-semibold shrink-0">

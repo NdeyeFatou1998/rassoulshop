@@ -51,7 +51,7 @@ export default function Checkout() {
     if (cart.length === 0) { setError("Votre panier est vide."); return; }
 
     /* Construction des items à envoyer */
-    const items = cart.map(({ product, quantity }) => {
+    const items = cart.map(({ product, quantity, personalization }) => {
       const unitPrice = getProductUnitPrice(product);
       return {
         id: product.id,
@@ -62,6 +62,7 @@ export default function Checkout() {
         promo_price: product.promo_price,
         quantity,
         image: product.image || null,
+        ...(personalization ? { personalization } : {}),
       };
     });
 
@@ -283,8 +284,8 @@ export default function Checkout() {
 
               {/* Articles */}
               <div className="space-y-3 mb-5 pb-4 border-b border-white/[0.05] max-h-52 overflow-y-auto">
-                {cart.map(({ product, quantity }) => (
-                  <div key={product.id} className="flex items-center gap-3">
+                {cart.map(({ product, quantity, personalization, lineKey }) => (
+                  <div key={lineKey || product.id} className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg overflow-hidden bg-noir-700 flex-shrink-0">
                       <img
                         src={
@@ -297,6 +298,11 @@ export default function Checkout() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-xs text-cream truncate">{product.title}</p>
+                      {personalization && (
+                        <p className="text-[10px] text-white/40 truncate">
+                          « {personalization} »
+                        </p>
+                      )}
                       <p className="text-[10px] text-white/35">×{quantity}</p>
                     </div>
                     <span className="text-xs font-semibold text-cream flex-shrink-0">

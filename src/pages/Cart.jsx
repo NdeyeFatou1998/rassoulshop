@@ -80,7 +80,7 @@ export default function Cart() {
             <AnimatePresence>
               {cart.map((item, i) => (
                 <motion.div
-                  key={item.product.id}
+                  key={item.lineKey || item.product.id}
                   layout
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -117,6 +117,11 @@ export default function Cart() {
                       >
                         {item.product.title}
                       </Link>
+                      {item.personalization && (
+                        <p className="text-[10px] text-neutral-500 mt-1 line-clamp-2">
+                          Personnalisation : « {item.personalization} »
+                        </p>
+                      )}
                       {/* Prix unitaire */}
                       <p className="text-[11px] text-neutral-600 mt-0.5">
                         {getProductUnitPrice(item.product).toLocaleString("fr-FR")} FCFA
@@ -128,7 +133,12 @@ export default function Cart() {
                       {/* Compteur +/- */}
                       <div className="flex items-center border border-gold/[0.15] rounded-full">
                         <button
-                          onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
+                          onClick={() =>
+                            updateQuantity(
+                              item.lineKey || String(item.product.id),
+                              item.quantity - 1
+                            )
+                          }
                           className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center text-neutral-600 hover:text-[#0a0a0a] active:scale-90 transition-all"
                         >
                           <Minus size={11} />
@@ -142,7 +152,12 @@ export default function Cart() {
                           {item.quantity}
                         </motion.span>
                         <button
-                          onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+                          onClick={() =>
+                            updateQuantity(
+                              item.lineKey || String(item.product.id),
+                              item.quantity + 1
+                            )
+                          }
                           className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center text-neutral-600 hover:text-[#0a0a0a] active:scale-90 transition-all"
                         >
                           <Plus size={11} />
@@ -158,7 +173,9 @@ export default function Cart() {
 
                   {/* Bouton supprimer */}
                   <button
-                    onClick={() => removeFromCart(item.product.id)}
+                    onClick={() =>
+                      removeFromCart(item.lineKey || String(item.product.id))
+                    }
                     className="flex-shrink-0 self-start p-1.5 md:p-2 text-neutral-500 hover:text-red-400 active:scale-90 transition-all"
                     aria-label="Supprimer"
                   >

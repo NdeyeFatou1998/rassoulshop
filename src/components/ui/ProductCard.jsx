@@ -5,7 +5,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { ShoppingCart, Check } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import { isVipProduct } from "../../constants/categories";
 
@@ -13,6 +13,7 @@ const GOLD = "#D7A12B";
 
 export default function ProductCard({ product, index = 0, lightBackground = false, premium = false }) {
   const { addToCart } = useCart();
+  const navigate = useNavigate();
   const [justAdded, setJustAdded] = useState(false);
 
   const hasPromo = product.promo_active && product.promo_price;
@@ -24,6 +25,10 @@ export default function ProductCard({ product, index = 0, lightBackground = fals
   function handleQuickAdd(e) {
     e.preventDefault();
     e.stopPropagation();
+    if (product.is_personalizable) {
+      navigate(`/product/${product.id}`);
+      return;
+    }
     setJustAdded(true);
     setTimeout(() => setJustAdded(false), 1400);
     addToCart(product, 1);
