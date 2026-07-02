@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Gift, Package, Crown, ShoppingCart, ArrowLeft, Check, RefreshCw } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import PageHeader from "../components/ui/PageHeader";
+import { BOITES_VIP_SLUG } from "../constants/categories";
 
 const DEFAULT_IMG = `data:image/svg+xml;utf8,${encodeURIComponent(`
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">
@@ -52,18 +53,9 @@ export default function GiftBoxDetail() {
         const data = await res.json();
         setBox(data.success === false ? null : data);
 
-        const resCats = await fetch("/api/categories?active=true");
-        const dataCats = await resCats.json();
-        const boitesCat = (dataCats.categoriesFull || []).find((c) => c.slug === "boites");
-        if (boitesCat) {
-          const resProd = await fetch("/api/products");
-          const dataProd = await resProd.json();
-          setBoxProducts(
-            (dataProd.products || []).filter(
-              (p) => p.category_id === boitesCat.id && p.active && p.is_vip
-            )
-          );
-        }
+        const resProd = await fetch(`/api/products?category=${encodeURIComponent(BOITES_VIP_SLUG)}`);
+        const dataProd = await resProd.json();
+        setBoxProducts(dataProd.products || []);
       } catch (err) {
         console.error("Erreur chargement gift box:", err);
       } finally {
@@ -501,8 +493,8 @@ export default function GiftBoxDetail() {
 
                       {boxProducts.length === 0 ? (
                         <p className="text-xs text-neutral-500 italic">
-                          Aucune boîte VIP disponible. Créez des produits « Boîtes » marqués VIP dans
-                          l&apos;admin Produits.
+                          Aucune boîte VIP disponible. Ajoutez des produits dans la catégorie
+                          &laquo; Boîtes VIP &raquo; (Admin → Produits).
                         </p>
                       ) : (
                         <div className="flex gap-2 overflow-x-auto pb-1">

@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { getStockAlert, DEFAULT_LOW_STOCK_THRESHOLD } from "../../utils/stockAlert";
 import { fetchShopSettings } from "../../services/adminApi";
+import { BOITES_VIP_SLUG } from "../../constants/categories";
 
 export default function AdminProducts() {
   const token = localStorage.getItem("rassoul_admin_token");
@@ -217,7 +218,7 @@ export default function AdminProducts() {
         stock: parseInt(form.stock) || 0,
         badge: form.badge || null, rating: parseFloat(form.rating) || 0,
         image: form.image || null,
-        is_vip: form.category === "boites" ? form.is_vip : false,
+        is_vip: form.category === BOITES_VIP_SLUG,
       };
       const isNew = selected === "new";
       const url = isNew ? "/api/products" : `/api/products/${selected.id}`;
@@ -599,19 +600,16 @@ export default function AdminProducts() {
                 <select value={form.category_id} onChange={handleCatSelect}
                   className="w-full px-3 py-2.5 admin-card border border-black/[0.08] rounded-lg text-[#0a0a0a] text-sm focus:border-[#D7A12B] focus:outline-none">
                   <option value="">— Choisir —</option>
-                  {categories.filter(c=>c.active).map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                  {categories
+                    .filter((c) => c.active || c.is_system)
+                    .map((c) => (
+                      <option key={c.id} value={c.id}>{c.name}</option>
+                    ))}
                 </select>
-                {/* Checkbox VIP — visible uniquement si catégorie = boites */}
-                {form.category === "boites" && (
-                  <label className="flex items-center gap-2 mt-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={form.is_vip}
-                      onChange={e => setForm(f => ({...f, is_vip: e.target.checked}))}
-                      className="w-4 h-4 accent-[#D7A12B]"
-                    />
-                    <span className="text-xs text-[#D7A12B] font-semibold uppercase tracking-wider">Boîte VIP</span>
-                  </label>
+                {form.category === BOITES_VIP_SLUG && (
+                  <p className="mt-2 text-xs text-neutral-500 leading-relaxed">
+                    Réservé aux emballages VIP des coffrets cadeau — invisible dans la boutique publique.
+                  </p>
                 )}
               </div>
               <div>

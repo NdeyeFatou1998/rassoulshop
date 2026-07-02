@@ -18,6 +18,7 @@ import {
 import { fetchProducts, fetchProductById } from "../services/api";
 import { useCart } from "../context/CartContext";
 import ProductCard from "../components/ui/ProductCard";
+import { isVipProduct } from "../constants/categories";
 
 const GOLD = "#D7A12B";
 
@@ -212,7 +213,7 @@ export default function ProductDetail() {
                       {product.badge}
                     </span>
                   )}
-                  {product.is_vip && (
+                  {isVipProduct(product) && (
                     <span
                       className="px-3 py-1.5 text-[9px] uppercase tracking-[0.16em] font-bold rounded-full backdrop-blur-sm"
                       style={{ background: "rgba(0,0,0,0.55)", color: GOLD, border: `1px solid ${GOLD}` }}

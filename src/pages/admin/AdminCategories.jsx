@@ -110,7 +110,7 @@ export default function AdminCategories() {
       const payload = buildPayload();
 
       if (editingCategory) {
-        await fetch(`/api/categories/${editingCategory.id}`, {
+        const res = await fetch(`/api/categories/${editingCategory.id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -118,6 +118,11 @@ export default function AdminCategories() {
           },
           body: JSON.stringify(payload),
         });
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          alert(data.message || "Erreur lors de la modification");
+          return;
+        }
       } else {
         const response = await fetch("/api/categories", {
           method: "POST",
@@ -145,10 +150,15 @@ export default function AdminCategories() {
   async function toggleCategory(id) {
     try {
       const token = localStorage.getItem("rassoul_admin_token");
-      await fetch(`/api/categories/${id}/toggle`, {
+      const res = await fetch(`/api/categories/${id}/toggle`, {
         method: "PATCH",
         headers: { Authorization: `Bearer ${token}` },
       });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        alert(data.message || "Cette catégorie ne peut pas être désactivée");
+        return;
+      }
       fetchCategories();
     } catch (error) {
       console.error("Erreur lors du toggle:", error);
@@ -160,10 +170,15 @@ export default function AdminCategories() {
 
     try {
       const token = localStorage.getItem("rassoul_admin_token");
-      await fetch(`/api/categories/${id}`, {
+      const res = await fetch(`/api/categories/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        alert(data.message || "Cette catégorie ne peut pas être supprimée");
+        return;
+      }
       fetchCategories();
     } catch (error) {
       console.error("Erreur lors de la suppression:", error);
@@ -235,33 +250,42 @@ export default function AdminCategories() {
                           Inactif
                         </span>
                       )}
+                      {category.is_system && (
+                        <span className="text-[10px] uppercase tracking-wider bg-[#D7A12B]/15 text-[#D7A12B] px-2 py-0.5 rounded">
+                          Système
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => toggleCategory(category.id)}
-                    className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
-                      category.active
-                        ? "bg-green-500/20 text-green-400 hover:bg-green-500/30"
-                        : "bg-neutral-100 text-neutral-400 hover:bg-neutral-200"
-                    }`}
-                  >
-                    {category.active ? "Actif" : "Inactif"}
-                  </button>
+                  {!category.is_system && (
+                    <button
+                      onClick={() => toggleCategory(category.id)}
+                      className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+                        category.active
+                          ? "bg-green-500/20 text-green-400 hover:bg-green-500/30"
+                          : "bg-neutral-100 text-neutral-400 hover:bg-neutral-200"
+                      }`}
+                    >
+                      {category.active ? "Actif" : "Inactif"}
+                    </button>
+                  )}
                   <button
                     onClick={() => openModal(category)}
                     className="px-3 py-1.5 bg-[#D7A12B]/20 text-[#D7A12B] text-sm rounded-lg hover:bg-[#D7A12B]/30 transition-colors"
                   >
                     Modifier
                   </button>
-                  <button
-                    onClick={() => deleteCategory(category.id)}
-                    className="px-3 py-1.5 bg-red-500/20 text-red-400 text-sm rounded-lg hover:bg-red-500/30 transition-colors"
-                  >
-                    Supprimer
-                  </button>
+                  {!category.is_system && (
+                    <button
+                      onClick={() => deleteCategory(category.id)}
+                      className="px-3 py-1.5 bg-red-500/20 text-red-400 text-sm rounded-lg hover:bg-red-500/30 transition-colors"
+                    >
+                      Supprimer
+                    </button>
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -359,14 +383,20 @@ export default function AdminCategories() {
                 <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
                   Statut
                 </label>
-                <select
-                  value={formData.active ? "true" : "false"}
-                  onChange={(e) => setFormData({ ...formData, active: e.target.value === "true" })}
-                  className="w-full px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] focus:border-[#D7A12B] focus:outline-none transition-colors"
-                >
-                  <option value="true">Actif</option>
-                  <option value="false">Inactif</option>
-                </select>
+                {editingCategory?.is_system ? (
+                  <p className="px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-sm text-neutral-600">
+                    Catégorie système — toujours active
+                  </p>
+                ) : (
+                  <select
+                    value={formData.active ? "true" : "false"}
+                    onChange={(e) => setFormData({ ...formData, active: e.target.value === "true" })}
+                    className="w-full px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] focus:border-[#D7A12B] focus:outline-none transition-colors"
+                  >
+                    <option value="true">Actif</option>
+                    <option value="false">Inactif</option>
+                  </select>
+                )}
               </div>
 
               <div className="flex gap-3 pt-4">

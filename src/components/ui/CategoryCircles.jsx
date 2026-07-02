@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { getCategoryImageUrl } from "../../utils/categoryImage";
+import { isHiddenShopCategory } from "../../constants/categories";
 
 export default function CategoryCircles() {
   const [categories, setCategories] = useState([]);
@@ -14,7 +15,13 @@ export default function CategoryCircles() {
   useEffect(() => {
     fetch("/api/categories?active=true")
       .then((r) => r.json())
-      .then((d) => setCategories(Array.isArray(d.categoriesFull) ? d.categoriesFull : []))
+      .then((d) =>
+        setCategories(
+          (Array.isArray(d.categoriesFull) ? d.categoriesFull : []).filter(
+            (cat) => !isHiddenShopCategory(cat.slug)
+          )
+        )
+      )
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);

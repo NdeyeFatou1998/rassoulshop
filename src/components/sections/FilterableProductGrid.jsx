@@ -21,6 +21,7 @@ import ProductCard from "../ui/ProductCard";
 import { useProducts } from "../../hooks/useProducts";
 import { fetchCategoriesFull } from "../../services/api";
 import { getCategoryImageUrl } from "../../utils/categoryImage";
+import { isHiddenShopCategory } from "../../constants/categories";
 
 /* Squircle radius en px */
 const R_OUT = 20; /* border-radius du contour tournant */
@@ -258,14 +259,15 @@ export default function FilterableProductGrid({
 
   useEffect(() => {
     fetchCategoriesFull({ activeOnly: true }).then((rows) => {
-      if (!rows.length) return;
+      const visible = rows.filter((cat) => !isHiddenShopCategory(cat.slug));
+      if (!visible.length) return;
       setCategories([
         {
           label: "Tous",
           slug: null,
-          image: getCategoryImageUrl(rows[0]?.image_url),
+          image: getCategoryImageUrl(visible[0]?.image_url),
         },
-        ...rows.map((cat) => ({
+        ...visible.map((cat) => ({
           label: cat.name,
           slug: cat.slug,
           image: getCategoryImageUrl(cat.image_url),

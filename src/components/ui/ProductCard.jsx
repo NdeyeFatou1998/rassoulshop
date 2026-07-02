@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { ShoppingCart, Check } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
+import { isVipProduct } from "../../constants/categories";
 
 const GOLD = "#D7A12B";
 
@@ -18,6 +19,7 @@ export default function ProductCard({ product, index = 0, lightBackground = fals
   const displayPrice = hasPromo ? product.promo_price : product.price;
   const category = product.category_name || product.category;
   const isPremiumLight = premium && lightBackground;
+  const showVipBadge = isVipProduct(product);
 
   function handleQuickAdd(e) {
     e.preventDefault();
@@ -74,7 +76,7 @@ export default function ProductCard({ product, index = 0, lightBackground = fals
               {category}
             </span>
           )}
-          {product.is_vip && (
+          {showVipBadge && (
             <span
               className="text-[7px] uppercase font-bold px-1.5 py-[2px] rounded-full backdrop-blur-sm"
               style={{ background: "rgba(0,0,0,0.55)", color: GOLD, border: `1px solid ${GOLD}` }}

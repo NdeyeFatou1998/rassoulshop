@@ -4,6 +4,7 @@
 
 import { useSearchParams, Navigate } from "react-router-dom";
 import FilterableProductGrid from "../components/sections/FilterableProductGrid";
+import { BOITES_VIP_SLUG } from "../constants/categories";
 
 const COFFRETS_CATEGORY = "sets-cadeau";
 
@@ -13,6 +14,10 @@ export default function Shop() {
 
   if (initialCategory === COFFRETS_CATEGORY) {
     return <Navigate to="/coffrets" replace />;
+  }
+
+  if (initialCategory === BOITES_VIP_SLUG) {
+    return <Navigate to="/shop" replace />;
   }
 
   return (
