@@ -5,6 +5,7 @@
 import { useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { forgotPassword } from "../../services/adminApi";
 import { BRAND_LOGO } from "../../constants/brand";
 
 export default function AdminLogin() {
@@ -15,6 +16,12 @@ export default function AdminLogin() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const [showForgot, setShowForgot] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotMessage, setForgotMessage] = useState("");
+  const [forgotError, setForgotError] = useState("");
 
   if (authLoading) {
     return (
@@ -41,6 +48,32 @@ export default function AdminLogin() {
     } finally {
       setLoading(false);
     }
+  }
+
+  async function handleForgotSubmit(e) {
+    e.preventDefault();
+    setForgotError("");
+    setForgotMessage("");
+    setForgotLoading(true);
+
+    try {
+      const data = await forgotPassword(forgotEmail.trim());
+      setForgotMessage(
+        data.message ||
+          "Si cette adresse est enregistrée, un mot de passe temporaire vient de vous être envoyé par email."
+      );
+    } catch (err) {
+      setForgotError(err.message || "Une erreur est survenue. Réessayez plus tard.");
+    } finally {
+      setForgotLoading(false);
+    }
+  }
+
+  function openForgot() {
+    setShowForgot(true);
+    setForgotEmail(email);
+    setForgotMessage("");
+    setForgotError("");
   }
 
   return (
@@ -100,6 +133,69 @@ export default function AdminLogin() {
               {loading ? "Connexion..." : "Se connecter"}
             </button>
           </form>
+
+          <div className="mt-6 pt-6 border-t border-black/[0.06]">
+            {!showForgot ? (
+              <button
+                type="button"
+                onClick={openForgot}
+                className="w-full text-center text-sm text-neutral-500 hover:text-[#D7A12B] transition-colors"
+              >
+                Mot de passe oublié ?
+              </button>
+            ) : (
+              <div>
+                <h3 className="text-sm font-semibold text-[#0a0a0a] mb-1">
+                  Mot de passe oublié
+                </h3>
+                <p className="text-xs text-neutral-500 mb-4">
+                  Entrez votre email. Si un compte existe chez nous, vous recevrez un mot de passe
+                  temporaire par mail.
+                </p>
+
+                {forgotMessage && (
+                  <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-700 text-sm">
+                    {forgotMessage}
+                  </div>
+                )}
+
+                {forgotError && (
+                  <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+                    {forgotError}
+                  </div>
+                )}
+
+                <form onSubmit={handleForgotSubmit} className="space-y-3">
+                  <input
+                    type="email"
+                    value={forgotEmail}
+                    onChange={(e) => setForgotEmail(e.target.value)}
+                    required
+                    className="admin-input"
+                    placeholder="Votre email"
+                  />
+                  <button
+                    type="submit"
+                    disabled={forgotLoading}
+                    className="w-full py-2.5 bg-neutral-100 text-neutral-700 font-semibold text-sm rounded-lg hover:bg-neutral-200 disabled:opacity-50 transition-colors"
+                  >
+                    {forgotLoading ? "Envoi..." : "Envoyer un mot de passe temporaire"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowForgot(false);
+                      setForgotMessage("");
+                      setForgotError("");
+                    }}
+                    className="w-full text-xs text-neutral-400 hover:text-neutral-600 transition-colors"
+                  >
+                    Retour à la connexion
+                  </button>
+                </form>
+              </div>
+            )}
+          </div>
         </div>
 
         <p className="text-center mt-6 text-neutral-400 text-xs">

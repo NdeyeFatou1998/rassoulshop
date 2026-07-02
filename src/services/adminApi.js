@@ -101,6 +101,15 @@ export async function changePassword(currentPassword, newPassword) {
   });
 }
 
+/** POST /api/auth/forgot-password — Mot de passe temporaire par email */
+export async function forgotPassword(email) {
+  return apiRequest(`${API_BASE}/auth/forgot-password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
+}
+
 /* ================================================================== */
 /*  USERS                                                              */
 /* ================================================================== */
