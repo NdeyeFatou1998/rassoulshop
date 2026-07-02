@@ -199,7 +199,7 @@ export default function Lookbook() {
       {/* Grille mosaïque */}
       <section className="w-full px-3 md:px-5 lg:px-8 pb-24 pt-2">
         {looks.length === 0 ? (
-          <p className="text-center text-white/30 text-sm py-20">Aucun média pour le moment</p>
+          <p className="text-center text-neutral-400 text-sm py-20">Aucun média pour le moment</p>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 auto-rows-[180px] md:auto-rows-[240px] gap-2 md:gap-3">
             {looks.map((look, i) => (
