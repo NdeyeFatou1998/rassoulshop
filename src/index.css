@@ -349,6 +349,20 @@
     background: #ebebeb;
   }
 
+  /* Champs PIN admin — chiffres visibles (évite bullets invisibles sur fond blanc) */
+  .admin-pin-input {
+    color: #0a0a0a !important;
+    -webkit-text-fill-color: #0a0a0a !important;
+    caret-color: #0a0a0a;
+    background: #fafafa;
+    font-variant-numeric: tabular-nums;
+  }
+  .admin-pin-input:focus {
+    background: #ffffff;
+    border-color: rgba(215, 161, 43, 0.55);
+    outline: none;
+  }
+
   .home-hero-premium {
     position: relative;
   }

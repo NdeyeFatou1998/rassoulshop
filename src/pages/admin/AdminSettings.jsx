@@ -266,12 +266,13 @@ export default function AdminSettings() {
                 PIN actuel
               </label>
               <input
-                type="password"
+                type="text"
                 inputMode="numeric"
+                autoComplete="off"
                 value={currentPin}
                 onChange={(e) => setCurrentPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
                 required
-                className="w-full px-3 py-2.5 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-sm text-center tracking-[0.3em] font-mono focus:border-[#D7A12B] focus:outline-none"
+                className="admin-pin-input w-full px-3 py-2.5 border border-black/[0.12] rounded-lg text-sm text-center tracking-[0.25em] font-mono"
               />
             </div>
             <div>
@@ -279,12 +280,13 @@ export default function AdminSettings() {
                 Nouveau PIN
               </label>
               <input
-                type="password"
+                type="text"
                 inputMode="numeric"
+                autoComplete="off"
                 value={newPin}
                 onChange={(e) => setNewPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
                 required
-                className="w-full px-3 py-2.5 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-sm text-center tracking-[0.3em] font-mono focus:border-[#D7A12B] focus:outline-none"
+                className="admin-pin-input w-full px-3 py-2.5 border border-black/[0.12] rounded-lg text-sm text-center tracking-[0.25em] font-mono"
               />
             </div>
             <div>
@@ -292,12 +294,13 @@ export default function AdminSettings() {
                 Confirmer le nouveau PIN
               </label>
               <input
-                type="password"
+                type="text"
                 inputMode="numeric"
+                autoComplete="off"
                 value={confirmPin}
                 onChange={(e) => setConfirmPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
                 required
-                className="w-full px-3 py-2.5 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-sm text-center tracking-[0.3em] font-mono focus:border-[#D7A12B] focus:outline-none"
+                className="admin-pin-input w-full px-3 py-2.5 border border-black/[0.12] rounded-lg text-sm text-center tracking-[0.25em] font-mono"
               />
             </div>
             <button

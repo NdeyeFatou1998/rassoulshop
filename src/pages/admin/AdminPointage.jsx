@@ -244,13 +244,14 @@ function ClockModal({ assistant, onClose, onDone }) {
                 PIN de l&apos;assistant
               </label>
               <input
-                type="password"
+                type="text"
                 inputMode="numeric"
+                autoComplete="off"
                 autoFocus
                 value={pin}
                 onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                placeholder="••••"
-                className="w-full px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-center text-2xl tracking-[0.5em] font-mono focus:border-[#D7A12B] focus:outline-none"
+                placeholder="1234"
+                className="admin-pin-input w-full px-4 py-3 border border-black/[0.12] rounded-lg text-center text-2xl tracking-[0.25em] font-mono"
               />
             </div>
 
@@ -458,11 +459,12 @@ function PinFields({ fields }) {
     <div key={label}>
       <label className="block text-xs text-neutral-500 uppercase tracking-wider mb-1">{label}</label>
       <input
-        type="password"
+        type="text"
         inputMode="numeric"
+        autoComplete="off"
         value={val}
         onChange={(e) => setter(e.target.value.replace(/\D/g, "").slice(0, 6))}
-        className="w-full px-4 py-2.5 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-center text-lg tracking-[0.4em] font-mono focus:border-[#D7A12B] focus:outline-none"
+        className="admin-pin-input w-full px-4 py-2.5 border border-black/[0.12] rounded-lg text-center text-lg tracking-[0.25em] font-mono"
       />
     </div>
   ));
