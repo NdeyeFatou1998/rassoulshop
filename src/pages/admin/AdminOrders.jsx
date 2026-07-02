@@ -242,6 +242,15 @@ export default function AdminOrders() {
                   <p className="text-xs text-neutral-400 mt-0.5 truncate">
                     {order.customerPhone} · {order.items.length} article(s) · {fmtDate(order.createdAt)}
                   </p>
+                  {order.items.some((item) => item.personalization) && (
+                    <p className="text-[10px] text-[#D7A12B] mt-1 truncate">
+                      Personnalisation :{" "}
+                      {order.items
+                        .filter((item) => item.personalization)
+                        .map((item) => `« ${item.personalization} »`)
+                        .join(" · ")}
+                    </p>
+                  )}
                 </div>
                 <div className="flex items-center gap-3">
                   <p className="text-sm font-semibold text-[#D7A12B]">{fmtPrice(order.total)}</p>
@@ -312,7 +321,7 @@ export default function AdminOrders() {
                 </div>
                 <div className="bg-neutral-50 rounded-lg p-3 border border-black/[0.08]">
                   <p className="text-[10px] text-neutral-500 uppercase tracking-wider mb-1">Adresse</p>
-                  <p className="text-[#ccc] text-xs leading-relaxed">
+                  <p className="text-[#0a0a0a] text-xs leading-relaxed">
                     {selectedOrder.deliveryAddress || "—"}
                   </p>
                 </div>
@@ -344,13 +353,13 @@ export default function AdminOrders() {
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm text-[#0a0a0a] font-medium truncate">{item.title}</p>
+                          <p className="text-sm text-[#0a0a0a] font-medium">{item.title}</p>
                           {item.personalization && (
-                            <p className="text-xs text-neutral-500 truncate">
+                            <p className="text-xs text-[#D7A12B] mt-1 leading-snug">
                               Personnalisation : « {item.personalization} »
                             </p>
                           )}
-                          <p className="text-xs text-neutral-400">Qté : {item.quantity}</p>
+                          <p className="text-xs text-neutral-400 mt-0.5">Qté : {item.quantity}</p>
                         </div>
                         <p className="text-sm text-[#D7A12B] font-semibold shrink-0">
                           {fmtPrice((item.price || 0) * (item.quantity || 1))}

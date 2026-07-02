@@ -1,56 +1,51 @@
 /**
- * Page Checkout — Passer une commande
- *
- * Affiche :
- * - Bannière "Vous paierez à la livraison"
- * - Formulaire client : prénom, nom, email (optionnel), téléphone, adresse
- * - Résumé du panier à droite
- * - Bouton "Confirmer la commande"
- * - Écran de succès après envoi
+ * Page Checkout — Passer une commande (thème premium clair)
  */
 
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { ArrowLeft, Truck, Phone, MapPin, User, Mail, CheckCircle, ShoppingBag } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { getProductUnitPrice } from "../utils/pricing";
 
+const inputCls =
+  "w-full px-4 py-3 premium-input rounded-xl text-sm text-[#0a0a0a] placeholder-neutral-400 focus:border-[#D7A12B]/60 focus:outline-none transition-colors";
+const labelCls =
+  "block text-[10px] uppercase tracking-[0.18em] text-neutral-600 font-semibold mb-1.5";
+
 export default function Checkout() {
   const { cart, cartTotal, clearCart } = useCart();
-  const navigate = useNavigate();
 
-  /* Champs du formulaire */
   const [form, setForm] = useState({
-    firstName: "", lastName: "", email: "", phone: "", address: "", notes: ""
+    firstName: "", lastName: "", email: "", phone: "", address: "", notes: "",
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [orderReference, setOrderReference] = useState(null);
 
-  /* Remonter en haut quand l'écran succès s'affiche (même URL /checkout) */
   useEffect(() => {
     if (success) {
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     }
   }, [success]);
 
-  /* Helpers */
   function field(key) {
     return {
       value: form[key],
-      onChange: e => setForm(f => ({ ...f, [key]: e.target.value }))
+      onChange: (e) => setForm((f) => ({ ...f, [key]: e.target.value })),
     };
   }
 
-  /* Soumission */
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
-    if (cart.length === 0) { setError("Votre panier est vide."); return; }
+    if (cart.length === 0) {
+      setError("Votre panier est vide.");
+      return;
+    }
 
-    /* Construction des items à envoyer */
     const items = cart.map(({ product, quantity, personalization }) => {
       const unitPrice = getProductUnitPrice(product);
       return {
@@ -62,7 +57,7 @@ export default function Checkout() {
         promo_price: product.promo_price,
         quantity,
         image: product.image || null,
-        ...(personalization ? { personalization } : {}),
+        ...(personalization ? { personalization: String(personalization).trim() } : {}),
       };
     });
 
@@ -73,19 +68,21 @@ export default function Checkout() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           customer_first_name: form.firstName,
-          customer_last_name:  form.lastName,
-          customer_email:      form.email || null,
-          customer_phone:      form.phone,
-          delivery_address:    form.address,
-          notes:               form.notes || null,
+          customer_last_name: form.lastName,
+          customer_email: form.email || null,
+          customer_phone: form.phone,
+          delivery_address: form.address,
+          notes: form.notes || null,
           items,
           total: cartTotal,
         }),
       });
       const data = await res.json();
-      if (!data.success) { setError(data.message || "Erreur lors de la commande."); return; }
+      if (!data.success) {
+        setError(data.message || "Erreur lors de la commande.");
+        return;
+      }
 
-      /* Succès */
       setOrderReference(
         data.order_reference ||
           data.order?.reference ||
@@ -102,7 +99,6 @@ export default function Checkout() {
     }
   }
 
-  /* ---- Écran succès ---- */
   if (success) {
     return (
       <section className="w-full flex flex-col items-center px-4 pt-24 md:pt-28 pb-16 md:pb-20">
@@ -118,27 +114,35 @@ export default function Checkout() {
             transition={{ delay: 0.2, type: "spring", stiffness: 300, damping: 20 }}
             className="w-20 h-20 rounded-full bg-emerald-500/15 flex items-center justify-center"
           >
-            <CheckCircle size={40} className="text-emerald-400" />
+            <CheckCircle size={40} className="text-emerald-600" />
           </motion.div>
 
           <div>
-            <p className="text-[10px] uppercase tracking-[0.25em] text-gold font-semibold mb-2">Commande reçue</p>
-            <h1 className="font-serif text-2xl md:text-3xl text-cream mb-3">Merci pour votre commande !</h1>
+            <p className="text-[10px] uppercase tracking-[0.25em] text-[#D7A12B] font-semibold mb-2">
+              Commande reçue
+            </p>
+            <h1 className="font-serif text-2xl md:text-3xl text-[#0a0a0a] mb-3">
+              Merci pour votre commande !
+            </h1>
             {orderReference && (
-              <p className="text-sm text-white/40 mb-2">
+              <p className="text-sm text-neutral-500 mb-2">
                 Référence commande :{" "}
-                <span className="text-gold font-semibold font-mono tracking-wider">{orderReference}</span>
+                <span className="text-[#D7A12B] font-semibold font-mono tracking-wider">
+                  {orderReference}
+                </span>
               </p>
             )}
-            <p className="text-sm text-white/40 leading-relaxed">
-              Un email de confirmation avec votre facture PDF vous a été envoyé si vous avez renseigné votre adresse email.<br />
-              <span className="text-gold/70">Paiement à la livraison.</span>
+            <p className="text-sm text-neutral-500 leading-relaxed">
+              Un email de confirmation avec votre facture PDF vous a été envoyé si vous avez
+              renseigné votre adresse email.
+              <br />
+              <span className="text-[#D7A12B] font-medium">Paiement à la livraison.</span>
             </p>
           </div>
 
           <Link
             to="/shop"
-            className="mt-3 px-8 py-3 rounded-full bg-gold text-noir-900 text-[11px] uppercase tracking-[0.2em] font-bold hover:bg-gold/90 transition-all"
+            className="mt-3 px-8 py-3 rounded-full bg-[#D7A12B] text-[#0a0a0a] text-[11px] uppercase tracking-[0.2em] font-bold hover:bg-[#E8B945] transition-all"
           >
             Continuer mes achats
           </Link>
@@ -147,24 +151,17 @@ export default function Checkout() {
     );
   }
 
-  /* ---- Formulaire ---- */
-  const inputCls = "w-full px-4 py-3 premium-input border border-white/[0.07] rounded-xl text-cream text-sm placeholder-white/25 focus:border-gold/50 focus:outline-none transition-colors";
-  const labelCls = "block text-[10px] uppercase tracking-[0.18em] text-white/40 font-semibold mb-1.5";
-
   return (
     <section className="w-full px-4 md:px-8 lg:px-12 pt-24 pb-32">
-
-      {/* Retour */}
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
         <Link
           to="/cart"
-          className="inline-flex items-center gap-2 text-white/35 hover:text-[#0a0a0a] text-xs uppercase tracking-[0.1em] mb-6 transition-colors"
+          className="inline-flex items-center gap-2 text-neutral-500 hover:text-[#0a0a0a] text-xs uppercase tracking-[0.1em] mb-6 transition-colors"
         >
           <ArrowLeft size={14} /> Retour au panier
         </Link>
       </motion.div>
 
-      {/* Titre */}
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
@@ -172,42 +169,41 @@ export default function Checkout() {
         className="mb-8"
       >
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-6 h-px bg-gold" />
-          <span className="text-[10px] uppercase tracking-[0.25em] text-gold font-semibold">Commander</span>
+          <div className="w-6 h-px bg-[#D7A12B]" />
+          <span className="text-[10px] uppercase tracking-[0.25em] text-[#D7A12B] font-semibold">
+            Commander
+          </span>
         </div>
-        <h1 className="font-serif text-2xl md:text-3xl text-cream">Finaliser ma commande</h1>
+        <h1 className="font-serif text-2xl md:text-3xl text-[#0a0a0a]">Finaliser ma commande</h1>
       </motion.div>
 
-      {/* ── Bannière paiement à la livraison ── */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.1 }}
-        className="flex items-center gap-3 p-4 rounded-2xl bg-gold/[0.08] border border-gold/20 mb-8"
+        className="flex items-center gap-3 p-4 rounded-2xl bg-[#D7A12B]/10 border border-[#D7A12B]/25 mb-8"
       >
-        <div className="w-9 h-9 rounded-full bg-gold/15 flex items-center justify-center flex-shrink-0">
-          <Truck size={18} className="text-gold" />
+        <div className="w-9 h-9 rounded-full bg-[#D7A12B]/20 flex items-center justify-center flex-shrink-0">
+          <Truck size={18} className="text-[#D7A12B]" />
         </div>
         <div>
-          <p className="text-sm font-semibold text-gold">Vous paierez à la livraison</p>
-          <p className="text-[11px] text-white/40 mt-0.5">Aucun paiement en ligne requis — règlement en espèces à la réception</p>
+          <p className="text-sm font-semibold text-[#0a0a0a]">Vous paierez à la livraison</p>
+          <p className="text-[11px] text-neutral-500 mt-0.5">
+            Aucun paiement en ligne requis — règlement en espèces à la réception
+          </p>
         </div>
       </motion.div>
 
-      {/* Layout 2 colonnes */}
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
-
-          {/* ── Formulaire client ── */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.15 }}
             className="lg:col-span-2 space-y-5"
           >
-            <h2 className="font-serif text-lg text-cream">Vos informations</h2>
+            <h2 className="font-serif text-lg text-[#0a0a0a]">Vos informations</h2>
 
-            {/* Prénom + Nom */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className={labelCls}>
@@ -223,15 +219,16 @@ export default function Checkout() {
               </div>
             </div>
 
-            {/* Email (optionnel) */}
             <div>
               <label className={labelCls}>
-                <span className="inline-flex items-center gap-1.5"><Mail size={10} />Email <span className="text-white/25 normal-case tracking-normal font-normal">(optionnel)</span></span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Mail size={10} />Email{" "}
+                  <span className="text-neutral-400 normal-case tracking-normal font-normal">(optionnel)</span>
+                </span>
               </label>
               <input {...field("email")} type="email" placeholder="aminata@exemple.com" className={inputCls} />
             </div>
 
-            {/* Téléphone */}
             <div>
               <label className={labelCls}>
                 <span className="inline-flex items-center gap-1.5"><Phone size={10} />Numéro de téléphone *</span>
@@ -239,7 +236,6 @@ export default function Checkout() {
               <input {...field("phone")} required type="tel" placeholder="+221 77 000 00 00" className={inputCls} />
             </div>
 
-            {/* Adresse */}
             <div>
               <label className={labelCls}>
                 <span className="inline-flex items-center gap-1.5"><MapPin size={10} />Adresse de livraison *</span>
@@ -253,9 +249,11 @@ export default function Checkout() {
               />
             </div>
 
-            {/* Notes (optionnel) */}
             <div>
-              <label className={labelCls}>Notes <span className="text-white/25 normal-case tracking-normal font-normal">(optionnel)</span></label>
+              <label className={labelCls}>
+                Notes{" "}
+                <span className="text-neutral-400 normal-case tracking-normal font-normal">(optionnel)</span>
+              </label>
               <textarea
                 {...field("notes")}
                 rows={2}
@@ -265,28 +263,28 @@ export default function Checkout() {
             </div>
 
             {error && (
-              <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/25 text-red-400 text-sm">{error}</div>
+              <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-sm">
+                {error}
+              </div>
             )}
           </motion.div>
 
-          {/* ── Résumé commande ── */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             className="lg:col-span-1"
           >
-            <div className="sticky top-28 rounded-2xl premium-input border border-white/[0.04] p-5 md:p-6">
+            <div className="sticky top-28 rounded-2xl premium-card border border-black/[0.08] p-5 md:p-6">
               <div className="flex items-center gap-2 mb-5">
-                <ShoppingBag size={15} className="text-gold/60" />
-                <h3 className="font-serif text-base text-cream">Résumé</h3>
+                <ShoppingBag size={15} className="text-[#D7A12B]" />
+                <h3 className="font-serif text-base text-[#0a0a0a]">Résumé</h3>
               </div>
 
-              {/* Articles */}
-              <div className="space-y-3 mb-5 pb-4 border-b border-white/[0.05] max-h-52 overflow-y-auto">
+              <div className="space-y-3 mb-5 pb-4 border-b border-black/[0.08] max-h-52 overflow-y-auto">
                 {cart.map(({ product, quantity, personalization, lineKey }) => (
                   <div key={lineKey || product.id} className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg overflow-hidden bg-noir-700 flex-shrink-0">
+                    <div className="w-10 h-10 rounded-lg overflow-hidden bg-neutral-100 flex-shrink-0 border border-black/[0.06]">
                       <img
                         src={
                           product.image ||
@@ -297,50 +295,52 @@ export default function Checkout() {
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs text-cream truncate">{product.title}</p>
+                      <p className="text-xs text-[#0a0a0a] font-medium truncate">{product.title}</p>
                       {personalization && (
-                        <p className="text-[10px] text-white/40 truncate">
-                          « {personalization} »
+                        <p className="text-[10px] text-[#D7A12B] mt-0.5 line-clamp-2">
+                          Personnalisation : « {personalization} »
                         </p>
                       )}
-                      <p className="text-[10px] text-white/35">×{quantity}</p>
+                      <p className="text-[10px] text-neutral-500">×{quantity}</p>
                     </div>
-                    <span className="text-xs font-semibold text-cream flex-shrink-0">
+                    <span className="text-xs font-semibold text-[#0a0a0a] flex-shrink-0">
                       {(getProductUnitPrice(product) * quantity).toLocaleString("fr-FR")}
                     </span>
                   </div>
                 ))}
               </div>
 
-              {/* Total */}
               <div className="space-y-2 mb-5">
                 <div className="flex justify-between text-xs">
-                  <span className="text-white/40">Sous-total</span>
-                  <span className="text-cream">{cartTotal.toLocaleString("fr-FR")} FCFA</span>
+                  <span className="text-neutral-500">Sous-total</span>
+                  <span className="text-[#0a0a0a]">{cartTotal.toLocaleString("fr-FR")} FCFA</span>
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-white/40">Livraison</span>
-                  <span className="text-gold text-[10px] uppercase tracking-wider font-semibold">Gratuite</span>
+                  <span className="text-neutral-500">Livraison</span>
+                  <span className="text-[#D7A12B] text-[10px] uppercase tracking-wider font-semibold">
+                    Gratuite
+                  </span>
                 </div>
-                <div className="flex justify-between font-semibold pt-2 border-t border-white/[0.05]">
-                  <span className="text-sm text-cream">Total</span>
-                  <span className="text-lg font-serif text-gold">{cartTotal.toLocaleString("fr-FR")} FCFA</span>
+                <div className="flex justify-between font-semibold pt-2 border-t border-black/[0.08]">
+                  <span className="text-sm text-[#0a0a0a]">Total</span>
+                  <span className="text-lg font-serif text-[#D7A12B]">
+                    {cartTotal.toLocaleString("fr-FR")} FCFA
+                  </span>
                 </div>
               </div>
 
-              {/* Bouton commander */}
               <motion.button
                 type="submit"
                 disabled={submitting || cart.length === 0}
                 whileTap={{ scale: 0.97 }}
-                className="w-full py-3.5 rounded-full bg-gold text-noir-900 text-[11px] uppercase tracking-[0.2em] font-bold
+                className="w-full py-3.5 rounded-full bg-[#D7A12B] text-[#0a0a0a] text-[11px] uppercase tracking-[0.2em] font-bold
                            disabled:opacity-50 disabled:cursor-not-allowed
-                           hover:bg-gold/90 transition-all duration-300"
+                           hover:bg-[#E8B945] transition-all duration-300"
               >
                 {submitting ? "Envoi en cours…" : "Commander maintenant"}
               </motion.button>
 
-              <p className="text-center text-[10px] text-white/25 mt-3">
+              <p className="text-center text-[10px] text-neutral-400 mt-3">
                 Paiement à la livraison · Livraison gratuite
               </p>
             </div>

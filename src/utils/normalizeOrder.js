@@ -17,6 +17,7 @@ export function normalizeOrder(raw) {
   items = items.map((item) => {
     const quantity = Math.max(1, Number(item.quantity) || 1);
     const unitPrice = getOrderItemUnitPrice(item);
+    const personalization = item.personalization?.trim() || null;
     return {
       ...item,
       id: item.id ?? item.productId ?? null,
@@ -24,6 +25,7 @@ export function normalizeOrder(raw) {
       image: item.image || item.productImage || item.img || null,
       price: unitPrice,
       quantity,
+      ...(personalization ? { personalization } : {}),
     };
   });
 
