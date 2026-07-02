@@ -98,11 +98,11 @@ export async function fetchCategoriesFull({ activeOnly = true } = {}) {
 export async function fetchHomeBanner() {
   try {
     const response = await fetch(`${API_BASE}/home/banner`);
-    if (!response.ok) throw new Error("Bannière indisponible");
+    if (response.status === 404) return null;
+    if (!response.ok) return null;
     const data = await response.json();
     return data.banner || null;
-  } catch (error) {
-    console.warn("Erreur bannière accueil:", error.message);
+  } catch {
     return null;
   }
 }
