@@ -317,6 +317,38 @@
     margin-bottom: 0.5rem;
   }
 
+  /* Listes admin — aucune ligne entre les items */
+  .admin-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.35rem 0.25rem;
+  }
+  .admin-list > * {
+    border: none !important;
+  }
+  .admin-list > * + * {
+    border-top: none !important;
+  }
+
+  .admin-thumb {
+    background: #f5f5f5;
+  }
+
+  .admin-badge-muted {
+    background: rgba(0, 0, 0, 0.06);
+    color: #737373;
+  }
+
+  .admin-btn-secondary {
+    background: #f5f5f5;
+    color: #404040;
+    transition: background 0.2s ease;
+  }
+  .admin-btn-secondary:hover {
+    background: #ebebeb;
+  }
+
   .home-hero-premium {
     position: relative;
   }

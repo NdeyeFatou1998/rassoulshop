@@ -167,7 +167,7 @@ export default function AdminDashboard() {
 
       {/* ---- Dernières commandes ---- */}
       <div className="admin-card border border-black/[0.08] rounded-xl">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-black/[0.08]">
+        <div className="flex items-center justify-between px-6 py-4">
           <h2 className="text-sm font-medium text-[#0a0a0a]">Dernières commandes</h2>
           <Link
             to="/admin/orders"
@@ -182,11 +182,11 @@ export default function AdminDashboard() {
             Aucune commande pour le moment
           </p>
         ) : (
-          <div className="divide-y divide-[#222]">
+          <div className="admin-list">
             {recentOrders.map((order) => {
               const st = statusLabels[order.status] || statusLabels.pending;
               return (
-                <div key={order.id} className="px-6 py-3 flex items-center justify-between">
+                <div key={order.id} className="px-4 py-3 mx-2 rounded-lg flex items-center justify-between hover:bg-neutral-50/80 transition-colors">
                   <div>
                     <p className="text-sm text-[#0a0a0a]">
                       <span className="text-[#D7A12B] font-mono text-xs mr-2">{order.reference}</span>

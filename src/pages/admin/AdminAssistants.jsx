@@ -361,7 +361,7 @@ export default function AdminAssistants() {
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="flex-1 py-3 bg-[#333] text-[#0a0a0a] font-semibold text-sm rounded-lg hover:bg-[#444] transition-colors"
+                  className="flex-1 py-3 bg-neutral-100 text-neutral-700 font-semibold text-sm rounded-lg hover:bg-neutral-200 transition-colors"
                 >
                   {generatedPassword || resetPassword ? "Fermer" : "Annuler"}
                 </button>

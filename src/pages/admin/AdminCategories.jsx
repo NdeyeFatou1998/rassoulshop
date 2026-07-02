@@ -245,7 +245,7 @@ export default function AdminCategories() {
                     className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                       category.active
                         ? "bg-green-500/20 text-green-400 hover:bg-green-500/30"
-                        : "bg-[#333] text-neutral-500 hover:bg-[#444]"
+                        : "bg-neutral-100 text-neutral-400 hover:bg-neutral-200"
                     }`}
                   >
                     {category.active ? "Actif" : "Inactif"}
@@ -373,7 +373,7 @@ export default function AdminCategories() {
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="flex-1 py-3 bg-[#333] text-[#0a0a0a] font-semibold text-sm rounded-lg hover:bg-[#444] transition-colors"
+                  className="flex-1 py-3 bg-neutral-100 text-neutral-700 font-semibold text-sm rounded-lg hover:bg-neutral-200 transition-colors"
                 >
                   Annuler
                 </button>

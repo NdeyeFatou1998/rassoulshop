@@ -220,7 +220,7 @@ function ClockModal({ assistant, onClose, onDone }) {
                   <span className="text-xs text-[#bbb]">{camError}</span>
                   <button
                     onClick={startCamera}
-                    className="flex items-center gap-2 text-xs px-3 py-1.5 bg-[#222] rounded-lg text-[#0a0a0a] hover:bg-[#333]"
+                    className="flex items-center gap-2 text-xs px-3 py-1.5 admin-btn-secondary rounded-lg"
                   >
                     <RefreshCw size={13} /> Réessayer
                   </button>
@@ -530,27 +530,27 @@ function HistorySection({
       ) : (
         <div className="admin-card border border-black/[0.08] rounded-xl overflow-hidden">
           {canDelete && (
-            <div className="px-4 py-2.5 border-b border-black/[0.08] flex items-center gap-3">
+            <div className="px-4 py-2.5 flex items-center gap-3">
               <label className="flex items-center gap-2 text-xs text-neutral-500 cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={allSelected}
                   onChange={onToggleSelectAll}
-                  className="rounded border-[#444] bg-neutral-50 text-[#D7A12B] focus:ring-[#D7A12B]"
+                  className="rounded border-black/[0.15] bg-neutral-50 text-[#D7A12B] focus:ring-[#D7A12B]"
                 />
                 Tout sélectionner
               </label>
             </div>
           )}
-          <div className="divide-y divide-[#222]">
+          <div className="admin-list">
             {history.map((s) => (
-              <div key={s.id} className="p-4 flex items-center gap-4">
+              <div key={s.id} className="p-4 mx-2 rounded-lg flex items-center gap-4 hover:bg-neutral-50/80 transition-colors">
                 {canDelete && (
                   <input
                     type="checkbox"
                     checked={selectedIds.has(s.id)}
                     onChange={() => onToggleSelect(s.id)}
-                    className="shrink-0 rounded border-[#444] bg-neutral-50 text-[#D7A12B] focus:ring-[#D7A12B]"
+                    className="shrink-0 rounded border-black/[0.15] bg-neutral-50 text-[#D7A12B] focus:ring-[#D7A12B]"
                   />
                 )}
                 <div className="flex gap-2 shrink-0">
@@ -626,7 +626,7 @@ function PhotoThumb({ src, label, onClick }) {
           <img src={src} alt={label} className="w-full h-full object-cover" />
         </button>
       ) : (
-        <div className="w-12 h-12 rounded-lg border border-dashed border-black/[0.12] flex items-center justify-center text-[#444]">
+        <div className="w-12 h-12 rounded-lg border border-dashed border-black/[0.12] flex items-center justify-center text-neutral-400">
           <ImageIcon size={16} />
         </div>
       )}

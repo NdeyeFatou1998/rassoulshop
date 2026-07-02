@@ -217,14 +217,14 @@ export default function AdminOrders() {
           <p>Aucune commande</p>
         </div>
       ) : (
-        <div className="admin-card border border-black/[0.08] rounded-xl overflow-hidden divide-y divide-[#222]">
+        <div className="admin-card border border-black/[0.08] rounded-xl overflow-hidden admin-list">
           {filtered.map((order) => {
             const st = STATUS_CONFIG[order.status] || STATUS_CONFIG.pending;
             const StIcon = st.icon;
             return (
               <div
                 key={order.id}
-                className="px-6 py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 hover:bg-neutral-50 transition-colors"
+                className="px-4 py-4 mx-2 rounded-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-3 hover:bg-neutral-50 transition-colors"
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
@@ -329,7 +329,7 @@ export default function AdminOrders() {
                         key={i}
                         className="flex items-center gap-3 bg-neutral-50 px-3 py-2.5 rounded-lg border border-black/[0.08]"
                       >
-                        <div className="w-14 h-14 rounded-lg overflow-hidden bg-[#222] border border-black/[0.12] shrink-0">
+                        <div className="w-14 h-14 rounded-lg overflow-hidden admin-thumb border border-black/[0.12] shrink-0">
                           {src ? (
                             <img
                               src={src}
@@ -338,7 +338,7 @@ export default function AdminOrders() {
                               crossOrigin="anonymous"
                             />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-[#444]">
+                            <div className="w-full h-full flex items-center justify-center text-neutral-400">
                               <ImageIcon size={18} />
                             </div>
                           )}
@@ -376,7 +376,7 @@ export default function AdminOrders() {
                   type="button"
                   onClick={() => !invoiceError && invoiceUrl && setInvoiceFullscreen(true)}
                   disabled={!invoiceUrl || !!invoiceError}
-                  className="w-full max-w-[220px] text-left rounded-xl border border-black/[0.12] bg-neutral-50 overflow-hidden hover:border-[#D7A12B]/50 hover:bg-[#1f1f1f] transition-all group disabled:opacity-50 disabled:pointer-events-none"
+                  className="w-full max-w-[220px] text-left rounded-xl border border-black/[0.12] bg-neutral-50 overflow-hidden hover:border-[#D7A12B]/50 hover:bg-neutral-100 transition-all group disabled:opacity-50 disabled:pointer-events-none"
                 >
                   <div className="h-[88px] overflow-hidden relative bg-white">
                     {invoiceLoading && (
@@ -433,7 +433,7 @@ export default function AdminOrders() {
           onClick={() => setInvoiceFullscreen(false)}
         >
           <div
-            className="flex items-center justify-between px-4 py-3 border-b border-white/10 shrink-0"
+            className="flex items-center justify-between px-4 py-3 border-b border-black/[0.06] shrink-0"
             onClick={(e) => e.stopPropagation()}
           >
             <button

@@ -26,7 +26,7 @@ const ROLE_LABELS = {
 
 function UserRow({ user, currentUser, onEdit, onDelete }) {
   return (
-    <div className="px-6 py-4 flex items-center justify-between hover:bg-neutral-50 transition-colors">
+    <div className="px-4 py-4 mx-2 rounded-lg flex items-center justify-between hover:bg-neutral-50 transition-colors">
       <div className="flex items-center gap-4">
         <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold ${
           user.role === "admin" || user.role === "sub_admin"
@@ -85,7 +85,7 @@ function UserList({ users, currentUser, onEdit, onDelete, emptyLabel }) {
   }
 
   return (
-    <div className="admin-card border border-black/[0.08] rounded-xl overflow-hidden divide-y divide-[#222]">
+    <div className="admin-card border border-black/[0.08] rounded-xl overflow-hidden admin-list">
       {users.map((user) => (
         <UserRow
           key={user.id}
@@ -257,7 +257,7 @@ export default function AdminUsers() {
               <Icon size={16} />
               {tab.label}
               <span className={`text-xs px-1.5 py-0.5 rounded-full ${
-                isActive ? "bg-black/20" : "bg-[#222]"
+                isActive ? "bg-black/[0.08] text-neutral-700" : "admin-badge-muted"
               }`}>
                 {count}
               </span>
@@ -338,7 +338,7 @@ export default function AdminUsers() {
                     <button
                       type="button"
                       onClick={handleCopy}
-                      className="p-2 bg-[#222] rounded-lg hover:bg-[#333] transition-colors"
+                      className="p-2 bg-neutral-100 rounded-lg hover:bg-neutral-200 transition-colors"
                       title="Copier"
                     >
                       {copied ? <Check size={16} className="text-emerald-400" /> : <Copy size={16} className="text-neutral-500" />}
@@ -412,7 +412,7 @@ export default function AdminUsers() {
                         className={`flex items-start gap-2 p-3 rounded-lg border text-left transition-colors ${
                           createRole === "admin"
                             ? "border-[#D7A12B] bg-[#D7A12B]/10"
-                            : "border-black/[0.12] bg-neutral-50 hover:border-[#555]"
+                            : "border-black/[0.12] bg-neutral-50 hover:border-black/[0.18]"
                         }`}
                       >
                         <Shield size={16} className="text-[#D7A12B] shrink-0 mt-0.5" />
@@ -427,7 +427,7 @@ export default function AdminUsers() {
                         className={`flex items-start gap-2 p-3 rounded-lg border text-left transition-colors ${
                           createRole === "sub_admin"
                             ? "border-[#D7A12B] bg-[#D7A12B]/10"
-                            : "border-black/[0.12] bg-neutral-50 hover:border-[#555]"
+                            : "border-black/[0.12] bg-neutral-50 hover:border-black/[0.18]"
                         }`}
                       >
                         <ShieldCheck size={16} className="text-[#D7A12B] shrink-0 mt-0.5" />

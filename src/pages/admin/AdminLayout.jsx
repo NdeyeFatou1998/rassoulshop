@@ -151,7 +151,7 @@ export default function AdminLayout() {
           <div className="w-8" />
         </header>
 
-        <main className="flex-1 p-3 md:p-4 lg:p-8 overflow-y-auto overflow-x-hidden bg-neutral-50/80">
+        <main className="flex-1 p-3 md:p-4 lg:p-8 overflow-y-auto overflow-x-hidden bg-white">
           <Outlet />
         </main>
       </div>

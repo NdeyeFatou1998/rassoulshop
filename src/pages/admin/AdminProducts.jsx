@@ -393,7 +393,7 @@ export default function AdminProducts() {
             ✓ {successMsg}
           </div>
         )}
-        <div className="p-3 border-b border-black/[0.08] space-y-2">
+        <div className="p-3 space-y-2">
           <button
             onClick={selectNew}
             className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors ${selected === "new" ? "bg-[#D7A12B] text-[#0a0a0a]" : "bg-[#D7A12B]/10 text-[#D7A12B] hover:bg-[#D7A12B]/20"}`}
@@ -410,14 +410,14 @@ export default function AdminProducts() {
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto divide-y divide-[#1a1a1a]">
+        <div className="flex-1 overflow-y-auto admin-list">
           {loading ? Array.from({length:6}).map((_,i) => <div key={i} className="h-14 mx-2 my-1 admin-card rounded-lg animate-pulse" />) :
           filtered.map(p => {
             const alert = stockAlert(p.stock);
             return (
             <div
               key={p.id}
-              className={`flex items-center gap-2 px-2.5 py-2 transition-colors ${
+              className={`flex items-center gap-2 px-2.5 py-2 mx-1 rounded-lg transition-colors ${
                 selected !== "new" && selected?.id === p.id ? "bg-[#D7A12B]/10" : "hover:bg-neutral-50"
               } ${alert ? "border-l-2 border-l-red-500 bg-red-500/[0.04]" : ""}`}
             >
@@ -425,11 +425,11 @@ export default function AdminProducts() {
               <div className="relative flex-shrink-0">
                 {p.image
                   ? <img src={p.image} alt="" className="w-8 h-8 rounded-md object-cover" />
-                  : <div className="w-8 h-8 rounded-md bg-[#222] flex items-center justify-center"><Tag size={11} className="text-neutral-400" /></div>
+                  : <div className="w-8 h-8 rounded-md admin-thumb flex items-center justify-center"><Tag size={11} className="text-neutral-400" /></div>
                 }
                 {alert && (
                   <span
-                    className="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-red-600 rounded-full border border-[#111] shadow-sm"
+                    className="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-red-600 rounded-full border border-white shadow-sm"
                     title={alert.label}
                   >
                     <Flag size={9} className="text-white fill-white" />
@@ -492,8 +492,8 @@ export default function AdminProducts() {
         showForm ? 'block' : 'hidden md:block'
       } flex-1 min-w-0 overflow-y-auto`}>
         {!selected ? (
-          <div className="flex flex-col items-center justify-center h-full text-[#444]">
-            <Tag size={36} className="mb-3 text-[#333]" />
+          <div className="flex flex-col items-center justify-center h-full text-neutral-400">
+            <Tag size={36} className="mb-3 text-neutral-500" />
             <p className="text-sm">Sélectionnez un produit ou créez-en un nouveau</p>
           </div>
         ) : (
@@ -508,7 +508,7 @@ export default function AdminProducts() {
             </button>
 
             {/* Header */}
-            <div className="flex items-center gap-2 justify-between sticky top-0 bg-[#0a0a0a] py-2 z-10 min-w-0">
+            <div className="flex items-center gap-2 justify-between sticky top-0 bg-white py-2 z-10 min-w-0 -mx-1 px-1">
               <div className="min-w-0 flex-1">
                 <h2 className="text-sm font-semibold text-[#0a0a0a] truncate">
                   {selected === "new" ? "Nouveau produit" : selected.title}
@@ -568,7 +568,7 @@ export default function AdminProducts() {
               <div className="flex items-center gap-3">
                 {form.image
                   ? <img src={form.image} alt="" className="w-16 h-16 rounded-lg object-cover border border-black/[0.12]" />
-                  : <div className="w-16 h-16 rounded-lg admin-card border border-black/[0.08] flex items-center justify-center"><ImageIcon size={18} className="text-[#444]" /></div>
+                  : <div className="w-16 h-16 rounded-lg admin-card border border-black/[0.08] flex items-center justify-center"><ImageIcon size={18} className="text-neutral-400" /></div>
                 }
                 <div className="flex-1">
                   <input type="file" accept="image/*"
@@ -657,7 +657,7 @@ export default function AdminProducts() {
                 </div>
 
                 {variantTypes.length === 0 ? (
-                  <p className="text-xs text-[#444] italic">
+                  <p className="text-xs text-neutral-400 italic">
                     Aucun type défini — créez-en dans l'onglet <span className="text-[#D7A12B]">Variantes</span>.
                   </p>
                 ) : (
@@ -677,7 +677,7 @@ export default function AdminProducts() {
                       <label className="w-9 h-9 rounded-lg bg-neutral-50 border border-black/[0.12] flex items-center justify-center cursor-pointer overflow-hidden hover:border-[#D7A12B] transition-colors flex-shrink-0" title="Photo (optionnel)">
                         {uploadingImg ? <div className="w-3.5 h-3.5 border border-[#D7A12B] border-t-transparent rounded-full animate-spin" />
                           : newOptImage ? <img src={newOptImage} alt="" className="w-full h-full object-cover" />
-                          : <ImageIcon size={13} className="text-[#444]" />}
+                          : <ImageIcon size={13} className="text-neutral-400" />}
                         <input type="file" accept="image/*" className="hidden" onChange={e=>e.target.files[0]&&uploadOptImage(e.target.files[0])} />
                       </label>
                       <button type="button" onClick={handleAddOption} disabled={!newOptName.trim()||!selTypeId}
@@ -712,16 +712,16 @@ export default function AdminProducts() {
                                   </span>
                                 ) : (
                                   /* ---- Mode affichage ---- */
-                                  <span key={opt.id} className={`flex items-center gap-1 bg-neutral-50 border rounded-md px-2 py-0.5 text-xs text-[#0a0a0a] group ${isPending ? "border-[#D7A12B]/30" : "border-[#2a2a2a]"}`}>
+                                  <span key={opt.id} className={`flex items-center gap-1 bg-neutral-50 border rounded-md px-2 py-0.5 text-xs text-[#0a0a0a] group ${isPending ? "border-[#D7A12B]/30" : "border-black/[0.08]"}`}>
                                     {opt.image && <img src={opt.image} alt="" className="w-4 h-4 rounded object-cover" />}
                                     {opt.name}
                                     <button type="button"
                                       onClick={()=>{ setEditingOpt(opt); setEditOptName(opt.name); }}
-                                      className="text-[#444] hover:text-[#D7A12B] opacity-0 group-hover:opacity-100 transition-all">
+                                      className="text-neutral-400 hover:text-[#D7A12B] opacity-0 group-hover:opacity-100 transition-all">
                                       <Pencil size={9} />
                                     </button>
                                     <button type="button" onClick={()=>handleDeleteOption(opt.id, isPending)}
-                                      className="text-[#444] hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all">
+                                      className="text-neutral-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all">
                                       <X size={10} />
                                     </button>
                                   </span>

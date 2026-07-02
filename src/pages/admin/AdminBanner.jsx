@@ -77,7 +77,7 @@ export default function AdminBanner() {
           <label
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold cursor-pointer transition-colors ${
               uploading
-                ? "bg-[#333] text-neutral-500 cursor-not-allowed"
+                ? "bg-neutral-100 text-neutral-400 cursor-not-allowed"
                 : "bg-[#D7A12B] text-[#0a0a0a] hover:bg-[#E8B945]"
             }`}
           >

@@ -389,7 +389,7 @@ export default function AdminGiftBoxes() {
                     className="w-20 h-20 rounded-lg object-cover border border-black/[0.12]"
                   />
                 ) : (
-                  <div className="w-20 h-20 rounded-lg bg-[#222] flex items-center justify-center border border-black/[0.12]">
+                  <div className="w-20 h-20 rounded-lg admin-thumb flex items-center justify-center border border-black/[0.12]">
                     <Gift size={24} className="text-neutral-400" />
                   </div>
                 )}
@@ -429,7 +429,7 @@ export default function AdminGiftBoxes() {
                           className={`inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full ${
                             item.is_replaceable
                               ? "bg-[#D7A12B]/15 text-[#D7A12B] border border-[#D7A12B]/30"
-                              : "bg-[#222] text-neutral-500"
+                              : "admin-badge-muted"
                           }`}
                         >
                           <Package size={10} />
@@ -621,7 +621,7 @@ export default function AdminGiftBoxes() {
                             className={`flex items-center gap-3 px-4 py-3 rounded-lg border cursor-pointer transition-colors ${
                               selected
                                 ? "bg-[#D7A12B]/10 border-[#D7A12B]/40"
-                                : "bg-neutral-50 border-black/[0.12] hover:border-[#555]"
+                                : "bg-neutral-50 border-black/[0.12] hover:border-black/[0.18]"
                             }`}
                           >
                             {/* Checkbox custom */}
@@ -635,7 +635,7 @@ export default function AdminGiftBoxes() {
                             {product.image ? (
                               <img src={product.image} alt={product.title} className="w-10 h-10 rounded object-cover" />
                             ) : (
-                              <div className="w-10 h-10 rounded bg-[#222] flex items-center justify-center">
+                              <div className="w-10 h-10 rounded admin-thumb flex items-center justify-center">
                                 <Package size={14} className="text-neutral-400" />
                               </div>
                             )}
@@ -652,10 +652,10 @@ export default function AdminGiftBoxes() {
                                 {/* Quantité */}
                                 <div className="flex items-center gap-1">
                                   <button type="button" onClick={() => updateQuantity(product.id, (selItem?.quantity || 1) - 1)}
-                                    className="w-7 h-7 bg-[#333] text-[#0a0a0a] rounded text-sm hover:bg-[#444]">-</button>
+                                    className="w-7 h-7 bg-neutral-100 text-neutral-700 rounded text-sm hover:bg-neutral-200">-</button>
                                   <span className="text-sm text-[#0a0a0a] w-6 text-center">{selItem?.quantity || 1}</span>
                                   <button type="button" onClick={() => updateQuantity(product.id, (selItem?.quantity || 1) + 1)}
-                                    className="w-7 h-7 bg-[#333] text-[#0a0a0a] rounded text-sm hover:bg-[#444]">+</button>
+                                    className="w-7 h-7 bg-neutral-100 text-neutral-700 rounded text-sm hover:bg-neutral-200">+</button>
                                 </div>
 
                                 {/* Checkbox remplaçable (visible si box personnalisable) */}
@@ -666,7 +666,7 @@ export default function AdminGiftBoxes() {
                                     className={`px-2 py-1 rounded text-[10px] uppercase tracking-wider font-semibold transition-colors ${
                                       selItem?.is_replaceable
                                         ? "bg-[#D7A12B] text-[#0a0a0a]"
-                                        : "bg-[#333] text-neutral-500 hover:bg-[#444]"
+                                        : "bg-neutral-100 text-neutral-400 hover:bg-neutral-200"
                                     }`}
                                     title="Cet article peut être remplacé par le client"
                                   >
@@ -696,7 +696,7 @@ export default function AdminGiftBoxes() {
                                         className={`flex items-center gap-2 px-3 py-2 rounded border cursor-pointer transition-colors text-xs ${
                                           isReplacement
                                             ? "bg-[#D7A12B]/10 border-[#D7A12B]/30"
-                                            : "bg-neutral-50 border-black/[0.12] hover:border-[#555]"
+                                            : "bg-neutral-50 border-black/[0.12] hover:border-black/[0.18]"
                                         }`}
                                       >
                                         <div className={`w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 ${
@@ -707,7 +707,7 @@ export default function AdminGiftBoxes() {
                                         {rp.image ? (
                                           <img src={rp.image} alt={rp.title} className="w-7 h-7 rounded object-cover" />
                                         ) : (
-                                          <div className="w-7 h-7 rounded bg-[#222] flex items-center justify-center">
+                                          <div className="w-7 h-7 rounded admin-thumb flex items-center justify-center">
                                             <Package size={10} className="text-neutral-400" />
                                           </div>
                                         )}
@@ -760,7 +760,7 @@ export default function AdminGiftBoxes() {
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="flex-1 py-3 bg-[#333] text-[#0a0a0a] font-semibold text-sm rounded-lg hover:bg-[#444] transition-colors"
+                  className="flex-1 py-3 bg-neutral-100 text-neutral-700 font-semibold text-sm rounded-lg hover:bg-neutral-200 transition-colors"
                 >
                   Annuler
                 </button>

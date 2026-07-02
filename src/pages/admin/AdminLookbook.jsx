@@ -173,7 +173,7 @@ export default function AdminLookbook() {
           </div>
           <label className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold cursor-pointer transition-colors ${
             bannerUploading
-              ? "bg-[#333] text-neutral-500 cursor-not-allowed"
+              ? "bg-neutral-100 text-neutral-400 cursor-not-allowed"
               : "bg-[#D7A12B] text-[#0a0a0a] hover:bg-[#E8B945]"
           }`}>
             <Upload size={14} />
@@ -219,7 +219,7 @@ export default function AdminLookbook() {
               </span>
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center h-[160px] rounded-xl border-2 border-dashed border-[#2a2a2a] text-neutral-400">
+            <div className="flex flex-col items-center justify-center h-[160px] rounded-xl border-2 border-dashed border-black/[0.08] text-neutral-400">
               <Image size={32} className="mb-2 opacity-40" />
               <p className="text-sm">Aucune bannière — uploadez une image ou vidéo</p>
             </div>
@@ -267,7 +267,7 @@ export default function AdminLookbook() {
             <div className="flex flex-col items-center justify-center py-16 text-neutral-400">
               <LayoutGrid size={40} className="mb-3 opacity-30" />
               <p className="text-sm">Aucun média dans le lookbook</p>
-              <p className="text-xs mt-1 text-[#444]">Ajoutez des images ou des vidéos</p>
+              <p className="text-xs mt-1 text-neutral-400">Ajoutez des images ou des vidéos</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -334,7 +334,7 @@ export default function AdminLookbook() {
           ============================================================ */}
       {showModal && (
         <div className="fixed inset-0 bg-black/75 z-50 flex items-center justify-center px-4">
-          <div className="admin-card border border-[#2a2a2a] rounded-2xl w-full max-w-md shadow-2xl">
+          <div className="admin-card border border-black/[0.08] rounded-2xl w-full max-w-md shadow-2xl">
             {/* Header modal */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-black/[0.08]">
               <h3 className="text-[#0a0a0a] font-semibold">

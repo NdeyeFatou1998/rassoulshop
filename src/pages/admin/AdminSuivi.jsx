@@ -12,7 +12,7 @@ const ROLE_STYLES = {
   Administrateur: "bg-[#D7A12B]/20 text-[#D7A12B]",
   Assistant: "bg-blue-500/20 text-blue-400",
   "Client (boutique)": "bg-emerald-500/20 text-emerald-400",
-  Système: "bg-[#333] text-neutral-500",
+  Système: "bg-neutral-100 text-neutral-500",
 };
 
 function formatDateTime(iso) {
@@ -77,7 +77,7 @@ export default function AdminSuivi() {
         <button
           type="button"
           onClick={load}
-          className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-500 hover:text-[#0a0a0a] border border-black/[0.12] rounded-lg hover:border-[#555]"
+          className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-500 hover:text-[#0a0a0a] border border-black/[0.12] rounded-lg hover:border-black/[0.18]"
         >
           <RefreshCw size={14} />
           Actualiser
@@ -117,19 +117,19 @@ export default function AdminSuivi() {
         <div className="text-center py-20 text-neutral-400">
           <ScrollText size={40} className="mx-auto mb-3 opacity-40" />
           <p>Aucune action enregistrée pour le moment</p>
-          <p className="text-xs mt-2 text-[#444]">
+          <p className="text-xs mt-2 text-neutral-400">
             Les actions apparaîtront ici après connexion, commandes, produits, etc.
           </p>
         </div>
       ) : (
-        <div className="admin-card border border-black/[0.08] rounded-xl overflow-hidden divide-y divide-[#222]">
+        <div className="admin-card border border-black/[0.08] rounded-xl overflow-hidden admin-list">
           {logs.map((log) => {
-            const roleCls = ROLE_STYLES[log.actorRole] || "bg-[#222] text-neutral-500";
+            const roleCls = ROLE_STYLES[log.actorRole] || "admin-badge-muted";
             const isStaff = log.actorType === "admin" || log.actorType === "assistant";
             return (
               <div
                 key={log.id}
-                className="px-4 sm:px-6 py-4 hover:bg-neutral-50 transition-colors"
+                className="px-4 sm:px-5 py-4 mx-2 rounded-lg hover:bg-neutral-50 transition-colors"
               >
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                   <div className="flex items-start gap-3 min-w-0 flex-1">

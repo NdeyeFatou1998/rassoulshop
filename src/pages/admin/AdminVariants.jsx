@@ -112,8 +112,8 @@ export default function AdminVariants() {
           {[1,2,3].map(i => <div key={i} className="h-14 admin-card rounded-xl animate-pulse" />)}
         </div>
       ) : types.length === 0 ? (
-        <div className="text-center py-16 admin-card rounded-xl border border-black/[0.08] text-[#444]">
-          <Layers size={28} className="mx-auto mb-2 text-[#333]" />
+        <div className="text-center py-16 admin-card rounded-xl border border-black/[0.08] text-neutral-400">
+          <Layers size={28} className="mx-auto mb-2 text-neutral-500" />
           <p className="text-sm">Aucun type de variante.</p>
           <p className="text-xs text-neutral-400 mt-1">Créez vos premiers types : Couleur, Taille…</p>
         </div>
