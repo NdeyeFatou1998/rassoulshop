@@ -340,15 +340,16 @@ export default function AdminGiftBoxes() {
   const activeProducts = products.filter(p => p.active);
 
   return (
-    <div className="p-6 md:p-8">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="font-serif text-2xl md:text-3xl text-[#0a0a0a] mb-2">
-            🎁 Box Cadeau
+          <h1 className="text-xl font-semibold text-[#0a0a0a] flex items-center gap-2">
+            <Gift size={22} className="text-[#D7A12B]" />
+            Box Cadeau
           </h1>
-          <p className="text-sm text-neutral-500">
-            Créer des boxes cadeaux composées d'articles
+          <p className="text-sm text-neutral-500 mt-1">
+            Créer des boxes cadeaux composées d&apos;articles
           </p>
         </div>
         <button
@@ -377,7 +378,7 @@ export default function AdminGiftBoxes() {
               className={`admin-card border rounded-xl p-5 transition-colors ${
                 box.active
                   ? "border-[#D7A12B]/20 hover:border-[#D7A12B]/40"
-                  : "border-black/[0.12]/50 opacity-60"
+                  : "border-black/[0.08] opacity-60"
               }`}
             >
               <div className="flex items-start gap-4">
@@ -488,22 +489,18 @@ export default function AdminGiftBoxes() {
               {/* Nom + Prix en ligne */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
-                    Nom de la box *
-                  </label>
+                  <label className="admin-label">Nom de la box *</label>
                   <input
                     type="text"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     required
                     placeholder="Ex : Box Prestige"
-                    className="w-full px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
+                    className="admin-input"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
-                    Prix du box (FCFA) *
-                  </label>
+                  <label className="admin-label">Prix du box (FCFA) *</label>
                   <input
                     type="number"
                     value={form.price}
@@ -511,45 +508,38 @@ export default function AdminGiftBoxes() {
                     required
                     min="0"
                     placeholder="Prix défini par l'admin"
-                    className="w-full px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
+                    className="admin-input"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
-                  Stock disponible
-                </label>
+                <label className="admin-label">Stock disponible</label>
                 <input
                   type="number"
                   value={form.stock}
                   onChange={(e) => setForm({ ...form, stock: e.target.value })}
                   min="0"
                   placeholder="0 = masquée sur le site"
-                  className="w-full max-w-xs px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
+                  className="admin-input max-w-xs"
                 />
                 <p className="text-[10px] text-neutral-400 mt-1">À 0, la box n&apos;apparaît plus sur la page Box Cadeau.</p>
               </div>
 
               {/* Description */}
               <div>
-                <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
-                  Description
-                </label>
+                <label className="admin-label">Description</label>
                 <textarea
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
                   rows={2}
                   placeholder="Description de la box cadeau"
-                  className="w-full px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors resize-none"
+                  className="admin-input resize-none"
                 />
               </div>
 
-              {/* Image Upload */}
               <div>
-                <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
-                  Image de la box
-                </label>
+                <label className="admin-label">Image de la box</label>
                 <div className="flex items-center gap-4">
                   {form.image && (
                     <img
@@ -580,11 +570,9 @@ export default function AdminGiftBoxes() {
               </div>
 
               {/* ---- Sélection des articles ---- */}
-              <div className="border border-black/[0.12] rounded-lg p-4">
+              <div className="border border-black/[0.08] rounded-xl p-4 bg-neutral-50/50">
                 <div className="flex items-center justify-between mb-3">
-                  <label className="text-xs uppercase tracking-wider text-[#D7A12B]/70">
-                    Choisir les articles de la box
-                  </label>
+                  <label className="admin-label mb-0">Choisir les articles de la box</label>
                   <span className="text-xs text-neutral-500">
                     {form.selectedItems.length} article{form.selectedItems.length !== 1 ? "s" : ""} sélectionné{form.selectedItems.length !== 1 ? "s" : ""}
                   </span>
@@ -626,7 +614,7 @@ export default function AdminGiftBoxes() {
                           >
                             {/* Checkbox custom */}
                             <div className={`w-5 h-5 rounded border flex items-center justify-center flex-shrink-0 ${
-                              selected ? "bg-[#D7A12B] border-[#D7A12B]" : "border-[#555]"
+                              selected ? "bg-[#D7A12B] border-[#D7A12B]" : "border-black/[0.15] bg-white"
                             }`}>
                               {selected && <Check size={14} className="text-[#0a0a0a]" />}
                             </div>
@@ -700,7 +688,7 @@ export default function AdminGiftBoxes() {
                                         }`}
                                       >
                                         <div className={`w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 ${
-                                          isReplacement ? "bg-[#D7A12B] border-[#D7A12B]" : "border-[#555]"
+                                          isReplacement ? "bg-[#D7A12B] border-[#D7A12B]" : "border-black/[0.15] bg-white"
                                         }`}>
                                           {isReplacement && <Check size={10} className="text-[#0a0a0a]" />}
                                         </div>
@@ -727,28 +715,24 @@ export default function AdminGiftBoxes() {
               </div>
 
               {/* Box personnalisable + Statut en ligne */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
-                    Box personnalisable
-                  </label>
+                  <label className="admin-label">Box personnalisable</label>
                   <select
                     value={form.is_customizable ? "true" : "false"}
                     onChange={(e) => setForm({ ...form, is_customizable: e.target.value === "true" })}
-                    className="w-full px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] focus:border-[#D7A12B] focus:outline-none transition-colors"
+                    className="admin-input"
                   >
                     <option value="false">Non</option>
                     <option value="true">Oui — le client peut remplacer des articles</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
-                    Statut
-                  </label>
+                  <label className="admin-label">Statut</label>
                   <select
                     value={form.active ? "true" : "false"}
                     onChange={(e) => setForm({ ...form, active: e.target.value === "true" })}
-                    className="w-full px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] focus:border-[#D7A12B] focus:outline-none transition-colors"
+                    className="admin-input"
                   >
                     <option value="true">Actif</option>
                     <option value="false">Inactif</option>
