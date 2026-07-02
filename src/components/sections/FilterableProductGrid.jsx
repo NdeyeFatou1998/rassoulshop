@@ -240,6 +240,9 @@ export default function FilterableProductGrid({
   lightBackground = false,
   premium = false,
   showPageHeader = false,
+  pageTitle = "Nos Créations",
+  pageBreadcrumb = "Accueil · Collections",
+  pageSubtitle = "Des cadeaux qui transforment un instant en souvenir",
 }) {
   const [active, setActive]       = useState(defaultCategory);
   const [search, setSearch]       = useState("");
@@ -340,49 +343,62 @@ export default function FilterableProductGrid({
         {showPageHeader && (
           <header className="text-center mb-8 md:mb-12 pt-2 md:pt-4">
             <p className="text-[10px] uppercase tracking-[0.32em] text-neutral-400 font-semibold mb-3">
-              Accueil · Collections
+              {pageBreadcrumb}
             </p>
             <h1 className="font-serif text-[1.75rem] sm:text-4xl md:text-[2.65rem] font-semibold text-[#0a0a0a] tracking-tight leading-tight">
-              Nos Créations
+              {pageTitle}
             </h1>
             <div
               className="mx-auto mt-3 h-px w-24"
               style={{ background: "linear-gradient(90deg, transparent, #D7A12B, transparent)" }}
             />
-            <p className="mt-3 text-[10px] uppercase tracking-[0.22em] text-neutral-400 font-medium max-w-md mx-auto leading-relaxed">
-              Des cadeaux qui transforment un instant en souvenir
-            </p>
+            {pageSubtitle && (
+              <p className="mt-3 text-[10px] uppercase tracking-[0.22em] text-neutral-400 font-medium max-w-md mx-auto leading-relaxed">
+                {pageSubtitle}
+              </p>
+            )}
           </header>
         )}
 
-        {/* ---- Barre recherche + filtre prix (Shop uniquement) ---- */}
         {showFilters && (
           <div className="mb-8 space-y-4">
-            {/* Barre de recherche */}
             <div className="relative">
-              <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/25 pointer-events-none" />
+              <Search
+                size={15}
+                className={`absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none ${
+                  lightBackground ? "text-neutral-400" : "text-white/25"
+                }`}
+              />
               <input
                 type="text"
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Rechercher un produit…"
-                className="w-full pl-11 pr-10 py-3 bg-[#1e1b12] border border-gold/[0.20] rounded-xl
-                           text-sm text-white placeholder-white/50
-                           focus:border-gold/60 focus:outline-none focus:bg-[#231f14]
-                           transition-all duration-300"
+                className={
+                  lightBackground
+                    ? "w-full pl-11 pr-10 py-3 premium-input rounded-xl text-sm transition-all duration-300"
+                    : "w-full pl-11 pr-10 py-3 bg-[#1e1b12] border border-gold/[0.20] rounded-xl text-sm text-white placeholder-white/50 focus:border-gold/60 focus:outline-none focus:bg-[#231f14] transition-all duration-300"
+                }
               />
               {search && (
                 <button
                   onClick={() => setSearch("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-white/30 hover:text-white/70 transition-colors"
+                  className={`absolute right-3 top-1/2 -translate-y-1/2 p-1 transition-colors ${
+                    lightBackground ? "text-neutral-400 hover:text-neutral-700" : "text-white/30 hover:text-white/70"
+                  }`}
                 >
                   <X size={14} />
                 </button>
               )}
             </div>
 
-            {/* Double slider prix — compact inline */}
-            <div className="flex items-center gap-3 bg-[#1e1b12] border border-gold/[0.18] rounded-xl px-4 py-3">
+            <div
+              className={
+                lightBackground
+                  ? "flex items-center gap-3 premium-filter-bar px-4 py-3"
+                  : "flex items-center gap-3 bg-[#1e1b12] border border-gold/[0.18] rounded-xl px-4 py-3"
+              }
+            >
               {/* Icône + label */}
               <SlidersHorizontal size={13} className="text-gold/50 flex-shrink-0" />
 
@@ -390,12 +406,15 @@ export default function FilterableProductGrid({
               <div className="flex-1 min-w-0">
                 {/* Valeurs */}
                 <div className="flex justify-between mb-1.5">
-                  <span className="text-[10px] text-white/50">{minVal.toLocaleString("fr-FR")} FCFA</span>
-                  <span className="text-[10px] text-white/50">{maxVal.toLocaleString("fr-FR")} FCFA</span>
+                  <span className={`text-[10px] ${lightBackground ? "text-neutral-500" : "text-white/50"}`}>
+                    {minVal.toLocaleString("fr-FR")} FCFA
+                  </span>
+                  <span className={`text-[10px] ${lightBackground ? "text-neutral-500" : "text-white/50"}`}>
+                    {maxVal.toLocaleString("fr-FR")} FCFA
+                  </span>
                 </div>
-                {/* Track + inputs */}
                 <div className="relative h-5 flex items-center">
-                  <div className="absolute w-full h-[3px] bg-white/[0.08] rounded-full" />
+                  <div className={`absolute w-full h-[3px] rounded-full ${lightBackground ? "bg-black/[0.08]" : "bg-white/[0.08]"}`} />
                   <div
                     className="absolute h-[3px] bg-gold/50 rounded-full"
                     style={{ left: `${pct(minVal)}%`, right: `${100 - pct(maxVal)}%` }}
@@ -427,7 +446,7 @@ export default function FilterableProductGrid({
             {/* Compteur résultats + reset */}
             {!loading && (
               <div className="flex items-center justify-between">
-                <p className="text-[11px] text-white/55">
+                <p className={`text-[11px] ${lightBackground ? "text-neutral-500" : "text-white/55"}`}>
                   {filtered.length} produit{filtered.length !== 1 ? "s" : ""}
                 </p>
                 {hasActiveFilters && (

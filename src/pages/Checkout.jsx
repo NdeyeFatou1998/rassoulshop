@@ -147,7 +147,7 @@ export default function Checkout() {
   }
 
   /* ---- Formulaire ---- */
-  const inputCls = "w-full px-4 py-3 bg-noir-800 border border-white/[0.07] rounded-xl text-cream text-sm placeholder-white/25 focus:border-gold/50 focus:outline-none transition-colors";
+  const inputCls = "w-full px-4 py-3 premium-input border border-white/[0.07] rounded-xl text-cream text-sm placeholder-white/25 focus:border-gold/50 focus:outline-none transition-colors";
   const labelCls = "block text-[10px] uppercase tracking-[0.18em] text-white/40 font-semibold mb-1.5";
 
   return (
@@ -157,7 +157,7 @@ export default function Checkout() {
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
         <Link
           to="/cart"
-          className="inline-flex items-center gap-2 text-white/35 hover:text-cream text-xs uppercase tracking-[0.1em] mb-6 transition-colors"
+          className="inline-flex items-center gap-2 text-white/35 hover:text-[#0a0a0a] text-xs uppercase tracking-[0.1em] mb-6 transition-colors"
         >
           <ArrowLeft size={14} /> Retour au panier
         </Link>
@@ -275,7 +275,7 @@ export default function Checkout() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="lg:col-span-1"
           >
-            <div className="sticky top-28 rounded-2xl bg-noir-800 border border-white/[0.04] p-5 md:p-6">
+            <div className="sticky top-28 rounded-2xl premium-input border border-white/[0.04] p-5 md:p-6">
               <div className="flex items-center gap-2 mb-5">
                 <ShoppingBag size={15} className="text-gold/60" />
                 <h3 className="font-serif text-base text-cream">Résumé</h3>

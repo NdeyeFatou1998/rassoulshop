@@ -173,10 +173,10 @@ export default function AdminAssistants() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="font-serif text-2xl md:text-3xl text-[#f5f0e8] mb-2">
+          <h1 className="font-serif text-2xl md:text-3xl text-[#0a0a0a] mb-2">
             Assistants
           </h1>
-          <p className="text-sm text-[#888]">
+          <p className="text-sm text-neutral-500">
             Gérer les assistants de la boutique
           </p>
         </div>
@@ -190,9 +190,9 @@ export default function AdminAssistants() {
 
       {/* Liste des assistants */}
       {loading ? (
-        <div className="text-center py-12 text-[#888]">Chargement...</div>
+        <div className="text-center py-12 text-neutral-500">Chargement...</div>
       ) : assistants.length === 0 ? (
-        <div className="text-center py-12 text-[#888]">
+        <div className="text-center py-12 text-neutral-500">
           Aucun assistant pour le moment
         </div>
       ) : (
@@ -202,14 +202,14 @@ export default function AdminAssistants() {
               key={assistant.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-[#141414] border border-[#D7A12B]/20 rounded-xl p-5 hover:border-[#D7A12B]/40 transition-colors"
+              className="admin-card border border-[#D7A12B]/20 rounded-xl p-5 hover:border-[#D7A12B]/40 transition-colors"
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="font-semibold text-[#f5f0e8] text-lg">
+                  <h3 className="font-semibold text-[#0a0a0a] text-lg">
                     {assistant.first_name} {assistant.last_name}
                   </h3>
-                  <div className="mt-2 space-y-1 text-sm text-[#888]">
+                  <div className="mt-2 space-y-1 text-sm text-neutral-500">
                     <p>Email: {assistant.email}</p>
                     {assistant.phone && <p>Tél: {assistant.phone}</p>}
                   </div>
@@ -240,9 +240,9 @@ export default function AdminAssistants() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-[#141414] border border-[#D7A12B]/20 rounded-2xl p-6 w-full max-w-md"
+            className="admin-card border border-[#D7A12B]/20 rounded-2xl p-6 w-full max-w-md"
           >
-            <h2 className="font-serif text-xl text-[#f5f0e8] mb-6">
+            <h2 className="font-serif text-xl text-[#0a0a0a] mb-6">
               {editingAssistant ? "Modifier l'assistant" : "Nouvel assistant"}
             </h2>
 
@@ -253,7 +253,7 @@ export default function AdminAssistants() {
                   ✅ Assistant créé ! Mot de passe généré :
                 </p>
                 <div className="flex items-center gap-2">
-                  <p className="text-[#f5f0e8] font-mono text-xl flex-1 break-all">{generatedPassword}</p>
+                  <p className="text-[#0a0a0a] font-mono text-xl flex-1 break-all">{generatedPassword}</p>
                   <button
                     onClick={() => {
                       navigator.clipboard.writeText(generatedPassword);
@@ -277,7 +277,7 @@ export default function AdminAssistants() {
                   ✅ Nouveau mot de passe généré :
                 </p>
                 <div className="flex items-center gap-2">
-                  <p className="text-[#f5f0e8] font-mono text-xl flex-1 break-all">{resetPassword}</p>
+                  <p className="text-[#0a0a0a] font-mono text-xl flex-1 break-all">{resetPassword}</p>
                   <button
                     onClick={() => {
                       navigator.clipboard.writeText(resetPassword);
@@ -315,7 +315,7 @@ export default function AdminAssistants() {
                   value={formData.first_name}
                   onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
                   required
-                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
                 />
               </div>
 
@@ -328,7 +328,7 @@ export default function AdminAssistants() {
                   value={formData.last_name}
                   onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
                   required
-                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
                 />
               </div>
 
@@ -341,7 +341,7 @@ export default function AdminAssistants() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
-                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
                 />
               </div>
 
@@ -353,7 +353,7 @@ export default function AdminAssistants() {
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
                 />
               </div>
 
@@ -361,7 +361,7 @@ export default function AdminAssistants() {
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="flex-1 py-3 bg-[#333] text-[#f5f0e8] font-semibold text-sm rounded-lg hover:bg-[#444] transition-colors"
+                  className="flex-1 py-3 bg-[#333] text-[#0a0a0a] font-semibold text-sm rounded-lg hover:bg-[#444] transition-colors"
                 >
                   {generatedPassword || resetPassword ? "Fermer" : "Annuler"}
                 </button>

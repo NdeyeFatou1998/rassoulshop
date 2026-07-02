@@ -1,9 +1,5 @@
 /**
- * Page de connexion Admin — /admin/login
- *
- * Formulaire email + mot de passe avec design premium noir/doré.
- * Redirige vers /admin/dashboard après connexion réussie.
- * Si déjà connecté, redirige automatiquement.
+ * Page de connexion Admin — design premium aligné site public
  */
 
 import { useState } from "react";
@@ -22,7 +18,7 @@ export default function AdminLogin() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+      <div className="min-h-screen admin-premium flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-[#D7A12B] border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -32,7 +28,6 @@ export default function AdminLogin() {
     return <Navigate to="/admin/dashboard" replace />;
   }
 
-  /** Soumettre le formulaire de connexion */
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
@@ -49,10 +44,8 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4">
-      {/* Conteneur principal avec bordure dorée subtile */}
+    <div className="min-h-screen admin-premium flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        {/* Logo / Titre */}
         <div className="text-center mb-8">
           <img
             src={BRAND_LOGO}
@@ -60,56 +53,45 @@ export default function AdminLogin() {
             className="h-20 w-auto mx-auto mb-4 object-contain"
             style={{ filter: "drop-shadow(0 0 12px rgba(215,161,43,0.35))" }}
           />
-          <p className="text-xs uppercase tracking-[0.3em] text-[#D7A12B]">
+          <p className="text-xs uppercase tracking-[0.3em] text-[#8B6914] font-semibold">
             Administration
           </p>
         </div>
 
-        {/* Carte de connexion */}
-        <div className="bg-[#141414] border border-[#D7A12B]/20 rounded-2xl p-8 shadow-2xl">
-          <h2 className="text-lg font-medium text-[#f5f0e8] mb-6">
-            Connexion
-          </h2>
+        <div className="admin-card p-8">
+          <h2 className="text-lg font-semibold text-[#0a0a0a] mb-6">Connexion</h2>
 
-          {/* Message d'erreur */}
           {error && (
-            <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
               {error}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Champ Email */}
             <div>
-              <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
-                Email
-              </label>
+              <label className="admin-label">Email</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
+                className="admin-input"
                 placeholder="admin@rassoulshop.com"
               />
             </div>
 
-            {/* Champ Mot de passe */}
             <div>
-              <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
-                Mot de passe
-              </label>
+              <label className="admin-label">Mot de passe</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
+                className="admin-input"
                 placeholder="••••••••"
               />
             </div>
 
-            {/* Bouton de connexion */}
             <button
               type="submit"
               disabled={loading}
@@ -120,8 +102,7 @@ export default function AdminLogin() {
           </form>
         </div>
 
-        {/* Lien retour site */}
-        <p className="text-center mt-6 text-[#555] text-xs">
+        <p className="text-center mt-6 text-neutral-400 text-xs">
           <a href="/" className="hover:text-[#D7A12B] transition-colors">
             ← Retour au site
           </a>

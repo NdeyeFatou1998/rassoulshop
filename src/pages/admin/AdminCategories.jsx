@@ -175,10 +175,10 @@ export default function AdminCategories() {
     <div className="p-6 md:p-8">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="font-serif text-2xl md:text-3xl text-[#f5f0e8] mb-2">
+          <h1 className="font-serif text-2xl md:text-3xl text-[#0a0a0a] mb-2">
             Catégories
           </h1>
-          <p className="text-sm text-[#888]">
+          <p className="text-sm text-neutral-500">
             Gérer les catégories de produits
           </p>
         </div>
@@ -191,9 +191,9 @@ export default function AdminCategories() {
       </div>
 
       {loading ? (
-        <div className="text-center py-12 text-[#888]">Chargement...</div>
+        <div className="text-center py-12 text-neutral-500">Chargement...</div>
       ) : categories.length === 0 ? (
-        <div className="text-center py-12 text-[#888]">
+        <div className="text-center py-12 text-neutral-500">
           Aucune catégorie pour le moment
         </div>
       ) : (
@@ -203,15 +203,15 @@ export default function AdminCategories() {
               key={category.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`bg-[#141414] border rounded-xl p-5 transition-colors ${
+              className={`admin-card border rounded-xl p-5 transition-colors ${
                 category.active
                   ? "border-[#D7A12B]/20 hover:border-[#D7A12B]/40"
-                  : "border-[#333]/50 opacity-60"
+                  : "border-black/[0.12]/50 opacity-60"
               }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-xl overflow-hidden bg-[#1a1a1a] border border-[#333] flex-shrink-0">
+                  <div className="w-14 h-14 rounded-xl overflow-hidden bg-neutral-50 border border-black/[0.12] flex-shrink-0">
                     {category.image_url ? (
                       <img
                         src={category.image_url}
@@ -219,7 +219,7 @@ export default function AdminCategories() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-[10px] text-[#555]">
+                      <div className="w-full h-full flex items-center justify-center text-[10px] text-neutral-400">
                         Sans image
                       </div>
                     )}
@@ -227,7 +227,7 @@ export default function AdminCategories() {
 
                   <div>
                     <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-[#f5f0e8] text-lg">
+                      <h3 className="font-semibold text-[#0a0a0a] text-lg">
                         {category.name}
                       </h3>
                       {!category.active && (
@@ -245,7 +245,7 @@ export default function AdminCategories() {
                     className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                       category.active
                         ? "bg-green-500/20 text-green-400 hover:bg-green-500/30"
-                        : "bg-[#333] text-[#888] hover:bg-[#444]"
+                        : "bg-[#333] text-neutral-500 hover:bg-[#444]"
                     }`}
                   >
                     {category.active ? "Actif" : "Inactif"}
@@ -274,9 +274,9 @@ export default function AdminCategories() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-[#141414] border border-[#D7A12B]/20 rounded-2xl p-6 w-full max-w-md"
+            className="admin-card border border-[#D7A12B]/20 rounded-2xl p-6 w-full max-w-md"
           >
-            <h2 className="font-serif text-xl text-[#f5f0e8] mb-6">
+            <h2 className="font-serif text-xl text-[#0a0a0a] mb-6">
               {editingCategory ? "Modifier la catégorie" : "Nouvelle catégorie"}
             </h2>
 
@@ -291,7 +291,7 @@ export default function AdminCategories() {
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
                   placeholder="Ex : Peluches"
-                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
                 />
               </div>
 
@@ -300,7 +300,7 @@ export default function AdminCategories() {
                   Image
                 </label>
                 <div className="flex items-start gap-4">
-                  <div className="w-24 h-24 rounded-xl overflow-hidden bg-[#1a1a1a] border border-[#333] flex-shrink-0">
+                  <div className="w-24 h-24 rounded-xl overflow-hidden bg-neutral-50 border border-black/[0.12] flex-shrink-0">
                     {formData.image_url ? (
                       <img
                         src={formData.image_url}
@@ -308,7 +308,7 @@ export default function AdminCategories() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-[10px] text-[#555] text-center px-2">
+                      <div className="w-full h-full flex items-center justify-center text-[10px] text-neutral-400 text-center px-2">
                         Aucune image
                       </div>
                     )}
@@ -323,7 +323,7 @@ export default function AdminCategories() {
                         if (file) uploadCategoryImage(file);
                         e.target.value = "";
                       }}
-                      className="block w-full text-xs text-[#888] file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-[#D7A12B]/20 file:text-[#D7A12B] hover:file:bg-[#D7A12B]/30"
+                      className="block w-full text-xs text-neutral-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-[#D7A12B]/20 file:text-[#D7A12B] hover:file:bg-[#D7A12B]/30"
                     />
                     {uploadingImg && (
                       <p className="text-xs text-[#D7A12B]">Upload en cours…</p>
@@ -343,7 +343,7 @@ export default function AdminCategories() {
 
               <div>
                 <label className="block text-xs uppercase tracking-wider text-[#D7A12B]/70 mb-2">
-                  Ordre d'affichage <span className="text-[#555] normal-case tracking-normal">(optionnel)</span>
+                  Ordre d'affichage <span className="text-neutral-400 normal-case tracking-normal">(optionnel)</span>
                 </label>
                 <input
                   type="number"
@@ -351,7 +351,7 @@ export default function AdminCategories() {
                   onChange={(e) => setFormData({ ...formData, display_order: e.target.value })}
                   min={0}
                   placeholder="Laisser vide pour tri automatique"
-                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
                 />
               </div>
 
@@ -362,7 +362,7 @@ export default function AdminCategories() {
                 <select
                   value={formData.active ? "true" : "false"}
                   onChange={(e) => setFormData({ ...formData, active: e.target.value === "true" })}
-                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] focus:border-[#D7A12B] focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] focus:border-[#D7A12B] focus:outline-none transition-colors"
                 >
                   <option value="true">Actif</option>
                   <option value="false">Inactif</option>
@@ -373,7 +373,7 @@ export default function AdminCategories() {
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="flex-1 py-3 bg-[#333] text-[#f5f0e8] font-semibold text-sm rounded-lg hover:bg-[#444] transition-colors"
+                  className="flex-1 py-3 bg-[#333] text-[#0a0a0a] font-semibold text-sm rounded-lg hover:bg-[#444] transition-colors"
                 >
                   Annuler
                 </button>

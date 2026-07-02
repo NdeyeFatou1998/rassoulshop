@@ -344,10 +344,10 @@ export default function AdminGiftBoxes() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="font-serif text-2xl md:text-3xl text-[#f5f0e8] mb-2">
+          <h1 className="font-serif text-2xl md:text-3xl text-[#0a0a0a] mb-2">
             🎁 Box Cadeau
           </h1>
-          <p className="text-sm text-[#888]">
+          <p className="text-sm text-neutral-500">
             Créer des boxes cadeaux composées d'articles
           </p>
         </div>
@@ -361,9 +361,9 @@ export default function AdminGiftBoxes() {
 
       {/* Liste des boxes */}
       {loading ? (
-        <div className="text-center py-12 text-[#888]">Chargement...</div>
+        <div className="text-center py-12 text-neutral-500">Chargement...</div>
       ) : giftBoxes.length === 0 ? (
-        <div className="text-center py-16 text-[#555]">
+        <div className="text-center py-16 text-neutral-400">
           <Gift size={40} className="mx-auto mb-3 opacity-50" />
           <p>Aucune box cadeau pour le moment</p>
         </div>
@@ -374,10 +374,10 @@ export default function AdminGiftBoxes() {
               key={box.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`bg-[#141414] border rounded-xl p-5 transition-colors ${
+              className={`admin-card border rounded-xl p-5 transition-colors ${
                 box.active
                   ? "border-[#D7A12B]/20 hover:border-[#D7A12B]/40"
-                  : "border-[#333]/50 opacity-60"
+                  : "border-black/[0.12]/50 opacity-60"
               }`}
             >
               <div className="flex items-start gap-4">
@@ -386,18 +386,18 @@ export default function AdminGiftBoxes() {
                   <img
                     src={box.image}
                     alt={box.name}
-                    className="w-20 h-20 rounded-lg object-cover border border-[#333]"
+                    className="w-20 h-20 rounded-lg object-cover border border-black/[0.12]"
                   />
                 ) : (
-                  <div className="w-20 h-20 rounded-lg bg-[#222] flex items-center justify-center border border-[#333]">
-                    <Gift size={24} className="text-[#555]" />
+                  <div className="w-20 h-20 rounded-lg bg-[#222] flex items-center justify-center border border-black/[0.12]">
+                    <Gift size={24} className="text-neutral-400" />
                   </div>
                 )}
 
                 {/* Infos */}
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-semibold text-[#f5f0e8] text-lg">{box.name}</h3>
+                    <h3 className="font-semibold text-[#0a0a0a] text-lg">{box.name}</h3>
                     {box.is_customizable && (
                       <span className="text-[10px] uppercase tracking-wider bg-[#D7A12B]/20 text-[#D7A12B] px-2 py-0.5 rounded">
                         Personnalisable
@@ -415,10 +415,10 @@ export default function AdminGiftBoxes() {
                     )}
                   </div>
                   {box.description && (
-                    <p className="text-sm text-[#888] mb-2">{box.description}</p>
+                    <p className="text-sm text-neutral-500 mb-2">{box.description}</p>
                   )}
                   <p className="text-[#D7A12B] font-semibold text-lg">{fmtPrice(box.price)}</p>
-                  <p className="text-xs text-[#888] mt-1">Stock : {Number(box.stock) || 0}</p>
+                  <p className="text-xs text-neutral-500 mt-1">Stock : {Number(box.stock) || 0}</p>
 
                   {/* Articles de la box */}
                   {box.items?.length > 0 && (
@@ -429,7 +429,7 @@ export default function AdminGiftBoxes() {
                           className={`inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full ${
                             item.is_replaceable
                               ? "bg-[#D7A12B]/15 text-[#D7A12B] border border-[#D7A12B]/30"
-                              : "bg-[#222] text-[#888]"
+                              : "bg-[#222] text-neutral-500"
                           }`}
                         >
                           <Package size={10} />
@@ -441,7 +441,7 @@ export default function AdminGiftBoxes() {
                     </div>
                   )}
                   {(!box.items || box.items.length === 0) && (
-                    <p className="mt-2 text-xs text-[#555]">Aucun article dans cette box</p>
+                    <p className="mt-2 text-xs text-neutral-400">Aucun article dans cette box</p>
                   )}
                 </div>
 
@@ -472,9 +472,9 @@ export default function AdminGiftBoxes() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-[#141414] border border-[#D7A12B]/20 rounded-2xl p-6 w-full max-w-2xl my-8"
+            className="admin-card border border-[#D7A12B]/20 rounded-2xl p-6 w-full max-w-2xl my-8"
           >
-            <h2 className="font-serif text-xl text-[#f5f0e8] mb-6">
+            <h2 className="font-serif text-xl text-[#0a0a0a] mb-6">
               {editingBox ? "Modifier la box" : "Nouvelle box cadeau"}
             </h2>
 
@@ -497,7 +497,7 @@ export default function AdminGiftBoxes() {
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     required
                     placeholder="Ex : Box Prestige"
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
                   />
                 </div>
                 <div>
@@ -511,7 +511,7 @@ export default function AdminGiftBoxes() {
                     required
                     min="0"
                     placeholder="Prix défini par l'admin"
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -526,9 +526,9 @@ export default function AdminGiftBoxes() {
                   onChange={(e) => setForm({ ...form, stock: e.target.value })}
                   min="0"
                   placeholder="0 = masquée sur le site"
-                  className="w-full max-w-xs px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
+                  className="w-full max-w-xs px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors"
                 />
-                <p className="text-[10px] text-[#555] mt-1">À 0, la box n&apos;apparaît plus sur la page Box Cadeau.</p>
+                <p className="text-[10px] text-neutral-400 mt-1">À 0, la box n&apos;apparaît plus sur la page Box Cadeau.</p>
               </div>
 
               {/* Description */}
@@ -541,7 +541,7 @@ export default function AdminGiftBoxes() {
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
                   rows={2}
                   placeholder="Description de la box cadeau"
-                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors resize-none"
+                  className="w-full px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] placeholder-[#555] focus:border-[#D7A12B] focus:outline-none transition-colors resize-none"
                 />
               </div>
 
@@ -555,7 +555,7 @@ export default function AdminGiftBoxes() {
                     <img
                       src={form.image}
                       alt="Aperçu"
-                      className="w-16 h-16 rounded-lg object-cover border border-[#333]"
+                      className="w-16 h-16 rounded-lg object-cover border border-black/[0.12]"
                     />
                   )}
                   <div className="flex-1">
@@ -563,9 +563,9 @@ export default function AdminGiftBoxes() {
                       type="file"
                       accept="image/jpeg,image/png,image/gif,image/webp"
                       onChange={handleImageUpload}
-                      className="w-full text-sm text-[#888] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#D7A12B] file:text-[#0a0a0a] hover:file:bg-[#E8B945] file:cursor-pointer"
+                      className="w-full text-sm text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#D7A12B] file:text-[#0a0a0a] hover:file:bg-[#E8B945] file:cursor-pointer"
                     />
-                    <p className="text-[10px] text-[#555] mt-1">JPEG, PNG, GIF, WebP — Max 5MB</p>
+                    <p className="text-[10px] text-neutral-400 mt-1">JPEG, PNG, GIF, WebP — Max 5MB</p>
                   </div>
                 </div>
                 {form.image && (
@@ -580,20 +580,20 @@ export default function AdminGiftBoxes() {
               </div>
 
               {/* ---- Sélection des articles ---- */}
-              <div className="border border-[#333] rounded-lg p-4">
+              <div className="border border-black/[0.12] rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
                   <label className="text-xs uppercase tracking-wider text-[#D7A12B]/70">
                     Choisir les articles de la box
                   </label>
-                  <span className="text-xs text-[#888]">
+                  <span className="text-xs text-neutral-500">
                     {form.selectedItems.length} article{form.selectedItems.length !== 1 ? "s" : ""} sélectionné{form.selectedItems.length !== 1 ? "s" : ""}
                   </span>
                 </div>
 
                 {/* Info prix total des articles vs prix du box */}
                 {form.selectedItems.length > 0 && (
-                  <div className="mb-3 p-3 bg-[#1a1a1a] rounded-lg text-xs">
-                    <div className="flex justify-between text-[#888]">
+                  <div className="mb-3 p-3 bg-neutral-50 rounded-lg text-xs">
+                    <div className="flex justify-between text-neutral-500">
                       <span>Valeur totale des articles :</span>
                       <span>{fmtPrice(itemsTotal)}</span>
                     </div>
@@ -605,7 +605,7 @@ export default function AdminGiftBoxes() {
                 )}
 
                 {products.length === 0 ? (
-                  <p className="text-sm text-[#555] py-4 text-center">
+                  <p className="text-sm text-neutral-400 py-4 text-center">
                     Aucun produit disponible. Créez d'abord des produits.
                   </p>
                 ) : (
@@ -621,7 +621,7 @@ export default function AdminGiftBoxes() {
                             className={`flex items-center gap-3 px-4 py-3 rounded-lg border cursor-pointer transition-colors ${
                               selected
                                 ? "bg-[#D7A12B]/10 border-[#D7A12B]/40"
-                                : "bg-[#1a1a1a] border-[#333] hover:border-[#555]"
+                                : "bg-neutral-50 border-black/[0.12] hover:border-[#555]"
                             }`}
                           >
                             {/* Checkbox custom */}
@@ -636,14 +636,14 @@ export default function AdminGiftBoxes() {
                               <img src={product.image} alt={product.title} className="w-10 h-10 rounded object-cover" />
                             ) : (
                               <div className="w-10 h-10 rounded bg-[#222] flex items-center justify-center">
-                                <Package size={14} className="text-[#555]" />
+                                <Package size={14} className="text-neutral-400" />
                               </div>
                             )}
 
                             {/* Infos produit */}
                             <div className="flex-1 min-w-0">
-                              <p className="text-sm text-[#f5f0e8] truncate">{product.title}</p>
-                              <p className="text-xs text-[#888]">{fmtPrice(product.price)}</p>
+                              <p className="text-sm text-[#0a0a0a] truncate">{product.title}</p>
+                              <p className="text-xs text-neutral-500">{fmtPrice(product.price)}</p>
                             </div>
 
                             {/* Quantité + Remplaçable (si sélectionné) */}
@@ -652,10 +652,10 @@ export default function AdminGiftBoxes() {
                                 {/* Quantité */}
                                 <div className="flex items-center gap-1">
                                   <button type="button" onClick={() => updateQuantity(product.id, (selItem?.quantity || 1) - 1)}
-                                    className="w-7 h-7 bg-[#333] text-[#f5f0e8] rounded text-sm hover:bg-[#444]">-</button>
-                                  <span className="text-sm text-[#f5f0e8] w-6 text-center">{selItem?.quantity || 1}</span>
+                                    className="w-7 h-7 bg-[#333] text-[#0a0a0a] rounded text-sm hover:bg-[#444]">-</button>
+                                  <span className="text-sm text-[#0a0a0a] w-6 text-center">{selItem?.quantity || 1}</span>
                                   <button type="button" onClick={() => updateQuantity(product.id, (selItem?.quantity || 1) + 1)}
-                                    className="w-7 h-7 bg-[#333] text-[#f5f0e8] rounded text-sm hover:bg-[#444]">+</button>
+                                    className="w-7 h-7 bg-[#333] text-[#0a0a0a] rounded text-sm hover:bg-[#444]">+</button>
                                 </div>
 
                                 {/* Checkbox remplaçable (visible si box personnalisable) */}
@@ -666,7 +666,7 @@ export default function AdminGiftBoxes() {
                                     className={`px-2 py-1 rounded text-[10px] uppercase tracking-wider font-semibold transition-colors ${
                                       selItem?.is_replaceable
                                         ? "bg-[#D7A12B] text-[#0a0a0a]"
-                                        : "bg-[#333] text-[#888] hover:bg-[#444]"
+                                        : "bg-[#333] text-neutral-500 hover:bg-[#444]"
                                     }`}
                                     title="Cet article peut être remplacé par le client"
                                   >
@@ -696,7 +696,7 @@ export default function AdminGiftBoxes() {
                                         className={`flex items-center gap-2 px-3 py-2 rounded border cursor-pointer transition-colors text-xs ${
                                           isReplacement
                                             ? "bg-[#D7A12B]/10 border-[#D7A12B]/30"
-                                            : "bg-[#1a1a1a] border-[#333] hover:border-[#555]"
+                                            : "bg-neutral-50 border-black/[0.12] hover:border-[#555]"
                                         }`}
                                       >
                                         <div className={`w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 ${
@@ -708,11 +708,11 @@ export default function AdminGiftBoxes() {
                                           <img src={rp.image} alt={rp.title} className="w-7 h-7 rounded object-cover" />
                                         ) : (
                                           <div className="w-7 h-7 rounded bg-[#222] flex items-center justify-center">
-                                            <Package size={10} className="text-[#555]" />
+                                            <Package size={10} className="text-neutral-400" />
                                           </div>
                                         )}
-                                        <span className="text-[#f5f0e8] truncate flex-1">{rp.title}</span>
-                                        <span className="text-[#888]">{fmtPrice(rp.price)}</span>
+                                        <span className="text-[#0a0a0a] truncate flex-1">{rp.title}</span>
+                                        <span className="text-neutral-500">{fmtPrice(rp.price)}</span>
                                       </div>
                                     );
                                   })}
@@ -735,7 +735,7 @@ export default function AdminGiftBoxes() {
                   <select
                     value={form.is_customizable ? "true" : "false"}
                     onChange={(e) => setForm({ ...form, is_customizable: e.target.value === "true" })}
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] focus:border-[#D7A12B] focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] focus:border-[#D7A12B] focus:outline-none transition-colors"
                   >
                     <option value="false">Non</option>
                     <option value="true">Oui — le client peut remplacer des articles</option>
@@ -748,7 +748,7 @@ export default function AdminGiftBoxes() {
                   <select
                     value={form.active ? "true" : "false"}
                     onChange={(e) => setForm({ ...form, active: e.target.value === "true" })}
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] focus:border-[#D7A12B] focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] focus:border-[#D7A12B] focus:outline-none transition-colors"
                   >
                     <option value="true">Actif</option>
                     <option value="false">Inactif</option>
@@ -760,7 +760,7 @@ export default function AdminGiftBoxes() {
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="flex-1 py-3 bg-[#333] text-[#f5f0e8] font-semibold text-sm rounded-lg hover:bg-[#444] transition-colors"
+                  className="flex-1 py-3 bg-[#333] text-[#0a0a0a] font-semibold text-sm rounded-lg hover:bg-[#444] transition-colors"
                 >
                   Annuler
                 </button>

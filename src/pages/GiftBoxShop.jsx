@@ -1,12 +1,12 @@
 /**
- * GiftBoxShop — /gift-boxes
- * Grille de cards cadeaux cliquables, mène vers /gift-boxes/:id
+ * GiftBoxShop — /gift-boxes (design premium aligné accueil)
  */
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Gift } from "lucide-react";
 import { Link } from "react-router-dom";
+import PageHeader from "../components/ui/PageHeader";
 
 const DEFAULT_IMG = `data:image/svg+xml;utf8,${encodeURIComponent(`
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">
@@ -18,11 +18,8 @@ const DEFAULT_IMG = `data:image/svg+xml;utf8,${encodeURIComponent(`
   </defs>
   <rect width="800" height="800" fill="url(#g)"/>
   <rect x="70" y="70" width="660" height="660" rx="48" fill="#ffffff" stroke="#e8dfd0" stroke-width="10"/>
-  <path d="M260 340h280v300H260z" fill="#1a1612" opacity="0.06"/>
-  <path d="M270 380h260v260H270z" fill="#ffffff" stroke="#e8dfd0" stroke-width="8" rx="20"/>
   <path d="M400 245c-42-62-145-42-145 36 0 54 52 89 145 129 93-40 145-75 145-129 0-78-103-98-145-36z" fill="#D7A12B" opacity="0.35"/>
   <text x="400" y="560" font-family="Georgia, serif" font-size="34" font-weight="700" fill="#1a1612" text-anchor="middle">Coffret</text>
-  <text x="400" y="604" font-family="Arial, sans-serif" font-size="18" fill="#8a6a42" text-anchor="middle" letter-spacing="2">RASSOUL SHOP</text>
 </svg>
 `)}`;
 
@@ -39,87 +36,69 @@ export default function GiftBoxShop() {
   }, []);
 
   return (
-    <div className="min-h-screen" style={{ background: "#030303" }}>
-      {/* ---- Header ---- */}
-      <section className="pt-20 md:pt-24 pb-5 max-w-7xl mx-auto px-5 lg:px-10 text-center">
-        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <h1 className="font-serif text-3xl md:text-4xl text-white">Box Cadeau</h1>
-          <div className="w-10 h-px bg-gold/50 mx-auto mt-3" />
-        </motion.div>
-      </section>
+    <>
+      <PageHeader
+        title="Box Cadeau"
+        breadcrumb="Accueil · Box Cadeau"
+        subtitle="Composez un coffret sur mesure"
+      />
 
-      {/* ---- Grille ---- */}
-      <section className="max-w-7xl mx-auto px-5 lg:px-10 py-8 pb-24">
+      <section className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 pb-24 home-products-premium">
         {loading ? (
-          /* Skeletons */
           <div className="product-grid">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="rounded-2xl overflow-hidden" style={{ background: "#111010", border: "1px solid rgba(215,161,43,0.25)" }}>
-                <div className="aspect-square shimmer" />
-                <div className="px-3.5 py-3 space-y-2 border-t border-white/[0.05]">
-                  <div className="h-2 shimmer rounded w-1/3" />
-                  <div className="h-3 shimmer rounded w-3/4" />
-                  <div className="h-3 shimmer rounded w-2/5 mt-2" />
+              <div key={i} className="rounded-xl overflow-hidden bg-white border border-black/[0.06]">
+                <div className="aspect-[4/5] shimmer-light" />
+                <div className="px-2.5 py-2 space-y-1.5">
+                  <div className="h-2.5 shimmer-light rounded-full w-[88%]" />
+                  <div className="h-2 shimmer-light rounded-full w-2/5" />
                 </div>
               </div>
             ))}
           </div>
         ) : giftBoxes.length === 0 ? (
           <div className="text-center py-24">
-            <Gift size={40} className="mx-auto mb-4 text-white/30" />
-            <p className="text-white/60 text-sm">Aucun coffret disponible pour le moment</p>
+            <Gift size={40} className="mx-auto mb-4 text-neutral-300" />
+            <p className="text-neutral-500 text-sm">Aucun coffret disponible pour le moment</p>
           </div>
         ) : (
           <div className="product-grid">
             {giftBoxes.map((box, i) => (
-              <motion.div
+              <motion.article
                 key={box.id}
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.45, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
-                className="group relative overflow-hidden rounded-2xl"
-                style={{
-                  aspectRatio: "4 / 5",
-                  background: "#111010",
-                  border: "0.5px solid rgba(255,255,255,0.14)",
-                  boxShadow: "0 10px 30px -12px rgba(0,0,0,0.7)",
-                }}
+                className="group flex flex-col w-full overflow-hidden product-card-premium rounded-xl transition-all duration-300"
               >
-                <Link to={`/gift-boxes/${box.id}`} className="absolute inset-0 block">
-                  <img
-                    src={box.image || DEFAULT_IMG}
-                    alt={box.name}
-                    loading="lazy"
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.07]"
-                    onError={e => { e.currentTarget.src = DEFAULT_IMG; }}
-                  />
-                  <div
-                    className="absolute inset-x-0 bottom-0 h-3/5 pointer-events-none"
-                    style={{
-                      background:
-                        "linear-gradient(to top, rgba(6,5,3,0.94) 0%, rgba(6,5,3,0.78) 28%, rgba(6,5,3,0.30) 62%, transparent 100%)",
-                    }}
-                  />
+                <div className="relative aspect-[4/5] overflow-hidden bg-neutral-100">
+                  <Link to={`/gift-boxes/${box.id}`} className="absolute inset-0 block">
+                    <img
+                      src={box.image || DEFAULT_IMG}
+                      alt={box.name}
+                      loading="lazy"
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-[900ms] group-hover:scale-[1.05]"
+                      onError={e => { e.currentTarget.src = DEFAULT_IMG; }}
+                    />
+                  </Link>
                   {box.is_customizable && (
-                    <span className="absolute top-2.5 left-2.5 z-10 text-[8px] uppercase tracking-[0.14em] font-bold px-2 py-[3px] rounded-full"
-                      style={{ background: "#D7A12B", color: "#0c0a07" }}>
+                    <span className="absolute top-2 left-2 z-10 text-[8px] uppercase tracking-[0.12em] font-extrabold px-2 py-0.5 rounded-sm bg-[#D7A12B] text-[#0a0a0a]">
                       Personnalisable
                     </span>
                   )}
-                  <div className="absolute inset-x-0 bottom-0 z-10 px-3.5 pb-3.5 pt-6">
-                    <h3 className="product-card-title line-clamp-2 mb-1">{box.name}</h3>
-                    <p className="product-card-category mb-2">Coffret</p>
-                    <span className="product-card-price leading-none whitespace-nowrap">
-                      {(box.price || 0).toLocaleString("fr-FR")}
-                      <span className="product-card-price-unit"> FCFA</span>
-                    </span>
-                  </div>
+                </div>
+                <Link to={`/gift-boxes/${box.id}`} className="block px-2.5 py-2.5 text-center product-card-caption-premium">
+                  <h3 className="product-card-title-below product-card-title-below--premium line-clamp-1">{box.name}</h3>
+                  <span className="product-card-price-below product-card-price-below--premium leading-none whitespace-nowrap">
+                    {(box.price || 0).toLocaleString("fr-FR")}
+                    <span className="product-card-price-unit-below"> FCFA</span>
+                  </span>
                 </Link>
-              </motion.div>
+              </motion.article>
             ))}
           </div>
         )}
       </section>
-    </div>
+    </>
   );
 }

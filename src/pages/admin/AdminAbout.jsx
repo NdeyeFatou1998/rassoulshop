@@ -130,7 +130,7 @@ export default function AdminAbout() {
     <div className="space-y-6">
       {/* ---- Header ---- */}
       <div className="flex items-center justify-between">
-        <p className="text-sm text-[#888]">{sections.length} section(s)</p>
+        <p className="text-sm text-neutral-500">{sections.length} section(s)</p>
         <button
           onClick={handleNew}
           className="flex items-center gap-2 px-4 py-2.5 bg-[#D7A12B] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#E8B945] transition-colors"
@@ -144,11 +144,11 @@ export default function AdminAbout() {
       {loading ? (
         <div className="space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-32 bg-[#141414] rounded-xl animate-pulse" />
+            <div key={i} className="h-32 admin-card rounded-xl animate-pulse" />
           ))}
         </div>
       ) : sections.length === 0 ? (
-        <div className="text-center py-16 text-[#555]">
+        <div className="text-center py-16 text-neutral-400">
           <FileText size={40} className="mx-auto mb-3 opacity-50" />
           <p>Aucune section À Propos</p>
           <p className="text-xs mt-1">Créez des sections pour la page À Propos</p>
@@ -158,24 +158,24 @@ export default function AdminAbout() {
           {sections.map((section) => (
             <div
               key={section.id}
-              className="bg-[#141414] border border-[#222] rounded-xl overflow-hidden"
+              className="admin-card border border-black/[0.08] rounded-xl overflow-hidden"
             >
               {/* Header de la section */}
-              <div className="flex items-center justify-between px-6 py-4 border-b border-[#222]">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-black/[0.08]">
                 <div>
-                  <h3 className="text-sm font-medium text-[#f5f0e8]">{section.title}</h3>
-                  <p className="text-xs text-[#555] mt-0.5">Ordre : {section.sortOrder}</p>
+                  <h3 className="text-sm font-medium text-[#0a0a0a]">{section.title}</h3>
+                  <p className="text-xs text-neutral-400 mt-0.5">Ordre : {section.sortOrder}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleEdit(section)}
-                    className="p-2 rounded-lg hover:bg-[#222] text-[#888] hover:text-[#D7A12B] transition-colors"
+                    className="p-2 rounded-lg hover:bg-neutral-100 text-neutral-500 hover:text-[#D7A12B] transition-colors"
                   >
                     <Edit2 size={16} />
                   </button>
                   <button
                     onClick={() => handleDelete(section)}
-                    className="p-2 rounded-lg hover:bg-red-500/10 text-[#888] hover:text-red-400 transition-colors"
+                    className="p-2 rounded-lg hover:bg-red-500/10 text-neutral-500 hover:text-red-400 transition-colors"
                   >
                     <Trash2 size={16} />
                   </button>
@@ -184,13 +184,13 @@ export default function AdminAbout() {
 
               {/* Description */}
               <div className="px-6 py-3">
-                <p className="text-sm text-[#888] line-clamp-3">
+                <p className="text-sm text-neutral-500 line-clamp-3">
                   {section.description || "Aucune description"}
                 </p>
               </div>
 
               {/* Images de la section */}
-              <div className="px-6 py-3 border-t border-[#222]">
+              <div className="px-6 py-3 border-t border-black/[0.08]">
                 <div className="flex items-center gap-3 flex-wrap">
                   {/* Images existantes */}
                   {section.images?.map((img) => (
@@ -210,9 +210,9 @@ export default function AdminAbout() {
                   ))}
 
                   {/* Bouton ajouter une image */}
-                  <label className="w-20 h-20 flex flex-col items-center justify-center bg-[#1a1a1a] border-2 border-dashed border-[#333] rounded-lg cursor-pointer hover:border-[#D7A12B] transition-colors">
-                    <Upload size={16} className="text-[#555]" />
-                    <span className="text-[9px] text-[#555] mt-1">Image</span>
+                  <label className="w-20 h-20 flex flex-col items-center justify-center bg-neutral-50 border-2 border-dashed border-black/[0.12] rounded-lg cursor-pointer hover:border-[#D7A12B] transition-colors">
+                    <Upload size={16} className="text-neutral-400" />
+                    <span className="text-[9px] text-neutral-400 mt-1">Image</span>
                     <input
                       type="file"
                       accept="image/*"
@@ -234,12 +234,12 @@ export default function AdminAbout() {
       {/* ---- Modal Création/Édition section ---- */}
       {showModal && (
         <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center px-4">
-          <div className="bg-[#141414] border border-[#222] rounded-2xl w-full max-w-md">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-[#222]">
-              <h2 className="text-lg font-medium text-[#f5f0e8]">
+          <div className="admin-card border border-black/[0.08] rounded-2xl w-full max-w-md">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-black/[0.08]">
+              <h2 className="text-lg font-medium text-[#0a0a0a]">
                 {editingSection ? "Modifier la section" : "Nouvelle section"}
               </h2>
-              <button onClick={() => setShowModal(false)} className="text-[#555] hover:text-[#f5f0e8]">
+              <button onClick={() => setShowModal(false)} className="text-neutral-400 hover:text-[#0a0a0a]">
                 <X size={20} />
               </button>
             </div>
@@ -252,34 +252,34 @@ export default function AdminAbout() {
               )}
 
               <div>
-                <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">Titre *</label>
+                <label className="block text-xs text-neutral-500 uppercase tracking-wider mb-1">Titre *</label>
                 <input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   required
-                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none"
+                  className="w-full px-3 py-2.5 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-sm focus:border-[#D7A12B] focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">Description</label>
+                <label className="block text-xs text-neutral-500 uppercase tracking-wider mb-1">Description</label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   rows={5}
-                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none resize-none"
+                  className="w-full px-3 py-2.5 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-sm focus:border-[#D7A12B] focus:outline-none resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">Ordre</label>
+                <label className="block text-xs text-neutral-500 uppercase tracking-wider mb-1">Ordre</label>
                 <input
                   type="number"
                   value={sortOrder}
                   onChange={(e) => setSortOrder(parseInt(e.target.value, 10) || 0)}
                   min="0"
-                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none"
+                  className="w-full px-3 py-2.5 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-sm focus:border-[#D7A12B] focus:outline-none"
                 />
               </div>
 
@@ -287,7 +287,7 @@ export default function AdminAbout() {
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-5 py-2.5 text-sm text-[#888] hover:text-[#f5f0e8]"
+                  className="px-5 py-2.5 text-sm text-neutral-500 hover:text-[#0a0a0a]"
                 >
                   Annuler
                 </button>

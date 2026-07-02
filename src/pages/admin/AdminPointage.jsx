@@ -172,13 +172,13 @@ function ClockModal({ assistant, onClose, onDone }) {
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-[#141414] border border-[#222] rounded-2xl w-full max-w-md overflow-hidden"
+        className="admin-card border border-black/[0.08] rounded-2xl w-full max-w-md overflow-hidden"
       >
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#222]">
-          <h2 className="text-lg font-medium text-[#f5f0e8]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-black/[0.08]">
+          <h2 className="text-lg font-medium text-[#0a0a0a]">
             Pointage — {assistant.firstName} {assistant.lastName}
           </h2>
-          <button onClick={onClose} className="text-[#555] hover:text-[#f5f0e8]">
+          <button onClick={onClose} className="text-neutral-400 hover:text-[#0a0a0a]">
             <X size={20} />
           </button>
         </div>
@@ -188,10 +188,10 @@ function ClockModal({ assistant, onClose, onDone }) {
             <div className="w-16 h-16 rounded-full bg-emerald-500/15 flex items-center justify-center mx-auto mb-4">
               <Check size={32} className="text-emerald-400" />
             </div>
-            <p className="text-[#f5f0e8] text-lg font-medium mb-1">
+            <p className="text-[#0a0a0a] text-lg font-medium mb-1">
               {result.type === "in" ? "Arrivée enregistrée" : "Descente enregistrée"}
             </p>
-            <p className="text-sm text-[#888] mb-6">{result.message}</p>
+            <p className="text-sm text-neutral-500 mb-6">{result.message}</p>
             <button
               onClick={onClose}
               className="w-full py-2.5 bg-[#D7A12B] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#E8B945]"
@@ -201,7 +201,7 @@ function ClockModal({ assistant, onClose, onDone }) {
           </div>
         ) : (
           <div className="px-6 py-5 space-y-4">
-            <div className="relative aspect-[4/3] bg-black rounded-xl overflow-hidden border border-[#222]">
+            <div className="relative aspect-[4/3] bg-black rounded-xl overflow-hidden border border-black/[0.08]">
               <video
                 ref={videoRef}
                 muted
@@ -209,7 +209,7 @@ function ClockModal({ assistant, onClose, onDone }) {
                 className="w-full h-full object-cover -scale-x-100"
               />
               {!camReady && !camError && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-[#888] gap-2">
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-neutral-500 gap-2">
                   <Camera size={28} className="opacity-50" />
                   <span className="text-xs">Activation de la caméra…</span>
                 </div>
@@ -220,7 +220,7 @@ function ClockModal({ assistant, onClose, onDone }) {
                   <span className="text-xs text-[#bbb]">{camError}</span>
                   <button
                     onClick={startCamera}
-                    className="flex items-center gap-2 text-xs px-3 py-1.5 bg-[#222] rounded-lg text-[#f5f0e8] hover:bg-[#333]"
+                    className="flex items-center gap-2 text-xs px-3 py-1.5 bg-[#222] rounded-lg text-[#0a0a0a] hover:bg-[#333]"
                   >
                     <RefreshCw size={13} /> Réessayer
                   </button>
@@ -235,12 +235,12 @@ function ClockModal({ assistant, onClose, onDone }) {
               </span>
             </div>
 
-            <p className="text-xs text-[#888] text-center">
+            <p className="text-xs text-neutral-500 text-center">
               Saisissez le PIN de l&apos;assistant. Sa photo sera prise au moment du pointage.
             </p>
 
             <div>
-              <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">
+              <label className="block text-xs text-neutral-500 uppercase tracking-wider mb-1">
                 PIN de l&apos;assistant
               </label>
               <input
@@ -250,7 +250,7 @@ function ClockModal({ assistant, onClose, onDone }) {
                 value={pin}
                 onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
                 placeholder="••••"
-                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-center text-2xl tracking-[0.5em] font-mono focus:border-[#D7A12B] focus:outline-none"
+                className="w-full px-4 py-3 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-center text-2xl tracking-[0.5em] font-mono focus:border-[#D7A12B] focus:outline-none"
               />
             </div>
 
@@ -322,7 +322,7 @@ function AssistantPinModal({ user, onClose }) {
       doneMessage="Code PIN mis à jour avec succès."
     >
       <form onSubmit={handleSave} className="px-6 py-5 space-y-4">
-        <p className="text-xs text-[#888]">
+        <p className="text-xs text-neutral-500">
           PIN actuel (par défaut <strong className="text-[#D7A12B]">1234</strong>) puis le nouveau PIN.
         </p>
         <PinFields
@@ -395,8 +395,8 @@ function AdminChangeAssistantPinModal({ assistant, onClose }) {
       doneMessage={`Code PIN de ${assistant.firstName} mis à jour.`}
     >
       <form onSubmit={handleSave} className="px-6 py-5 space-y-4">
-        <p className="text-xs text-[#888]">
-          Pour modifier le PIN de cet assistant, saisissez <strong className="text-[#f5f0e8]">votre PIN administrateur</strong> puis le nouveau PIN de l&apos;assistant.
+        <p className="text-xs text-neutral-500">
+          Pour modifier le PIN de cet assistant, saisissez <strong className="text-[#0a0a0a]">votre PIN administrateur</strong> puis le nouveau PIN de l&apos;assistant.
         </p>
         <PinFields
           fields={[
@@ -424,11 +424,11 @@ function PinModalShell({ title, done, onClose, doneMessage, children }) {
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-[#141414] border border-[#222] rounded-2xl w-full max-w-sm overflow-hidden"
+        className="admin-card border border-black/[0.08] rounded-2xl w-full max-w-sm overflow-hidden"
       >
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#222]">
-          <h2 className="text-lg font-medium text-[#f5f0e8]">{title}</h2>
-          <button onClick={onClose} className="text-[#555] hover:text-[#f5f0e8]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-black/[0.08]">
+          <h2 className="text-lg font-medium text-[#0a0a0a]">{title}</h2>
+          <button onClick={onClose} className="text-neutral-400 hover:text-[#0a0a0a]">
             <X size={20} />
           </button>
         </div>
@@ -437,7 +437,7 @@ function PinModalShell({ title, done, onClose, doneMessage, children }) {
             <div className="w-14 h-14 rounded-full bg-emerald-500/15 flex items-center justify-center mx-auto mb-4">
               <Check size={28} className="text-emerald-400" />
             </div>
-            <p className="text-[#f5f0e8] mb-6">{doneMessage}</p>
+            <p className="text-[#0a0a0a] mb-6">{doneMessage}</p>
             <button
               onClick={onClose}
               className="w-full py-2.5 bg-[#D7A12B] text-[#0a0a0a] rounded-lg text-sm font-semibold hover:bg-[#E8B945]"
@@ -456,13 +456,13 @@ function PinModalShell({ title, done, onClose, doneMessage, children }) {
 function PinFields({ fields }) {
   return fields.map(([label, val, setter]) => (
     <div key={label}>
-      <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">{label}</label>
+      <label className="block text-xs text-neutral-500 uppercase tracking-wider mb-1">{label}</label>
       <input
         type="password"
         inputMode="numeric"
         value={val}
         onChange={(e) => setter(e.target.value.replace(/\D/g, "").slice(0, 6))}
-        className="w-full px-4 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-center text-lg tracking-[0.4em] font-mono focus:border-[#D7A12B] focus:outline-none"
+        className="w-full px-4 py-2.5 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-center text-lg tracking-[0.4em] font-mono focus:border-[#D7A12B] focus:outline-none"
       />
     </div>
   ));
@@ -500,7 +500,7 @@ function HistorySection({
   return (
     <section>
       <div className="flex items-center justify-between mb-4 gap-3 flex-wrap">
-        <h2 className="text-sm font-semibold text-[#f5f0e8] uppercase tracking-wider flex items-center gap-2">
+        <h2 className="text-sm font-semibold text-[#0a0a0a] uppercase tracking-wider flex items-center gap-2">
           <History size={16} className="text-[#D7A12B]" />
           Historique des pointages
         </h2>
@@ -520,23 +520,23 @@ function HistorySection({
       {loading ? (
         <div className="space-y-3">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-16 bg-[#141414] rounded-lg animate-pulse" />
+            <div key={i} className="h-16 admin-card rounded-lg animate-pulse" />
           ))}
         </div>
       ) : history.length === 0 ? (
-        <div className="text-center py-12 text-[#555] border border-[#222] rounded-xl">
+        <div className="text-center py-12 text-neutral-400 border border-black/[0.08] rounded-xl">
           Aucun pointage enregistré pour le moment.
         </div>
       ) : (
-        <div className="bg-[#141414] border border-[#222] rounded-xl overflow-hidden">
+        <div className="admin-card border border-black/[0.08] rounded-xl overflow-hidden">
           {canDelete && (
-            <div className="px-4 py-2.5 border-b border-[#222] flex items-center gap-3">
-              <label className="flex items-center gap-2 text-xs text-[#888] cursor-pointer select-none">
+            <div className="px-4 py-2.5 border-b border-black/[0.08] flex items-center gap-3">
+              <label className="flex items-center gap-2 text-xs text-neutral-500 cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={allSelected}
                   onChange={onToggleSelectAll}
-                  className="rounded border-[#444] bg-[#1a1a1a] text-[#D7A12B] focus:ring-[#D7A12B]"
+                  className="rounded border-[#444] bg-neutral-50 text-[#D7A12B] focus:ring-[#D7A12B]"
                 />
                 Tout sélectionner
               </label>
@@ -550,7 +550,7 @@ function HistorySection({
                     type="checkbox"
                     checked={selectedIds.has(s.id)}
                     onChange={() => onToggleSelect(s.id)}
-                    className="shrink-0 rounded border-[#444] bg-[#1a1a1a] text-[#D7A12B] focus:ring-[#D7A12B]"
+                    className="shrink-0 rounded border-[#444] bg-neutral-50 text-[#D7A12B] focus:ring-[#D7A12B]"
                   />
                 )}
                 <div className="flex gap-2 shrink-0">
@@ -567,9 +567,9 @@ function HistorySection({
                 </div>
                 <div className="flex-1 min-w-0">
                   {showAssistantName && (
-                    <p className="text-sm font-medium text-[#f5f0e8] truncate">{s.assistantName}</p>
+                    <p className="text-sm font-medium text-[#0a0a0a] truncate">{s.assistantName}</p>
                   )}
-                  <div className={`flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-[#888] ${showAssistantName ? "mt-1" : ""}`}>
+                  <div className={`flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-neutral-500 ${showAssistantName ? "mt-1" : ""}`}>
                     <span className="flex items-center gap-1 text-emerald-400/90">
                       <LogIn size={12} /> {formatDateTime(s.clockInAt)}
                     </span>
@@ -600,7 +600,7 @@ function HistorySection({
                       onClick={() => onDeleteOne(s)}
                       disabled={deleting}
                       title="Supprimer définitivement"
-                      className="p-2 rounded-lg text-[#666] hover:text-red-400 hover:bg-red-500/10 disabled:opacity-50 transition-colors"
+                      className="p-2 rounded-lg text-neutral-500 hover:text-red-400 hover:bg-red-500/10 disabled:opacity-50 transition-colors"
                     >
                       <Trash2 size={16} />
                     </button>
@@ -621,16 +621,16 @@ function PhotoThumb({ src, label, onClick }) {
       {src ? (
         <button
           onClick={onClick}
-          className="block w-12 h-12 rounded-lg overflow-hidden border border-[#333] hover:border-[#D7A12B] transition-colors"
+          className="block w-12 h-12 rounded-lg overflow-hidden border border-black/[0.12] hover:border-[#D7A12B] transition-colors"
         >
           <img src={src} alt={label} className="w-full h-full object-cover" />
         </button>
       ) : (
-        <div className="w-12 h-12 rounded-lg border border-dashed border-[#333] flex items-center justify-center text-[#444]">
+        <div className="w-12 h-12 rounded-lg border border-dashed border-black/[0.12] flex items-center justify-center text-[#444]">
           <ImageIcon size={16} />
         </div>
       )}
-      <span className="block text-[9px] text-[#666] mt-1 uppercase tracking-wider">{label}</span>
+      <span className="block text-[9px] text-neutral-500 mt-1 uppercase tracking-wider">{label}</span>
     </div>
   );
 }
@@ -750,11 +750,11 @@ export default function AdminPointage() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-serif text-2xl md:text-3xl text-[#f5f0e8] mb-1 flex items-center gap-2">
+          <h1 className="font-serif text-2xl md:text-3xl text-[#0a0a0a] mb-1 flex items-center gap-2">
             <Clock size={24} className="text-[#D7A12B]" />
             Pointage
           </h1>
-          <p className="text-sm text-[#888]">
+          <p className="text-sm text-neutral-500">
             {isFullAdmin
               ? "Borne de pointage — arrivée et descente avec PIN et photo"
               : isSubAdmin
@@ -764,7 +764,7 @@ export default function AdminPointage() {
         </div>
         <button
           onClick={() => { setLoading(true); loadAll(); }}
-          className="flex items-center gap-2 px-3 py-2 text-sm text-[#888] hover:text-[#f5f0e8] border border-[#222] rounded-lg hover:border-[#333]"
+          className="flex items-center gap-2 px-3 py-2 text-sm text-neutral-500 hover:text-[#0a0a0a] border border-black/[0.08] rounded-lg hover:border-black/[0.12]"
         >
           <RefreshCw size={15} /> Actualiser
         </button>
@@ -773,22 +773,22 @@ export default function AdminPointage() {
       {/* Vue ASSISTANT : profil + changer PIN uniquement */}
       {isAssistant && (
         <section>
-          <div className="bg-[#141414] border border-[#222] rounded-xl p-6 max-w-md">
+          <div className="admin-card border border-black/[0.08] rounded-xl p-6 max-w-md">
             <div className="flex items-center gap-4 mb-6">
               <div className="w-14 h-14 rounded-full bg-blue-500/15 text-blue-400 flex items-center justify-center font-bold text-lg">
                 {initials(user?.firstName, user?.lastName)}
               </div>
               <div>
-                <p className="text-lg font-medium text-[#f5f0e8]">
+                <p className="text-lg font-medium text-[#0a0a0a]">
                   {user?.firstName} {user?.lastName}
                 </p>
-                <p className="text-xs text-[#888]">{user?.email}</p>
+                <p className="text-xs text-neutral-500">{user?.email}</p>
                 {openSession ? (
                   <p className="text-xs text-emerald-400 mt-1">
                     En service depuis {formatTime(openSession.clockInAt)}
                   </p>
                 ) : (
-                  <p className="text-xs text-[#666] mt-1">Hors service</p>
+                  <p className="text-xs text-neutral-500 mt-1">Hors service</p>
                 )}
               </div>
             </div>
@@ -798,7 +798,7 @@ export default function AdminPointage() {
             >
               <KeyRound size={16} /> Changer mon code PIN
             </button>
-            <p className="text-[10px] text-[#555] mt-3 text-center">
+            <p className="text-[10px] text-neutral-400 mt-3 text-center">
               Le pointage se fait depuis le poste administrateur en boutique.
             </p>
           </div>
@@ -809,10 +809,10 @@ export default function AdminPointage() {
       {staffAdmin && (
         <section>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-semibold text-[#f5f0e8] uppercase tracking-wider">
+            <h2 className="text-sm font-semibold text-[#0a0a0a] uppercase tracking-wider">
               Personnel
             </h2>
-            <span className="text-xs text-[#888]">
+            <span className="text-xs text-neutral-500">
               {onDutyCount} en service · {assistants.length} au total
             </span>
           </div>
@@ -820,11 +820,11 @@ export default function AdminPointage() {
           {loading ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="h-28 bg-[#141414] rounded-xl animate-pulse" />
+                <div key={i} className="h-28 admin-card rounded-xl animate-pulse" />
               ))}
             </div>
           ) : assistants.length === 0 ? (
-            <div className="text-center py-12 text-[#555] border border-[#222] rounded-xl">
+            <div className="text-center py-12 text-neutral-400 border border-black/[0.08] rounded-xl">
               Aucun assistant. Créez-en dans Utilisateurs.
             </div>
           ) : (
@@ -834,14 +834,14 @@ export default function AdminPointage() {
                   key={a.id}
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-[#141414] border border-[#222] rounded-xl p-4"
+                  className="admin-card border border-black/[0.08] rounded-xl p-4"
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-11 h-11 rounded-full bg-[#D7A12B]/15 text-[#D7A12B] flex items-center justify-center font-bold">
                       {initials(a.firstName, a.lastName)}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-[#f5f0e8] truncate">
+                      <p className="text-sm font-medium text-[#0a0a0a] truncate">
                         {a.firstName} {a.lastName}
                       </p>
                       {a.onDuty ? (
@@ -849,7 +849,7 @@ export default function AdminPointage() {
                           En service depuis {formatTime(a.since)}
                         </p>
                       ) : (
-                        <p className="text-xs text-[#888]">Hors service</p>
+                        <p className="text-xs text-neutral-500">Hors service</p>
                       )}
                     </div>
                   </div>
@@ -871,7 +871,7 @@ export default function AdminPointage() {
                   {isFullAdmin && (
                     <button
                       onClick={() => setPinTarget(a)}
-                      className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs text-[#888] hover:text-[#f5f0e8] border border-[#222] hover:border-[#333]"
+                      className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs text-neutral-500 hover:text-[#0a0a0a] border border-black/[0.08] hover:border-black/[0.12]"
                     >
                       <KeyRound size={13} /> Changer PIN
                     </button>

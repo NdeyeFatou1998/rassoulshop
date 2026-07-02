@@ -136,8 +136,8 @@ export default function ProductDetail() {
   if (!product) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4">
-        <ShoppingCart size={40} className="text-white/15" />
-        <p className="text-white/60 text-sm">Produit introuvable</p>
+        <ShoppingCart size={40} className="text-neutral-200" />
+        <p className="text-neutral-500 text-sm">Produit introuvable</p>
         <Link to="/shop" className="text-gold text-sm underline hover:text-gold-light transition-colors">
           Retour à la boutique
         </Link>
@@ -167,7 +167,7 @@ export default function ProductDetail() {
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
           <Link
             to="/shop"
-            className="inline-flex items-center gap-2 text-white/55 hover:text-cream text-[11px] uppercase tracking-[0.18em] mb-7 md:mb-10 transition-colors"
+            className="inline-flex items-center gap-2 text-neutral-500 hover:text-[#0a0a0a] text-[11px] uppercase tracking-[0.18em] mb-7 md:mb-10 transition-colors"
           >
             <ArrowLeft size={14} />
             <span>Boutique</span>
@@ -193,7 +193,7 @@ export default function ProductDetail() {
             >
               <div
                 ref={imgRef}
-                className="group relative rounded-[26px] overflow-hidden aspect-[4/5] bg-[#161310]"
+                className="group relative rounded-[26px] overflow-hidden aspect-[4/5] bg-neutral-100"
               >
                 <img
                   src={product.image || "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg"}
@@ -243,7 +243,7 @@ export default function ProductDetail() {
             {/* Titre */}
             <motion.h1
               variants={fadeUp}
-              className="font-serif text-3xl md:text-4xl lg:text-[2.9rem] text-white leading-[1.12] mb-4"
+              className="font-serif text-3xl md:text-4xl lg:text-[2.9rem] text-[#0a0a0a] leading-[1.12] mb-4"
             >
               {product.title}
             </motion.h1>
@@ -256,11 +256,11 @@ export default function ProductDetail() {
                     <Star
                       key={i}
                       size={14}
-                      className={i < Math.round(product.rating) ? "text-gold fill-gold" : "text-white/15"}
+                      className={i < Math.round(product.rating) ? "text-gold fill-gold" : "text-neutral-200"}
                     />
                   ))}
                 </div>
-                <span className="text-[11px] text-white/55">{product.rating}</span>
+                <span className="text-[11px] text-neutral-500">{product.rating}</span>
               </motion.div>
             )}
 
@@ -268,10 +268,10 @@ export default function ProductDetail() {
             <motion.div variants={fadeUp} className="flex items-baseline flex-wrap gap-3 mb-6">
               <p className="text-3xl md:text-4xl font-bold text-gradient-gold leading-none">
                 {finalPrice.toLocaleString("fr-FR")}
-                <span className="text-base font-semibold text-white/45 ml-1.5">FCFA</span>
+                <span className="text-base font-semibold text-neutral-400 ml-1.5">FCFA</span>
               </p>
               {(hasPromo || variantsExtra > 0) && (
-                <span className="text-sm text-white/40 line-through">
+                <span className="text-sm text-neutral-400 line-through">
                   {Number(product.price).toLocaleString("fr-FR")} FCFA
                 </span>
               )}
@@ -279,7 +279,7 @@ export default function ProductDetail() {
 
             {/* Description */}
             {product.description && (
-              <motion.p variants={fadeUp} className="text-[14px] md:text-[15px] text-white/70 leading-relaxed mb-7 max-w-lg">
+              <motion.p variants={fadeUp} className="text-[14px] md:text-[15px] text-neutral-600 leading-relaxed mb-7 max-w-lg">
                 {product.description}
               </motion.p>
             )}
@@ -290,14 +290,14 @@ export default function ProductDetail() {
                 {product.variant_types.map((type) => (
                   <div key={type.id}>
                     <div className="flex items-center gap-2 mb-2.5">
-                      <span className="text-[10px] uppercase tracking-[0.2em] text-white/65 font-semibold">
+                      <span className="text-[10px] uppercase tracking-[0.2em] text-neutral-600 font-semibold">
                         {type.name}
                       </span>
                       {selectedVariants[type.id] && (
                         <span className="text-[10px] text-gold font-medium">
                           — {selectedVariants[type.id].name}
                           {selectedVariants[type.id].price_modifier > 0 && (
-                            <span className="text-white/30 ml-1">
+                            <span className="text-neutral-300 ml-1">
                               +{selectedVariants[type.id].price_modifier.toLocaleString("fr-FR")} FCFA
                             </span>
                           )}
@@ -336,7 +336,7 @@ export default function ProductDetail() {
                             </div>
                             <span
                               className={`text-[10px] font-medium transition-colors duration-200 ${
-                                isSelected ? "text-gold" : "text-white/40 group-hover:text-white/70"
+                                isSelected ? "text-gold" : "text-neutral-400 group-hover:text-neutral-600"
                               }`}
                             >
                               {opt.name}
@@ -356,7 +356,7 @@ export default function ProductDetail() {
                             className={`px-4 py-2 rounded-full text-[11px] font-medium border transition-all duration-200 ${
                               isSelected
                                 ? "border-gold bg-gold/10 text-gold shadow-[0_0_10px_rgba(215,161,43,0.2)]"
-                                : "border-white/15 text-white/65 hover:border-white/40 hover:text-white/90"
+                                : "border-black/[0.12] text-neutral-600 hover:border-black/30 hover:text-[#0a0a0a]"
                             }`}
                           >
                             {opt.name}
@@ -376,7 +376,7 @@ export default function ProductDetail() {
               <div className="flex items-center rounded-full border border-white/[0.15] bg-white/[0.03]">
                 <button
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="w-12 h-12 flex items-center justify-center text-cream/55 hover:text-cream active:scale-90 transition-all"
+                  className="w-12 h-12 flex items-center justify-center text-cream/55 hover:text-[#0a0a0a] active:scale-90 transition-all"
                   aria-label="Diminuer"
                 >
                   <Minus size={15} />
@@ -391,7 +391,7 @@ export default function ProductDetail() {
                 </motion.span>
                 <button
                   onClick={() => setQuantity((q) => q + 1)}
-                  className="w-12 h-12 flex items-center justify-center text-cream/55 hover:text-cream active:scale-90 transition-all"
+                  className="w-12 h-12 flex items-center justify-center text-cream/55 hover:text-[#0a0a0a] active:scale-90 transition-all"
                   aria-label="Augmenter"
                 >
                   <Plus size={15} />
@@ -425,7 +425,7 @@ export default function ProductDetail() {
                   className="flex flex-col items-center text-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.02] px-2 py-3.5"
                 >
                   <Icon size={18} style={{ color: GOLD }} strokeWidth={1.6} />
-                  <span className="text-[9.5px] md:text-[10px] uppercase tracking-[0.1em] text-white/60 leading-tight">
+                  <span className="text-[9.5px] md:text-[10px] uppercase tracking-[0.1em] text-neutral-500 leading-tight">
                     {label}
                   </span>
                 </div>
@@ -446,7 +446,7 @@ export default function ProductDetail() {
           </div>
           <div className="product-grid">
             {similar.slice(0, 4).map((p, i) => (
-              <ProductCard key={p.id} product={p} index={i} />
+              <ProductCard key={p.id} product={p} index={i} lightBackground premium />
             ))}
           </div>
         </section>

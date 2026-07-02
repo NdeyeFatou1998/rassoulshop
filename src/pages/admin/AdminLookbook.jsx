@@ -162,18 +162,18 @@ export default function AdminLookbook() {
       {/* ============================================================
           SECTION 1 — BANNIÈRE HERO
           ============================================================ */}
-      <div className="bg-[#111] border border-[#222] rounded-2xl overflow-hidden">
+      <div className="admin-card border border-black/[0.08] rounded-2xl overflow-hidden">
         {/* Header section */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#222]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-black/[0.08]">
           <div>
-            <h2 className="text-[#f5f0e8] font-semibold">Bannière Hero</h2>
-            <p className="text-xs text-[#666] mt-0.5">
+            <h2 className="text-[#0a0a0a] font-semibold">Bannière Hero</h2>
+            <p className="text-xs text-neutral-500 mt-0.5">
               Photo ou vidéo affichée en fond sur la page Lookbook publique
             </p>
           </div>
           <label className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold cursor-pointer transition-colors ${
             bannerUploading
-              ? "bg-[#333] text-[#888] cursor-not-allowed"
+              ? "bg-[#333] text-neutral-500 cursor-not-allowed"
               : "bg-[#D7A12B] text-[#0a0a0a] hover:bg-[#E8B945]"
           }`}>
             <Upload size={14} />
@@ -219,7 +219,7 @@ export default function AdminLookbook() {
               </span>
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center h-[160px] rounded-xl border-2 border-dashed border-[#2a2a2a] text-[#555]">
+            <div className="flex flex-col items-center justify-center h-[160px] rounded-xl border-2 border-dashed border-[#2a2a2a] text-neutral-400">
               <Image size={32} className="mb-2 opacity-40" />
               <p className="text-sm">Aucune bannière — uploadez une image ou vidéo</p>
             </div>
@@ -234,15 +234,15 @@ export default function AdminLookbook() {
       {/* ============================================================
           SECTION 2 — MÉDIAS DU LOOKBOOK
           ============================================================ */}
-      <div className="bg-[#111] border border-[#222] rounded-2xl overflow-hidden">
+      <div className="admin-card border border-black/[0.08] rounded-2xl overflow-hidden">
         {/* Header section */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#222]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-black/[0.08]">
           <div>
-            <h2 className="text-[#f5f0e8] font-semibold">
+            <h2 className="text-[#0a0a0a] font-semibold">
               Médias du Lookbook
-              <span className="ml-2 text-xs text-[#555] font-normal">{items.length} élément(s)</span>
+              <span className="ml-2 text-xs text-neutral-400 font-normal">{items.length} élément(s)</span>
             </h2>
-            <p className="text-xs text-[#666] mt-0.5">
+            <p className="text-xs text-neutral-500 mt-0.5">
               Photos et vidéos affichées dans la galerie mosaïque
             </p>
           </div>
@@ -260,11 +260,11 @@ export default function AdminLookbook() {
           {loading ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
               {Array.from({ length: 8 }).map((_, i) => (
-                <div key={i} className="aspect-square bg-[#1a1a1a] rounded-xl animate-pulse" />
+                <div key={i} className="aspect-square bg-neutral-50 rounded-xl animate-pulse" />
               ))}
             </div>
           ) : items.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 text-[#555]">
+            <div className="flex flex-col items-center justify-center py-16 text-neutral-400">
               <LayoutGrid size={40} className="mb-3 opacity-30" />
               <p className="text-sm">Aucun média dans le lookbook</p>
               <p className="text-xs mt-1 text-[#444]">Ajoutez des images ou des vidéos</p>
@@ -274,7 +274,7 @@ export default function AdminLookbook() {
               {items.map((item) => (
                 <div
                   key={item.id}
-                  className="relative group bg-[#1a1a1a] border border-[#222] rounded-xl overflow-hidden"
+                  className="relative group bg-neutral-50 border border-black/[0.08] rounded-xl overflow-hidden"
                 >
                   {/* Aperçu */}
                   {item.type === "video" ? (
@@ -334,15 +334,15 @@ export default function AdminLookbook() {
           ============================================================ */}
       {showModal && (
         <div className="fixed inset-0 bg-black/75 z-50 flex items-center justify-center px-4">
-          <div className="bg-[#141414] border border-[#2a2a2a] rounded-2xl w-full max-w-md shadow-2xl">
+          <div className="admin-card border border-[#2a2a2a] rounded-2xl w-full max-w-md shadow-2xl">
             {/* Header modal */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-[#222]">
-              <h3 className="text-[#f5f0e8] font-semibold">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-black/[0.08]">
+              <h3 className="text-[#0a0a0a] font-semibold">
                 {editingItem ? "Modifier le média" : "Ajouter un média"}
               </h3>
               <button
                 onClick={() => setShowModal(false)}
-                className="text-[#555] hover:text-[#f5f0e8] transition-colors"
+                className="text-neutral-400 hover:text-[#0a0a0a] transition-colors"
               >
                 <X size={18} />
               </button>
@@ -359,11 +359,11 @@ export default function AdminLookbook() {
               {/* Upload — uniquement pour nouveau */}
               {!editingItem && (
                 <div>
-                  <label className="block text-[10px] text-[#888] uppercase tracking-wider mb-2">
+                  <label className="block text-[10px] text-neutral-500 uppercase tracking-wider mb-2">
                     Fichier *
                   </label>
-                  <label className="flex flex-col items-center gap-2 p-6 bg-[#1a1a1a] border-2 border-dashed border-[#333] rounded-xl cursor-pointer hover:border-[#D7A12B] transition-colors">
-                    <Upload size={22} className="text-[#555]" />
+                  <label className="flex flex-col items-center gap-2 p-6 bg-neutral-50 border-2 border-dashed border-black/[0.12] rounded-xl cursor-pointer hover:border-[#D7A12B] transition-colors">
+                    <Upload size={22} className="text-neutral-400" />
                     <span className="text-sm text-[#777]">
                       {file ? file.name : "Cliquer pour sélectionner (image ou vidéo)"}
                     </span>
@@ -379,13 +379,13 @@ export default function AdminLookbook() {
 
               {/* Span */}
               <div>
-                <label className="block text-[10px] text-[#888] uppercase tracking-wider mb-2">
+                <label className="block text-[10px] text-neutral-500 uppercase tracking-wider mb-2">
                   Taille dans la grille
                 </label>
                 <select
                   value={span}
                   onChange={(e) => setSpan(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none"
+                  className="w-full px-3 py-2.5 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-sm focus:border-[#D7A12B] focus:outline-none"
                 >
                   {SPAN_OPTIONS.map((o) => (
                     <option key={o.value} value={o.value}>{o.label}</option>
@@ -398,7 +398,7 @@ export default function AdminLookbook() {
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 text-sm text-[#777] hover:text-[#f5f0e8] transition-colors"
+                  className="px-4 py-2 text-sm text-[#777] hover:text-[#0a0a0a] transition-colors"
                 >
                   Annuler
                 </button>

@@ -144,19 +144,19 @@ export default function AdminSettings() {
   return (
     <div className="max-w-xl space-y-6">
       {/* ---- Profil ---- */}
-      <div className="bg-[#141414] border border-[#222] rounded-xl p-6">
-        <h2 className="text-sm font-medium text-[#f5f0e8] mb-4">Profil</h2>
+      <div className="admin-card border border-black/[0.08] rounded-xl p-6">
+        <h2 className="text-sm font-medium text-[#0a0a0a] mb-4">Profil</h2>
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-[#888] uppercase tracking-wider">Nom</span>
-            <span className="text-sm text-[#f5f0e8]">{user?.firstName} {user?.lastName}</span>
+            <span className="text-xs text-neutral-500 uppercase tracking-wider">Nom</span>
+            <span className="text-sm text-[#0a0a0a]">{user?.firstName} {user?.lastName}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-xs text-[#888] uppercase tracking-wider">Email</span>
-            <span className="text-sm text-[#f5f0e8]">{user?.email}</span>
+            <span className="text-xs text-neutral-500 uppercase tracking-wider">Email</span>
+            <span className="text-sm text-[#0a0a0a]">{user?.email}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-xs text-[#888] uppercase tracking-wider">Rôle</span>
+            <span className="text-xs text-neutral-500 uppercase tracking-wider">Rôle</span>
             <span className={`text-xs px-2.5 py-1 rounded-full ${
               user?.role === "admin" || user?.role === "sub_admin"
                 ? "bg-[#D7A12B]/20 text-[#D7A12B]"
@@ -169,15 +169,15 @@ export default function AdminSettings() {
       </div>
 
       {/* ---- Gestion stock ---- */}
-      <div className="bg-[#141414] border border-[#222] rounded-xl p-6">
+      <div className="admin-card border border-black/[0.08] rounded-xl p-6">
         <div className="flex items-center gap-2 mb-4">
           <Package size={16} className="text-[#D7A12B]" />
-          <h2 className="text-sm font-medium text-[#f5f0e8]">Gestion du stock</h2>
+          <h2 className="text-sm font-medium text-[#0a0a0a]">Gestion du stock</h2>
         </div>
 
-        <p className="text-xs text-[#888] leading-relaxed mb-4">
+        <p className="text-xs text-neutral-500 leading-relaxed mb-4">
           Définissez le stock minimal qui déclenche l&apos;alerte « Stock faible » dans l&apos;admin et le dashboard.
-          Les produits et box cadeaux à <strong className="text-[#f5f0e8] font-normal">stock 0</strong> ne sont
+          Les produits et box cadeaux à <strong className="text-[#0a0a0a] font-normal">stock 0</strong> ne sont
           plus visibles sur le site public (boutique, coffrets, box cadeau).
         </p>
 
@@ -196,7 +196,7 @@ export default function AdminSettings() {
 
         <form onSubmit={handleSaveStockSettings} className="space-y-4">
           <div>
-            <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">
+            <label className="block text-xs text-neutral-500 uppercase tracking-wider mb-1">
               Seuil stock faible (unités)
             </label>
             <input
@@ -207,9 +207,9 @@ export default function AdminSettings() {
               onChange={(e) => setLowStockThreshold(e.target.value)}
               disabled={stockLoading}
               required
-              className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none disabled:opacity-50"
+              className="w-full px-3 py-2.5 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-sm focus:border-[#D7A12B] focus:outline-none disabled:opacity-50"
             />
-            <p className="text-[10px] text-[#555] mt-1.5">
+            <p className="text-[10px] text-neutral-400 mt-1.5">
               Exemple : avec 5, un produit à 3 unités affiche « Stock faible », à 0 il disparaît du site.
             </p>
           </div>
@@ -226,13 +226,13 @@ export default function AdminSettings() {
 
       {/* ---- Code PIN de pointage (admin / sous-admin) ---- */}
       {isStaffAdmin && (
-        <div className="bg-[#141414] border border-[#222] rounded-xl p-6">
+        <div className="admin-card border border-black/[0.08] rounded-xl p-6">
           <div className="flex items-center gap-2 mb-4">
             <KeyRound size={16} className="text-[#D7A12B]" />
-            <h2 className="text-sm font-medium text-[#f5f0e8]">Code PIN de pointage</h2>
+            <h2 className="text-sm font-medium text-[#0a0a0a]">Code PIN de pointage</h2>
           </div>
 
-          <p className="text-xs text-[#888] leading-relaxed mb-4">
+          <p className="text-xs text-neutral-500 leading-relaxed mb-4">
             {isSubAdmin ? (
               <>
                 PIN du compte borne pointage en boutique. Par défaut :{" "}
@@ -262,7 +262,7 @@ export default function AdminSettings() {
 
           <form onSubmit={handleChangePin} className="space-y-4">
             <div>
-              <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">
+              <label className="block text-xs text-neutral-500 uppercase tracking-wider mb-1">
                 PIN actuel
               </label>
               <input
@@ -271,11 +271,11 @@ export default function AdminSettings() {
                 value={currentPin}
                 onChange={(e) => setCurrentPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
                 required
-                className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm text-center tracking-[0.3em] font-mono focus:border-[#D7A12B] focus:outline-none"
+                className="w-full px-3 py-2.5 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-sm text-center tracking-[0.3em] font-mono focus:border-[#D7A12B] focus:outline-none"
               />
             </div>
             <div>
-              <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">
+              <label className="block text-xs text-neutral-500 uppercase tracking-wider mb-1">
                 Nouveau PIN
               </label>
               <input
@@ -284,11 +284,11 @@ export default function AdminSettings() {
                 value={newPin}
                 onChange={(e) => setNewPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
                 required
-                className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm text-center tracking-[0.3em] font-mono focus:border-[#D7A12B] focus:outline-none"
+                className="w-full px-3 py-2.5 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-sm text-center tracking-[0.3em] font-mono focus:border-[#D7A12B] focus:outline-none"
               />
             </div>
             <div>
-              <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">
+              <label className="block text-xs text-neutral-500 uppercase tracking-wider mb-1">
                 Confirmer le nouveau PIN
               </label>
               <input
@@ -297,7 +297,7 @@ export default function AdminSettings() {
                 value={confirmPin}
                 onChange={(e) => setConfirmPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
                 required
-                className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm text-center tracking-[0.3em] font-mono focus:border-[#D7A12B] focus:outline-none"
+                className="w-full px-3 py-2.5 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-sm text-center tracking-[0.3em] font-mono focus:border-[#D7A12B] focus:outline-none"
               />
             </div>
             <button
@@ -312,10 +312,10 @@ export default function AdminSettings() {
       )}
 
       {/* ---- Changement de mot de passe ---- */}
-      <div className="bg-[#141414] border border-[#222] rounded-xl p-6">
+      <div className="admin-card border border-black/[0.08] rounded-xl p-6">
         <div className="flex items-center gap-2 mb-4">
           <Lock size={16} className="text-[#D7A12B]" />
-          <h2 className="text-sm font-medium text-[#f5f0e8]">Changer le mot de passe</h2>
+          <h2 className="text-sm font-medium text-[#0a0a0a]">Changer le mot de passe</h2>
         </div>
 
         {/* Messages de succès / erreur */}
@@ -334,7 +334,7 @@ export default function AdminSettings() {
 
         <form onSubmit={handleChangePassword} className="space-y-4">
           <div>
-            <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">
+            <label className="block text-xs text-neutral-500 uppercase tracking-wider mb-1">
               Mot de passe actuel
             </label>
             <input
@@ -342,12 +342,12 @@ export default function AdminSettings() {
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
               required
-              className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none"
+              className="w-full px-3 py-2.5 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-sm focus:border-[#D7A12B] focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">
+            <label className="block text-xs text-neutral-500 uppercase tracking-wider mb-1">
               Nouveau mot de passe
             </label>
             <input
@@ -356,12 +356,12 @@ export default function AdminSettings() {
               onChange={(e) => setNewPassword(e.target.value)}
               required
               minLength={6}
-              className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none"
+              className="w-full px-3 py-2.5 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-sm focus:border-[#D7A12B] focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">
+            <label className="block text-xs text-neutral-500 uppercase tracking-wider mb-1">
               Confirmer le nouveau mot de passe
             </label>
             <input
@@ -369,7 +369,7 @@ export default function AdminSettings() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none"
+              className="w-full px-3 py-2.5 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-sm focus:border-[#D7A12B] focus:outline-none"
             />
           </div>
 

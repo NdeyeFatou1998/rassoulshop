@@ -101,7 +101,7 @@ export default function Lookbook() {
   return (
     <>
       {/* Hero */}
-      <section className="px-3 md:px-5 pt-[72px] md:pt-[84px] pb-4 md:pb-6" style={{ background: "#030303" }}>
+      <section className="px-3 md:px-5 pt-[72px] md:pt-[84px] pb-4 md:pb-6 home-hero-premium" style={{ background: "transparent" }}>
         <div className="relative w-full" style={{ height: "clamp(380px, 58svh, 760px)" }}>
           <div
             className="spin-border-hero absolute inset-0"
@@ -188,7 +188,7 @@ export default function Lookbook() {
       </section>
 
       {/* Compteur */}
-      <div className="flex items-center gap-5 px-4 md:px-8 py-6" style={{ background: "#030303" }}>
+      <div className="flex items-center gap-5 px-4 md:px-8 py-6">
         <div className="flex-1 h-px bg-white/[0.05]" />
         <span className="text-[10px] uppercase tracking-[0.35em] text-gold/50 font-medium whitespace-nowrap">
           {looks.length} visuel{looks.length !== 1 ? "s" : ""}
@@ -197,7 +197,7 @@ export default function Lookbook() {
       </div>
 
       {/* Grille mosaïque */}
-      <section className="w-full px-3 md:px-5 lg:px-8 pb-24 pt-2" style={{ background: "#030303" }}>
+      <section className="w-full px-3 md:px-5 lg:px-8 pb-24 pt-2">
         {looks.length === 0 ? (
           <p className="text-center text-white/30 text-sm py-20">Aucun média pour le moment</p>
         ) : (

@@ -118,7 +118,7 @@ function PublicLayout() {
       <Navbar />
 
       {/* Contenu principal avec transitions animées entre les pages */}
-      <main className="min-h-screen pb-20 md:pb-0">
+      <main className="site-premium min-h-screen pb-20 md:pb-0">
         <AnimatedRoutes />
       </main>
 

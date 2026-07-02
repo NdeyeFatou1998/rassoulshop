@@ -47,10 +47,10 @@ export default function AdminDashboard() {
       <div className="space-y-6">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-28 bg-[#141414] rounded-xl animate-pulse" />
+            <div key={i} className="h-28 admin-card rounded-xl animate-pulse" />
           ))}
         </div>
-        <div className="h-64 bg-[#141414] rounded-xl animate-pulse" />
+        <div className="h-64 admin-card rounded-xl animate-pulse" />
       </div>
     );
   }
@@ -146,18 +146,18 @@ export default function AdminDashboard() {
           return (
             <div
               key={card.label}
-              className="bg-[#141414] border border-[#222] rounded-xl p-4 flex items-start gap-3"
+              className="admin-card border border-black/[0.08] rounded-xl p-4 flex items-start gap-3"
             >
               <div className={`p-2.5 rounded-lg ${card.bg}`}>
                 <Icon size={20} className={card.color} />
               </div>
               <div>
-                <p className="text-xs text-[#888] uppercase tracking-wider">{card.label}</p>
-                <p className="text-xl font-semibold text-[#f5f0e8] mt-1">
+                <p className="text-xs text-neutral-500 uppercase tracking-wider">{card.label}</p>
+                <p className="text-xl font-semibold text-[#0a0a0a] mt-1">
                   {card.value}
                 </p>
                 {card.sub && (
-                  <p className="text-[10px] text-[#666] mt-1 leading-snug">{card.sub}</p>
+                  <p className="text-[10px] text-neutral-500 mt-1 leading-snug">{card.sub}</p>
                 )}
               </div>
             </div>
@@ -166,9 +166,9 @@ export default function AdminDashboard() {
       </div>
 
       {/* ---- Dernières commandes ---- */}
-      <div className="bg-[#141414] border border-[#222] rounded-xl">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#222]">
-          <h2 className="text-sm font-medium text-[#f5f0e8]">Dernières commandes</h2>
+      <div className="admin-card border border-black/[0.08] rounded-xl">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-black/[0.08]">
+          <h2 className="text-sm font-medium text-[#0a0a0a]">Dernières commandes</h2>
           <Link
             to="/admin/orders"
             className="text-xs text-[#D7A12B] hover:text-[#E8B945] transition-colors"
@@ -178,7 +178,7 @@ export default function AdminDashboard() {
         </div>
 
         {recentOrders.length === 0 ? (
-          <p className="px-6 py-8 text-center text-[#555] text-sm">
+          <p className="px-6 py-8 text-center text-neutral-400 text-sm">
             Aucune commande pour le moment
           </p>
         ) : (
@@ -188,11 +188,11 @@ export default function AdminDashboard() {
               return (
                 <div key={order.id} className="px-6 py-3 flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-[#f5f0e8]">
+                    <p className="text-sm text-[#0a0a0a]">
                       <span className="text-[#D7A12B] font-mono text-xs mr-2">{order.reference}</span>
                       {order.customerFirstName} {order.customerLastName}
                     </p>
-                    <p className="text-xs text-[#555] mt-0.5">
+                    <p className="text-xs text-neutral-400 mt-0.5">
                       {order.items.length} article(s) · {new Date(order.createdAt).toLocaleDateString("fr-FR")}
                     </p>
                   </div>
@@ -215,31 +215,31 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <Link
           to="/admin/products"
-          className="bg-[#141414] border border-[#222] rounded-xl p-4 text-center hover:border-[#D7A12B]/30 transition-colors"
+          className="admin-card border border-black/[0.08] rounded-xl p-4 text-center hover:border-[#D7A12B]/30 transition-colors"
         >
           <Package size={24} className="mx-auto text-[#D7A12B] mb-2" />
-          <p className="text-sm text-[#f5f0e8]">Gérer Produits</p>
+          <p className="text-sm text-[#0a0a0a]">Gérer Produits</p>
         </Link>
         <Link
           to="/admin/orders"
-          className="bg-[#141414] border border-[#222] rounded-xl p-4 text-center hover:border-[#D7A12B]/30 transition-colors"
+          className="admin-card border border-black/[0.08] rounded-xl p-4 text-center hover:border-[#D7A12B]/30 transition-colors"
         >
           <ShoppingCart size={24} className="mx-auto text-[#D7A12B] mb-2" />
-          <p className="text-sm text-[#f5f0e8]">Commandes</p>
+          <p className="text-sm text-[#0a0a0a]">Commandes</p>
         </Link>
         <Link
           to="/admin/lookbook"
-          className="bg-[#141414] border border-[#222] rounded-xl p-4 text-center hover:border-[#D7A12B]/30 transition-colors"
+          className="admin-card border border-black/[0.08] rounded-xl p-4 text-center hover:border-[#D7A12B]/30 transition-colors"
         >
           <Package size={24} className="mx-auto text-[#D7A12B] mb-2" />
-          <p className="text-sm text-[#f5f0e8]">Lookbook</p>
+          <p className="text-sm text-[#0a0a0a]">Lookbook</p>
         </Link>
         <Link
           to="/admin/users"
-          className="bg-[#141414] border border-[#222] rounded-xl p-4 text-center hover:border-[#D7A12B]/30 transition-colors"
+          className="admin-card border border-black/[0.08] rounded-xl p-4 text-center hover:border-[#D7A12B]/30 transition-colors"
         >
           <Users size={24} className="mx-auto text-[#D7A12B] mb-2" />
-          <p className="text-sm text-[#f5f0e8]">Utilisateurs</p>
+          <p className="text-sm text-[#0a0a0a]">Utilisateurs</p>
         </Link>
       </div>
     </div>

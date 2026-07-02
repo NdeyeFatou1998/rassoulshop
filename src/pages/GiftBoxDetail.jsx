@@ -142,7 +142,7 @@ export default function GiftBoxDetail() {
   const finalPrice = calcPrice();
 
   return (
-    <div className="min-h-screen bg-[#080807]">
+    <div className="min-h-screen bg-white">
       <div className="max-w-5xl mx-auto px-5 lg:px-10 pt-20 md:pt-24 pb-28">
 
         {/* ── Retour ── */}

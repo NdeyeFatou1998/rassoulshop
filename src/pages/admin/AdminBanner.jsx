@@ -57,27 +57,27 @@ export default function AdminBanner() {
   return (
     <div className="max-w-3xl space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-[#f5f0e8]">Bannière accueil</h2>
-        <p className="text-sm text-[#666] mt-1">
+        <h2 className="text-xl font-semibold text-[#0a0a0a]">Bannière accueil</h2>
+        <p className="text-sm text-neutral-500 mt-1">
           Photo affichée dans la bannière en haut de la page d&apos;accueil publique.
         </p>
       </div>
 
-      <div className="bg-[#111] border border-[#222] rounded-2xl overflow-hidden">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#222]">
+      <div className="admin-card border border-black/[0.08] rounded-2xl overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-black/[0.08]">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-[#D7A12B]/10 flex items-center justify-center">
               <Home size={18} className="text-[#D7A12B]" />
             </div>
             <div>
-              <h3 className="text-[#f5f0e8] font-medium">Image hero</h3>
-              <p className="text-xs text-[#666]">Format recommandé : paysage, min. 1200×800 px</p>
+              <h3 className="text-[#0a0a0a] font-medium">Image hero</h3>
+              <p className="text-xs text-neutral-500">Format recommandé : paysage, min. 1200×800 px</p>
             </div>
           </div>
           <label
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold cursor-pointer transition-colors ${
               uploading
-                ? "bg-[#333] text-[#888] cursor-not-allowed"
+                ? "bg-[#333] text-neutral-500 cursor-not-allowed"
                 : "bg-[#D7A12B] text-[#0a0a0a] hover:bg-[#E8B945]"
             }`}
           >
@@ -101,7 +101,7 @@ export default function AdminBanner() {
           )}
 
           {loading ? (
-            <div className="h-[220px] rounded-xl bg-[#1a1a1a] animate-pulse" />
+            <div className="h-[220px] rounded-xl bg-neutral-50 animate-pulse" />
           ) : (
             <div className="relative rounded-xl overflow-hidden bg-[#0a0a0a]" style={{ height: "220px" }}>
               <img
@@ -117,13 +117,13 @@ export default function AdminBanner() {
           )}
 
           {!loading && !isCustom && (
-            <p className="text-xs text-[#666] mt-4">
+            <p className="text-xs text-neutral-500 mt-4">
               C&apos;est l&apos;image actuellement visible sur la page d&apos;accueil. Uploadez une nouvelle photo pour la remplacer.
             </p>
           )}
 
           {banner?.updated_at && (
-            <p className="text-xs text-[#555] mt-4">
+            <p className="text-xs text-neutral-400 mt-4">
               Dernière mise à jour :{" "}
               {new Date(banner.updated_at).toLocaleString("fr-FR")}
             </p>

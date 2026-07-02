@@ -235,10 +235,86 @@
     color: rgba(15, 12, 8, 0.35);
   }
 
-  /* ---- Accueil premium (blanc doré + noir) ---- */
-  .home-premium {
+  /* ---- Thème premium site (blanc + noir + or) ---- */
+  .home-premium,
+  .site-premium {
     background: #ffffff;
     min-height: 100vh;
+    color: #0a0a0a;
+  }
+
+  .site-premium .text-cream {
+    color: #0a0a0a;
+  }
+  .site-premium .text-muted {
+    color: #737373;
+  }
+
+  .premium-card {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.08);
+  }
+
+  .premium-input {
+    background: #fafafa;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #0a0a0a;
+  }
+  .premium-input::placeholder {
+    color: #a3a3a3;
+  }
+  .premium-input:focus {
+    border-color: rgba(215, 161, 43, 0.55);
+    outline: none;
+    background: #ffffff;
+  }
+
+  .premium-filter-bar {
+    background: #fafafa;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 0.75rem;
+  }
+
+  /* ---- Admin premium (aligné sur le site public) ---- */
+  .admin-premium {
+    background: #ffffff;
+    color: #0a0a0a;
+  }
+
+  .admin-card {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 1rem;
+    box-shadow: 0 2px 16px -6px rgba(0, 0, 0, 0.08);
+  }
+
+  .admin-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: #fafafa;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+    color: #0a0a0a;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .admin-input::placeholder {
+    color: #a3a3a3;
+  }
+  .admin-input:focus {
+    border-color: rgba(215, 161, 43, 0.55);
+    outline: none;
+    background: #ffffff;
+  }
+
+  .admin-label {
+    display: block;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #8B6914;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
   }
 
   .home-hero-premium {

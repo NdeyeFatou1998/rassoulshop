@@ -26,7 +26,7 @@ const ROLE_LABELS = {
 
 function UserRow({ user, currentUser, onEdit, onDelete }) {
   return (
-    <div className="px-6 py-4 flex items-center justify-between hover:bg-[#1a1a1a] transition-colors">
+    <div className="px-6 py-4 flex items-center justify-between hover:bg-neutral-50 transition-colors">
       <div className="flex items-center gap-4">
         <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold ${
           user.role === "admin" || user.role === "sub_admin"
@@ -36,7 +36,7 @@ function UserRow({ user, currentUser, onEdit, onDelete }) {
           {user.firstName?.[0]}{user.lastName?.[0]}
         </div>
         <div>
-          <p className="text-sm font-medium text-[#f5f0e8] flex items-center gap-2">
+          <p className="text-sm font-medium text-[#0a0a0a] flex items-center gap-2">
             {user.firstName} {user.lastName}
             {user.role === "sub_admin" && (
               <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-[#D7A12B]/15 text-[#D7A12B] uppercase tracking-wider font-semibold">
@@ -44,17 +44,17 @@ function UserRow({ user, currentUser, onEdit, onDelete }) {
               </span>
             )}
             {user.id === currentUser?.id && (
-              <span className="text-[10px] text-[#555]">(vous)</span>
+              <span className="text-[10px] text-neutral-400">(vous)</span>
             )}
           </p>
-          <p className="text-xs text-[#888]">{user.email}</p>
+          <p className="text-xs text-neutral-500">{user.email}</p>
         </div>
       </div>
 
       <div className="flex items-center gap-2">
         <button
           onClick={() => onEdit(user)}
-          className="p-2 rounded-lg hover:bg-[#222] text-[#888] hover:text-[#D7A12B] transition-colors"
+          className="p-2 rounded-lg hover:bg-neutral-100 text-neutral-500 hover:text-[#D7A12B] transition-colors"
           title="Modifier"
         >
           <Edit2 size={16} />
@@ -63,7 +63,7 @@ function UserRow({ user, currentUser, onEdit, onDelete }) {
         {user.id !== currentUser?.id && (
           <button
             onClick={() => onDelete(user)}
-            className="p-2 rounded-lg hover:bg-red-500/10 text-[#888] hover:text-red-400 transition-colors"
+            className="p-2 rounded-lg hover:bg-red-500/10 text-neutral-500 hover:text-red-400 transition-colors"
             title="Supprimer"
           >
             <Trash2 size={16} />
@@ -77,7 +77,7 @@ function UserRow({ user, currentUser, onEdit, onDelete }) {
 function UserList({ users, currentUser, onEdit, onDelete, emptyLabel }) {
   if (users.length === 0) {
     return (
-      <div className="text-center py-16 text-[#555]">
+      <div className="text-center py-16 text-neutral-400">
         <Users size={36} className="mx-auto mb-3 opacity-40" />
         <p className="text-sm">{emptyLabel}</p>
       </div>
@@ -85,7 +85,7 @@ function UserList({ users, currentUser, onEdit, onDelete, emptyLabel }) {
   }
 
   return (
-    <div className="bg-[#141414] border border-[#222] rounded-xl overflow-hidden divide-y divide-[#222]">
+    <div className="admin-card border border-black/[0.08] rounded-xl overflow-hidden divide-y divide-[#222]">
       {users.map((user) => (
         <UserRow
           key={user.id}
@@ -236,7 +236,7 @@ export default function AdminUsers() {
   return (
     <div className="space-y-6">
       {/* Onglets */}
-      <div className="flex gap-1 p-1 bg-[#141414] border border-[#222] rounded-xl w-full sm:w-auto">
+      <div className="flex gap-1 p-1 admin-card border border-black/[0.08] rounded-xl w-full sm:w-auto">
         {TABS.map((tab) => {
           const Icon = tab.icon;
           const count = tab.id === "admin" ? admins.length : assistants.length;
@@ -251,7 +251,7 @@ export default function AdminUsers() {
                   ? tab.id === "admin"
                     ? "bg-[#D7A12B]/15 text-[#D7A12B]"
                     : "bg-blue-500/15 text-blue-400"
-                  : "text-[#888] hover:text-[#f5f0e8]"
+                  : "text-neutral-500 hover:text-[#0a0a0a]"
               }`}
             >
               <Icon size={16} />
@@ -268,7 +268,7 @@ export default function AdminUsers() {
 
       {/* En-tête de l'onglet actif + Ajouter */}
       <div className="flex items-center justify-between">
-        <p className="text-sm text-[#888]">
+        <p className="text-sm text-neutral-500">
           {activeTab === "admin"
             ? `${admins.length} administrateur(s)`
             : `${assistants.length} assistant(s)`}
@@ -287,7 +287,7 @@ export default function AdminUsers() {
       {loading ? (
         <div className="space-y-3">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-16 bg-[#141414] rounded-lg animate-pulse" />
+            <div key={i} className="h-16 admin-card rounded-lg animate-pulse" />
           ))}
         </div>
       ) : (
@@ -306,10 +306,10 @@ export default function AdminUsers() {
 
       {showModal && (
         <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center px-4">
-          <div className="bg-[#141414] border border-[#222] rounded-2xl w-full max-w-md">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-[#222]">
-              <h2 className="text-lg font-medium text-[#f5f0e8]">{modalTitle}</h2>
-              <button onClick={() => setShowModal(false)} className="text-[#555] hover:text-[#f5f0e8]">
+          <div className="admin-card border border-black/[0.08] rounded-2xl w-full max-w-md">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-black/[0.08]">
+              <h2 className="text-lg font-medium text-[#0a0a0a]">{modalTitle}</h2>
+              <button onClick={() => setShowModal(false)} className="text-neutral-400 hover:text-[#0a0a0a]">
                 <X size={20} />
               </button>
             </div>
@@ -319,11 +319,11 @@ export default function AdminUsers() {
                 <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
                   <p className="text-sm text-emerald-400 mb-2">{successLabel} avec succès !</p>
                   {emailSent ? (
-                    <p className="text-xs text-[#888] flex items-start gap-2 mb-3">
+                    <p className="text-xs text-neutral-500 flex items-start gap-2 mb-3">
                       <Mail size={14} className="text-emerald-400 shrink-0 mt-0.5" />
                       <span>
                         Un email avec le mot de passe et le lien de connexion admin a été envoyé à{" "}
-                        <strong className="text-[#f5f0e8]">{email}</strong>.
+                        <strong className="text-[#0a0a0a]">{email}</strong>.
                       </span>
                     </p>
                   ) : (
@@ -332,7 +332,7 @@ export default function AdminUsers() {
                     </p>
                   )}
                   <div className="flex items-center gap-2">
-                    <code className="flex-1 px-3 py-2 bg-[#1a1a1a] rounded text-[#f5f0e8] text-sm font-mono">
+                    <code className="flex-1 px-3 py-2 bg-neutral-50 rounded text-[#0a0a0a] text-sm font-mono">
                       {generatedPwd}
                     </code>
                     <button
@@ -341,11 +341,11 @@ export default function AdminUsers() {
                       className="p-2 bg-[#222] rounded-lg hover:bg-[#333] transition-colors"
                       title="Copier"
                     >
-                      {copied ? <Check size={16} className="text-emerald-400" /> : <Copy size={16} className="text-[#888]" />}
+                      {copied ? <Check size={16} className="text-emerald-400" /> : <Copy size={16} className="text-neutral-500" />}
                     </button>
                   </div>
                   {!emailSent && (
-                    <p className="text-xs text-[#888] mt-2">
+                    <p className="text-xs text-neutral-500 mt-2">
                       Ce mot de passe ne sera plus affiché. Notez-le maintenant.
                     </p>
                   )}
@@ -368,41 +368,41 @@ export default function AdminUsers() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">Prénom *</label>
+                    <label className="block text-xs text-neutral-500 uppercase tracking-wider mb-1">Prénom *</label>
                     <input
                       type="text"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
                       required
-                      className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none"
+                      className="w-full px-3 py-2.5 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-sm focus:border-[#D7A12B] focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">Nom *</label>
+                    <label className="block text-xs text-neutral-500 uppercase tracking-wider mb-1">Nom *</label>
                     <input
                       type="text"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
                       required
-                      className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none"
+                      className="w-full px-3 py-2.5 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-sm focus:border-[#D7A12B] focus:outline-none"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs text-[#888] uppercase tracking-wider mb-1">Email *</label>
+                  <label className="block text-xs text-neutral-500 uppercase tracking-wider mb-1">Email *</label>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full px-3 py-2.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-[#f5f0e8] text-sm focus:border-[#D7A12B] focus:outline-none"
+                    className="w-full px-3 py-2.5 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-sm focus:border-[#D7A12B] focus:outline-none"
                   />
                 </div>
 
                 {!editingUser && activeTab === "admin" && (
                   <div>
-                    <label className="block text-xs text-[#888] uppercase tracking-wider mb-2">
+                    <label className="block text-xs text-neutral-500 uppercase tracking-wider mb-2">
                       Type de compte
                     </label>
                     <div className="grid grid-cols-2 gap-3">
@@ -412,13 +412,13 @@ export default function AdminUsers() {
                         className={`flex items-start gap-2 p-3 rounded-lg border text-left transition-colors ${
                           createRole === "admin"
                             ? "border-[#D7A12B] bg-[#D7A12B]/10"
-                            : "border-[#333] bg-[#1a1a1a] hover:border-[#555]"
+                            : "border-black/[0.12] bg-neutral-50 hover:border-[#555]"
                         }`}
                       >
                         <Shield size={16} className="text-[#D7A12B] shrink-0 mt-0.5" />
                         <span>
-                          <span className="block text-sm text-[#f5f0e8] font-medium">Administrateur</span>
-                          <span className="block text-[11px] text-[#888] mt-0.5">Accès complet</span>
+                          <span className="block text-sm text-[#0a0a0a] font-medium">Administrateur</span>
+                          <span className="block text-[11px] text-neutral-500 mt-0.5">Accès complet</span>
                         </span>
                       </button>
                       <button
@@ -427,13 +427,13 @@ export default function AdminUsers() {
                         className={`flex items-start gap-2 p-3 rounded-lg border text-left transition-colors ${
                           createRole === "sub_admin"
                             ? "border-[#D7A12B] bg-[#D7A12B]/10"
-                            : "border-[#333] bg-[#1a1a1a] hover:border-[#555]"
+                            : "border-black/[0.12] bg-neutral-50 hover:border-[#555]"
                         }`}
                       >
                         <ShieldCheck size={16} className="text-[#D7A12B] shrink-0 mt-0.5" />
                         <span>
-                          <span className="block text-sm text-[#f5f0e8] font-medium">Compte pointage</span>
-                          <span className="block text-[11px] text-[#888] mt-0.5">
+                          <span className="block text-sm text-[#0a0a0a] font-medium">Compte pointage</span>
+                          <span className="block text-[11px] text-neutral-500 mt-0.5">
                             Borne boutique — pointer les assistants, sans Utilisateurs / Suivi / changement PIN assistant
                           </span>
                         </span>
@@ -443,7 +443,7 @@ export default function AdminUsers() {
                 )}
 
                 {!editingUser && (
-                  <p className="text-xs text-[#888] bg-[#1a1a1a] p-3 rounded-lg">
+                  <p className="text-xs text-neutral-500 bg-neutral-50 p-3 rounded-lg">
                     Un mot de passe sera généré automatiquement et envoyé par email avec le lien vers la page de connexion admin.
                   </p>
                 )}
@@ -452,7 +452,7 @@ export default function AdminUsers() {
                   <button
                     type="button"
                     onClick={() => setShowModal(false)}
-                    className="px-5 py-2.5 text-sm text-[#888] hover:text-[#f5f0e8]"
+                    className="px-5 py-2.5 text-sm text-neutral-500 hover:text-[#0a0a0a]"
                   >
                     Annuler
                   </button>
