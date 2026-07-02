@@ -375,7 +375,7 @@ export async function fetchOrderInvoicePdf(id) {
 
   if (!response.ok) {
     const data = await response.json().catch(() => ({}));
-    throw new Error(data.message || data.error || `Erreur ${response.status}`);
+    throw new Error(data.error || data.message || `Erreur ${response.status}`);
   }
 
   if (!contentType.includes("pdf")) {
