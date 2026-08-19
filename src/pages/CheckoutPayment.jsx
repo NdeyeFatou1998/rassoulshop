@@ -17,21 +17,6 @@ function extractOrderRef(...candidates) {
   return "";
 }
 
-function downloadBlob(blob, filename) {
-  const pdfBlob = blob.type?.includes("pdf") ? blob : new Blob([blob], { type: "application/pdf" });
-  const url = URL.createObjectURL(pdfBlob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.rel = "noopener";
-  document.body.appendChild(a);
-  a.click();
-  window.setTimeout(() => {
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }, 500);
-}
-
 export default function CheckoutPayment() {
   const { ref: refParam } = useParams();
   const [params] = useSearchParams();
@@ -144,14 +129,36 @@ export default function CheckoutPayment() {
     };
   }, [state, ref]);
 
-  function handleDownload() {
-    if (!invoiceBlob || !order?.reference) return;
-    downloadBlob(invoiceBlob, `${order.reference}-facture.pdf`);
+  const invoiceDownloadHref = ref
+    ? `/api/payments/orange-money/order/${encodeURIComponent(ref)}/invoice?download=1`
+    : "";
+
+  async function handleDownload(e) {
+    if (!order?.reference || !invoiceBlob) return;
+    const filename = `${order.reference}-facture.pdf`;
+    try {
+      const file = new File([invoiceBlob], filename, { type: "application/pdf" });
+      if (typeof navigator.canShare === "function" && navigator.canShare({ files: [file] })) {
+        e.preventDefault();
+        await navigator.share({
+          files: [file],
+          title: filename,
+          text: "Facture Rassoul Shop",
+        });
+      }
+    } catch (err) {
+      if (err?.name === "AbortError") {
+        e.preventDefault();
+        return;
+      }
+      e.preventDefault();
+      window.open(invoiceDownloadHref, "_blank", "noopener,noreferrer");
+    }
   }
 
   if (state === "paid") {
     return (
-      <section className="w-full flex flex-col items-center px-4 pt-24 md:pt-28 pb-16 md:pb-20">
+      <section className="w-full flex flex-col items-center px-4 pt-24 md:pt-28 pb-28 md:pb-20">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -200,15 +207,19 @@ export default function CheckoutPayment() {
               <p className="text-xs uppercase tracking-[0.16em] text-neutral-500 font-semibold">
                 Votre facture
               </p>
-              <button
-                type="button"
+              <a
+                href={invoiceDownloadHref || undefined}
+                download={order?.reference ? `${order.reference}-facture.pdf` : undefined}
+                target="_blank"
+                rel="noopener noreferrer"
                 onClick={handleDownload}
-                disabled={!invoiceBlob}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#D7A12B] text-[#0a0a0a] text-[11px] uppercase tracking-[0.16em] font-bold disabled:opacity-50"
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#D7A12B] text-[#0a0a0a] text-[11px] uppercase tracking-[0.16em] font-bold ${
+                  !invoiceBlob && !invoiceDownloadHref ? "pointer-events-none opacity-50" : ""
+                }`}
               >
                 <Download size={14} />
                 Télécharger
-              </button>
+              </a>
             </div>
             <div className="bg-neutral-100 min-h-[420px] flex items-center justify-center p-3 md:p-5">
               {!invoiceUrl && !invoiceError && (
@@ -229,6 +240,23 @@ export default function CheckoutPayment() {
                 />
               )}
             </div>
+          </div>
+
+          <div className="md:hidden mt-4">
+            <a
+              href={invoiceDownloadHref || undefined}
+              download={order?.reference ? `${order.reference}-facture.pdf` : undefined}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={handleDownload}
+              className="flex items-center justify-center gap-2 w-full py-3.5 rounded-full bg-[#D7A12B] text-[#0a0a0a] text-[12px] uppercase tracking-[0.16em] font-bold"
+            >
+              <Download size={16} />
+              Télécharger / Partager la facture
+            </a>
+            <p className="text-[11px] text-neutral-500 text-center mt-2 leading-relaxed">
+              Sur téléphone, utilisez ce bouton puis « Enregistrer dans Fichiers » ou Partager.
+            </p>
           </div>
 
           <div className="text-center mt-8">
