@@ -35,6 +35,7 @@ import Lookbook from "./pages/Lookbook";
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import CheckoutPayment from "./pages/CheckoutPayment";
 import GiftBoxShop from "./pages/GiftBoxShop";
 import GiftBoxDetail from "./pages/GiftBoxDetail";
 import CoffretsShop from "./pages/CoffretsShop";
@@ -99,6 +100,8 @@ function AnimatedRoutes() {
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/checkout/payment" element={<CheckoutPayment />} />
+          <Route path="/checkout/success" element={<CheckoutPayment />} />
           <Route path="/gift-boxes" element={<GiftBoxShop />} />
           <Route path="/gift-boxes/:id" element={<GiftBoxDetail />} />
         </Routes>

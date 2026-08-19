@@ -24,6 +24,7 @@ export default function Checkout() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [orderReference, setOrderReference] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState("orange_money");
 
   useEffect(() => {
     if (success) {
@@ -75,11 +76,18 @@ export default function Checkout() {
           notes: form.notes || null,
           items,
           total: cartTotal,
+          payment_method: paymentMethod,
         }),
       });
       const data = await res.json();
       if (!data.success) {
         setError(data.message || "Erreur lors de la commande.");
+        return;
+      }
+
+      if (data.payment_url) {
+        clearCart();
+        window.location.href = data.payment_url;
         return;
       }
 
@@ -262,6 +270,38 @@ export default function Checkout() {
               />
             </div>
 
+            <div>
+              <p className={labelCls}>Paiement</p>
+              <div className="space-y-2">
+                <label className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer ${paymentMethod === "orange_money" ? "border-[#D7A12B] bg-[#D7A12B]/8" : "border-black/[0.08]"}`}>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    checked={paymentMethod === "orange_money"}
+                    onChange={() => setPaymentMethod("orange_money")}
+                    className="mt-1 accent-[#D7A12B]"
+                  />
+                  <span>
+                    <span className="block text-sm font-semibold text-[#0a0a0a]">Orange Money</span>
+                    <span className="block text-xs text-neutral-500">Paiement immédiat, redirection vers Orange</span>
+                  </span>
+                </label>
+                <label className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer ${paymentMethod === "cash_on_delivery" ? "border-[#D7A12B] bg-[#D7A12B]/8" : "border-black/[0.08]"}`}>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    checked={paymentMethod === "cash_on_delivery"}
+                    onChange={() => setPaymentMethod("cash_on_delivery")}
+                    className="mt-1 accent-[#D7A12B]"
+                  />
+                  <span>
+                    <span className="block text-sm font-semibold text-[#0a0a0a]">Paiement à la livraison</span>
+                    <span className="block text-xs text-neutral-500">Règlement en espèces à la réception</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+
             {error && (
               <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-sm">
                 {error}
@@ -337,11 +377,13 @@ export default function Checkout() {
                            disabled:opacity-50 disabled:cursor-not-allowed
                            hover:bg-[#E8B945] transition-all duration-300"
               >
-                {submitting ? "Envoi en cours…" : "Commander maintenant"}
+                {submitting ? "Envoi en cours…" : paymentMethod === "orange_money" ? "Payer avec Orange Money" : "Commander maintenant"}
               </motion.button>
 
               <p className="text-center text-[10px] text-neutral-400 mt-3">
-                Paiement à la livraison · Livraison gratuite
+                {paymentMethod === "orange_money"
+                  ? "Vous serez redirigé vers Orange Money"
+                  : "Paiement à la livraison · Livraison gratuite"}
               </p>
             </div>
           </motion.div>

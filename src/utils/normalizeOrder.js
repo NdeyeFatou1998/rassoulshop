@@ -54,6 +54,8 @@ export function normalizeOrder(raw) {
     customerPhone: raw.customer_phone || raw.customerPhone || "",
     customerEmail: raw.customer_email || raw.customerEmail || "",
     deliveryAddress: raw.delivery_address || raw.deliveryAddress || "",
+    payment_method: raw.payment_method || raw.paymentMethod || "cash_on_delivery",
+    payment_status: raw.payment_status || raw.paymentStatus || "",
     createdAt: raw.created_at || raw.createdAt,
     items,
     total,
