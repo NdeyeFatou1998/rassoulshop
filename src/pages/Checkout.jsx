@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Truck, Phone, MapPin, User, Mail, CheckCircle, ShoppingBag } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { getProductUnitPrice } from "../utils/pricing";
+import OrangeMoneyLogo from "../components/ui/OrangeMoneyLogo";
 
 const inputCls =
   "w-full px-4 py-3 premium-input rounded-xl text-sm text-[#0a0a0a] placeholder-neutral-400 focus:border-[#D7A12B]/60 focus:outline-none transition-colors";
@@ -25,6 +26,21 @@ export default function Checkout() {
   const [success, setSuccess] = useState(false);
   const [orderReference, setOrderReference] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("orange_money");
+  const [omReady, setOmReady] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/payments/orange-money/ready")
+      .then((r) => r.json())
+      .then((d) => {
+        const ok = Boolean(d.success && d.ready && d.canInitPayment);
+        setOmReady(ok);
+        if (!ok) setPaymentMethod("cash_on_delivery");
+      })
+      .catch(() => {
+        setOmReady(false);
+        setPaymentMethod("cash_on_delivery");
+      });
+  }, []);
 
   useEffect(() => {
     if (success) {
@@ -189,17 +205,35 @@ export default function Checkout() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.1 }}
-        className="flex items-center gap-3 p-4 rounded-2xl bg-[#D7A12B]/10 border border-[#D7A12B]/25 mb-8"
+        className={`flex items-center gap-3 p-4 rounded-2xl border mb-8 ${
+          paymentMethod === "orange_money"
+            ? "bg-black border-black"
+            : "bg-[#D7A12B]/10 border-[#D7A12B]/25"
+        }`}
       >
-        <div className="w-9 h-9 rounded-full bg-[#D7A12B]/20 flex items-center justify-center flex-shrink-0">
-          <Truck size={18} className="text-[#D7A12B]" />
-        </div>
-        <div>
-          <p className="text-sm font-semibold text-[#0a0a0a]">Vous paierez à la livraison</p>
-          <p className="text-[11px] text-neutral-500 mt-0.5">
-            Aucun paiement en ligne requis — règlement en espèces à la réception
-          </p>
-        </div>
+        {paymentMethod === "orange_money" ? (
+          <>
+            <OrangeMoneyLogo className="h-12 w-auto flex-shrink-0" />
+            <div>
+              <p className="text-sm font-semibold text-white">Paiement Orange Money</p>
+              <p className="text-[11px] text-white/70 mt-0.5">
+                Vous serez redirigé vers la page sécurisée Orange pour valider le paiement.
+              </p>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="w-9 h-9 rounded-full bg-[#D7A12B]/20 flex items-center justify-center flex-shrink-0">
+              <Truck size={18} className="text-[#D7A12B]" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-[#0a0a0a]">Vous paierez à la livraison</p>
+              <p className="text-[11px] text-neutral-500 mt-0.5">
+                Aucun paiement en ligne requis — règlement en espèces à la réception
+              </p>
+            </div>
+          </>
+        )}
       </motion.div>
 
       <form onSubmit={handleSubmit}>
@@ -271,19 +305,35 @@ export default function Checkout() {
             </div>
 
             <div>
-              <p className={labelCls}>Paiement</p>
+              <p className={labelCls}>Moyen de paiement</p>
               <div className="space-y-2">
-                <label className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer ${paymentMethod === "orange_money" ? "border-[#D7A12B] bg-[#D7A12B]/8" : "border-black/[0.08]"}`}>
+                <label
+                  className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${
+                    !omReady
+                      ? "opacity-50 cursor-not-allowed border-black/[0.08]"
+                      : paymentMethod === "orange_money"
+                        ? "border-black bg-black"
+                        : "border-black/[0.08] hover:border-black/30"
+                  }`}
+                >
                   <input
                     type="radio"
                     name="paymentMethod"
                     checked={paymentMethod === "orange_money"}
+                    disabled={!omReady}
                     onChange={() => setPaymentMethod("orange_money")}
-                    className="mt-1 accent-[#D7A12B]"
+                    className="accent-[#FF7900]"
                   />
-                  <span>
-                    <span className="block text-sm font-semibold text-[#0a0a0a]">Orange Money</span>
-                    <span className="block text-xs text-neutral-500">Paiement immédiat, redirection vers Orange</span>
+                  <OrangeMoneyLogo className="h-10 w-auto flex-shrink-0" />
+                  <span className={paymentMethod === "orange_money" && omReady ? "text-white" : ""}>
+                    <span className={`block text-sm font-semibold ${paymentMethod === "orange_money" && omReady ? "text-white" : "text-[#0a0a0a]"}`}>
+                      Orange Money
+                    </span>
+                    <span className={`block text-xs ${paymentMethod === "orange_money" && omReady ? "text-white/65" : "text-neutral-500"}`}>
+                      {omReady
+                        ? "Paiement immédiat et sécurisé"
+                        : "Indisponible pour le moment"}
+                    </span>
                   </span>
                 </label>
                 <label className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer ${paymentMethod === "cash_on_delivery" ? "border-[#D7A12B] bg-[#D7A12B]/8" : "border-black/[0.08]"}`}>
@@ -373,11 +423,23 @@ export default function Checkout() {
                 type="submit"
                 disabled={submitting || cart.length === 0}
                 whileTap={{ scale: 0.97 }}
-                className="w-full py-3.5 rounded-full bg-[#D7A12B] text-[#0a0a0a] text-[11px] uppercase tracking-[0.2em] font-bold
-                           disabled:opacity-50 disabled:cursor-not-allowed
-                           hover:bg-[#E8B945] transition-all duration-300"
+                className={`w-full py-3.5 rounded-full text-[11px] uppercase tracking-[0.2em] font-bold
+                           disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300
+                           flex items-center justify-center gap-2.5
+                           ${paymentMethod === "orange_money"
+                             ? "bg-black text-white hover:bg-[#111]"
+                             : "bg-[#D7A12B] text-[#0a0a0a] hover:bg-[#E8B945]"}`}
               >
-                {submitting ? "Envoi en cours…" : paymentMethod === "orange_money" ? "Payer avec Orange Money" : "Commander maintenant"}
+                {submitting ? (
+                  "Envoi en cours…"
+                ) : paymentMethod === "orange_money" ? (
+                  <>
+                    <OrangeMoneyLogo className="h-7 w-auto" />
+                    <span>Payer maintenant</span>
+                  </>
+                ) : (
+                  "Commander maintenant"
+                )}
               </motion.button>
 
               <p className="text-center text-[10px] text-neutral-400 mt-3">

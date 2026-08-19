@@ -4,6 +4,7 @@
 
 import { Link } from "react-router-dom";
 import { BRAND_LOGO } from "../../constants/brand";
+import OrangeMoneyLogo from "../ui/OrangeMoneyLogo";
 
 export default function Footer() {
   return (
@@ -69,6 +70,16 @@ export default function Footer() {
         </div>
 
         <div className="h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent mb-5" />
+
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-5">
+          <p className="text-[10px] uppercase tracking-[0.18em] text-white/45">
+            Paiement accepté
+          </p>
+          <div className="flex items-center gap-3">
+            <OrangeMoneyLogo className="h-10 w-auto" />
+            <span className="text-[11px] text-white/55">ou paiement à la livraison</span>
+          </div>
+        </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] text-white/45">
           <span>&copy; {new Date().getFullYear()} Rassoul Shop Sn — Tous droits réservés</span>

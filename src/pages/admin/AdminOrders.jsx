@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { fetchOrders, updateOrderStatus, deleteOrder, fetchOrderInvoicePdf, downloadBlobAsFile } from "../../services/adminApi";
 import { normalizeOrder } from "../../utils/normalizeOrder";
+import OrangeMoneyLogo from "../../components/ui/OrangeMoneyLogo";
 
 const STATUS_CONFIG = {
   pending:   { label: "En attente",  icon: Clock,       cls: "bg-amber-500/20 text-amber-400",   border: "border-amber-500/30" },
@@ -235,6 +236,9 @@ export default function AdminOrders() {
                       <StIcon size={10} />
                       {st.label}
                     </span>
+                    {order.payment_method === "orange_money" && (
+                      <OrangeMoneyLogo className="h-6 w-auto" />
+                    )}
                   </div>
                   <p className="text-sm font-medium text-[#0a0a0a] mt-1.5">
                     {order.customerFirstName} {order.customerLastName}
@@ -318,10 +322,15 @@ export default function AdminOrders() {
                   {selectedOrder.customerEmail && (
                     <p className="text-neutral-500 text-xs">{selectedOrder.customerEmail}</p>
                   )}
-                  <p className="text-xs mt-2">
-                    {selectedOrder.payment_method === "orange_money" ? "Orange Money" : "Paiement à la livraison"}
-                    {selectedOrder.payment_status ? ` · ${selectedOrder.payment_status}` : ""}
-                  </p>
+                  <div className="flex items-center gap-2 mt-2">
+                    {selectedOrder.payment_method === "orange_money" ? (
+                      <OrangeMoneyLogo className="h-7 w-auto" />
+                    ) : null}
+                    <p className="text-xs">
+                      {selectedOrder.payment_method === "orange_money" ? "Orange Money" : "Paiement à la livraison"}
+                      {selectedOrder.payment_status ? ` · ${selectedOrder.payment_status}` : ""}
+                    </p>
+                  </div>
                 </div>
                 <div className="bg-neutral-50 rounded-lg p-3 border border-black/[0.08]">
                   <p className="text-[10px] text-neutral-500 uppercase tracking-wider mb-1">Adresse</p>

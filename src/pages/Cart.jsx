@@ -13,9 +13,10 @@
 
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Minus, Plus, Trash2, ShoppingCart, ArrowLeft, Truck, Shield, CreditCard } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingCart, ArrowLeft, Truck, Shield } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { getProductUnitPrice, getLineTotal } from "../utils/pricing";
+import OrangeMoneyLogo from "../components/ui/OrangeMoneyLogo";
 
 export default function Cart() {
   const { cart, cartTotal, cartCount, updateQuantity, removeFromCart, clearCart } = useCart();
@@ -242,7 +243,8 @@ export default function Cart() {
                   <Shield size={12} /> <span>Paiement sécurisé</span>
                 </div>
                 <div className="flex items-center gap-2 text-[10px] text-muted/50">
-                  <CreditCard size={12} /> <span>Plusieurs moyens de paiement</span>
+                  <OrangeMoneyLogo className="h-6 w-auto" />
+                  <span>Orange Money ou paiement à la livraison</span>
                 </div>
               </div>
             </div>

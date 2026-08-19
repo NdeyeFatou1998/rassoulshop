@@ -13,11 +13,12 @@ import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Star, Minus, Plus, ShoppingCart, ArrowLeft, Check,
-  Truck, ShieldCheck, Gift,
+  Truck, Gift,
 } from "lucide-react";
 import { fetchProducts, fetchProductById } from "../services/api";
 import { useCart } from "../context/CartContext";
 import ProductCard from "../components/ui/ProductCard";
+import OrangeMoneyLogo from "../components/ui/OrangeMoneyLogo";
 import { isVipProduct } from "../constants/categories";
 
 const GOLD = "#D7A12B";
@@ -463,21 +464,24 @@ export default function ProductDetail() {
 
             {/* Garanties */}
             <motion.div variants={fadeUp} className="grid grid-cols-3 gap-2.5">
-              {[
-                { icon: Truck, label: "Livraison soignée" },
-                { icon: ShieldCheck, label: "Paiement sécurisé" },
-                { icon: Gift, label: "Emballage offert" },
-              ].map(({ icon: Icon, label }) => (
-                <div
-                  key={label}
-                  className="flex flex-col items-center text-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.02] px-2 py-3.5"
-                >
-                  <Icon size={18} style={{ color: GOLD }} strokeWidth={1.6} />
-                  <span className="text-[9.5px] md:text-[10px] uppercase tracking-[0.1em] text-neutral-500 leading-tight">
-                    {label}
-                  </span>
-                </div>
-              ))}
+              <div className="flex flex-col items-center text-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.02] px-2 py-3.5">
+                <Truck size={18} style={{ color: GOLD }} strokeWidth={1.6} />
+                <span className="text-[9.5px] md:text-[10px] uppercase tracking-[0.1em] text-neutral-500 leading-tight">
+                  Livraison soignée
+                </span>
+              </div>
+              <div className="flex flex-col items-center text-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.02] px-2 py-3.5">
+                <OrangeMoneyLogo className="h-7 w-auto" />
+                <span className="text-[9.5px] md:text-[10px] uppercase tracking-[0.1em] text-neutral-500 leading-tight">
+                  Orange Money
+                </span>
+              </div>
+              <div className="flex flex-col items-center text-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.02] px-2 py-3.5">
+                <Gift size={18} style={{ color: GOLD }} strokeWidth={1.6} />
+                <span className="text-[9.5px] md:text-[10px] uppercase tracking-[0.1em] text-neutral-500 leading-tight">
+                  Emballage offert
+                </span>
+              </div>
             </motion.div>
           </motion.div>
         </div>

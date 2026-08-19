@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { CheckCircle, XCircle, Loader2 } from "lucide-react";
+import OrangeMoneyLogo from "../components/ui/OrangeMoneyLogo";
 
 export default function CheckoutPayment() {
   const [params] = useSearchParams();
@@ -39,6 +40,9 @@ export default function CheckoutPayment() {
   return (
     <section className="w-full flex flex-col items-center px-4 pt-24 md:pt-28 pb-16">
       <div className="max-w-sm text-center space-y-4">
+        <div className="flex justify-center">
+          <OrangeMoneyLogo className="h-14 w-auto" />
+        </div>
         {state === "loading" && (
           <>
             <Loader2 className="mx-auto animate-spin text-[#D7A12B]" size={40} />
