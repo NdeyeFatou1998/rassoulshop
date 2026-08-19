@@ -101,7 +101,9 @@ function AnimatedRoutes() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/checkout/payment" element={<CheckoutPayment />} />
+          <Route path="/checkout/payment/:ref" element={<CheckoutPayment />} />
           <Route path="/checkout/success" element={<CheckoutPayment />} />
+          <Route path="/checkout/success/:ref" element={<CheckoutPayment />} />
           <Route path="/gift-boxes" element={<GiftBoxShop />} />
           <Route path="/gift-boxes/:id" element={<GiftBoxDetail />} />
         </Routes>

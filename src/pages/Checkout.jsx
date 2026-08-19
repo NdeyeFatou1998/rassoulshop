@@ -102,6 +102,18 @@ export default function Checkout() {
       }
 
       if (data.payment_url) {
+        const omRef =
+          data.order_reference ||
+          data.order?.reference ||
+          data.order?.order_reference ||
+          null;
+        if (omRef) {
+          try {
+            sessionStorage.setItem("rassoul_om_order_ref", omRef);
+          } catch {
+            /* ignore */
+          }
+        }
         clearCart();
         window.location.href = data.payment_url;
         return;
