@@ -218,51 +218,6 @@ export default function Checkout() {
         <h1 className="font-serif text-2xl md:text-3xl text-[#0a0a0a]">Finaliser ma commande</h1>
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.1 }}
-        className={`flex items-center gap-3 p-4 rounded-2xl border mb-8 ${
-          paymentMethod === "orange_money" || paymentMethod === "wave"
-            ? "bg-black border-black"
-            : "bg-[#D7A12B]/10 border-[#D7A12B]/25"
-        }`}
-      >
-        {paymentMethod === "orange_money" ? (
-          <>
-            <OrangeMoneyLogo className="h-12 w-auto flex-shrink-0" />
-            <div>
-              <p className="text-sm font-semibold text-white">Paiement Orange Money</p>
-              <p className="text-[11px] text-white/70 mt-0.5">
-                Vous serez redirigé vers la page sécurisée Orange pour valider le paiement.
-              </p>
-            </div>
-          </>
-        ) : paymentMethod === "wave" ? (
-          <>
-            <WaveLogo className="h-10 flex-shrink-0" />
-            <div>
-              <p className="text-sm font-semibold text-white">Paiement Wave</p>
-              <p className="text-[11px] text-white/70 mt-0.5">
-                Vous serez redirigé vers Wave pour valider le paiement.
-              </p>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="w-9 h-9 rounded-full bg-[#D7A12B]/20 flex items-center justify-center flex-shrink-0">
-              <Truck size={18} className="text-[#D7A12B]" />
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-[#0a0a0a]">Vous paierez à la livraison</p>
-              <p className="text-[11px] text-neutral-500 mt-0.5">
-                Aucun paiement en ligne requis — règlement en espèces à la réception
-              </p>
-            </div>
-          </>
-        )}
-      </motion.div>
-
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
           <motion.div
@@ -333,9 +288,9 @@ export default function Checkout() {
 
             <div>
               <p className={labelCls}>Moyen de paiement</p>
-              <div className="space-y-2">
+              <div className="grid grid-cols-3 gap-2 sm:gap-3">
                 <label
-                  className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${
+                  className={`flex flex-col items-center justify-center gap-2 p-3 sm:p-4 rounded-xl border cursor-pointer text-center transition-colors min-h-[108px] ${
                     !omReady
                       ? "opacity-50 cursor-not-allowed border-black/[0.08]"
                       : paymentMethod === "orange_money"
@@ -349,21 +304,19 @@ export default function Checkout() {
                     checked={paymentMethod === "orange_money"}
                     disabled={!omReady}
                     onChange={() => setPaymentMethod("orange_money")}
-                    className="accent-[#FF7900]"
+                    className="sr-only"
                   />
-                  <OrangeMoneyLogo className="h-10 w-auto flex-shrink-0" />
-                  <span>
-                    <span className={`block text-sm font-semibold ${paymentMethod === "orange_money" && omReady ? "text-white" : "text-[#0a0a0a]"}`}>
-                      Orange Money
-                    </span>
-                    <span className={`block text-xs ${paymentMethod === "orange_money" && omReady ? "text-white/65" : "text-neutral-500"}`}>
-                      {omReady ? "Paiement immédiat et sécurisé" : "Indisponible pour le moment"}
-                    </span>
+                  <OrangeMoneyLogo className="h-9 sm:h-11 w-auto" />
+                  <span className={`text-[11px] sm:text-xs font-semibold leading-tight ${paymentMethod === "orange_money" && omReady ? "text-white" : "text-[#0a0a0a]"}`}>
+                    Orange Money
                   </span>
+                  {!omReady && (
+                    <span className="text-[9px] text-neutral-400">Indisponible</span>
+                  )}
                 </label>
 
                 <label
-                  className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${
+                  className={`flex flex-col items-center justify-center gap-2 p-3 sm:p-4 rounded-xl border cursor-pointer text-center transition-colors min-h-[108px] ${
                     !waveReady
                       ? "opacity-50 cursor-not-allowed border-black/[0.08]"
                       : paymentMethod === "wave"
@@ -377,30 +330,36 @@ export default function Checkout() {
                     checked={paymentMethod === "wave"}
                     disabled={!waveReady}
                     onChange={() => setPaymentMethod("wave")}
-                    className="accent-[#1DC8FF]"
+                    className="sr-only"
                   />
-                  <WaveLogo className="h-9 flex-shrink-0" />
-                  <span>
-                    <span className={`block text-sm font-semibold ${paymentMethod === "wave" && waveReady ? "text-white" : "text-[#0a0a0a]"}`}>
-                      Wave
-                    </span>
-                    <span className={`block text-xs ${paymentMethod === "wave" && waveReady ? "text-white/65" : "text-neutral-500"}`}>
-                      {waveReady ? "Paiement immédiat et sécurisé" : "Indisponible pour le moment"}
-                    </span>
+                  <WaveLogo className="h-9 sm:h-11 w-auto" />
+                  <span className={`text-[11px] sm:text-xs font-semibold leading-tight ${paymentMethod === "wave" && waveReady ? "text-white" : "text-[#0a0a0a]"}`}>
+                    Wave
                   </span>
+                  {!waveReady && (
+                    <span className="text-[9px] text-neutral-400">Indisponible</span>
+                  )}
                 </label>
 
-                <label className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer ${paymentMethod === "cash_on_delivery" ? "border-[#D7A12B] bg-[#D7A12B]/8" : "border-black/[0.08]"}`}>
+                <label
+                  className={`flex flex-col items-center justify-center gap-2 p-3 sm:p-4 rounded-xl border cursor-pointer text-center transition-colors min-h-[108px] ${
+                    paymentMethod === "cash_on_delivery"
+                      ? "border-[#D7A12B] bg-[#D7A12B]/8"
+                      : "border-black/[0.08] hover:border-black/30"
+                  }`}
+                >
                   <input
                     type="radio"
                     name="paymentMethod"
                     checked={paymentMethod === "cash_on_delivery"}
                     onChange={() => setPaymentMethod("cash_on_delivery")}
-                    className="mt-1 accent-[#D7A12B]"
+                    className="sr-only"
                   />
-                  <span>
-                    <span className="block text-sm font-semibold text-[#0a0a0a]">Paiement à la livraison</span>
-                    <span className="block text-xs text-neutral-500">Règlement en espèces à la réception</span>
+                  <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#D7A12B]/20 flex items-center justify-center">
+                    <Truck size={18} className="text-[#D7A12B]" />
+                  </div>
+                  <span className="text-[11px] sm:text-xs font-semibold text-[#0a0a0a] leading-tight">
+                    À la livraison
                   </span>
                 </label>
               </div>
