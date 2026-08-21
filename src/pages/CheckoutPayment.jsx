@@ -4,7 +4,9 @@ import { motion } from "framer-motion";
 import { CheckCircle, XCircle, Loader2, Download, Mail } from "lucide-react";
 import { BRAND_LOGO } from "../constants/brand";
 import OrangeMoneyLogo from "../components/ui/OrangeMoneyLogo";
+import WaveLogo from "../components/ui/WaveLogo";
 
+const PAYMENT_REF_KEY = "rassoul_payment_order_ref";
 const OM_REF_KEY = "rassoul_om_order_ref";
 
 function extractOrderRef(...candidates) {
@@ -22,7 +24,7 @@ export default function CheckoutPayment() {
   const [params] = useSearchParams();
   const storedRef = (() => {
     try {
-      return sessionStorage.getItem(OM_REF_KEY) || "";
+      return sessionStorage.getItem(PAYMENT_REF_KEY) || sessionStorage.getItem(OM_REF_KEY) || "";
     } catch {
       return "";
     }
@@ -35,6 +37,7 @@ export default function CheckoutPayment() {
     params.get("orderId"),
     params.get("reference"),
     params.get("txnid"),
+    params.get("client_reference"),
     storedRef
   );
 
@@ -64,7 +67,7 @@ export default function CheckoutPayment() {
 
     async function check() {
       try {
-        const res = await fetch(`/api/payments/orange-money/order/${encodeURIComponent(ref)}`);
+        const res = await fetch(`/api/payments/order/${encodeURIComponent(ref)}`);
         const data = await res.json();
         if (cancelled) return;
         if (!data.success) {
@@ -102,7 +105,7 @@ export default function CheckoutPayment() {
     if (state !== "paid" || !ref) return;
     let cancelled = false;
     setInvoiceError("");
-    fetch(`/api/payments/orange-money/order/${encodeURIComponent(ref)}/invoice`)
+    fetch(`/api/payments/order/${encodeURIComponent(ref)}/invoice`)
       .then(async (res) => {
         if (!res.ok) {
           const data = await res.json().catch(() => ({}));
@@ -130,7 +133,7 @@ export default function CheckoutPayment() {
   }, [state, ref]);
 
   const invoiceDownloadHref = ref
-    ? `/api/payments/orange-money/order/${encodeURIComponent(ref)}/invoice?download=1`
+    ? `/api/payments/order/${encodeURIComponent(ref)}/invoice?download=1`
     : "";
 
   async function handleDownload(e) {
@@ -184,7 +187,11 @@ export default function CheckoutPayment() {
               </p>
             )}
             <div className="flex justify-center mb-4">
-              <OrangeMoneyLogo className="h-10 w-auto" />
+              {order?.payment_method === "wave" ? (
+                <WaveLogo className="h-10" />
+              ) : (
+                <OrangeMoneyLogo className="h-10 w-auto" />
+              )}
             </div>
             <p className="text-sm text-neutral-600 leading-relaxed max-w-md mx-auto">
               {order?.has_customer_email ? (
@@ -281,7 +288,7 @@ export default function CheckoutPayment() {
             <Loader2 className="mx-auto animate-spin text-[#D7A12B]" size={40} />
             <h1 className="font-serif text-2xl text-[#0a0a0a]">Confirmation du paiement</h1>
             <p className="text-sm text-neutral-500">
-              Merci de patienter, nous vérifions votre paiement Orange Money
+              Merci de patienter, nous vérifions votre paiement
               {ref ? ` (${ref})` : ""}.
             </p>
           </>

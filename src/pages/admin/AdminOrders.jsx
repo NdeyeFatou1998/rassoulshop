@@ -10,6 +10,7 @@ import {
 import { fetchOrders, updateOrderStatus, deleteOrder, fetchOrderInvoicePdf, downloadBlobAsFile } from "../../services/adminApi";
 import { normalizeOrder } from "../../utils/normalizeOrder";
 import OrangeMoneyLogo from "../../components/ui/OrangeMoneyLogo";
+import WaveLogo from "../../components/ui/WaveLogo";
 
 const STATUS_CONFIG = {
   pending:   { label: "En attente",  icon: Clock,       cls: "bg-amber-500/20 text-amber-400",   border: "border-amber-500/30" },
@@ -239,6 +240,9 @@ export default function AdminOrders() {
                     {order.payment_method === "orange_money" && (
                       <OrangeMoneyLogo className="h-6 w-auto" />
                     )}
+                    {order.payment_method === "wave" && (
+                      <WaveLogo className="h-6" />
+                    )}
                   </div>
                   <p className="text-sm font-medium text-[#0a0a0a] mt-1.5">
                     {order.customerFirstName} {order.customerLastName}
@@ -325,9 +329,15 @@ export default function AdminOrders() {
                   <div className="flex items-center gap-2 mt-2">
                     {selectedOrder.payment_method === "orange_money" ? (
                       <OrangeMoneyLogo className="h-7 w-auto" />
+                    ) : selectedOrder.payment_method === "wave" ? (
+                      <WaveLogo className="h-7" />
                     ) : null}
                     <p className="text-xs">
-                      {selectedOrder.payment_method === "orange_money" ? "Orange Money" : "Paiement à la livraison"}
+                      {selectedOrder.payment_method === "orange_money"
+                        ? "Orange Money"
+                        : selectedOrder.payment_method === "wave"
+                          ? "Wave"
+                          : "Paiement à la livraison"}
                       {selectedOrder.payment_status ? ` · ${selectedOrder.payment_status}` : ""}
                     </p>
                   </div>

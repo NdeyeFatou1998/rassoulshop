@@ -9,6 +9,9 @@ import { ArrowLeft, Truck, Phone, MapPin, User, Mail, CheckCircle, ShoppingBag }
 import { useCart } from "../context/CartContext";
 import { getProductUnitPrice } from "../utils/pricing";
 import OrangeMoneyLogo from "../components/ui/OrangeMoneyLogo";
+import WaveLogo from "../components/ui/WaveLogo";
+
+const PAYMENT_REF_KEY = "rassoul_payment_order_ref";
 
 const inputCls =
   "w-full px-4 py-3 premium-input rounded-xl text-sm text-[#0a0a0a] placeholder-neutral-400 focus:border-[#D7A12B]/60 focus:outline-none transition-colors";
@@ -27,19 +30,20 @@ export default function Checkout() {
   const [orderReference, setOrderReference] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("orange_money");
   const [omReady, setOmReady] = useState(true);
+  const [waveReady, setWaveReady] = useState(true);
 
   useEffect(() => {
-    fetch("/api/payments/orange-money/ready")
-      .then((r) => r.json())
-      .then((d) => {
-        const ok = Boolean(d.success && d.ready && d.canInitPayment);
-        setOmReady(ok);
-        if (!ok) setPaymentMethod("cash_on_delivery");
-      })
-      .catch(() => {
-        setOmReady(false);
-        setPaymentMethod("cash_on_delivery");
-      });
+    Promise.all([
+      fetch("/api/payments/orange-money/ready").then((r) => r.json()).catch(() => ({ success: false })),
+      fetch("/api/payments/wave/ready").then((r) => r.json()).catch(() => ({ success: false })),
+    ]).then(([om, wv]) => {
+      const omOk = Boolean(om.success && om.ready && om.canInitPayment);
+      const waveOk = Boolean(wv.success && wv.ready && wv.canInitPayment);
+      setOmReady(omOk);
+      setWaveReady(waveOk);
+      if (!omOk && waveOk) setPaymentMethod("wave");
+      else if (!omOk && !waveOk) setPaymentMethod("cash_on_delivery");
+    });
   }, []);
 
   useEffect(() => {
@@ -102,14 +106,15 @@ export default function Checkout() {
       }
 
       if (data.payment_url) {
-        const omRef =
+        const payRef =
           data.order_reference ||
           data.order?.reference ||
           data.order?.order_reference ||
           null;
-        if (omRef) {
+        if (payRef) {
           try {
-            sessionStorage.setItem("rassoul_om_order_ref", omRef);
+            sessionStorage.setItem(PAYMENT_REF_KEY, payRef);
+            sessionStorage.setItem("rassoul_om_order_ref", payRef);
           } catch {
             /* ignore */
           }
@@ -218,7 +223,7 @@ export default function Checkout() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.1 }}
         className={`flex items-center gap-3 p-4 rounded-2xl border mb-8 ${
-          paymentMethod === "orange_money"
+          paymentMethod === "orange_money" || paymentMethod === "wave"
             ? "bg-black border-black"
             : "bg-[#D7A12B]/10 border-[#D7A12B]/25"
         }`}
@@ -230,6 +235,16 @@ export default function Checkout() {
               <p className="text-sm font-semibold text-white">Paiement Orange Money</p>
               <p className="text-[11px] text-white/70 mt-0.5">
                 Vous serez redirigé vers la page sécurisée Orange pour valider le paiement.
+              </p>
+            </div>
+          </>
+        ) : paymentMethod === "wave" ? (
+          <>
+            <WaveLogo className="h-10 flex-shrink-0" />
+            <div>
+              <p className="text-sm font-semibold text-white">Paiement Wave</p>
+              <p className="text-[11px] text-white/70 mt-0.5">
+                Vous serez redirigé vers Wave pour valider le paiement.
               </p>
             </div>
           </>
@@ -337,17 +352,44 @@ export default function Checkout() {
                     className="accent-[#FF7900]"
                   />
                   <OrangeMoneyLogo className="h-10 w-auto flex-shrink-0" />
-                  <span className={paymentMethod === "orange_money" && omReady ? "text-white" : ""}>
+                  <span>
                     <span className={`block text-sm font-semibold ${paymentMethod === "orange_money" && omReady ? "text-white" : "text-[#0a0a0a]"}`}>
                       Orange Money
                     </span>
                     <span className={`block text-xs ${paymentMethod === "orange_money" && omReady ? "text-white/65" : "text-neutral-500"}`}>
-                      {omReady
-                        ? "Paiement immédiat et sécurisé"
-                        : "Indisponible pour le moment"}
+                      {omReady ? "Paiement immédiat et sécurisé" : "Indisponible pour le moment"}
                     </span>
                   </span>
                 </label>
+
+                <label
+                  className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${
+                    !waveReady
+                      ? "opacity-50 cursor-not-allowed border-black/[0.08]"
+                      : paymentMethod === "wave"
+                        ? "border-black bg-black"
+                        : "border-black/[0.08] hover:border-black/30"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    checked={paymentMethod === "wave"}
+                    disabled={!waveReady}
+                    onChange={() => setPaymentMethod("wave")}
+                    className="accent-[#1DC8FF]"
+                  />
+                  <WaveLogo className="h-9 flex-shrink-0" />
+                  <span>
+                    <span className={`block text-sm font-semibold ${paymentMethod === "wave" && waveReady ? "text-white" : "text-[#0a0a0a]"}`}>
+                      Wave
+                    </span>
+                    <span className={`block text-xs ${paymentMethod === "wave" && waveReady ? "text-white/65" : "text-neutral-500"}`}>
+                      {waveReady ? "Paiement immédiat et sécurisé" : "Indisponible pour le moment"}
+                    </span>
+                  </span>
+                </label>
+
                 <label className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer ${paymentMethod === "cash_on_delivery" ? "border-[#D7A12B] bg-[#D7A12B]/8" : "border-black/[0.08]"}`}>
                   <input
                     type="radio"
@@ -438,7 +480,7 @@ export default function Checkout() {
                 className={`w-full py-3.5 rounded-full text-[11px] uppercase tracking-[0.2em] font-bold
                            disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300
                            flex items-center justify-center gap-2.5
-                           ${paymentMethod === "orange_money"
+                           ${paymentMethod === "orange_money" || paymentMethod === "wave"
                              ? "bg-black text-white hover:bg-[#111]"
                              : "bg-[#D7A12B] text-[#0a0a0a] hover:bg-[#E8B945]"}`}
               >
@@ -449,6 +491,11 @@ export default function Checkout() {
                     <OrangeMoneyLogo className="h-7 w-auto" />
                     <span>Payer maintenant</span>
                   </>
+                ) : paymentMethod === "wave" ? (
+                  <>
+                    <WaveLogo className="h-7" />
+                    <span>Payer maintenant</span>
+                  </>
                 ) : (
                   "Commander maintenant"
                 )}
@@ -457,7 +504,9 @@ export default function Checkout() {
               <p className="text-center text-[10px] text-neutral-400 mt-3">
                 {paymentMethod === "orange_money"
                   ? "Vous serez redirigé vers Orange Money"
-                  : "Paiement à la livraison · Livraison gratuite"}
+                  : paymentMethod === "wave"
+                    ? "Vous serez redirigé vers Wave"
+                    : "Paiement à la livraison · Livraison gratuite"}
               </p>
             </div>
           </motion.div>

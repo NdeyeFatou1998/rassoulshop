@@ -5,6 +5,7 @@
 import { Link } from "react-router-dom";
 import { BRAND_LOGO } from "../../constants/brand";
 import OrangeMoneyLogo from "../ui/OrangeMoneyLogo";
+import WaveLogo from "../ui/WaveLogo";
 
 export default function Footer() {
   return (
@@ -77,6 +78,7 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-3">
             <OrangeMoneyLogo className="h-10 w-auto" />
+            <WaveLogo className="h-9" />
             <span className="text-[11px] text-white/55">ou paiement à la livraison</span>
           </div>
         </div>

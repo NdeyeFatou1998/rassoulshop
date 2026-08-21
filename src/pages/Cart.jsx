@@ -17,6 +17,7 @@ import { Minus, Plus, Trash2, ShoppingCart, ArrowLeft, Truck, Shield } from "luc
 import { useCart } from "../context/CartContext";
 import { getProductUnitPrice, getLineTotal } from "../utils/pricing";
 import OrangeMoneyLogo from "../components/ui/OrangeMoneyLogo";
+import WaveLogo from "../components/ui/WaveLogo";
 
 export default function Cart() {
   const { cart, cartTotal, cartCount, updateQuantity, removeFromCart, clearCart } = useCart();
@@ -244,7 +245,8 @@ export default function Cart() {
                 </div>
                 <div className="flex items-center gap-2 text-[10px] text-muted/50">
                   <OrangeMoneyLogo className="h-6 w-auto" />
-                  <span>Orange Money ou paiement à la livraison</span>
+                  <WaveLogo className="h-5" />
+                  <span>Orange Money, Wave ou paiement à la livraison</span>
                 </div>
               </div>
             </div>
