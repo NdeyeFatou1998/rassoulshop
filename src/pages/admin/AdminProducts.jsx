@@ -654,7 +654,7 @@ export default function AdminProducts() {
               </label>
               {form.personalizable && (
                 <p className="text-xs text-neutral-500 leading-relaxed">
-                  Le client devra saisir le texte ou l&apos;inscription à graver, broder ou imprimer lors de l&apos;achat.
+                  Le client pourra saisir un texte ou une inscription (optionnel) lors de l&apos;achat.
                 </p>
               )}
             </div>

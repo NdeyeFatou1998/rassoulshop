@@ -33,7 +33,6 @@ export default function ProductDetail() {
   const [selectedVariants, setSelectedVariants] = useState({});
   const [added, setAdded] = useState(false);
   const [personalizationText, setPersonalizationText] = useState("");
-  const [personalizationError, setPersonalizationError] = useState("");
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [slideDir, setSlideDir] = useState(0);
   const { addToCart, flyTargetRef } = useCart();
@@ -44,7 +43,6 @@ export default function ProductDetail() {
     setQuantity(1);
     setAdded(false);
     setPersonalizationText("");
-    setPersonalizationError("");
     setSelectedVariants({});
     setGalleryIndex(0);
     setSlideDir(0);
@@ -141,12 +139,6 @@ export default function ProductDetail() {
   function handleAddToCart() {
     if (!product) return;
 
-    if (product.is_personalizable && !personalizationText.trim()) {
-      setPersonalizationError("Veuillez indiquer le texte ou l'inscription souhaitée.");
-      return;
-    }
-    setPersonalizationError("");
-
     const displaySrc = currentSlide?.src || product.image || FALLBACK_IMG;
 
     if (imgRef.current && flyTargetRef.current) {
@@ -190,7 +182,7 @@ export default function ProductDetail() {
     addToCart(
       { ...product, _cartUnitPrice: unitPrice },
       quantity,
-      product.is_personalizable ? personalizationText.trim() : null
+      personalizationText.trim() || null
     );
     setAdded(true);
     setTimeout(() => setAdded(false), 1800);
@@ -539,30 +531,22 @@ export default function ProductDetail() {
                   htmlFor="personalization-text"
                   className="block text-[10px] uppercase tracking-[0.2em] text-neutral-600 font-semibold mb-2"
                 >
-                  Personnalisation *
+                  Personnalisation{" "}
+                  <span className="normal-case tracking-normal font-normal text-neutral-400">
+                    (optionnel)
+                  </span>
                 </label>
                 <textarea
                   id="personalization-text"
                   value={personalizationText}
-                  onChange={(e) => {
-                    setPersonalizationText(e.target.value);
-                    if (personalizationError) setPersonalizationError("");
-                  }}
+                  onChange={(e) => setPersonalizationText(e.target.value)}
                   rows={3}
                   placeholder="Ex. : Prénom à graver, message à broder, texte à imprimer…"
-                  className={`w-full px-4 py-3 rounded-xl border bg-white text-[#0a0a0a] text-sm placeholder-neutral-400 focus:outline-none transition-colors resize-none ${
-                    personalizationError
-                      ? "border-red-400 focus:border-red-400"
-                      : "border-black/[0.12] focus:border-[#D7A12B]"
-                  }`}
+                  className="w-full px-4 py-3 rounded-xl border border-black/[0.12] bg-white text-[#0a0a0a] text-sm placeholder-neutral-400 focus:outline-none focus:border-[#D7A12B] transition-colors resize-none"
                 />
-                {personalizationError ? (
-                  <p className="mt-2 text-xs text-red-500">{personalizationError}</p>
-                ) : (
-                  <p className="mt-2 text-xs text-neutral-500">
-                    Indiquez le texte ou l&apos;inscription à apposer sur votre produit.
-                  </p>
-                )}
+                <p className="mt-2 text-xs text-neutral-500">
+                  Vous pouvez laisser vide, ou indiquer le texte / l&apos;inscription à apposer.
+                </p>
               </motion.div>
             )}
 
