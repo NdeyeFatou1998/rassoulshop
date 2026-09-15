@@ -1,12 +1,12 @@
 /**
  * CartContext - Gestion globale du panier d'achat
  *
- * Chaque ligne : { lineKey, product, quantity, personalization? }
+ * Chaque ligne : { lineKey, product, quantity, personalization?, variants? }
  */
 
 import { createContext, useContext, useState, useEffect, useRef } from "react";
 import { getProductUnitPrice } from "../utils/pricing";
-import { getCartLineKey, normalizeCartItem } from "../utils/cartLine";
+import { getCartLineKey, normalizeCartItem, normalizeVariants } from "../utils/cartLine";
 
 const CartContext = createContext();
 
@@ -42,13 +42,15 @@ export function CartProvider({ children }) {
   /**
    * @param {object} product
    * @param {number} quantity
-   * @param {string|null} personalization — texte client si produit personnalisable
+   * @param {string|null} personalization
+   * @param {Array} variants
    */
-  function addToCart(product, quantity = 1, personalization = null) {
+  function addToCart(product, quantity = 1, personalization = null, variants = []) {
     const perso = product.is_personalizable
       ? String(personalization || "").trim()
       : "";
-    const lineKey = getCartLineKey(product.id, perso);
+    const selectedVariants = normalizeVariants(variants);
+    const lineKey = getCartLineKey(product.id, perso, selectedVariants);
 
     setCart((prev) => {
       const existing = prev.find((item) => item.lineKey === lineKey);
@@ -66,6 +68,7 @@ export function CartProvider({ children }) {
           product,
           quantity,
           ...(perso ? { personalization: perso } : {}),
+          ...(selectedVariants.length ? { variants: selectedVariants } : {}),
         },
       ];
     });

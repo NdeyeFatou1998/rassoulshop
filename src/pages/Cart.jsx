@@ -18,6 +18,7 @@ import { useCart } from "../context/CartContext";
 import { getProductUnitPrice, getLineTotal } from "../utils/pricing";
 import OrangeMoneyLogo from "../components/ui/OrangeMoneyLogo";
 import WaveLogo from "../components/ui/WaveLogo";
+import { formatVariantsLabel } from "../utils/cartLine";
 
 export default function Cart() {
   const { cart, cartTotal, cartCount, updateQuantity, removeFromCart, clearCart } = useCart();
@@ -122,6 +123,11 @@ export default function Cart() {
                       {item.personalization && (
                         <p className="text-[10px] text-neutral-500 mt-1 line-clamp-2">
                           Personnalisation : « {item.personalization} »
+                        </p>
+                      )}
+                      {formatVariantsLabel(item.variants) && (
+                        <p className="text-[10px] text-[#D7A12B] mt-1 line-clamp-2">
+                          {formatVariantsLabel(item.variants)}
                         </p>
                       )}
                       {/* Prix unitaire */}

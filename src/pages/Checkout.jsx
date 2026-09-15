@@ -10,6 +10,7 @@ import { useCart } from "../context/CartContext";
 import { getProductUnitPrice } from "../utils/pricing";
 import OrangeMoneyLogo from "../components/ui/OrangeMoneyLogo";
 import WaveLogo from "../components/ui/WaveLogo";
+import { formatVariantsLabel } from "../utils/cartLine";
 
 const PAYMENT_REF_KEY = "rassoul_payment_order_ref";
 
@@ -67,8 +68,9 @@ export default function Checkout() {
       return;
     }
 
-    const items = cart.map(({ product, quantity, personalization }) => {
+    const items = cart.map(({ product, quantity, personalization, variants }) => {
       const unitPrice = getProductUnitPrice(product);
+      const variantList = Array.isArray(variants) ? variants : [];
       return {
         id: product.id,
         title: product.title,
@@ -79,6 +81,7 @@ export default function Checkout() {
         quantity,
         image: product.image || null,
         ...(personalization ? { personalization: String(personalization).trim() } : {}),
+        ...(variantList.length ? { variants: variantList } : {}),
       };
     });
 
@@ -385,7 +388,7 @@ export default function Checkout() {
               </div>
 
               <div className="space-y-3 mb-5 pb-4 border-b border-black/[0.08] max-h-52 overflow-y-auto">
-                {cart.map(({ product, quantity, personalization, lineKey }) => (
+                {cart.map(({ product, quantity, personalization, variants, lineKey }) => (
                   <div key={lineKey || product.id} className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg overflow-hidden bg-neutral-100 flex-shrink-0 border border-black/[0.06]">
                       <img
@@ -399,6 +402,11 @@ export default function Checkout() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-xs text-[#0a0a0a] font-medium truncate">{product.title}</p>
+                      {formatVariantsLabel(variants) && (
+                        <p className="text-[10px] text-[#D7A12B] mt-0.5 line-clamp-2">
+                          {formatVariantsLabel(variants)}
+                        </p>
+                      )}
                       {personalization && (
                         <p className="text-[10px] text-[#D7A12B] mt-0.5 line-clamp-2">
                           Personnalisation : « {personalization} »

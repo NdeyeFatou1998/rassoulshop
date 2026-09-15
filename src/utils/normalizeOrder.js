@@ -1,4 +1,5 @@
 import { computeOrderTotal, getOrderItemUnitPrice } from "./pricing";
+import { normalizeVariants } from "./cartLine";
 
 /**
  * Normalise une commande API (snake_case) pour l'admin UI
@@ -18,6 +19,7 @@ export function normalizeOrder(raw) {
     const quantity = Math.max(1, Number(item.quantity) || 1);
     const unitPrice = getOrderItemUnitPrice(item);
     const personalization = item.personalization?.trim() || null;
+    const variants = normalizeVariants(item.variants);
     return {
       ...item,
       id: item.id ?? item.productId ?? null,
@@ -26,6 +28,7 @@ export function normalizeOrder(raw) {
       price: unitPrice,
       quantity,
       ...(personalization ? { personalization } : {}),
+      ...(variants.length ? { variants } : {}),
     };
   });
 

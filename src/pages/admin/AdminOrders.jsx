@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { fetchOrders, updateOrderStatus, deleteOrder, fetchOrderInvoicePdf, downloadBlobAsFile } from "../../services/adminApi";
 import { normalizeOrder } from "../../utils/normalizeOrder";
+import { formatVariantsLabel } from "../../utils/cartLine";
 import OrangeMoneyLogo from "../../components/ui/OrangeMoneyLogo";
 import WaveLogo from "../../components/ui/WaveLogo";
 
@@ -250,12 +251,17 @@ export default function AdminOrders() {
                   <p className="text-xs text-neutral-400 mt-0.5 truncate">
                     {order.customerPhone} · {order.items.length} article(s) · {fmtDate(order.createdAt)}
                   </p>
-                  {order.items.some((item) => item.personalization) && (
+                  {order.items.some((item) => item.personalization || formatVariantsLabel(item.variants)) && (
                     <p className="text-[10px] text-[#D7A12B] mt-1 truncate">
-                      Personnalisation :{" "}
                       {order.items
-                        .filter((item) => item.personalization)
-                        .map((item) => `« ${item.personalization} »`)
+                        .map((item) => {
+                          const parts = [];
+                          const vLabel = formatVariantsLabel(item.variants);
+                          if (vLabel) parts.push(vLabel);
+                          if (item.personalization) parts.push(`« ${item.personalization} »`);
+                          return parts.join(" · ");
+                        })
+                        .filter(Boolean)
                         .join(" · ")}
                     </p>
                   )}
@@ -377,6 +383,11 @@ export default function AdminOrders() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm text-[#0a0a0a] font-medium">{item.title}</p>
+                          {formatVariantsLabel(item.variants) && (
+                            <p className="text-xs text-[#D7A12B] mt-1 leading-snug">
+                              {formatVariantsLabel(item.variants)}
+                            </p>
+                          )}
                           {item.personalization && (
                             <p className="text-xs text-[#D7A12B] mt-1 leading-snug">
                               Personnalisation : « {item.personalization} »

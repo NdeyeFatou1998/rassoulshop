@@ -20,6 +20,7 @@ import { useCart } from "../context/CartContext";
 import ProductCard from "../components/ui/ProductCard";
 import OrangeMoneyLogo from "../components/ui/OrangeMoneyLogo";
 import { isVipProduct } from "../constants/categories";
+import { buildSelectedVariantsList } from "../utils/variants";
 
 const GOLD = "#D7A12B";
 const FALLBACK_IMG = "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg";
@@ -188,12 +189,18 @@ export default function ProductDetail() {
       0
     );
     const unitPrice = (Number(priceBeforeVariants) || 0) + variantsExtra;
+    const variants = buildSelectedVariantsList(product, selectedVariants);
+    const cartImage =
+      currentSlide?.typeId && currentSlide?.src
+        ? currentSlide.src
+        : product.image;
     addToCart(
-      { ...product, _cartUnitPrice: unitPrice },
+      { ...product, image: cartImage || product.image, _cartUnitPrice: unitPrice },
       quantity,
       wantPersonalization
         ? personalizationText.trim() || "Personnalisation demandée"
-        : null
+        : null,
+      variants
     );
     setAdded(true);
     setTimeout(() => setAdded(false), 1800);
