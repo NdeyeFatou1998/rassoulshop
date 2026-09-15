@@ -5,6 +5,7 @@ import { CheckCircle, XCircle, Loader2, Download, Mail } from "lucide-react";
 import { BRAND_LOGO } from "../constants/brand";
 import OrangeMoneyLogo from "../components/ui/OrangeMoneyLogo";
 import WaveLogo from "../components/ui/WaveLogo";
+import { downloadBlobAsFile } from "../utils/downloadFile";
 
 const PAYMENT_REF_KEY = "rassoul_payment_order_ref";
 const OM_REF_KEY = "rassoul_om_order_ref";
@@ -137,25 +138,17 @@ export default function CheckoutPayment() {
     : "";
 
   async function handleDownload(e) {
+    e.preventDefault();
     if (!order?.reference || !invoiceBlob) return;
     const filename = `${order.reference}-facture.pdf`;
     try {
-      const file = new File([invoiceBlob], filename, { type: "application/pdf" });
-      if (typeof navigator.canShare === "function" && navigator.canShare({ files: [file] })) {
-        e.preventDefault();
-        await navigator.share({
-          files: [file],
-          title: filename,
-          text: "Facture Rassoul Shop",
-        });
-      }
+      await downloadBlobAsFile(invoiceBlob, filename);
     } catch (err) {
-      if (err?.name === "AbortError") {
-        e.preventDefault();
-        return;
+      if (err?.name === "AbortError") return;
+      // Dernier recours : URL attachment côté serveur
+      if (invoiceDownloadHref) {
+        window.location.assign(invoiceDownloadHref);
       }
-      e.preventDefault();
-      window.open(invoiceDownloadHref, "_blank", "noopener,noreferrer");
     }
   }
 
@@ -217,7 +210,6 @@ export default function CheckoutPayment() {
               <a
                 href={invoiceDownloadHref || undefined}
                 download={order?.reference ? `${order.reference}-facture.pdf` : undefined}
-                target="_blank"
                 rel="noopener noreferrer"
                 onClick={handleDownload}
                 className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#D7A12B] text-[#0a0a0a] text-[11px] uppercase tracking-[0.16em] font-bold ${
@@ -253,7 +245,6 @@ export default function CheckoutPayment() {
             <a
               href={invoiceDownloadHref || undefined}
               download={order?.reference ? `${order.reference}-facture.pdf` : undefined}
-              target="_blank"
               rel="noopener noreferrer"
               onClick={handleDownload}
               className="flex items-center justify-center gap-2 w-full py-3.5 rounded-full bg-[#D7A12B] text-[#0a0a0a] text-[12px] uppercase tracking-[0.16em] font-bold"

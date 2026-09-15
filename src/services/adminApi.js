@@ -13,6 +13,10 @@
  *   - Orders    : liste, détail, update statut, stats
  */
 
+import { downloadBlobAsFile } from "../utils/downloadFile";
+
+export { downloadBlobAsFile };
+
 const API_BASE = "/api";
 
 /* ------------------------------------------------------------------ */
@@ -41,25 +45,6 @@ function authHeadersBinary(extra = {}) {
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...extra,
   };
-}
-
-/** Déclenche le téléchargement d'un Blob (compatible Safari / Chrome) */
-export function downloadBlobAsFile(blob, filename) {
-  const pdfBlob =
-    blob.type && blob.type.includes("pdf")
-      ? blob
-      : new Blob([blob], { type: "application/pdf" });
-  const url = URL.createObjectURL(pdfBlob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.rel = "noopener";
-  document.body.appendChild(a);
-  a.click();
-  window.setTimeout(() => {
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }, 500);
 }
 
 /** Requête générique avec gestion d'erreur */
@@ -392,7 +377,7 @@ export async function fetchOrderInvoicePdf(id) {
 /** Télécharge la facture PDF d'une commande */
 export async function downloadOrderInvoicePdf(id, filename) {
   const blob = await fetchOrderInvoicePdf(id);
-  downloadBlobAsFile(blob, filename);
+  await downloadBlobAsFile(blob, filename);
 }
 
 /** PUT /api/orders/:id — Modifier le statut */

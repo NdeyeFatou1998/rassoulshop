@@ -3,6 +3,7 @@
  */
 
 import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   Search, Eye, Trash2, X, Clock, CheckCircle, Truck,
   Package, XCircle, Filter, Download, ImageIcon, Maximize2, FileText, RotateCcw,
@@ -34,6 +35,7 @@ function isMobileInvoiceViewport() {
 }
 
 export default function AdminOrders() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState("");
@@ -45,6 +47,7 @@ export default function AdminOrders() {
   const [invoiceError, setInvoiceError] = useState(null);
   const invoiceUrlRef = useRef(null);
   const invoiceBlobRef = useRef(null);
+  const deepLinkHandledRef = useRef(false);
 
   function revokeInvoiceUrl() {
     if (invoiceUrlRef.current) {
@@ -105,6 +108,29 @@ export default function AdminOrders() {
 
   useEffect(() => { loadOrders(); }, [filterStatus]);
 
+  /* Lien mail admin → /admin/orders?ref=XXX ou ?id=123 */
+  useEffect(() => {
+    if (loading || deepLinkHandledRef.current || !orders.length) return;
+
+    const refParam = (searchParams.get("ref") || "").trim().toUpperCase();
+    const idParam = (searchParams.get("id") || "").trim();
+    if (!refParam && !idParam) return;
+
+    const match = orders.find((o) => {
+      if (idParam && String(o.id) === String(idParam)) return true;
+      if (!refParam) return false;
+      const ref = String(o.reference || o.order_reference || "").toUpperCase();
+      return ref === refParam;
+    });
+
+    deepLinkHandledRef.current = true;
+    if (match) {
+      setSelectedOrder(match);
+      setSearch(match.reference || "");
+    }
+    setSearchParams({}, { replace: true });
+  }, [loading, orders, searchParams, setSearchParams]);
+
   async function handleStatusChange(order, newStatus) {
     if (newStatus === order.status) return;
 
@@ -142,6 +168,7 @@ export default function AdminOrders() {
   }
 
   async function downloadInvoice(e) {
+    e?.preventDefault?.();
     e?.stopPropagation?.();
     if (!selectedOrder?.id) return;
 
@@ -154,7 +181,7 @@ export default function AdminOrders() {
         blob = await fetchOrderInvoicePdf(selectedOrder.id);
         invoiceBlobRef.current = blob;
       }
-      downloadBlobAsFile(blob, filename);
+      await downloadBlobAsFile(blob, filename);
     } catch (err) {
       alert(err.message || "Impossible de télécharger la facture");
     } finally {
@@ -577,6 +604,9 @@ export default function AdminOrders() {
                   >
                     Télécharger
                   </button>
+                  <p className="text-[11px] text-white/45 text-center leading-relaxed">
+                    Sur iPhone, choisissez « Enregistrer dans Fichiers ».
+                  </p>
                   <button
                     type="button"
                     onClick={closeInvoiceFullscreen}
