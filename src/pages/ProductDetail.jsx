@@ -8,12 +8,12 @@
  * - Animation fly-to-cart conservée + produits similaires
  */
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Star, Minus, Plus, ShoppingCart, ArrowLeft, Check,
-  Truck, Gift,
+  Truck, Gift, ChevronLeft, ChevronRight,
 } from "lucide-react";
 import { fetchProducts, fetchProductById } from "../services/api";
 import { useCart } from "../context/CartContext";
@@ -22,6 +22,7 @@ import OrangeMoneyLogo from "../components/ui/OrangeMoneyLogo";
 import { isVipProduct } from "../constants/categories";
 
 const GOLD = "#D7A12B";
+const FALLBACK_IMG = "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -33,6 +34,8 @@ export default function ProductDetail() {
   const [added, setAdded] = useState(false);
   const [personalizationText, setPersonalizationText] = useState("");
   const [personalizationError, setPersonalizationError] = useState("");
+  const [galleryIndex, setGalleryIndex] = useState(0);
+  const [slideDir, setSlideDir] = useState(0);
   const { addToCart, flyTargetRef } = useCart();
   const imgRef = useRef(null);
 
@@ -43,6 +46,8 @@ export default function ProductDetail() {
     setPersonalizationText("");
     setPersonalizationError("");
     setSelectedVariants({});
+    setGalleryIndex(0);
+    setSlideDir(0);
     window.scrollTo({ top: 0, behavior: "smooth" });
     Promise.all([fetchProductById(id), fetchProducts({})])
       .then(([detail, products]) => {
@@ -63,6 +68,76 @@ export default function ProductDetail() {
       .catch(() => setLoading(false));
   }, [id]);
 
+  const gallerySlides = useMemo(() => {
+    if (!product) return [];
+    const slides = [
+      {
+        key: "main",
+        src: product.image || FALLBACK_IMG,
+        label: "Produit",
+        typeId: null,
+        option: null,
+      },
+    ];
+    for (const type of product.variant_types || []) {
+      for (const opt of type.options || []) {
+        if (!opt?.image) continue;
+        slides.push({
+          key: `v-${type.id}-${opt.id}`,
+          src: opt.image,
+          label: opt.name,
+          typeId: type.id,
+          option: opt,
+        });
+      }
+    }
+    return slides;
+  }, [product]);
+
+  const canSwipe = gallerySlides.length > 1;
+  const currentSlide = gallerySlides[galleryIndex] || gallerySlides[0];
+
+  function goToSlide(nextIndex, dir = 0) {
+    if (!gallerySlides.length) return;
+    const len = gallerySlides.length;
+    const idx = ((nextIndex % len) + len) % len;
+    setSlideDir(dir);
+    setGalleryIndex(idx);
+    const slide = gallerySlides[idx];
+    if (slide?.typeId && slide.option) {
+      setSelectedVariants((prev) => ({
+        ...prev,
+        [slide.typeId]: {
+          id: slide.option.id,
+          name: slide.option.name,
+          price_modifier: slide.option.price_modifier || 0,
+        },
+      }));
+    }
+  }
+
+  function selectVariantOption(type, opt) {
+    const isSelected = selectedVariants[type.id]?.id === opt.id;
+    setSelectedVariants((prev) => ({
+      ...prev,
+      [type.id]: isSelected
+        ? undefined
+        : { id: opt.id, name: opt.name, price_modifier: opt.price_modifier || 0 },
+    }));
+    if (!isSelected && opt.image) {
+      const idx = gallerySlides.findIndex(
+        (s) => s.typeId === type.id && s.option?.id === opt.id
+      );
+      if (idx >= 0) {
+        setSlideDir(idx > galleryIndex ? 1 : -1);
+        setGalleryIndex(idx);
+      }
+    } else if (isSelected) {
+      setSlideDir(-1);
+      setGalleryIndex(0);
+    }
+  }
+
   function handleAddToCart() {
     if (!product) return;
 
@@ -71,6 +146,8 @@ export default function ProductDetail() {
       return;
     }
     setPersonalizationError("");
+
+    const displaySrc = currentSlide?.src || product.image || FALLBACK_IMG;
 
     if (imgRef.current && flyTargetRef.current) {
       const imgRect = imgRef.current.getBoundingClientRect();
@@ -90,8 +167,7 @@ export default function ProductDetail() {
         transition: all 0.65s cubic-bezier(0.32, 0, 0.07, 1);
       `;
       const flyImg = document.createElement("img");
-      flyImg.src =
-        product.image || "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg";
+      flyImg.src = displaySrc;
       flyImg.style.cssText = "width:100%;height:100%;object-fit:cover;";
       flyEl.appendChild(flyImg);
       document.body.appendChild(flyEl);
@@ -127,6 +203,12 @@ export default function ProductDetail() {
   const fadeUp = {
     hidden: { opacity: 0, y: 18 },
     show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] } },
+  };
+
+  const slideVariants = {
+    enter: (dir) => ({ x: dir >= 0 ? 80 : -80, opacity: 0 }),
+    center: { x: 0, opacity: 1 },
+    exit: (dir) => ({ x: dir >= 0 ? -80 : 80, opacity: 0 }),
   };
 
   /* ---- Loader ---- */
@@ -191,14 +273,13 @@ export default function ProductDetail() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14 lg:gap-20 items-start">
-          {/* ---- Image encadrée ---- */}
+          {/* ---- Image / carrousel variantes ---- */}
           <motion.div
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="relative md:sticky md:top-28"
           >
-            {/* Cadre doré dégradé */}
             <div
               className="relative rounded-[28px] p-[1.5px]"
               style={{
@@ -209,17 +290,77 @@ export default function ProductDetail() {
             >
               <div
                 ref={imgRef}
-                className="group relative rounded-[26px] overflow-hidden aspect-[4/5] bg-neutral-100"
+                className="group relative rounded-[26px] overflow-hidden aspect-[4/5] bg-neutral-100 touch-pan-y"
               >
-                <img
-                  src={product.image || "/assets/images/WhatsApp Image 2026-03-24 at 01.34.16.jpeg"}
-                  alt={product.title}
-                  className="w-full h-full object-cover transition-transform duration-[1100ms] ease-out group-hover:scale-[1.05]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
+                <AnimatePresence initial={false} custom={slideDir} mode="popLayout">
+                  <motion.img
+                    key={currentSlide?.key || "main"}
+                    src={currentSlide?.src || FALLBACK_IMG}
+                    alt={currentSlide?.label || product.title}
+                    custom={slideDir}
+                    variants={slideVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.28, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    drag={canSwipe ? "x" : false}
+                    dragConstraints={{ left: 0, right: 0 }}
+                    dragElastic={0.18}
+                    onDragEnd={(_, info) => {
+                      const offset = info.offset.x;
+                      const velocity = info.velocity.x;
+                      if (offset < -60 || velocity < -400) goToSlide(galleryIndex + 1, 1);
+                      else if (offset > 60 || velocity > 400) goToSlide(galleryIndex - 1, -1);
+                    }}
+                    className="absolute inset-0 w-full h-full object-cover cursor-grab active:cursor-grabbing"
+                  />
+                </AnimatePresence>
+
+                <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
+
+                {/* Étiquette variante / produit */}
+                <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 pointer-events-none">
+                  {canSwipe ? (
+                    <span
+                      className="inline-flex max-w-[75%] px-3 py-1.5 rounded-full text-[10px] sm:text-[11px] uppercase tracking-[0.14em] font-bold shadow-lg truncate"
+                      style={{ background: "rgba(12,10,7,0.72)", color: GOLD, border: `1px solid ${GOLD}` }}
+                    >
+                      {currentSlide?.label || "Produit"}
+                    </span>
+                  ) : (
+                    <span />
+                  )}
+                  {canSwipe && (
+                    <span className="text-[10px] text-white/80 font-medium tabular-nums bg-black/40 px-2 py-1 rounded-full backdrop-blur-sm">
+                      {galleryIndex + 1}/{gallerySlides.length}
+                    </span>
+                  )}
+                </div>
+
+                {/* Flèches desktop */}
+                {canSwipe && (
+                  <>
+                    <button
+                      type="button"
+                      aria-label="Image précédente"
+                      onClick={() => goToSlide(galleryIndex - 1, -1)}
+                      className="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full items-center justify-center bg-black/45 text-white hover:bg-black/65 transition-colors"
+                    >
+                      <ChevronLeft size={18} />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Image suivante"
+                      onClick={() => goToSlide(galleryIndex + 1, 1)}
+                      className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full items-center justify-center bg-black/45 text-white hover:bg-black/65 transition-colors"
+                    >
+                      <ChevronRight size={18} />
+                    </button>
+                  </>
+                )}
 
                 {/* Badges */}
-                <div className="absolute top-4 left-4 flex flex-col gap-2">
+                <div className="absolute top-4 left-4 flex flex-col gap-2 pointer-events-none">
                   {product.badge && (
                     <span
                       className="px-3 py-1.5 text-[9px] uppercase tracking-[0.16em] font-bold rounded-full shadow-lg"
@@ -244,6 +385,23 @@ export default function ProductDetail() {
                 )}
               </div>
             </div>
+
+            {/* Pastilles */}
+            {canSwipe && (
+              <div className="flex items-center justify-center gap-1.5 mt-3">
+                {gallerySlides.map((slide, i) => (
+                  <button
+                    key={slide.key}
+                    type="button"
+                    aria-label={`Voir ${slide.label}`}
+                    onClick={() => goToSlide(i, i > galleryIndex ? 1 : -1)}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      i === galleryIndex ? "w-6 bg-[#D7A12B]" : "w-1.5 bg-black/20 hover:bg-black/35"
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
           </motion.div>
 
           {/* ---- Infos ---- */}
@@ -326,14 +484,8 @@ export default function ProductDetail() {
                         return opt.image ? (
                           <button
                             key={opt.id}
-                            onClick={() =>
-                              setSelectedVariants((prev) => ({
-                                ...prev,
-                                [type.id]: isSelected
-                                  ? undefined
-                                  : { id: opt.id, name: opt.name, price_modifier: opt.price_modifier },
-                              }))
-                            }
+                            type="button"
+                            onClick={() => selectVariantOption(type, opt)}
                             className="flex flex-col items-center gap-1.5 group"
                           >
                             <div
@@ -361,14 +513,8 @@ export default function ProductDetail() {
                         ) : (
                           <button
                             key={opt.id}
-                            onClick={() =>
-                              setSelectedVariants((prev) => ({
-                                ...prev,
-                                [type.id]: isSelected
-                                  ? undefined
-                                  : { id: opt.id, name: opt.name, price_modifier: opt.price_modifier },
-                              }))
-                            }
+                            type="button"
+                            onClick={() => selectVariantOption(type, opt)}
                             className={`px-4 py-2 rounded-full text-[11px] font-medium border transition-all duration-200 ${
                               isSelected
                                 ? "border-gold bg-gold/10 text-gold shadow-[0_0_10px_rgba(215,161,43,0.2)]"
