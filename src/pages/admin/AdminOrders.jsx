@@ -28,6 +28,11 @@ function itemImageSrc(image) {
   return `/${image.replace(/^\//, "")}`;
 }
 
+function isMobileInvoiceViewport() {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(max-width: 768px), (pointer: coarse)").matches;
+}
+
 export default function AdminOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -155,6 +160,23 @@ export default function AdminOrders() {
     } finally {
       setInvoiceLoading(false);
     }
+  }
+
+  function openInvoiceFullscreen() {
+    if (!invoiceUrl || invoiceError) return;
+    setInvoiceFullscreen(true);
+  }
+
+  function closeInvoiceFullscreen(e) {
+    e?.stopPropagation?.();
+    e?.preventDefault?.();
+    setInvoiceFullscreen(false);
+  }
+
+  function openInvoiceInNewTab(e) {
+    e?.stopPropagation?.();
+    if (!invoiceUrl) return;
+    window.open(invoiceUrl, "_blank", "noopener,noreferrer");
   }
 
   function fmtPrice(n) {
@@ -302,19 +324,21 @@ export default function AdminOrders() {
 
       {/* Modal détail */}
       {selectedOrder && (
-        <div className="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 overflow-y-auto">
-          <div className="admin-card border border-black/[0.08] rounded-2xl w-full max-w-2xl max-h-[92vh] flex flex-col my-auto">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-black/[0.08] shrink-0">
-              <div>
-                <h2 className="text-lg font-medium text-[#0a0a0a]">{selectedOrder.reference}</h2>
+        <div className="fixed inset-0 bg-black/75 z-[60] flex items-end sm:items-center justify-center p-0 sm:p-4 overflow-y-auto">
+          <div className="admin-card border border-black/[0.08] rounded-t-2xl sm:rounded-2xl w-full max-w-2xl max-h-[94vh] flex flex-col my-auto">
+            <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-black/[0.08] shrink-0">
+              <div className="min-w-0 pr-2">
+                <h2 className="text-lg font-medium text-[#0a0a0a] truncate">{selectedOrder.reference}</h2>
                 <p className="text-xs text-neutral-400 mt-0.5">{fmtDate(selectedOrder.createdAt)}</p>
               </div>
               <button
+                type="button"
                 onClick={() => {
                   setInvoiceFullscreen(false);
                   setSelectedOrder(null);
                 }}
-                className="text-neutral-400 hover:text-[#0a0a0a] p-1"
+                className="min-h-11 min-w-11 inline-flex items-center justify-center rounded-lg text-neutral-400 hover:text-[#0a0a0a] hover:bg-neutral-100 shrink-0"
+                aria-label="Fermer"
               >
                 <X size={20} />
               </button>
@@ -422,7 +446,7 @@ export default function AdminOrders() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => !invoiceError && invoiceUrl && setInvoiceFullscreen(true)}
+                  onClick={openInvoiceFullscreen}
                   disabled={!invoiceUrl || !!invoiceError}
                   className="w-full max-w-[220px] text-left rounded-xl border border-black/[0.12] bg-neutral-50 overflow-hidden hover:border-[#D7A12B]/50 hover:bg-neutral-100 transition-all group disabled:opacity-50 disabled:pointer-events-none"
                 >
@@ -477,27 +501,31 @@ export default function AdminOrders() {
       {/* Plein écran facture */}
       {selectedOrder && invoiceFullscreen && (
         <div
-          className="fixed inset-0 z-[70] bg-black/92 flex flex-col"
-          onClick={() => setInvoiceFullscreen(false)}
+          className="fixed inset-0 z-[100] bg-black/95 flex flex-col"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Facture"
         >
           <div
-            className="flex items-center justify-between px-4 py-3 border-b border-black/[0.06] shrink-0"
-            onClick={(e) => e.stopPropagation()}
+            className="relative z-20 flex items-center justify-between gap-3 px-3 sm:px-4 py-3 border-b border-white/10 bg-black shrink-0"
+            style={{ paddingTop: "max(0.75rem, env(safe-area-inset-top))" }}
           >
             <button
               type="button"
-              onClick={() => setInvoiceFullscreen(false)}
-              className="p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+              onClick={closeInvoiceFullscreen}
+              className="relative z-30 min-h-11 min-w-11 inline-flex items-center justify-center rounded-lg text-white hover:bg-white/10 transition-colors"
               aria-label="Fermer"
             >
               <X size={22} />
             </button>
-            <p className="text-sm font-mono text-[#D7A12B]">{selectedOrder.reference}</p>
+            <p className="text-sm font-mono text-[#D7A12B] truncate flex-1 text-center">
+              {selectedOrder.reference}
+            </p>
             <button
               type="button"
               onClick={downloadInvoice}
               disabled={invoiceLoading || !!invoiceError}
-              className="p-2 rounded-lg text-[#D7A12B] hover:bg-[#D7A12B]/15 transition-colors disabled:opacity-50"
+              className="relative z-30 min-h-11 min-w-11 inline-flex items-center justify-center rounded-lg text-[#D7A12B] hover:bg-[#D7A12B]/15 transition-colors disabled:opacity-50"
               aria-label="Télécharger la facture"
               title="Télécharger PDF"
             >
@@ -506,26 +534,70 @@ export default function AdminOrders() {
           </div>
 
           <div
-            className="flex-1 overflow-y-auto p-4 md:p-8 flex justify-center items-start"
-            onClick={(e) => e.stopPropagation()}
+            className="relative z-10 flex-1 min-h-0 overflow-hidden flex flex-col"
+            style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
           >
             {invoiceLoading && (
-              <div className="flex items-center justify-center py-20 text-neutral-500 text-sm">
+              <div className="flex items-center justify-center flex-1 py-20 text-neutral-400 text-sm">
                 Chargement de la facture…
               </div>
             )}
             {invoiceError && (
-              <div className="flex items-center justify-center py-20 text-red-400 text-sm">
+              <div className="flex items-center justify-center flex-1 py-20 text-red-400 text-sm px-4 text-center">
                 {invoiceError}
               </div>
             )}
-            {invoiceUrl && (
-              <iframe
-                src={`${invoiceUrl}#toolbar=0`}
-                title={`Facture ${selectedOrder.reference}`}
-                className="w-full max-w-2xl bg-white shadow-2xl rounded-xl border-0"
-                style={{ height: "min(842px, 85vh)" }}
-              />
+
+            {/* Mobile : aperçu iframe PDF souvent cassé (iOS) → actions natives */}
+            {invoiceUrl && isMobileInvoiceViewport() && (
+              <div className="flex-1 flex flex-col items-center justify-center gap-5 px-6 py-10">
+                <div className="w-16 h-16 rounded-2xl bg-[#D7A12B]/15 flex items-center justify-center">
+                  <FileText size={28} className="text-[#D7A12B]" />
+                </div>
+                <div className="text-center space-y-2 max-w-sm">
+                  <p className="text-white text-base font-medium">Facture PDF</p>
+                  <p className="text-sm text-white/60 leading-relaxed">
+                    Sur mobile, ouvrez la facture dans le lecteur PDF du téléphone
+                    ou téléchargez-la.
+                  </p>
+                </div>
+                <div className="flex flex-col w-full max-w-xs gap-3">
+                  <button
+                    type="button"
+                    onClick={openInvoiceInNewTab}
+                    className="w-full py-3.5 rounded-xl bg-[#D7A12B] text-[#0a0a0a] text-sm font-semibold"
+                  >
+                    Ouvrir la facture
+                  </button>
+                  <button
+                    type="button"
+                    onClick={downloadInvoice}
+                    disabled={invoiceLoading}
+                    className="w-full py-3.5 rounded-xl border border-white/20 text-white text-sm font-medium disabled:opacity-50"
+                  >
+                    Télécharger
+                  </button>
+                  <button
+                    type="button"
+                    onClick={closeInvoiceFullscreen}
+                    className="w-full py-3 text-sm text-white/50 hover:text-white"
+                  >
+                    Fermer
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Desktop : aperçu iframe */}
+            {invoiceUrl && !isMobileInvoiceViewport() && (
+              <div className="flex-1 min-h-0 overflow-auto p-4 md:p-8 flex justify-center">
+                <iframe
+                  src={`${invoiceUrl}#toolbar=0&navpanes=0`}
+                  title={`Facture ${selectedOrder.reference}`}
+                  className="w-full max-w-2xl bg-white shadow-2xl rounded-xl border-0"
+                  style={{ height: "min(842px, calc(100vh - 5.5rem))", minHeight: 480 }}
+                />
+              </div>
             )}
           </div>
         </div>
