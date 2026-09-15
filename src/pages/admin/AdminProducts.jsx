@@ -43,6 +43,7 @@ export default function AdminProducts() {
     promoEndsAt:"", category_id:"", category:"", stock:"0", badge:"", rating:"0", image:"", active:true,
     is_vip: false,
     personalizable: false,
+    personalizationPrice: "",
   };
   const [form, setForm] = useState(emptyForm);
 
@@ -131,6 +132,8 @@ export default function AdminProducts() {
         active: full.active !== false,
         is_vip: !!full.is_vip,
         personalizable: !!full.is_personalizable,
+        personalizationPrice:
+          full.personalization_price != null ? String(full.personalization_price) : "",
       });
       loadByType(full.id);
     } catch {
@@ -151,6 +154,8 @@ export default function AdminProducts() {
         active: p.active !== false,
         is_vip: !!p.is_vip,
         personalizable: !!p.is_personalizable,
+        personalizationPrice:
+          p.personalization_price != null ? String(p.personalization_price) : "",
       });
       loadByType(p.id);
     }
@@ -210,9 +215,29 @@ export default function AdminProducts() {
     e.preventDefault();
     setError(""); setSaving(true);
     try {
+      const basePrice = parseInt(form.price, 10) || 0;
+      let personalizationPrice = null;
+      if (form.personalizable) {
+        if (form.personalizationPrice === "" || form.personalizationPrice == null) {
+          setError("Indiquez le prix avec personnalisation.");
+          return;
+        }
+        personalizationPrice = parseInt(form.personalizationPrice, 10);
+        if (!Number.isFinite(personalizationPrice) || personalizationPrice < 0) {
+          setError("Prix avec personnalisation invalide.");
+          return;
+        }
+        if (personalizationPrice < basePrice) {
+          setError(
+            `Le prix avec personnalisation (${personalizationPrice.toLocaleString("fr-FR")} FCFA) ne peut pas être inférieur au prix normal (${basePrice.toLocaleString("fr-FR")} FCFA).`
+          );
+          return;
+        }
+      }
+
       const payload = {
         title: form.title, description: form.description || null,
-        price: parseInt(form.price) || 0,
+        price: basePrice,
         promo_price: form.promoPrice ? parseInt(form.promoPrice) : null,
         promo_active: form.promoActive, promo_ends_at: form.promoEndsAt || null,
         category_id: form.category_id ? parseInt(form.category_id) : null,
@@ -223,6 +248,7 @@ export default function AdminProducts() {
         image: form.image || null,
         is_vip: form.category === BOITES_VIP_SLUG,
         is_personalizable: form.personalizable,
+        personalization_price: personalizationPrice,
       };
       const isNew = selected === "new";
       const url = isNew ? "/api/products" : `/api/products/${selected.id}`;
@@ -647,15 +673,41 @@ export default function AdminProducts() {
                 <input
                   type="checkbox"
                   checked={form.personalizable}
-                  onChange={(e) => setForm((f) => ({ ...f, personalizable: e.target.checked }))}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      personalizable: e.target.checked,
+                      personalizationPrice: e.target.checked ? f.personalizationPrice : "",
+                    }))
+                  }
                   className="w-4 h-4 accent-[#D7A12B]"
                 />
                 <span className="text-sm text-[#0a0a0a]">Produit personnalisable</span>
               </label>
               {form.personalizable && (
-                <p className="text-xs text-neutral-500 leading-relaxed">
-                  Le client pourra saisir un texte ou une inscription (optionnel) lors de l&apos;achat.
-                </p>
+                <div className="space-y-2 pt-1">
+                  <label className="block text-xs text-neutral-500 uppercase tracking-wider">
+                    Prix avec personnalisation (FCFA) *
+                  </label>
+                  <input
+                    type="number"
+                    min={form.price || 0}
+                    value={form.personalizationPrice}
+                    onChange={(e) =>
+                      setForm((f) => ({ ...f, personalizationPrice: e.target.value }))
+                    }
+                    placeholder={form.price || "0"}
+                    className="w-full px-3 py-2.5 bg-neutral-50 border border-black/[0.12] rounded-lg text-[#0a0a0a] text-sm focus:border-[#D7A12B] focus:outline-none"
+                    required
+                  />
+                  <p className="text-xs text-neutral-500 leading-relaxed">
+                    Doit être supérieur ou égal au prix normal
+                    {form.price
+                      ? ` (${Number(form.price).toLocaleString("fr-FR")} FCFA)`
+                      : ""}
+                    . Affiché au client s&apos;il choisit la personnalisation.
+                  </p>
+                </div>
               )}
             </div>
 

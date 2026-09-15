@@ -33,6 +33,7 @@ export default function ProductDetail() {
   const [selectedVariants, setSelectedVariants] = useState({});
   const [added, setAdded] = useState(false);
   const [personalizationText, setPersonalizationText] = useState("");
+  const [wantPersonalization, setWantPersonalization] = useState(false);
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [slideDir, setSlideDir] = useState(0);
   const { addToCart, flyTargetRef } = useCart();
@@ -43,6 +44,7 @@ export default function ProductDetail() {
     setQuantity(1);
     setAdded(false);
     setPersonalizationText("");
+    setWantPersonalization(false);
     setSelectedVariants({});
     setGalleryIndex(0);
     setSlideDir(0);
@@ -174,15 +176,24 @@ export default function ProductDetail() {
 
     const hasPromo = product.promo_active && product.promo_price;
     const basePrice = hasPromo ? product.promo_price : product.price;
+    const persoPrice = Number(product.personalization_price);
+    const usePersoPrice =
+      wantPersonalization &&
+      product.is_personalizable &&
+      Number.isFinite(persoPrice) &&
+      persoPrice > 0;
+    const priceBeforeVariants = usePersoPrice ? persoPrice : basePrice;
     const variantsExtra = Object.values(selectedVariants).reduce(
       (acc, v) => acc + (v?.price_modifier || 0),
       0
     );
-    const unitPrice = (Number(basePrice) || 0) + variantsExtra;
+    const unitPrice = (Number(priceBeforeVariants) || 0) + variantsExtra;
     addToCart(
       { ...product, _cartUnitPrice: unitPrice },
       quantity,
-      personalizationText.trim() || null
+      wantPersonalization
+        ? personalizationText.trim() || "Personnalisation demandée"
+        : null
     );
     setAdded(true);
     setTimeout(() => setAdded(false), 1800);
@@ -237,11 +248,18 @@ export default function ProductDetail() {
 
   const hasPromo = product.promo_active && product.promo_price;
   const basePrice = hasPromo ? product.promo_price : product.price;
+  const personalizationPrice = Number(product.personalization_price);
+  const hasPersonalizationPrice =
+    product.is_personalizable &&
+    Number.isFinite(personalizationPrice) &&
+    personalizationPrice > 0;
+  const usePersoPrice = wantPersonalization && hasPersonalizationPrice;
+  const priceBeforeVariants = usePersoPrice ? personalizationPrice : basePrice;
   const variantsExtra = Object.values(selectedVariants).reduce(
     (acc, v) => acc + (v?.price_modifier || 0),
     0
   );
-  const finalPrice = (Number(basePrice) || 0) + variantsExtra;
+  const finalPrice = (Number(priceBeforeVariants) || 0) + variantsExtra;
   const showRating = product.rating && Number(product.rating) > 0;
 
   return (
@@ -436,9 +454,9 @@ export default function ProductDetail() {
                 {finalPrice.toLocaleString("fr-FR")}
                 <span className="text-base font-semibold text-neutral-400 ml-1.5">FCFA</span>
               </p>
-              {(hasPromo || variantsExtra > 0) && (
+              {(hasPromo || variantsExtra > 0 || usePersoPrice) && (
                 <span className="text-sm text-neutral-400 line-through">
-                  {Number(product.price).toLocaleString("fr-FR")} FCFA
+                  {Number(usePersoPrice ? basePrice : product.price).toLocaleString("fr-FR")} FCFA
                 </span>
               )}
             </motion.div>
@@ -526,27 +544,53 @@ export default function ProductDetail() {
             <motion.div variants={fadeUp} className="h-px bg-white/[0.08] mb-6" />
 
             {product.is_personalizable && (
-              <motion.div variants={fadeUp} className="mb-6">
-                <label
-                  htmlFor="personalization-text"
-                  className="block text-[10px] uppercase tracking-[0.2em] text-neutral-600 font-semibold mb-2"
-                >
-                  Personnalisation{" "}
-                  <span className="normal-case tracking-normal font-normal text-neutral-400">
-                    (optionnel)
+              <motion.div variants={fadeUp} className="mb-6 space-y-3">
+                <label className="flex items-center gap-3 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={wantPersonalization}
+                    onChange={(e) => {
+                      setWantPersonalization(e.target.checked);
+                      if (!e.target.checked) setPersonalizationText("");
+                    }}
+                    className="w-4 h-4 accent-[#D7A12B]"
+                  />
+                  <span className="text-sm font-medium text-[#0a0a0a]">
+                    Je souhaite personnaliser ce produit
                   </span>
                 </label>
-                <textarea
-                  id="personalization-text"
-                  value={personalizationText}
-                  onChange={(e) => setPersonalizationText(e.target.value)}
-                  rows={3}
-                  placeholder="Ex. : Prénom à graver, message à broder, texte à imprimer…"
-                  className="w-full px-4 py-3 rounded-xl border border-black/[0.12] bg-white text-[#0a0a0a] text-sm placeholder-neutral-400 focus:outline-none focus:border-[#D7A12B] transition-colors resize-none"
-                />
-                <p className="mt-2 text-xs text-neutral-500">
-                  Vous pouvez laisser vide, ou indiquer le texte / l&apos;inscription à apposer.
-                </p>
+
+                {wantPersonalization && (
+                  <div className="space-y-3 pl-1">
+                    <textarea
+                      id="personalization-text"
+                      value={personalizationText}
+                      onChange={(e) => setPersonalizationText(e.target.value)}
+                      rows={3}
+                      placeholder="Ex. : Prénom à graver, message à broder, texte à imprimer…"
+                      className="w-full px-4 py-3 rounded-xl border border-black/[0.12] bg-white text-[#0a0a0a] text-sm placeholder-neutral-400 focus:outline-none focus:border-[#D7A12B] transition-colors resize-none"
+                    />
+                    {hasPersonalizationPrice && (
+                      <p className="text-sm text-neutral-600 leading-relaxed">
+                        Avec la personnalisation, le prix de l&apos;article est de{" "}
+                        <span className="text-gradient-gold font-bold">
+                          {personalizationPrice.toLocaleString("fr-FR")} FCFA
+                        </span>
+                        {variantsExtra > 0 && (
+                          <>
+                            {" "}
+                            (total avec options :{" "}
+                            <span className="text-gradient-gold font-bold">
+                              {finalPrice.toLocaleString("fr-FR")} FCFA
+                            </span>
+                            )
+                          </>
+                        )}
+                        .
+                      </p>
+                    )}
+                  </div>
+                )}
               </motion.div>
             )}
 
