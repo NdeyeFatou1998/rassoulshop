@@ -55,6 +55,7 @@ import AdminCategories from "./pages/admin/AdminCategories";
 import AdminGiftBoxes from "./pages/admin/AdminGiftBoxes";
 import AdminVariants from "./pages/admin/AdminVariants";
 import AdminSettings from "./pages/admin/AdminSettings";
+import AdminDelivery from "./pages/admin/AdminDelivery";
 import AdminPointage from "./pages/admin/AdminPointage";
 
 /**
@@ -165,6 +166,7 @@ export default function App() {
               <Route path="categories" element={<AdminCategories />} />
               <Route path="gift-boxes" element={<AdminGiftBoxes />} />
               <Route path="variants" element={<AdminVariants />} />
+              <Route path="delivery" element={<AdminDelivery />} />
               <Route path="settings" element={<AdminSettings />} />
             </Route>
 

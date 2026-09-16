@@ -482,6 +482,15 @@ export async function updateLowStockThreshold(lowStockThreshold) {
   });
 }
 
+/** PUT /api/settings/delivery-price — Frais de livraison */
+export async function updateDeliveryPrice(deliveryPrice) {
+  return apiRequest(`${API_BASE}/settings/delivery-price`, {
+    method: "PUT",
+    headers: authHeaders(),
+    body: JSON.stringify({ deliveryPrice }),
+  });
+}
+
 /** GET /api/orders/stats/summary — Statistiques dashboard (camelCase) */
 export async function fetchDashboardStats() {
   const data = await apiRequest(`${API_BASE}/orders/stats/summary`, {

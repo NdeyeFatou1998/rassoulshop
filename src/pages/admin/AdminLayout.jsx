@@ -7,7 +7,8 @@ import { Outlet, Link, useLocation, useNavigate, Navigate } from "react-router-d
 import { useAuth } from "../../context/AuthContext";
 import {
   LayoutDashboard, Package, Image, FileText, ShoppingCart,
-  Users, Tags, Gift, LogOut, Menu, X, ChevronRight, Settings, Layers, ScrollText, Clock, PanelTop
+  Users, Tags, Gift, LogOut, Menu, X, ChevronRight, Settings,
+  Layers, ScrollText, Clock, PanelTop, Truck,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -23,6 +24,7 @@ const NAV_ITEMS = [
   { label: "Catégories", path: "/admin/categories", icon: Tags },
   { label: "Box Cadeau", path: "/admin/gift-boxes", icon: Gift },
   { label: "Variantes", path: "/admin/variants", icon: Layers },
+  { label: "Livraison", path: "/admin/delivery", icon: Truck },
   { label: "Paramètres", path: "/admin/settings", icon: Settings },
 ];
 

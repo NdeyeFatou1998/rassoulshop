@@ -11,6 +11,7 @@
  * - Panier vide avec illustration animée
  */
 
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Minus, Plus, Trash2, ShoppingCart, ArrowLeft, Truck, Shield } from "lucide-react";
@@ -19,10 +20,18 @@ import { getProductUnitPrice, getLineTotal } from "../utils/pricing";
 import OrangeMoneyLogo from "../components/ui/OrangeMoneyLogo";
 import WaveLogo from "../components/ui/WaveLogo";
 import { formatVariantsLabel } from "../utils/cartLine";
+import { DEFAULT_DELIVERY_PRICE, fetchPublicDeliveryPrice } from "../utils/delivery";
 
 export default function Cart() {
   const { cart, cartTotal, cartCount, updateQuantity, removeFromCart, clearCart } = useCart();
   const navigate = useNavigate();
+  const [deliveryPrice, setDeliveryPrice] = useState(DEFAULT_DELIVERY_PRICE);
+
+  useEffect(() => {
+    fetchPublicDeliveryPrice().then(setDeliveryPrice);
+  }, []);
+
+  const grandTotal = cartTotal + deliveryPrice;
 
   return (
     <section className="w-full px-4 md:px-8 lg:px-12 pt-24 md:pt-32 pb-32">
@@ -210,13 +219,17 @@ export default function Cart() {
                   <span className="text-muted">Sous-total</span>
                   <span className="text-cream">{cartTotal.toLocaleString("fr-FR")} FCFA</span>
                 </div>
+                <div className="flex justify-between text-[12px] md:text-sm">
+                  <span className="text-muted">Livraison</span>
+                  <span className="text-cream">{deliveryPrice.toLocaleString("fr-FR")} FCFA</span>
+                </div>
               </div>
 
               {/* Total avec gradient doré */}
               <div className="flex justify-between items-center mb-6">
                 <span className="text-[12px] md:text-sm font-semibold text-cream">Total</span>
                 <span className="text-lg md:text-xl font-serif font-bold text-gradient-gold">
-                  {cartTotal.toLocaleString("fr-FR")} FCFA
+                  {grandTotal.toLocaleString("fr-FR")} FCFA
                 </span>
               </div>
 

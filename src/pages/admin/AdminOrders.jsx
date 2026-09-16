@@ -516,9 +516,28 @@ export default function AdminOrders() {
                 </button>
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-black/[0.08]">
-                <p className="text-xs text-neutral-500">Total commande</p>
-                <p className="text-xl font-bold text-[#D7A12B]">{fmtPrice(selectedOrder.total)}</p>
+              <div className="space-y-1.5 pt-2 border-t border-black/[0.08]">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs text-neutral-500">Sous-total</p>
+                  <p className="text-sm text-[#0a0a0a]">
+                    {fmtPrice(
+                      selectedOrder.items.reduce(
+                        (sum, item) => sum + (item.price || 0) * (item.quantity || 1),
+                        0
+                      )
+                    )}
+                  </p>
+                </div>
+                <div className="flex items-center justify-between">
+                  <p className="text-xs text-neutral-500">Livraison</p>
+                  <p className="text-sm text-[#0a0a0a]">
+                    {fmtPrice(selectedOrder.deliveryPrice || 0)}
+                  </p>
+                </div>
+                <div className="flex items-center justify-between">
+                  <p className="text-xs text-neutral-500">Total commande</p>
+                  <p className="text-xl font-bold text-[#D7A12B]">{fmtPrice(selectedOrder.total)}</p>
+                </div>
               </div>
             </div>
           </div>

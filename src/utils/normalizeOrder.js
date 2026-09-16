@@ -32,7 +32,9 @@ export function normalizeOrder(raw) {
     };
   });
 
-  const computedTotal = computeOrderTotal(items);
+  const computedItems = computeOrderTotal(items);
+  const deliveryPrice = Number(raw.delivery_price ?? raw.deliveryPrice) || 0;
+  const computedTotal = computedItems + deliveryPrice;
   const total =
     computedTotal > 0
       ? computedTotal
@@ -61,6 +63,8 @@ export function normalizeOrder(raw) {
     payment_status: raw.payment_status || raw.paymentStatus || "",
     createdAt: raw.created_at || raw.createdAt,
     items,
+    deliveryPrice,
+    delivery_price: deliveryPrice,
     total,
   };
 }

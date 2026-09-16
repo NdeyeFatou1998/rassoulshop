@@ -11,6 +11,7 @@ import { getProductUnitPrice } from "../utils/pricing";
 import OrangeMoneyLogo from "../components/ui/OrangeMoneyLogo";
 import WaveLogo from "../components/ui/WaveLogo";
 import { formatVariantsLabel } from "../utils/cartLine";
+import { DEFAULT_DELIVERY_PRICE, fetchPublicDeliveryPrice } from "../utils/delivery";
 
 const PAYMENT_REF_KEY = "rassoul_payment_order_ref";
 
@@ -32,6 +33,13 @@ export default function Checkout() {
   const [paymentMethod, setPaymentMethod] = useState("orange_money");
   const [omReady, setOmReady] = useState(true);
   const [waveReady, setWaveReady] = useState(true);
+  const [deliveryPrice, setDeliveryPrice] = useState(DEFAULT_DELIVERY_PRICE);
+
+  const grandTotal = cartTotal + deliveryPrice;
+
+  useEffect(() => {
+    fetchPublicDeliveryPrice().then(setDeliveryPrice);
+  }, []);
 
   useEffect(() => {
     Promise.all([
@@ -98,7 +106,7 @@ export default function Checkout() {
           delivery_address: form.address,
           notes: form.notes || null,
           items,
-          total: cartTotal,
+          total: grandTotal,
           payment_method: paymentMethod,
         }),
       });
@@ -426,10 +434,14 @@ export default function Checkout() {
                   <span className="text-neutral-500">Sous-total</span>
                   <span className="text-[#0a0a0a]">{cartTotal.toLocaleString("fr-FR")} FCFA</span>
                 </div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-neutral-500">Livraison</span>
+                  <span className="text-[#0a0a0a]">{deliveryPrice.toLocaleString("fr-FR")} FCFA</span>
+                </div>
                 <div className="flex justify-between font-semibold pt-2 border-t border-black/[0.08]">
                   <span className="text-sm text-[#0a0a0a]">Total</span>
                   <span className="text-lg font-serif text-[#D7A12B]">
-                    {cartTotal.toLocaleString("fr-FR")} FCFA
+                    {grandTotal.toLocaleString("fr-FR")} FCFA
                   </span>
                 </div>
               </div>
