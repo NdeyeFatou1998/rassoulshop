@@ -210,10 +210,6 @@ export default function Cart() {
                   <span className="text-muted">Sous-total</span>
                   <span className="text-cream">{cartTotal.toLocaleString("fr-FR")} FCFA</span>
                 </div>
-                <div className="flex justify-between text-[12px] md:text-sm">
-                  <span className="text-muted">Livraison</span>
-                  <span className="text-gold text-[10px] uppercase tracking-wider font-semibold">Gratuite</span>
-                </div>
               </div>
 
               {/* Total avec gradient doré */}

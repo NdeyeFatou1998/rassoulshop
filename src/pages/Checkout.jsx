@@ -426,12 +426,6 @@ export default function Checkout() {
                   <span className="text-neutral-500">Sous-total</span>
                   <span className="text-[#0a0a0a]">{cartTotal.toLocaleString("fr-FR")} FCFA</span>
                 </div>
-                <div className="flex justify-between text-xs">
-                  <span className="text-neutral-500">Livraison</span>
-                  <span className="text-[#D7A12B] text-[10px] uppercase tracking-wider font-semibold">
-                    Gratuite
-                  </span>
-                </div>
                 <div className="flex justify-between font-semibold pt-2 border-t border-black/[0.08]">
                   <span className="text-sm text-[#0a0a0a]">Total</span>
                   <span className="text-lg font-serif text-[#D7A12B]">
@@ -473,7 +467,7 @@ export default function Checkout() {
                   ? "Vous serez redirigé vers Orange Money"
                   : paymentMethod === "wave"
                     ? "Vous serez redirigé vers Wave"
-                    : "Paiement à la livraison · Livraison gratuite"}
+                    : "Paiement à la livraison"}
               </p>
             </div>
           </motion.div>
