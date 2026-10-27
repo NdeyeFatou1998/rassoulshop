@@ -22,12 +22,15 @@ export default function AdminGiftBoxes() {
   const [editingBox, setEditingBox] = useState(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [customDraft, setCustomDraft] = useState({ name: "", image: "", uploading: false });
 
   /* État du formulaire box avec personnalisation */
   const emptyForm = {
-    name: "", description: "", price: "", stock: "0", image: "", active: true,
+    name: "", description: "", price: "", image: "", active: true,
     is_customizable: false,
-    selectedItems: [] // { product_id, quantity, is_replaceable, replacements: [product_id] }
+    // Articles catalogue : { product_id, quantity, is_replaceable, replacements }
+    // Articles hors catalogue : { is_custom, temp_id?, item_id?, custom_name, custom_image, quantity }
+    selectedItems: []
   };
   const [form, setForm] = useState(emptyForm);
 
@@ -65,6 +68,7 @@ export default function AdminGiftBoxes() {
   function handleNew() {
     setEditingBox(null);
     setForm({ ...emptyForm, selectedItems: [] });
+    setCustomDraft({ name: "", image: "", uploading: false });
     setError("");
     setShowModal(true);
   }
@@ -76,17 +80,32 @@ export default function AdminGiftBoxes() {
       name: box.name || "",
       description: box.description || "",
       price: String(box.price || ""),
-      stock: String(box.stock ?? 0),
       image: box.image || "",
       active: box.active,
       is_customizable: box.is_customizable || false,
-      selectedItems: (box.items || []).map(item => ({
-        product_id: item.product_id,
-        quantity: item.quantity || 1,
-        is_replaceable: item.is_replaceable || false,
-        replacements: (item.replacements || []).map(r => r.product_id)
-      }))
+      selectedItems: (box.items || []).map((item) => {
+        const isCustom = Boolean(item.is_custom) || !item.product_id;
+        if (isCustom) {
+          return {
+            item_id: item.item_id,
+            is_custom: true,
+            custom_name: item.custom_name || item.title || "",
+            custom_image: item.custom_image || item.image || "",
+            quantity: item.quantity || 1,
+            is_replaceable: false,
+            replacements: [],
+          };
+        }
+        return {
+          item_id: item.item_id,
+          product_id: item.product_id,
+          quantity: item.quantity || 1,
+          is_replaceable: item.is_replaceable || false,
+          replacements: (item.replacements || []).map((r) => r.product_id),
+        };
+      }),
     });
+    setCustomDraft({ name: "", image: "", uploading: false });
     setError("");
     setShowModal(true);
   }
@@ -96,6 +115,7 @@ export default function AdminGiftBoxes() {
     setShowModal(false);
     setEditingBox(null);
     setForm({ ...emptyForm, selectedItems: [] });
+    setCustomDraft({ name: "", image: "", uploading: false });
     setError("");
   }
 
@@ -158,7 +178,96 @@ export default function AdminGiftBoxes() {
 
   /** Vérifier si un produit est sélectionné */
   function isSelected(productId) {
-    return form.selectedItems.some(i => i.product_id === productId);
+    return form.selectedItems.some((i) => !i.is_custom && i.product_id === productId);
+  }
+
+  function itemKey(item) {
+    if (item.item_id) return `id-${item.item_id}`;
+    if (item.is_custom) return item.temp_id || `custom-${item.custom_name}`;
+    return `p-${item.product_id}`;
+  }
+
+  function addCustomItem() {
+    const name = customDraft.name.trim();
+    if (!name) {
+      setError("Indiquez le nom de l'article hors catalogue");
+      return;
+    }
+    setForm({
+      ...form,
+      selectedItems: [
+        ...form.selectedItems,
+        {
+          is_custom: true,
+          temp_id: `temp-${Date.now()}`,
+          custom_name: name,
+          custom_image: customDraft.image || "",
+          quantity: 1,
+          is_replaceable: false,
+          replacements: [],
+        },
+      ],
+    });
+    setCustomDraft({ name: "", image: "", uploading: false });
+    setError("");
+  }
+
+  function removeCustomItem(key) {
+    setForm({
+      ...form,
+      selectedItems: form.selectedItems.filter((i) => itemKey(i) !== key),
+    });
+  }
+
+  function updateCustomQuantity(key, quantity) {
+    setForm({
+      ...form,
+      selectedItems: form.selectedItems.map((i) =>
+        itemKey(i) === key ? { ...i, quantity: Math.max(1, quantity) } : i
+      ),
+    });
+  }
+
+  async function handleCustomImageUpload(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setCustomDraft((d) => ({ ...d, uploading: true }));
+    const formDataUpload = new FormData();
+    formDataUpload.append("image", file);
+    try {
+      const token = localStorage.getItem("rassoul_admin_token");
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formDataUpload,
+      });
+      const data = await res.json();
+      if (data.success) {
+        setCustomDraft((d) => ({ ...d, image: data.imageUrl, uploading: false }));
+      } else {
+        setCustomDraft((d) => ({ ...d, uploading: false }));
+        alert(data.message || "Erreur lors de l'upload");
+      }
+    } catch {
+      setCustomDraft((d) => ({ ...d, uploading: false }));
+      alert("Erreur lors de l'upload de l'image");
+    }
+  }
+
+  function serializeItemPayload(selItem) {
+    if (selItem.is_custom) {
+      return {
+        custom_name: selItem.custom_name,
+        custom_image: selItem.custom_image || null,
+        quantity: selItem.quantity || 1,
+      };
+    }
+    return {
+      product_id: selItem.product_id,
+      quantity: selItem.quantity,
+      is_replaceable: selItem.is_replaceable,
+      replacements: selItem.replacements,
+    };
   }
 
   /** Sauvegarder la box (créer ou modifier) */
@@ -171,25 +280,22 @@ export default function AdminGiftBoxes() {
       const token = localStorage.getItem("rassoul_admin_token");
 
       if (editingBox) {
-        // --- MODIFIER ---
-        // 1. Mettre à jour les infos de la box
         const payload = {
           name: form.name,
           description: form.description || null,
           price: parseInt(form.price, 10) || 0,
-          stock: parseInt(form.stock, 10) || 0,
           image: form.image || null,
           active: form.active,
-          is_customizable: form.is_customizable
+          is_customizable: form.is_customizable,
         };
 
         const res = await fetch(`/api/gift-boxes/${editingBox.id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(payload),
         });
 
         const data = await res.json();
@@ -198,76 +304,59 @@ export default function AdminGiftBoxes() {
           return;
         }
 
-        // 2. Synchroniser les articles
         const existingItems = editingBox.items || [];
-        const existingProductIds = existingItems.map(i => i.product_id);
-        const selectedProductIds = form.selectedItems.map(i => i.product_id);
+        const keepIds = new Set(
+          form.selectedItems.filter((i) => i.item_id).map((i) => i.item_id)
+        );
 
-        // Retirer les articles qui ne sont plus sélectionnés
         for (const item of existingItems) {
-          if (!selectedProductIds.includes(item.product_id)) {
+          if (!keepIds.has(item.item_id)) {
             await fetch(`/api/gift-boxes/${editingBox.id}/items/${item.item_id}`, {
               method: "DELETE",
-              headers: { Authorization: `Bearer ${token}` }
+              headers: { Authorization: `Bearer ${token}` },
             });
           }
         }
 
-        // Ajouter les nouveaux articles
         for (const selItem of form.selectedItems) {
-          if (!existingProductIds.includes(selItem.product_id)) {
+          if (selItem.item_id) {
+            await fetch(`/api/gift-boxes/${editingBox.id}/items/${selItem.item_id}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify(serializeItemPayload(selItem)),
+            });
+          } else {
             await fetch(`/api/gift-boxes/${editingBox.id}/items`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
               },
-              body: JSON.stringify({
-                product_id: selItem.product_id,
-                quantity: selItem.quantity,
-                is_replaceable: selItem.is_replaceable,
-                replacements: selItem.replacements
-              })
+              body: JSON.stringify(serializeItemPayload(selItem)),
             });
-          } else {
-            // Mettre à jour is_replaceable et replacements pour les articles existants
-            const existingItem = existingItems.find(i => i.product_id === selItem.product_id);
-            if (existingItem) {
-              await fetch(`/api/gift-boxes/${editingBox.id}/items/${existingItem.item_id}`, {
-                method: "PUT",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                  is_replaceable: selItem.is_replaceable,
-                  replacements: selItem.replacements
-                })
-              });
-            }
           }
         }
-
       } else {
-        // --- CRÉER ---
         const payload = {
           name: form.name,
           description: form.description || null,
           price: parseInt(form.price, 10) || 0,
-          stock: parseInt(form.stock, 10) || 0,
           image: form.image || null,
           active: form.active,
           is_customizable: form.is_customizable,
-          items: form.selectedItems
+          items: form.selectedItems.map(serializeItemPayload),
         };
 
         const res = await fetch("/api/gift-boxes", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(payload),
         });
 
         const data = await res.json();
@@ -409,17 +498,11 @@ export default function AdminGiftBoxes() {
                         Inactif
                       </span>
                     )}
-                    {Number(box.stock) <= 0 && (
-                      <span className="text-[10px] uppercase tracking-wider bg-red-500/20 text-red-400 px-2 py-0.5 rounded">
-                        Rupture
-                      </span>
-                    )}
                   </div>
                   {box.description && (
                     <p className="text-sm text-neutral-500 mb-2">{box.description}</p>
                   )}
                   <p className="text-[#D7A12B] font-semibold text-lg">{fmtPrice(box.price)}</p>
-                  <p className="text-xs text-neutral-500 mt-1">Stock : {Number(box.stock) || 0}</p>
 
                   {/* Articles de la box */}
                   {box.items?.length > 0 && (
@@ -433,8 +516,19 @@ export default function AdminGiftBoxes() {
                               : "admin-badge-muted"
                           }`}
                         >
-                          <Package size={10} />
-                          {item.title}
+                          {(item.image || item.custom_image) ? (
+                            <img
+                              src={item.image || item.custom_image}
+                              alt=""
+                              className="w-4 h-4 rounded-full object-cover"
+                            />
+                          ) : (
+                            <Package size={10} />
+                          )}
+                          {item.title || item.custom_name}
+                          {item.is_custom && (
+                            <span className="text-[9px] uppercase tracking-wider text-neutral-400">libre</span>
+                          )}
                           {item.quantity > 1 && <span className="text-[#D7A12B]">x{item.quantity}</span>}
                           {item.is_replaceable && <span className="ml-1">↔</span>}
                         </span>
@@ -513,19 +607,6 @@ export default function AdminGiftBoxes() {
                 </div>
               </div>
 
-              <div>
-                <label className="admin-label">Stock disponible</label>
-                <input
-                  type="number"
-                  value={form.stock}
-                  onChange={(e) => setForm({ ...form, stock: e.target.value })}
-                  min="0"
-                  placeholder="0 = masquée sur le site"
-                  className="admin-input max-w-xs"
-                />
-                <p className="text-[10px] text-neutral-400 mt-1">À 0, la box n&apos;apparaît plus sur la page Box Cadeau.</p>
-              </div>
-
               {/* Description */}
               <div>
                 <label className="admin-label">Description</label>
@@ -592,9 +673,117 @@ export default function AdminGiftBoxes() {
                   </div>
                 )}
 
+                {/* Articles hors catalogue déjà ajoutés */}
+                {form.selectedItems.filter((i) => i.is_custom).length > 0 && (
+                  <div className="mb-3 space-y-2">
+                    <p className="text-[10px] uppercase tracking-wider text-neutral-400">
+                      Articles hors catalogue
+                    </p>
+                    {form.selectedItems.filter((i) => i.is_custom).map((item) => {
+                      const key = itemKey(item);
+                      return (
+                        <div
+                          key={key}
+                          className="flex items-center gap-3 px-4 py-3 rounded-lg border bg-[#D7A12B]/10 border-[#D7A12B]/40"
+                        >
+                          {item.custom_image ? (
+                            <img
+                              src={item.custom_image}
+                              alt={item.custom_name}
+                              className="w-10 h-10 rounded object-cover"
+                            />
+                          ) : (
+                            <div className="w-10 h-10 rounded admin-thumb flex items-center justify-center">
+                              <Package size={14} className="text-neutral-400" />
+                            </div>
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm text-[#0a0a0a] truncate">{item.custom_name}</p>
+                            <p className="text-[10px] text-neutral-500">Hors catalogue</p>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <button
+                              type="button"
+                              onClick={() => updateCustomQuantity(key, (item.quantity || 1) - 1)}
+                              className="w-7 h-7 bg-neutral-100 text-neutral-700 rounded text-sm hover:bg-neutral-200"
+                            >
+                              -
+                            </button>
+                            <span className="text-sm text-[#0a0a0a] w-6 text-center">{item.quantity || 1}</span>
+                            <button
+                              type="button"
+                              onClick={() => updateCustomQuantity(key, (item.quantity || 1) + 1)}
+                              className="w-7 h-7 bg-neutral-100 text-neutral-700 rounded text-sm hover:bg-neutral-200"
+                            >
+                              +
+                            </button>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => removeCustomItem(key)}
+                            className="p-1.5 text-red-400 hover:text-red-300"
+                            title="Retirer"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Ajouter un article hors catalogue */}
+                <div className="mb-4 p-3 rounded-lg border border-dashed border-black/[0.12] bg-white space-y-3">
+                  <p className="text-xs font-medium text-[#0a0a0a]">
+                    Ajouter un article qui n&apos;est pas dans la liste
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3">
+                    <input
+                      type="text"
+                      value={customDraft.name}
+                      onChange={(e) => setCustomDraft({ ...customDraft, name: e.target.value })}
+                      placeholder="Nom de l'article"
+                      className="admin-input"
+                    />
+                    <label className="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-black/[0.12] bg-neutral-50 text-xs text-neutral-700 cursor-pointer hover:bg-neutral-100">
+                      {customDraft.uploading ? "Upload…" : customDraft.image ? "Changer la photo" : "Photo"}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleCustomImageUpload}
+                        disabled={customDraft.uploading}
+                      />
+                    </label>
+                  </div>
+                  {customDraft.image && (
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={customDraft.image}
+                        alt="Aperçu"
+                        className="w-12 h-12 rounded object-cover border border-black/[0.08]"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setCustomDraft({ ...customDraft, image: "" })}
+                        className="text-xs text-red-400 hover:text-red-300"
+                      >
+                        Retirer la photo
+                      </button>
+                    </div>
+                  )}
+                  <button
+                    type="button"
+                    onClick={addCustomItem}
+                    className="px-3 py-2 bg-neutral-900 text-white text-xs font-semibold rounded-lg hover:bg-neutral-800"
+                  >
+                    + Ajouter cet article
+                  </button>
+                </div>
+
                 {products.length === 0 ? (
                   <p className="text-sm text-neutral-400 py-4 text-center">
-                    Aucun produit disponible. Créez d'abord des produits.
+                    Aucun produit catalogue. Vous pouvez quand même ajouter des articles hors liste ci-dessus.
                   </p>
                 ) : (
                   <div className="space-y-2 max-h-64 overflow-y-auto pr-1">

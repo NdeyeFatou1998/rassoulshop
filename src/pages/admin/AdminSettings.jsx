@@ -177,8 +177,8 @@ export default function AdminSettings() {
 
         <p className="text-xs text-neutral-500 leading-relaxed mb-4">
           Définissez le stock minimal qui déclenche l&apos;alerte « Stock faible » dans l&apos;admin et le dashboard.
-          Les produits et box cadeaux à <strong className="text-[#0a0a0a] font-normal">stock 0</strong> ne sont
-          plus visibles sur le site public (boutique, coffrets, box cadeau).
+          Les produits à <strong className="text-[#0a0a0a] font-normal">stock 0</strong> ne sont
+          plus visibles dans la boutique. Une box cadeau n&apos;a pas de stock propre : le stock est celui de chaque article qui la compose.
         </p>
 
         {stockSuccess && (
