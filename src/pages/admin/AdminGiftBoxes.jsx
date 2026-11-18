@@ -9,9 +9,10 @@
  * - Upload d'image pour la box
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Plus, Trash2, Gift, Package, Check, ArrowRight } from "lucide-react";
+import { isVipProduct } from "../../constants/categories";
 
 export default function AdminGiftBoxes() {
   const token = localStorage.getItem("rassoul_admin_token");
@@ -28,6 +29,8 @@ export default function AdminGiftBoxes() {
   const emptyForm = {
     name: "", description: "", price: "", image: "", active: true,
     is_customizable: false,
+    // Boîte VIP imposée (id produit catégorie « boites-vip ») — "" = au choix du client
+    vip_product_id: "",
     // Articles catalogue : { product_id, quantity, is_replaceable, replacements }
     // Articles hors catalogue : { is_custom, temp_id?, item_id?, custom_name, custom_image, quantity }
     selectedItems: []
@@ -64,6 +67,9 @@ export default function AdminGiftBoxes() {
 
   useEffect(() => { loadGiftBoxes(); loadProducts(); }, []);
 
+  /* Boîtes VIP disponibles (produits de la catégorie « Boîtes VIP ») */
+  const vipProducts = useMemo(() => products.filter((p) => isVipProduct(p)), [products]);
+
   /** Ouvrir modal pour créer une box */
   function handleNew() {
     setEditingBox(null);
@@ -83,6 +89,7 @@ export default function AdminGiftBoxes() {
       image: box.image || "",
       active: box.active,
       is_customizable: box.is_customizable || false,
+      vip_product_id: box.vip_product_id ? String(box.vip_product_id) : "",
       selectedItems: (box.items || []).map((item) => {
         const isCustom = Boolean(item.is_custom) || !item.product_id;
         if (isCustom) {
@@ -287,6 +294,7 @@ export default function AdminGiftBoxes() {
           image: form.image || null,
           active: form.active,
           is_customizable: form.is_customizable,
+          vip_product_id: form.vip_product_id ? Number(form.vip_product_id) : null,
         };
 
         const res = await fetch(`/api/gift-boxes/${editingBox.id}`, {
@@ -347,6 +355,7 @@ export default function AdminGiftBoxes() {
           image: form.image || null,
           active: form.active,
           is_customizable: form.is_customizable,
+          vip_product_id: form.vip_product_id ? Number(form.vip_product_id) : null,
           items: form.selectedItems.map(serializeItemPayload),
         };
 
@@ -491,6 +500,11 @@ export default function AdminGiftBoxes() {
                     {box.is_customizable && (
                       <span className="text-[10px] uppercase tracking-wider bg-[#D7A12B]/20 text-[#D7A12B] px-2 py-0.5 rounded">
                         Personnalisable
+                      </span>
+                    )}
+                    {box.vip_product && (
+                      <span className="text-[10px] uppercase tracking-wider bg-[#0a0a0a] text-[#D7A12B] px-2 py-0.5 rounded">
+                        ★ Boîte VIP : {box.vip_product.title}
                       </span>
                     )}
                     {!box.active && (
@@ -901,6 +915,34 @@ export default function AdminGiftBoxes() {
                     })}
                   </div>
                 )}
+              </div>
+
+              {/* Emballage : boîte VIP imposée ou choix du client */}
+              <div>
+                <label className="admin-label">Emballage</label>
+                <select
+                  value={form.vip_product_id}
+                  onChange={(e) => setForm({ ...form, vip_product_id: e.target.value })}
+                  className="admin-input"
+                >
+                  <option value="">Au choix du client (boîte simple ou boîte VIP)</option>
+                  {vipProducts.map((vp) => (
+                    <option key={vp.id} value={String(vp.id)}>
+                      Boîte VIP imposée : {vp.title}
+                      {vp.active === false ? " (inactive)" : ""}
+                    </option>
+                  ))}
+                </select>
+                {form.vip_product_id ? (
+                  <p className="mt-1.5 text-[11px] text-neutral-500">
+                    Le client ne choisit pas l&apos;emballage : cette boîte VIP est livrée avec la box.
+                    Le prix de la box doit l&apos;inclure (aucun supplément n&apos;est ajouté).
+                  </p>
+                ) : vipProducts.length === 0 ? (
+                  <p className="mt-1.5 text-[11px] text-neutral-500">
+                    Aucune boîte VIP : créez-les dans Produits, catégorie « Boîtes VIP ».
+                  </p>
+                ) : null}
               </div>
 
               {/* Box personnalisable + Statut en ligne */}

@@ -70,9 +70,13 @@ export default function GiftBoxDetail() {
     return boxProducts.find((p) => p.id === vipProductId) || null;
   }
 
+  /* Boîte VIP imposée par l'admin : incluse dans le prix, aucun choix client */
+  const imposedVip = box?.vip_product || null;
+
   function calcPrice() {
     if (!box) return 0;
     let total = parseFloat(box.price) || 0;
+    if (imposedVip) return total;
     if (boxType === "vip" && vipProductId) {
       const vipProduct = getSelectedVipProduct();
       if (vipProduct) {
@@ -85,8 +89,9 @@ export default function GiftBoxDetail() {
   function handleAdd() {
     if (!box) return;
     const finalPrice = calcPrice();
-    let desc =
-      boxType === "vip" && vipProductId
+    let desc = imposedVip
+      ? `Boîte VIP incluse: ${imposedVip.title}`
+      : boxType === "vip" && vipProductId
         ? `Boîte VIP: ${boxProducts.find((p) => p.id === vipProductId)?.title}`
         : "Boîte simple (offerte)";
     if (box.items) {
@@ -400,6 +405,29 @@ export default function GiftBoxDetail() {
             )}
 
             {/* Emballage */}
+            {imposedVip ? (
+              <div>
+                <h2 className="text-[10px] uppercase tracking-[0.22em] text-[#8B6914] font-semibold mb-3">
+                  Emballage
+                </h2>
+                <div className="flex items-center gap-3 p-3 rounded-xl border border-[#D7A12B]/45 bg-[#D7A12B]/[0.06]">
+                  <div className="w-14 h-14 flex-shrink-0 rounded-lg overflow-hidden bg-neutral-100 flex items-center justify-center">
+                    {imposedVip.image ? (
+                      <img src={imposedVip.image} alt={imposedVip.title} className="w-full h-full object-cover" />
+                    ) : (
+                      <Crown size={20} className="text-[#D7A12B]" />
+                    )}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="flex items-center gap-1.5 text-xs font-semibold text-[#8B6914]">
+                      <Crown size={13} className="text-[#D7A12B]" /> Boîte VIP incluse
+                    </p>
+                    <p className="text-sm text-[#0a0a0a] truncate">{imposedVip.title}</p>
+                    <p className="text-[10px] text-neutral-500 mt-0.5">Comprise dans le prix du coffret</p>
+                  </div>
+                </div>
+              </div>
+            ) : (
             <div>
               <h2 className="text-[10px] uppercase tracking-[0.22em] text-[#8B6914] font-semibold mb-3">
                 Emballage
@@ -548,9 +576,11 @@ export default function GiftBoxDetail() {
               </AnimatePresence>
             </div>
 
+            )}
+
             {/* Total + panier */}
             <div className="pt-4 border-t border-black/[0.06]">
-              {boxType === "vip" && vipExtraPrice > 0 && (
+              {!imposedVip && boxType === "vip" && vipExtraPrice > 0 && (
                 <div className="mb-3 p-3 rounded-lg bg-neutral-50 border border-black/[0.06] text-xs space-y-1">
                   <div className="flex justify-between text-neutral-500">
                     <span>Coffret</span>
@@ -597,7 +627,7 @@ export default function GiftBoxDetail() {
                 <button
                   type="button"
                   onClick={handleAdd}
-                  disabled={boxType === "vip" && !vipProductId && boxProducts.length > 0}
+                  disabled={!imposedVip && boxType === "vip" && !vipProductId && boxProducts.length > 0}
                   className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold uppercase tracking-wider transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed ${
                     justAdded
                       ? "bg-emerald-500 text-white"

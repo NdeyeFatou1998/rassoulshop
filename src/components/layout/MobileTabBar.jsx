@@ -5,8 +5,9 @@
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Home, ShoppingBag, Package, Gift, Camera } from "lucide-react";
+import { COFFRETS_CATEGORY_SLUG } from "../../constants/categories";
 
-const COFFRETS_CATEGORY = "sets-cadeau";
+const COFFRETS_CATEGORY = COFFRETS_CATEGORY_SLUG;
 
 function isTabActive(tab, pathname, category) {
   if (tab.id === "coffrets") {

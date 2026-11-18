@@ -1,6 +1,9 @@
 /** Slugs de catégories réservées au système / hors boutique publique */
 export const BOITES_VIP_SLUG = "boites-vip";
 
+/** Catégorie produits affichée sur la page /coffrets */
+export const COFFRETS_CATEGORY_SLUG = "coffrets-cadeaux";
+
 /** Pseudo-catégorie front regroupant les box cadeaux (/api/gift-boxes) */
 export const GIFT_BOX_CATEGORY_SLUG = "box-cadeau";
 

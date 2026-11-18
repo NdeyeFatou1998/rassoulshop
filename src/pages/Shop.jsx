@@ -4,9 +4,9 @@
 
 import { useSearchParams, Navigate } from "react-router-dom";
 import FilterableProductGrid from "../components/sections/FilterableProductGrid";
-import { BOITES_VIP_SLUG } from "../constants/categories";
+import { BOITES_VIP_SLUG, COFFRETS_CATEGORY_SLUG } from "../constants/categories";
 
-const COFFRETS_CATEGORY = "sets-cadeau";
+const COFFRETS_CATEGORY = COFFRETS_CATEGORY_SLUG;
 
 export default function Shop() {
   const [searchParams] = useSearchParams();

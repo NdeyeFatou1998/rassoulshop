@@ -6,8 +6,9 @@ import { Package } from "lucide-react";
 import { useProducts } from "../hooks/useProducts";
 import ProductCard from "../components/ui/ProductCard";
 import PageHeader from "../components/ui/PageHeader";
+import { COFFRETS_CATEGORY_SLUG } from "../constants/categories";
 
-const COFFRETS_CATEGORY = "sets-cadeau";
+const COFFRETS_CATEGORY = COFFRETS_CATEGORY_SLUG;
 
 export default function CoffretsShop() {
   const { products, loading } = useProducts({ category: COFFRETS_CATEGORY, limit: 100 });

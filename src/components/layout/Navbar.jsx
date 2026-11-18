@@ -9,10 +9,11 @@ import { Menu, X, ShoppingCart, ShoppingBag, Search } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import SearchOverlay from "../ui/SearchOverlay";
 import { BRAND_LOGO } from "../../constants/brand";
+import { COFFRETS_CATEGORY_SLUG } from "../../constants/categories";
 
 const GOLD = "#D7A12B";
 
-const COFFRETS_CATEGORY = "sets-cadeau";
+const COFFRETS_CATEGORY = COFFRETS_CATEGORY_SLUG;
 
 function isNavLinkActive(link, pathname, search) {
   const category = new URLSearchParams(search).get("category");

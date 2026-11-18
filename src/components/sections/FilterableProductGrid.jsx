@@ -10,7 +10,8 @@
  *
  * Box cadeau :
  * - Les box actives (/api/gift-boxes) sont réparties parmi les produits dans « Tous »
- * - Une catégorie « Box Cadeau » (slug GIFT_BOX_CATEGORY_SLUG) les isole
+ * - « Box Cadeau » est la 1re catégorie et ouvre la page /gift-boxes
+ * - ?category=box-cadeau (GIFT_BOX_CATEGORY_SLUG) filtre la grille sur les box
  *
  * Props :
  * - limit (number)           : produits max à charger (défaut: 80)
@@ -19,7 +20,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Search, X, SlidersHorizontal } from "lucide-react";
 import ProductCard from "../ui/ProductCard";
 import GiftBoxCard, { GIFT_BOX_DEFAULT_IMG } from "../ui/GiftBoxCard";
@@ -286,6 +287,7 @@ export default function FilterableProductGrid({
   pageBreadcrumb = "Accueil · Collections",
   pageSubtitle = "Des cadeaux qui transforment un instant en souvenir",
 }) {
+  const navigate = useNavigate();
   const [active, setActive]       = useState(defaultCategory);
   const [search, setSearch]       = useState("");
 
@@ -319,7 +321,7 @@ export default function FilterableProductGrid({
     };
   }, []);
 
-  /* Catégorie « Box Cadeau » (après « Tous ») si des box sont disponibles */
+  /* Catégorie « Box Cadeau » (en 1re position, ouvre /gift-boxes) si des box sont disponibles */
   const giftBoxCategory = useMemo(
     () => ({
       label: "Box Cadeau",
@@ -331,8 +333,7 @@ export default function FilterableProductGrid({
 
   const allCategories = useMemo(() => {
     if (!giftBoxes.length) return categories;
-    const [first, ...rest] = categories;
-    return first?.slug === null ? [first, giftBoxCategory, ...rest] : [giftBoxCategory, ...categories];
+    return [giftBoxCategory, ...categories];
   }, [categories, giftBoxes, giftBoxCategory]);
 
   useEffect(() => {
@@ -560,12 +561,11 @@ export default function FilterableProductGrid({
           <div className="mx-auto mt-2 h-px w-16" style={{ background: "linear-gradient(90deg, transparent, #D7A12B, transparent)" }} />
         </div>
 
-        {/* ---- Bande de squircles ---- */}
-        <div
-          className={`flex gap-5 md:gap-8 pb-8 mb-6 md:mb-10 overflow-x-auto no-scrollbar ${
-            premium ? "justify-start md:justify-center flex-nowrap" : ""
-          }`}
-        >
+        {/* ---- Bande de squircles ----
+            Bande intérieure w-max + mx-auto : centrée si elle tient, sinon départ à gauche
+            (un justify-center sur le conteneur scrollable rendait le début inaccessible) */}
+        <div className="pb-8 mb-6 md:mb-10 overflow-x-auto no-scrollbar">
+          <div className={`flex gap-5 md:gap-8 ${premium ? "w-max mx-auto flex-nowrap" : ""}`}>
           {(premium
             ? visibleCategories
             : Array.from({ length: 10 }).flatMap((_, rep) =>
@@ -577,11 +577,14 @@ export default function FilterableProductGrid({
                 label={cat.label}
                 image={cat.image}
                 isActive={active === cat.slug}
-                onClick={() => setActive(cat.slug)}
+                onClick={() =>
+                  cat.slug === GIFT_BOX_CATEGORY_SLUG ? navigate("/gift-boxes") : setActive(cat.slug)
+                }
                 lightBackground={lightBackground}
                 premium={premium}
               />
           ))}
+          </div>
         </div>
 
         {/* ---- Grille produits ---- */}
