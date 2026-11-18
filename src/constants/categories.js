@@ -1,6 +1,9 @@
 /** Slugs de catégories réservées au système / hors boutique publique */
 export const BOITES_VIP_SLUG = "boites-vip";
 
+/** Pseudo-catégorie front regroupant les box cadeaux (/api/gift-boxes) */
+export const GIFT_BOX_CATEGORY_SLUG = "box-cadeau";
+
 /** Catégories masquées du shop public (accueil, filtres) */
 export const HIDDEN_SHOP_CATEGORY_SLUGS = [BOITES_VIP_SLUG];
 

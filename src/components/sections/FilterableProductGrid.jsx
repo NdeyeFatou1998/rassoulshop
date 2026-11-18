@@ -8,6 +8,10 @@
  * - Le contour (conic-gradient) tourne en continu, plus vif sur l'actif
  * - Transitions animées sur la grille au changement de filtre
  *
+ * Box cadeau :
+ * - Les box actives (/api/gift-boxes) sont réparties parmi les produits dans « Tous »
+ * - Une catégorie « Box Cadeau » (slug GIFT_BOX_CATEGORY_SLUG) les isole
+ *
  * Props :
  * - limit (number)           : produits max à charger (défaut: 80)
  * - defaultCategory (string) : catégorie active au chargement (défaut: null)
@@ -18,10 +22,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Search, X, SlidersHorizontal } from "lucide-react";
 import ProductCard from "../ui/ProductCard";
+import GiftBoxCard, { GIFT_BOX_DEFAULT_IMG } from "../ui/GiftBoxCard";
 import { useProducts } from "../../hooks/useProducts";
 import { fetchCategoriesFull } from "../../services/api";
 import { getCategoryImageUrl } from "../../utils/categoryImage";
-import { isHiddenShopCategory } from "../../constants/categories";
+import { isHiddenShopCategory, GIFT_BOX_CATEGORY_SLUG } from "../../constants/categories";
 
 /* Squircle radius en px */
 const R_OUT = 20; /* border-radius du contour tournant */
@@ -232,6 +237,42 @@ function productInCategory(product, slug) {
   return product.category_slug === slug || product.category === slug;
 }
 
+function productPrice(product) {
+  return product.promo_active && product.promo_price ? product.promo_price : product.price;
+}
+
+/* Box cadeau → élément de grille (distingué des produits par __giftBox) */
+function toGridBox(box) {
+  return {
+    __giftBox: true,
+    id: `box-${box.id}`,
+    box,
+    title: box.name || "",
+    description: box.description || "",
+    price: Number(box.price) || 0,
+  };
+}
+
+function itemPrice(item) {
+  return item.__giftBox ? item.price : productPrice(item);
+}
+
+/* Répartit régulièrement les box parmi les produits (ordre de chaque liste conservé) */
+function interleave(products, boxes) {
+  if (!boxes.length) return products;
+  if (!products.length) return boxes;
+  const out = [];
+  let ip = 0;
+  let ib = 0;
+  while (ip < products.length || ib < boxes.length) {
+    const takeBox =
+      ib < boxes.length &&
+      (ip >= products.length || (ib + 0.5) / boxes.length <= (ip + 0.5) / products.length);
+    out.push(takeBox ? boxes[ib++] : products[ip++]);
+  }
+  return out;
+}
+
 /* ---- Composant principal ---- */
 export default function FilterableProductGrid({
   limit = 80,
@@ -255,7 +296,44 @@ export default function FilterableProductGrid({
   const [maxVal, setMaxVal]       = useState(200000);
   const [applied, setApplied]     = useState(null); /* { min, max } ou null */
   const [categories, setCategories] = useState(FALLBACK_CATEGORIES);
-  const { products, loading } = useProducts({ limit });
+  const { products, loading: productsLoading } = useProducts({ limit });
+  const [giftBoxes, setGiftBoxes] = useState([]);
+  const [boxesLoading, setBoxesLoading] = useState(true);
+  const loading = productsLoading || boxesLoading;
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/gift-boxes")
+      .then((r) => (r.ok ? r.json() : { giftBoxes: [] }))
+      .then((d) => {
+        if (cancelled) return;
+        const active = (Array.isArray(d.giftBoxes) ? d.giftBoxes : []).filter((b) => b.active);
+        setGiftBoxes(active.map(toGridBox));
+      })
+      .catch(console.error)
+      .finally(() => {
+        if (!cancelled) setBoxesLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  /* Catégorie « Box Cadeau » (après « Tous ») si des box sont disponibles */
+  const giftBoxCategory = useMemo(
+    () => ({
+      label: "Box Cadeau",
+      slug: GIFT_BOX_CATEGORY_SLUG,
+      image: giftBoxes.find((b) => b.box.image)?.box.image || GIFT_BOX_DEFAULT_IMG,
+    }),
+    [giftBoxes]
+  );
+
+  const allCategories = useMemo(() => {
+    if (!giftBoxes.length) return categories;
+    const [first, ...rest] = categories;
+    return first?.slug === null ? [first, giftBoxCategory, ...rest] : [giftBoxCategory, ...categories];
+  }, [categories, giftBoxes, giftBoxCategory]);
 
   useEffect(() => {
     fetchCategoriesFull({ activeOnly: true }).then((rows) => {
@@ -278,15 +356,15 @@ export default function FilterableProductGrid({
 
   /* Étendue réelle des prix depuis les produits chargés */
   const priceExtent = useMemo(() => {
-    if (!products.length) return [0, 200000];
-    const prices = products.map(p => (p.promo_active && p.promo_price) ? p.promo_price : p.price);
+    if (!products.length && !giftBoxes.length) return [0, 200000];
+    const prices = [...products.map(productPrice), ...giftBoxes.map((b) => b.price)];
     const hi = Math.ceil(Math.max(...prices) / PRICE_STEP) * PRICE_STEP;
     return [0, hi];
-  }, [products]);
+  }, [products, giftBoxes]);
 
   /* Initialiser le slider dès que les produits sont chargés */
   useEffect(() => {
-    if (products.length) {
+    if (products.length || giftBoxes.length) {
       setMinVal(priceExtent[0]);
       setMaxVal(priceExtent[1]);
     }
@@ -301,37 +379,42 @@ export default function FilterableProductGrid({
 
   /* Filtrage côté client : catégorie + recherche + prix appliqué */
   const filtered = useMemo(() => {
-    let result = products;
-    if (active) result = result.filter(p => p.category_slug === active || p.category === active);
+    let result;
+    if (active === GIFT_BOX_CATEGORY_SLUG) result = giftBoxes;
+    else if (active) result = products.filter(p => productInCategory(p, active));
+    else result = interleave(products, giftBoxes);
     if (search.trim()) {
       const q = search.toLowerCase();
-      result = result.filter(p => p.title.toLowerCase().includes(q) || (p.description || "").toLowerCase().includes(q));
+      result = result.filter(p => (p.title || "").toLowerCase().includes(q) || (p.description || "").toLowerCase().includes(q));
     }
     if (applied) {
       result = result.filter(p => {
-        const price = (p.promo_active && p.promo_price) ? p.promo_price : p.price;
+        const price = itemPrice(p);
         return price >= applied.min && price <= applied.max;
       });
     }
     return result;
-  }, [products, active, search, applied]);
+  }, [products, giftBoxes, active, search, applied]);
 
   /* Actif si au moins un filtre secondaire est appliqué */
   const hasActiveFilters = search.trim() !== "" || applied !== null;
 
   /* Masquer les catégories sans produit dans le jeu chargé */
   const visibleCategories = useMemo(() => {
-    return categories.filter((cat) => {
-      if (cat.slug === null) return products.length > 0;
+    return allCategories.filter((cat) => {
+      if (cat.slug === null) return products.length > 0 || giftBoxes.length > 0;
+      if (cat.slug === GIFT_BOX_CATEGORY_SLUG) return giftBoxes.length > 0;
       return products.some((p) => productInCategory(p, cat.slug));
     });
-  }, [categories, products]);
+  }, [allCategories, products, giftBoxes]);
 
+  /* Attendre la fin du chargement : sinon un ?category= est perdu avant l'arrivée des données */
   useEffect(() => {
+    if (loading) return;
     if (active && !visibleCategories.some((c) => c.slug === active)) {
       setActive(null);
     }
-  }, [active, visibleCategories]);
+  }, [active, visibleCategories, loading]);
 
   return (
     <section
@@ -449,7 +532,7 @@ export default function FilterableProductGrid({
             {!loading && (
               <div className="flex items-center justify-between">
                 <p className={`text-[11px] ${lightBackground ? "text-neutral-500" : "text-white/55"}`}>
-                  {filtered.length} produit{filtered.length !== 1 ? "s" : ""}
+                  {filtered.length} article{filtered.length !== 1 ? "s" : ""}
                 </p>
                 {hasActiveFilters && (
                   <button
@@ -539,9 +622,9 @@ export default function FilterableProductGrid({
                     className="product-grid"
                   >
                     <AnimatePresence mode="popLayout">
-                      {chunk.map((product, i) => (
+                      {chunk.map((item, i) => (
                         <motion.div
-                          key={product.id}
+                          key={item.id}
                           layout
                           initial={{ opacity: 0, scale: 0.95 }}
                           animate={{ opacity: 1, scale: 1 }}
@@ -552,12 +635,20 @@ export default function FilterableProductGrid({
                             ease: [0.22, 1, 0.36, 1],
                           }}
                         >
-                          <ProductCard
-                            product={product}
-                            index={chunkIdx * 8 + i}
-                            lightBackground={lightBackground}
-                            premium={premium}
-                          />
+                          {item.__giftBox ? (
+                            <GiftBoxCard
+                              box={item.box}
+                              index={chunkIdx * 8 + i}
+                              showBoxBadge={active !== GIFT_BOX_CATEGORY_SLUG}
+                            />
+                          ) : (
+                            <ProductCard
+                              product={item}
+                              index={chunkIdx * 8 + i}
+                              lightBackground={lightBackground}
+                              premium={premium}
+                            />
+                          )}
                         </motion.div>
                       ))}
                     </AnimatePresence>
